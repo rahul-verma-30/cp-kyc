@@ -1,0 +1,298 @@
+.headerContainer {
+    font-family: 'Inter', sans-serif;
+    background-color: #ffffff;
+    padding: 24px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+.mainLayout {
+    display: flex;
+    gap: 24px;
+        max-width: 1440px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Logo Styles */
+.logoWrapper {
+    flex-shrink: 0;
+}
+
+.logoCircle {
+    width: 160px;
+    height: 160px;
+    background: rgba(250, 250, 250, 1);
+    border: 1px solid rgba(228, 228, 231, 1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.logoImage {
+    width: 108px;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Content Styles */
+.contentSection {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.titleRow {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+
+.companyName {
+    font-size: 24px;
+    font-weight: 600;
+    color: rgba(39, 39, 42, 1);
+    margin: 0;
+    line-height: 32px;
+    letter-spacing: 0%;
+}
+
+.statsContainer {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+}
+
+.statItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.statLabel {
+      font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+    color: rgba(24, 24, 27, 1);
+}
+
+.scoreBadgeRed {
+    background-color: rgba(254, 242, 242, 1);
+    color: rgba(239, 68, 68, 1);
+    padding: 4px 8px;
+    border-radius: 8px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0;
+  vertical-align: middle;
+}
+
+.cinBadge {
+    background-color: rgba(244, 244, 245, 1);
+    color: rgba(39, 39, 42, 1);
+    padding: 4px 8px;
+    border-radius: 8px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0;
+  vertical-align: middle;
+}
+
+.arrowDown {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+}
+
+
+.description {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(63, 63, 70, 1);
+  margin: 0;
+}
+
+.infoMetaRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    color: rgba(113, 113, 122, 1);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+.metaItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.link {
+    color: rgba(59, 130, 246, 1);
+    text-decoration: none;
+}
+
+.socialIcons {
+    display: flex;
+    gap: 6px;
+}
+
+.socialIcon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tagsRow {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    background-color:rgba(241, 245, 249, 1);
+    color: rgba(39, 39, 42, 1);
+    padding: 6px 12px;
+    border-radius: 100px;
+      font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  vertical-align: middle;
+}
+
+/* Action Section Styles */
+.actionSection {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    min-height: 160px;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 12px;
+}
+
+.saveButton {
+    background: white;
+    border: 1px solid var(--border, rgba(226, 232, 240, 1));
+    padding: 7px 15px;
+    border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0;
+  color: rgba(4, 30, 66, 1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.actionsButton {
+    background-color: rgba(4, 30, 66, 1);
+    color: white;
+    border: none;
+    padding: 7px 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+
+.lastUpdated {
+    font-size: 13px;
+    color: rgba(113, 113, 122, 1);
+    display: flex;
+    gap: 12px;
+      font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.lastUpdated strong {
+    color: rgba(39, 39, 42, 1);
+    font-weight: 500;
+}
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+    .mainLayout {
+        flex-wrap: wrap;
+    }
+
+    .actionSection {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        min-height: auto;
+        margin-top: 20px;
+        border-top: 1px solid rgba(228, 228, 231, 1);
+        padding-top: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .logoCircle {
+        width: 100px;
+        height: 100px;
+    }
+
+    .companyName {
+        font-size: 22px;
+    }
+
+    .titleRow {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .headerContainer {
+        padding: 16px;
+    }
+
+    .mainLayout {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .titleRow,
+    .infoMetaRow,
+    .tagsRow {
+        justify-content: center;
+    }
+
+    .actionSection {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .statsContainer {
+        flex-direction: column;
+        gap: 8px;
+    }
+}

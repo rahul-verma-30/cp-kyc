@@ -1,0 +1,148 @@
+.container {
+  font-family: 'Inter', sans-serif;
+  max-width: 1088px;
+  margin: 0 auto;
+  background-color: #ffffff;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(244, 244, 245, 1);
+  padding: 12px 24px;
+  border-radius: 100px;
+  margin-bottom: 32px;
+}
+
+.title {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  letter-spacing: 0;
+  color: rgba(24, 24, 27, 1);
+  margin: 0;
+}
+
+.metaInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.metaLabel {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(113, 113, 122, 1);
+}
+
+.metaValue {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(39, 39, 42, 1);
+}
+
+.metaValueText {
+  font-size: 16px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background-color: #d1d5db;
+}
+
+.aboutSection {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sectionTitle {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 28px;
+  letter-spacing: 0;
+  color: rgba(39, 39, 42, 1);
+}
+
+.contentBox {
+  border: 1px solid rgba(228, 228, 231, 1);
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.description {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(113, 113, 122, 1);
+  margin: 0;
+}
+
+/* Responsiveness */
+
+@media (max-width: 1024px) {
+  .header {
+    padding: 14px 24px;
+  }
+  .title {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 20px;
+    gap: 12px;
+    padding: 20px;
+  }
+  
+  .metaInfo {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .divider {
+    display: none;
+  }
+
+  .contentBox {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 20px;
+  }
+
+  .metaLabel, .metaValue, .metaValueText {
+    font-size: 14px;
+  }
+
+  .sectionTitle {
+    font-size: 18px;
+  }
+
+  .description {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}

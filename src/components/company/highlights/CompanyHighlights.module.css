@@ -1,0 +1,237 @@
+.container {
+  font-family: 'Inter', sans-serif;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  background-color: #ffffff;
+}
+
+/* Header Styles */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(244, 244, 245, 1);
+  padding: 12px 24px;
+  border-radius: 100px;
+}
+
+.headerTitle {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  letter-spacing: 0;
+  color: rgba(24, 24, 27, 1);
+  margin: 0;
+}
+
+.headerInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.infoGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.infoLabel {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(113, 113, 122, 1);
+}
+
+.infoValue {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(39, 39, 42, 1);
+}
+
+.infoDivider {
+  width: 1px;
+  height: 20px;
+  background-color: rgba(228, 228, 231, 1);
+  display: inline-block;
+}
+
+
+/* Section Common Styles */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionTitle {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 28px;
+  letter-spacing: 0;
+  color: rgba(39, 39, 42, 1);
+  margin: 0;
+}
+
+/* Card Styles */
+.card {background: rgba(250, 250, 250, 1);
+border: 1px solid rgba(228, 228, 231, 1);
+box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.06);
+
+  border-radius: 20px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chartLine {
+  height: 1px;
+  background-color: rgba(229, 231, 235, 1);
+  flex: 1;
+}
+
+.chartHeaderText {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(30, 41, 59, 1);
+}
+
+.shareholdingSection {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Progress Bar Styles */
+
+.progressBar {
+  height: 16px;
+  width: 100%;
+  display: flex;
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.progressPromoter {
+  background-color: rgba(191, 219, 254, 1);
+}
+
+.progressNonPromoter {
+  background-color: rgba(233, 213, 255, 1);
+}
+
+/* Legend Styles */
+.legendGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.legendItem {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.dotPromoter {
+  background-color: rgba(191, 219, 254, 1);
+}
+
+.dotNonPromoter {
+  background-color: rgba(233, 213, 255, 1);
+}
+
+.legendLabel {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(100, 116, 139, 1);
+  margin: 0 0 2px 0;
+}
+
+.legendValue {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0;
+  color: rgba(39, 39, 42, 1);
+  margin: 0;
+}
+
+/* Charges Section Styles */
+.emptyCard {
+border: 1px solid rgba(228, 228, 231, 1);
+  border-radius: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+}
+
+.emptyText {
+  font-size: 14px;
+  color: rgba(113, 113, 122, 1);
+  font-style: italic;
+  margin: 0;
+}
+
+/* Responsive Rules */
+
+@media (max-width: 1024px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 16px 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .legendGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .headerTitle {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .headerInfo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .infoDivider {
+    display: none;
+  }
+
+  .card, .emptyCard {
+    padding: 20px;
+  }
+}

@@ -1,0 +1,63 @@
+.statsWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: transparent;
+  font-family: 'Inter', sans-serif;
+  max-width: 760px;
+  width: 100%;
+  margin: 0 auto;
+  gap: 32px;
+}
+
+.badge {
+  background-color: rgba(4, 30, 66, 1);
+  color: white;
+  padding: 8px;
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;       
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  vertical-align: middle;
+  /* max-width: 277px;
+  width: 100%; */
+  text-align: center;
+}
+
+.statsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  width: 100%;
+}
+
+.statBox {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.number {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;        
+  font-size: 36px;
+  line-height: 44px;
+  letter-spacing: -0.02em;    
+  text-align: center;
+  color: rgba(31, 41, 55, 1);
+  margin: 0;
+}
+
+.label {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;       
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0;
+  text-align: center;
+  color: rgba(107, 114, 128, 1);
+  margin: 0;
+}

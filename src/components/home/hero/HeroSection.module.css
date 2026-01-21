@@ -1,0 +1,108 @@
+.hero {
+  position: relative;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  /* padding-top: 80px; */
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+}
+
+.content {
+  z-index: 2;
+  max-width: 1135px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+
+.textWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.title {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 60px;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: rgba(31, 41, 55, 1);
+  margin: 0;
+}
+
+.subtitle {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  letter-spacing: 0;
+  text-align: center;
+  color: rgba(31, 41, 55, 1);
+  margin: 0;
+}
+
+.searchContainer {
+  max-width: 866px;
+  width: 100%;
+  background: white;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.12);
+  border: 8px solid rgba(4, 30, 66, 0.05);
+  margin: 0 auto;
+}
+
+.squareIcon {
+  width: 32px;
+  height: 32px;
+  padding-left: 16px;
+}
+
+.input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0;
+  text-align: left;
+  color: rgba(113, 113, 122, 1);
+  padding-left: 16px;
+}
+
+.searchBtn {
+  background-color: rgba(4, 30, 66, 1);
+  color: white;
+  border: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrowUp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrowImg {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
