@@ -1,6 +1,15 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import styles from "./HeroSection.module.css";
 
 export default function HeroSection() {
+  const router = useRouter();
+
+  const handleSearch = () => {
+    router.push("/company");
+  };
+
   return (
     <section className={styles.hero}>
       <div className={styles.content}>
@@ -25,12 +34,17 @@ export default function HeroSection() {
               />
             </div>
           </div>
+
           <input
             type="text"
             placeholder="Search by company name, CIN, LLPIN, or director name"
             className={styles.input}
           />
-          <button className={styles.searchBtn}>
+
+          <button
+            className={styles.searchBtn}
+            onClick={handleSearch}
+          >
             <span className={styles.arrowUp}>
               <img
                 src="/icons/arrow-up.svg"
@@ -41,6 +55,7 @@ export default function HeroSection() {
           </button>
         </div>
       </div>
+
       <div className={styles.gridOverlay}></div>
     </section>
   );

@@ -2,10 +2,9 @@
 
 import React from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-import styles from "./OwnershipSection.module.css";
-import Link from "next/link";
+import styles from "./ShareHoldingsPattern.module.css";
 
-const OwnershipSection = () => {
+const ShareHoldingsPattern = () => {
   const summaryStats = [
     { label: "Latest Annual Return", value: "31 Mar 2024", type: "blue" },
     { label: "Promoter Shares", value: "1174000355.00", type: "red" },
@@ -74,22 +73,21 @@ const OwnershipSection = () => {
 
   return (
     <div className={styles.mainWrapper}>
-      <header className={styles.mainHeader}>
-        <h1 className={styles.mainTitle}>Control & Ownership</h1>
-      </header>
-
+      <nav className={styles.breadcrumb}>
+        <span className={styles.breadcrumbLink}>Company Details</span>
+        <span className={styles.breadcrumbSeparator}>
+          <img
+            src="/icons/arrow-right-black.svg"
+            alt=""
+            className={styles.breadcrumbIcon}
+          />
+        </span>
+        <span className={styles.breadcrumbActive}>Share Holdings Details</span>
+      </nav>
       <section className={styles.section}>
         <div className={styles.sectionWrapper}>
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>Share Holding Pattern</h2>
-            <Link href="/company/shareHoldings" className={styles.viewAllBtn}>
-                View Full Details
-                <img
-                    src="/icons/chevron-right.svg"
-                    alt=""
-                    className={styles.arrowIcon}
-                />
-            </Link>
           </div>
 
           <div className={styles.statsGrid}>
@@ -152,48 +150,8 @@ const OwnershipSection = () => {
           </div>
         ))}
       </section>
-
-      <section className={styles.section}>
-        <div className={styles.sectionWrapper}>
-          <h2 className={styles.sectionTitle}>Group Structure</h2>
-          <div className={styles.statsGrid}>
-            {groupStats.map((stat, idx) => (
-              <div
-                key={idx}
-                className={`${styles.statCard} ${styles[stat.type + "Stat"]}`}
-              >
-                <p className={styles.statLabel}>{stat.label}</p>
-                <p className={styles.statValue}>{stat.value}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className={styles.tableWrapper}>
-          <table className={styles.activityTable}>
-            <thead>
-              <tr>
-                <th>Company Name</th>
-                <th className={styles.textRight}>Percentage</th>
-                <th className={styles.textRight}>Relation Type</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Dabur Egypt Ltd.</td>
-                <td className={styles.textRight}>100.00</td>
-                <td className={styles.textRight}>Subsidiary</td>
-              </tr>
-              <tr>
-                <td>Dabur International Fze (W.E.F. 07.12.2023)</td>
-                <td className={styles.textRight}>100.00</td>
-                <td className={styles.textRight}>Subsidiary</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
     </div>
   );
 };
 
-export default OwnershipSection;
+export default ShareHoldingsPattern;
