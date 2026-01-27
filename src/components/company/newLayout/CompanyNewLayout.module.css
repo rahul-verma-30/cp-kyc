@@ -1,10 +1,9 @@
 .layoutContainer {
   display: flex;
   flex-direction: column;
-  height: 100vh;
   width: 100%;
-  overflow: hidden;
   font-family: 'Inter', sans-serif;
+  min-height: 100vh;
 }
 
 /* Header Section */
@@ -117,7 +116,6 @@
   display: flex;
   flex: 1;
   width: 100%;
-  overflow: hidden;
 }
 
 .sidebar {
@@ -166,5 +164,28 @@
 .contentArea {
   flex: 1;
   background-color: #ffffff;
-  overflow-y: auto;
+  /* overflow-y: auto; */
+}
+/* Below CompanyNewHeader */
+.companyBody {
+  display: flex;
+  min-height: 0;
+  max-width: 1632px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 120px;
+  position: relative;
+}
+
+/* Company page left sidebar */
+.companySidebar {
+  width: 280px; /* or whatever your component needs */
+  border-right: 1px solid rgba(228, 228, 231, 1);
+  background: #fafafa;
+}
+
+/* Company page right content */
+.companyContent {
+  flex: 1;
+  padding: 24px;
 }

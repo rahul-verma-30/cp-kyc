@@ -57,6 +57,35 @@
 
 /* Responsiveness */
 
+@media (max-width:1550px){
+  .tableWrapper{border-radius:10px}
+}
+
+@media (max-width:1440px){
+  .th,.td{padding:14px 18px}
+}
+
+@media (max-width:1280px){
+  .th,.td{padding:12px 16px}
+}
+
+@media (max-width:1024px){
+  .tableWrapper{overflow-x:auto}
+  .table{min-width:560px}
+}
+
+@media (max-width:768px){
+  .title{font-size:17px}
+  .table{min-width:500px}
+}
+
+@media (max-width:480px){
+  .title{font-size:16px}
+  .th,.td{font-size:13px;padding:10px 12px}
+  .table{min-width:400px}
+}
+
+
 @media (max-width: 1024px) {
   .th, .td {
     padding: 16px 20px;

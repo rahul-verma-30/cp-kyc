@@ -95,6 +95,38 @@
 
 /* Responsiveness */
 
+
+@media (max-width:1280px){
+  .header{padding:12px 20px}
+}
+
+@media (max-width:1024px){
+  .container{max-width:100%}
+  .header{padding:14px 20px}
+  .title{font-size:20px}
+}
+
+@media (max-width:768px){
+  .header{
+    flex-direction:column;
+    align-items:flex-start;
+    border-radius:20px;
+    gap:12px;
+    padding:20px
+  }
+  .metaInfo{flex-wrap:wrap;gap:12px}
+  .divider{display:none}
+}
+
+@media (max-width:480px){
+  .container{padding:0 16px}
+  .title{font-size:18px}
+  .sectionTitle{font-size:16px}
+  .metaLabel,.metaValue,.metaValueText{font-size:13px}
+  .description{font-size:13px;line-height:1.5}
+}
+
+
 @media (max-width: 1024px) {
   .header {
     padding: 14px 24px;

@@ -3,13 +3,12 @@
     background-color: #ffffff;
     padding: 24px;
     box-sizing: border-box;
-    margin: 0 auto;
 }
 
 .mainLayout {
     display: flex;
     gap: 24px;
-        max-width: 1632px;
+    max-width: 1632px;
     width: 100%;
     margin: 0 auto;
 }
@@ -75,10 +74,10 @@
 }
 
 .statLabel {
-      font-weight: 500;
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: 0;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0;
     color: rgba(24, 24, 27, 1);
 }
 
@@ -87,11 +86,11 @@
     color: rgba(239, 68, 68, 1);
     padding: 4px 8px;
     border-radius: 8px;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 18px;
-  letter-spacing: 0;
-  vertical-align: middle;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 0;
+    vertical-align: middle;
 }
 
 .cinBadge {
@@ -99,27 +98,27 @@
     color: rgba(39, 39, 42, 1);
     padding: 4px 8px;
     border-radius: 8px;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 18px;
-  letter-spacing: 0;
-  vertical-align: middle;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 0;
+    vertical-align: middle;
 }
 
 .arrowDown {
-  width: 18px;
-  height: 18px;
-  display: inline-block;
+    width: 18px;
+    height: 18px;
+    display: inline-block;
 }
 
 
 .description {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: 0;
-  color: rgba(63, 63, 70, 1);
-  margin: 0;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0;
+    color: rgba(63, 63, 70, 1);
+    margin: 0;
 }
 
 .infoMetaRow {
@@ -127,11 +126,11 @@
     flex-wrap: wrap;
     gap: 24px;
     color: rgba(113, 113, 122, 1);
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: 0;
-  text-align: center;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0;
+    text-align: center;
 }
 
 .metaItem {
@@ -165,15 +164,15 @@
 }
 
 .tag {
-    background-color:rgba(241, 245, 249, 1);
+    background-color: rgba(241, 245, 249, 1);
     color: rgba(39, 39, 42, 1);
     padding: 6px 12px;
     border-radius: 100px;
-      font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: 0;
-  vertical-align: middle;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0;
+    vertical-align: middle;
 }
 
 /* Action Section Styles */
@@ -195,11 +194,11 @@
     border: 1px solid var(--border, rgba(226, 232, 240, 1));
     padding: 7px 15px;
     border-radius: 8px;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 24px;
-  letter-spacing: 0;
-  color: rgba(4, 30, 66, 1);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: 0;
+    color: rgba(4, 30, 66, 1);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -217,18 +216,22 @@
     align-items: center;
     gap: 8px;
     cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
+.actionsButton:hover{
+    background-color: rgb(14, 160, 68);
+}
 
 .lastUpdated {
     font-size: 13px;
     color: rgba(113, 113, 122, 1);
     display: flex;
     gap: 12px;
-      font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: 0;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0;
 }
 
 .lastUpdated strong {
@@ -236,7 +239,6 @@
     font-weight: 500;
 }
 
-/* ... existing styles */
 
 /* Added/Updated for Alerts Row */
 .alertsRow {
@@ -251,49 +253,325 @@
     gap: 6px;
     padding: 6px 12px;
     border-radius: 100px;
-    font-size: 14px;
-    font-family: 500;
+    font-size: 12px;
+    font-family: 400;
     border: 1px solid transparent;
 }
 
-.alertBadge strong { font-weight: 600; margin-right: 2px; }
+.alertBadge strong {
+    font-size: 14px;
+    font-weight: 600;
+}
 
-.legalAlert { background: rgba(254, 242, 242, 1); color: rgba(220, 38, 38, 1); border-color: rgba(254, 202, 202, 1); }
-.adverseAlert { background: rgba(254, 252, 232, 1); color: rgba(202, 138, 4, 1); border-color: rgba(254, 240, 138, 1); }
-.regulatoryAlert { background: rgba(255, 247, 237, 1); color: rgba(234, 88, 12, 1); border-color: rgba(254, 215, 170, 1); }
-.riskAlert { background: rgba(255, 251, 235, 1); color: rgba(217, 119, 6, 1); border-color: rgba(253, 230, 138, 1); }
+.legalAlert {
+    background: rgba(254, 242, 242, 1);
+    color: rgba(220, 38, 38, 1);
+    border-color: rgba(254, 202, 202, 1);
+}
+
+.adverseAlert {
+    background: rgba(254, 252, 232, 1);
+    color: rgba(202, 138, 4, 1);
+    border-color: rgba(254, 240, 138, 1);
+}
+
+.regulatoryAlert {
+    background: rgba(255, 247, 237, 1);
+    color: rgba(234, 88, 12, 1);
+    border-color: rgba(254, 215, 170, 1);
+}
+
+.riskAlert {
+    background: rgba(255, 251, 235, 1);
+    color: rgba(217, 119, 6, 1);
+    border-color: rgba(253, 230, 138, 1);
+}
 
 .viewAllBtn {
     background: none;
     border: none;
-    color: #041E42;
+    color: rgba(4, 30, 66, 1);
     font-weight: 500;
     font-size: 14px;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     cursor: pointer;
     text-decoration: underline;
-    margin-left: 8px;
+    padding: 6px 12px;
 }
 
-/* Adjusting the Action Section to align with the bottom */
-.actionSection {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: space-between; /* Keeps buttons top and date bottom */
-    padding-bottom: 8px;
-}
 
 .arrowDownRed {
     width: 14px;
     filter: invert(39%) sepia(87%) saturate(3000%) hue-rotate(340deg) brightness(95%) contrast(90%);
 }
 
-/* Ensure the layout doesn't break on wide screens */
-.mainLayout {
+/* Container to group header and observation bar */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    width: 100%;
+}
+
+.observationsBar {
+    border-left: 4px solid rgba(4, 30, 66, 1);
+    background-color: rgba(255, 247, 237, 1);
+    border-top: 1px solid rgba(228, 228, 231, 1);
+    border-bottom: 1px solid rgba(228, 228, 231, 1);
+    padding: 20px 0;
+}
+
+.observationsContent {
+    max-width: 1632px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+.obsLeft {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background-color: rgba(161, 161, 170, 1);
+    border-radius: 50%;
+}
+
+.obsTitle {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(39, 39, 42, 1);
+}
+
+.obsDivider {
+    width: 1px;
+    height: 24px;
+    background-color: rgba(228, 228, 231, 1);
+    margin: 0 24px;
+}
+
+.obsRight {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.issueItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.issueTextOrange {
+    color: rgba(234, 88, 12, 1);
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.issueTextRed {
+    color: rgba(220, 38, 38, 1);
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.bullet {
+    color: rgba(251, 146, 60, 1);
+    font-size: 18px;
+}
+
+.obsChevron {
+    margin-left: auto;
+    cursor: pointer;
+    width: 24px;
+}
+
+/* Expanded Container */
+.expandedWrapper {
+    background-color: rgba(250, 250, 250, 1);
+    /* Slight cream background per image */
+    padding: 20px 0;
+    border-left: 4px solid rgba(4, 30, 66, 1);
+    border-bottom: 1px solid rgba(228, 228, 231, 1);
+}
+
+.expandedInner {
+    max-width: 1632px;
+    margin: 0 auto;
+}
+
+.riskSummaryHeader {
+    display: flex;
+    gap: 16px;
     align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.riskIconBox {
+    background: rgba(249, 115, 22, 1);
+    padding: 12px;
+    border-radius: 100px;
+    display: flex;
+}
+
+.riskSummaryTitle {
+    font-size: 18px;
+    font-weight: 500;
+    color: rgba(39, 39, 42, 1);
+    margin: 0;
+}
+
+.riskSummarySub {
+    font-size: 14px;
+    color: rgba(113, 113, 122, 1);
+    margin: 2px 0 0 0;
+}
+
+/* Grid Layout */
+.riskGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.riskCard {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    gap: 16px;
+    border-radius: 20px;
+    padding: 24px;
+    align-items: flex-start;
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cardHigh {
+    border: 1px solid rgba(254, 202, 202, 1);
+    background: rgba(254, 242, 242, 1);
+}
+
+.cardMedium {
+    border: 1px solid rgba(252, 211, 77, 1);
+    background: rgba(255, 251, 235, 1);
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cardIconBox {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cardHigh .cardIconBox {
+    background: rgba(254, 226, 226, 1);
+}
+
+.cardMedium .cardIconBox {
+    background: rgba(254, 243, 199, 1);
+}
+
+.cardIconBox img {
+    width: 20px;
+    height: 20px;
+
+}
+
+.categoryLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(220, 38, 38, 1);
+    letter-spacing: 0.05em;
+}
+
+.categoryLabelYellow {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(217, 119, 6, 1);
+    letter-spacing: 0.05em;
+}
+
+.severityBadgeHigh {
+    margin-left: auto;
+    background: rgba(239, 68, 68, 1);
+    color: white;
+    padding: 2px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.severityBadgeMed {
+    margin-left: auto;
+    background: rgba(245, 158, 11, 1);
+    color: white;
+    padding: 2px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.cardTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(39, 39, 42, 1);
+    margin: 0;
+}
+
+.cardDesc {
+    font-size: 14px;
+    color: rgba(113, 113, 122, 1);
+    line-height: 20px;
+    margin: 0;
+}
+
+.cardFooter {
+    font-size: 12px;
+    color: rgba(113, 113, 122, 1);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.footerItem{
+    display: flex;
+    gap: 6px;
+}
+
+.footerDivider {
+  width: 5px;
+  height: 5px;
+  background-color: rgba(161, 161, 170, 1);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+
+.rotated {
+    transform: rotate(180deg);
+}
+
+@media (max-width: 768px) {
+    .riskGrid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Responsiveness */

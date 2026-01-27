@@ -63,6 +63,35 @@
 }
 
 /* Tablet Breakpoint */
+@media (max-width:1550px){
+  .grid{column-gap:18px}
+}
+
+@media (max-width:1440px){
+  .card{padding:18px}
+  .grid{column-gap:16px}
+}
+
+@media (max-width:1280px){
+  .grid{column-gap:14px;row-gap:14px}
+}
+
+@media (max-width:1024px){
+  .grid{gap:12px}
+}
+
+@media (max-width:768px){
+  .grid{grid-template-columns:1fr}
+}
+
+@media (max-width:480px){
+  .container{padding:10px}
+  .card{padding:16px}
+  .title{font-size:16px}
+  .label{font-size:12px}
+  .value{font-size:14px}
+}
+
 @media (max-width: 1024px) {
   .grid {
     gap: 12px;

@@ -36,3 +36,30 @@
   flex-direction: column;
   gap: 32px;
 }
+
+@media (max-width:1550px){
+  .contentRow{gap:28px}
+}
+
+@media (max-width:1440px){
+  .contentRow{padding:32px 24px}
+  .sidebar{max-width:300px}
+}
+
+@media (max-width:1280px){
+  .contentRow{gap:24px}
+  .sidebar{max-width:280px}
+}
+
+@media (max-width:1024px){
+  .contentRow{flex-direction:column;max-width:100%;padding:24px}
+  .sidebar{max-width:100%}
+}
+
+@media (max-width:768px){
+  .contentRow{padding:16px;gap:20px}
+}
+
+@media (max-width:480px){
+  .contentRow{padding:12px;gap:16px}
+}
