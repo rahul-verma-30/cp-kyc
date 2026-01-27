@@ -1,0 +1,157 @@
+/* FinancialHighlightsTables.module.css */
+.container {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.headerRow1 {
+  padding-bottom: 12px;
+  font-size: 18px;
+  font-weight: 500;
+  color: rgba(39, 39, 42, 1);
+
+}
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid rgba(228, 228, 231, 1);
+  border-radius: 12px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.headerRow {
+  background-color: #ffffff;
+  border-bottom: 1px solid rgba(228, 228, 231, 1);
+}
+
+.headerRow th {
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(113, 113, 122, 1);
+  background-color: rgba(250, 250, 250, 1);
+  text-align: left;
+}
+
+.particularsCell {
+  min-width: 250px;
+}
+
+.dateCell {
+  width: 14%;
+}
+
+/* .row {
+  border-bottom: 1px solid rgba(228, 228, 231, 1);
+} */
+
+.sectionHeaderRow {
+  background-color: rgba(244, 244, 245, 1);
+}
+
+.sectionHeaderRow .labelCell {
+  font-weight: 600;
+  font-size: 14px;
+  color: rgba(39, 39, 42, 1);
+  padding: 12px 16px;
+}
+
+.sectionHeaderRow .labelCell {
+  max-width: 33%;
+  width: 100%;
+}
+
+.auditorTable .particularsCell , .auditorTable .labelCell  {
+      max-width: 10%;
+  width: 100%;
+  min-width: 150px;
+}
+
+.auditorTable .dateCell  {
+  max-width: 20%;
+  width: 100%;
+}
+.auditorTable .valueCell{
+  max-width: 15%;
+  width: 100%;
+}
+
+.labelCell {
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(39, 39, 42, 1);
+  text-align: left;
+  border-bottom: 1px solid rgba(228, 228, 231, 1);
+}
+
+.valueCell {
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(39, 39, 42, 1);
+  text-align: left;
+  border-bottom: 1px solid rgba(228, 228, 231, 1);
+}
+
+.totalRow {
+  /* background-color: rgba(228, 228, 231, 1); */
+  border-bottom: 1px solid rgba(228, 228, 231, 1);
+}
+
+.totalRow .labelCell,
+.totalRow .valueCell {
+  font-weight: 700;
+  color: rgba(39, 39, 42, 1);
+    padding: 16px;
+}
+
+.grandTotalRow {
+    background-color: rgba(228, 228, 231, 1);
+}
+.grandTotalRow .labelCell,
+.grandTotalRow .valueCell {
+  border-top: 1px solid rgba(212, 212, 216, 1) ;
+  border-bottom: 1px solid rgba(212, 212, 216, 1) ;
+}
+
+.table tbody tr:last-child .labelCell,
+.table tbody tr:last-child .valueCell {
+  border-bottom: none;
+}
+
+/* Responsive Styles */
+
+@media (max-width: 1024px) {
+  .particularsCell {
+    min-width: 200px;
+  }
+  .dateCell {
+    width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .labelCell, .valueCell, .headerRow th {
+    font-size: 13px;
+    padding: 10px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .labelCell, .valueCell, .headerRow th {
+    font-size: 12px;
+    padding: 8px 4px;
+  }
+  .particularsCell {
+    min-width: 140px;
+  }
+}

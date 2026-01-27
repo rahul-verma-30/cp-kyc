@@ -14,6 +14,12 @@
   gap: 3px;
 }
 
+.breadcrumbLink{
+    color: rgba(113, 113, 122, 1);
+    cursor: pointer;
+    text-decoration: none;
+}
+
 .breadcrumbIcon {
   width: 20px;
   height: 20px;
@@ -58,12 +64,21 @@
   background: #ffffff;
   border: 1px solid rgba(228, 228, 231, 1);
   border-radius: 24px;
-  transition: all 0.2s ease;
+    transition: 
+    background-color 0.25s ease,
+    border-radius 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .expandedCard {
   border: 1px solid rgba(228, 228, 231, 1);
 }
+.expandedCard .detailsContent {
+  max-height: 1200px; /* large enough to fit content */
+  opacity: 1;
+  padding: 0 24px 24px 24px;
+}
+
 
 .cardHeader {
   display: flex;
@@ -74,7 +89,7 @@
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
   background-color: rgba(244, 244, 245, 1);
-  
+  transition: background-color 0.25s ease, padding 0.25s ease;
 }
 
 .headerLeft {
@@ -82,6 +97,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 12px;
+  transition: flex-direction 0.25s ease, gap 0.25s ease;
 }
 
 .avatar {
@@ -89,6 +105,7 @@
   height: 140px;
   border-radius: 50%;
   object-fit: cover;
+  transition: width 0.25s ease, height 0.25s ease;
 }
 
 .directorName {
@@ -97,6 +114,7 @@
   font-weight: 600;
   margin: 0;
   margin-bottom: 6px;
+  transition: font-size 0.25s ease, line-height 0.25s ease;
 }
 
 .dinLabel {
@@ -117,6 +135,13 @@
   background-color: rgba(244, 244, 245, 1);
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
+    max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: 
+    max-height 0.4s ease,
+    opacity 0.25s ease,
+    padding 0.3s ease;
 }
 
 .gridInfo {
