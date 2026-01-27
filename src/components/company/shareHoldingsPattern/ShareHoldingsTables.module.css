@@ -61,6 +61,7 @@
   text-align: center;
     border: 1px solid rgba(228, 228, 231, 1);
     border-top: none;
+    text-align: center !important;
 }
 
 .subHeader {
@@ -91,7 +92,7 @@
 
 /* Footer styling */
 .footerRow td {
-  background-color: rgba(244, 244, 245, 1);
+  background-color: rgba(244, 244, 245, 1) !important;
   font-weight: 600;
   color: rgba(39, 39, 42, 1);
 }

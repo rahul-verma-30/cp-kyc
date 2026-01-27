@@ -11,9 +11,9 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import styles from "./FinancialHighlights.module.css";
+import styles from "./FinancialHighlightsDetails.module.css";
 
-const FinancialHighlights = () => {
+const FinancialHighlightsDetails = () => {
   const topCards = [
     { label: "Revenue", value: "₹ 9,522.65 Cr", change: "-0.32 %", isNegative: true },
     { label: "Profit", value: "₹ 1,403.22 Cr", change: "-7.02 %", isNegative: true },
@@ -50,20 +50,23 @@ const FinancialHighlights = () => {
   ];
 
   return (
+        <div className={styles.mainWrapper}>
+      <nav className={styles.breadcrumb}>
+        <Link href="/company" className={styles.breadcrumbLink}>
+          Company Details
+        </Link>
+        <span className={styles.breadcrumbSeparator}>
+          <img
+            src="/icons/arrow-right-black.svg"
+            alt=""
+            className={styles.breadcrumbIcon}
+          />
+        </span>
+        <span className={styles.breadcrumbActive}>Financials Details</span>
+      </nav>
     <div className={styles.container}>
       <div className={styles.header}>
         <h2 className={styles.title}>Financial Highlights</h2>
-        <Link
-            href="/company/financialHighlights"
-            className={styles.viewDetails}
-            >
-            View Full Detials
-            <img
-                src="/icons/chevron-right.svg"
-                alt=""
-                className={styles.chevron}
-            />
-        </Link>
       </div>
 
       <div className={styles.topGrid}>
@@ -130,7 +133,8 @@ const FinancialHighlights = () => {
         </div>
       </div>
     </div>
+    </div>
   );
 };
 
-export default FinancialHighlights;
+export default FinancialHighlightsDetails;

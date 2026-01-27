@@ -36,14 +36,14 @@ const DirectorsSection = () => {
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>Current Directors Details</h2>
-<Link href="/company/employee" className={styles.viewAllBtn}>
-  View All Employee
-  <img
-    src="/icons/chevron-right.svg"
-    alt=""
-    className={styles.arrowIcon}
-  />
-</Link>
+            <Link href="/company/employee" className={styles.viewAllBtn}>
+                View All Employee
+                <img
+                    src="/icons/chevron-right.svg"
+                    alt=""
+                    className={styles.arrowIcon}
+                />
+            </Link>
         </div>
         <div className={styles.membersOuterBox}>
           <div className={styles.membersGrid}>
@@ -65,10 +65,14 @@ const DirectorsSection = () => {
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>Former Directors Details</h2>
-          <button className={styles.viewAllBtn}>
-            View All Employee
-            <img src="/icons/chevron-right.svg" alt="" className={styles.arrowIcon} />
-          </button>
+            <Link href="/company/employee" className={styles.viewAllBtn}>
+                View All Employee
+                <img
+                    src="/icons/chevron-right.svg"
+                    alt=""
+                    className={styles.arrowIcon}
+                />
+            </Link>
         </div>
         <div className={styles.membersOuterBox}>
           <div className={styles.membersGrid}>

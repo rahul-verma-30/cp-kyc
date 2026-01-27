@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import styles from "./EmployeeDetails.module.css";
+import Link from "next/link";
 
 const EmployeeDetails = () => {
   const [expandedId, setExpandedId] = useState("saket-current");
@@ -143,20 +144,18 @@ const EmployeeDetails = () => {
   };
 
   const renderDirectorCard = (director, isExpanded) => (
-<div
-  key={director.id}
-  className={`${styles.card} ${
-    isExpanded ? styles.expandedCard : styles.collapsedCard
-  }`}
->
-
-<div
-  className={`${styles.cardHeader} ${
-    !isExpanded ? styles.collapsedInner : ""
-  }`}
-  onClick={() => toggleExpand(director.id)}
->
-
+    <div
+      key={director.id}
+      className={`${styles.card} ${
+        isExpanded ? styles.expandedCard : styles.collapsedCard
+      }`}
+    >
+      <div
+        className={`${styles.cardHeader} ${
+          !isExpanded ? styles.collapsedInner : ""
+        }`}
+        onClick={() => toggleExpand(director.id)}
+      >
         <div className={styles.headerLeft}>
           <img
             src={director.image}
@@ -242,7 +241,9 @@ const EmployeeDetails = () => {
   return (
     <div className={styles.container}>
       <nav className={styles.breadcrumb}>
-        <span>Company Details</span>
+        <Link href="/company" className={styles.breadcrumbLink}>
+          Company Details
+        </Link>
         <img
           src="/icons/arrow-right-black.svg"
           alt="arrow"
