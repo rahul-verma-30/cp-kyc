@@ -3,7 +3,11 @@
 import React, { useState } from "react";
 import styles from "./newSidebar.module.css";
 
+import { useCompanySection } from "@/components/company/context/CompanySectionContext";
+
 const CompanyNewSidebar = () => {
+  const { activeSection, setActiveSection } = useCompanySection();
+
   // Set default states to true to match the expanded look of the image
   const [expandedSections, setExpandedSections] = useState({
     companyDetails: true,
@@ -15,7 +19,6 @@ const CompanyNewSidebar = () => {
     litigation: true,
   });
 
-  const [activeSection, setActiveSection] = useState("companyDetails");
   const [activeTab, setActiveTab] = useState("Summary");
 
   const toggleSection = (sectionId) => {
@@ -32,7 +35,11 @@ const CompanyNewSidebar = () => {
       items: ["Summary", "Name History", "Contact Details"],
     },
     { id: "alerts", title: "Alerts", isStandalone: true },
-    { id: "companyHighlights", title: "Company Highlights", isStandalone: true },
+    {
+      id: "companyHighlights",
+      title: "Company Highlights",
+      isStandalone: true,
+    },
     {
       id: "directorsKmp",
       title: "Directors & KMP Details",
@@ -66,7 +73,11 @@ const CompanyNewSidebar = () => {
       items: ["Open Charges", "Closed Charges"],
     },
     { id: "peerComparison", title: "Peer Comparison", isStandalone: true },
-    { id: "relatedCorporates", title: "Related Corporates", isStandalone: true },
+    {
+      id: "relatedCorporates",
+      title: "Related Corporates",
+      isStandalone: true,
+    },
     {
       id: "compliance",
       title: "Compliance Details",
@@ -97,7 +108,7 @@ const CompanyNewSidebar = () => {
         {menuData.map((section) => (
           <div key={section.id} className={styles.section}>
             {section.isStandalone ? (
-              <div 
+              <div
                 className={styles.standaloneHeader}
                 onClick={() => setActiveSection(section.id)}
               >
@@ -109,7 +120,10 @@ const CompanyNewSidebar = () => {
                   className={`${styles.sectionHeader} ${
                     activeSection === section.id ? styles.headerActive : ""
                   }`}
-                  onClick={() => toggleSection(section.id)}
+                  onClick={() => {
+                    toggleSection(section.id);
+                    setActiveSection(section.id);
+                  }}
                 >
                   <span className={styles.title}>{section.title}</span>
                   <img
@@ -124,31 +138,31 @@ const CompanyNewSidebar = () => {
                 </button>
 
                 {expandedSections[section.id] && section.items && (
-                <ul className={styles.itemList}>
+                  <ul className={styles.itemList}>
                     {section.items.map((item) => {
-                    const isActive = activeTab === item;
+                      const isActive = activeTab === item;
 
-                    return (
+                      return (
                         <li
-                        key={item}
-                        className={`${styles.navItem} ${
+                          key={item}
+                          className={`${styles.navItem} ${
                             isActive ? styles.navItemActive : ""
-                        }`}
-                        onClick={() => {
+                          }`}
+                          onClick={() => {
                             setActiveTab(item);
                             setActiveSection(section.id);
-                        }}
+                          }}
                         >
-                        <span
+                          <span
                             className={`${styles.timelineDot} ${
-                            isActive ? styles.timelineDotActive : ""
+                              isActive ? styles.timelineDotActive : ""
                             }`}
-                        />
-                        <span className={styles.itemText}>{item}</span>
+                          />
+                          <span className={styles.itemText}>{item}</span>
                         </li>
-                    );
+                      );
                     })}
-                </ul>
+                  </ul>
                 )}
               </>
             )}

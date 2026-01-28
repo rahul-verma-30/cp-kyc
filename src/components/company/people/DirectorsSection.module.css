@@ -6,19 +6,62 @@
   gap: 32px;
 }
 
-.mainHeader {
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: rgba(244, 244, 245, 1);
   padding: 12px 24px;
   border-radius: 100px;
 }
 
-.mainTitle {
-  font-size: 20px;
+.headerTitle {
   font-weight: 500;
-  color: rgba(4, 30, 66, 1);
+  font-size: 20px;
   line-height: 30px;
+  letter-spacing: 0;
+  color: rgba(24, 24, 27, 1);
   margin: 0;
 }
+
+.headerInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.infoGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.infoLabel {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(113, 113, 122, 1);
+}
+
+.infoValue {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(39, 39, 42, 1);
+}
+
+.infoDivider {
+  width: 1px;
+  height: 20px;
+  background-color: rgba(228, 228, 231, 1);
+  display: inline-block;
+}
+
+/* =====================
+   STATS
+   ===================== */
 
 .statsGrid {
   display: flex;
@@ -74,6 +117,10 @@
   color: rgba(22, 163, 74, 1);
 }
 
+/* =====================
+   SECTION
+   ===================== */
+
 .section {
   display: flex;
   flex-direction: column;
@@ -115,81 +162,16 @@
   object-fit: contain;
 }
 
-.membersOuterBox {
-  border: 1px solid rgba(228, 228, 231, 1);
-  border-radius: 20px;
-  padding: 20px;
-}
+/* =====================
+   RESPONSIVE
+   ===================== */
 
-.membersGrid {
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-}
-
-.personCard {
-  flex: 1;
-  min-width: 220px;
-  border: 1px solid rgba(228, 228, 231, 1);
-  border-radius: 20px;
-  padding: 12px;
-  background-color: rgba(250, 250, 250, 1);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.imageContainer {
-  background-color: #ffffff;
-  border-radius: 12px;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.profileImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.info {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.name {
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 20px;
-  color: rgba(39, 39, 42, 1);
-}
-
-.role {
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 18px;
-  color: rgba(113, 113, 122, 1);
-  margin: 0;
-}
-
-/* Responsive Breakpoints */
-
-@media (max-width: 1024px) {
+@media (max-width: 1300px) {
   .statsGrid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
   }
-  .membersGrid {
-    flex-wrap: wrap;
-  }
-  .personCard {
-    flex: 0 0 calc(50% - 10px);
-  }
+
 }
 
 @media (max-width: 768px) {
@@ -198,6 +180,7 @@
     align-items: flex-start;
     gap: 8px;
   }
+
   .viewAllBtn {
     width: 100%;
     justify-content: center;
@@ -208,11 +191,5 @@
   .statsGrid {
     grid-template-columns: 1fr;
   }
-  .personCard {
-    flex: 0 0 100%;
-  }
-  .membersOuterBox {
-    padding: 12px;
-    border-radius: 16px;
-  }
 }
+

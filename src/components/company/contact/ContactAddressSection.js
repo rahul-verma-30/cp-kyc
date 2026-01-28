@@ -47,7 +47,7 @@ const ContactAddressSection = () => {
           <div key={index} className={styles.row}>
             <div className={styles.iconContainer}>
               <img src={item.icon} alt={item.label} className={styles.icon} />
-              {index < contactItems.length && (
+              {index < contactItems.length - 1 && (
                 <div className={styles.line}></div>
               )}
             </div>

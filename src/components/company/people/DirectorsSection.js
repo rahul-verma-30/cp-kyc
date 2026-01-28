@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './DirectorsSection.module.css';
-import Link from "next/link";
-
+import DirectorProfile from './DirectorProfile';
 
 const DirectorsSection = () => {
   const stats = [
@@ -20,8 +19,19 @@ const DirectorsSection = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.mainHeader}>
-        <h1 className={styles.mainTitle}>Directors & KMP Details</h1>
+      <div className={styles.header}>
+        <h1 className={styles.headerTitle}>Directors & KMP Details</h1>
+        <div className={styles.headerInfo}>
+          <span className={styles.infoGroup}>
+            <span className={styles.infoLabel}>Source:</span>
+            <span className={styles.infoValue}>MCA</span>
+          </span>
+          <span className={styles.infoDivider}></span>
+          <span className={styles.infoGroup}>
+            <span className={styles.infoLabel}>Last Updated:</span>
+            <span className={styles.infoValue}>30-Dec-2024, 11:45 AM IST</span>
+          </span>
+        </div>
       </div>
 
       <div className={styles.statsGrid}>
@@ -32,64 +42,7 @@ const DirectorsSection = () => {
           </div>
         ))}
       </div>
-
-      <section className={styles.section}>
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>Current Directors Details</h2>
-            <Link href="/company/employee" className={styles.viewAllBtn}>
-                View All Employee
-                <img
-                    src="/icons/chevron-right.svg"
-                    alt=""
-                    className={styles.arrowIcon}
-                />
-            </Link>
-        </div>
-        <div className={styles.membersOuterBox}>
-          <div className={styles.membersGrid}>
-            {directors.map((person, index) => (
-              <div key={index} className={styles.personCard}>
-                <div className={styles.imageContainer}>
-                  <img src={person.image} alt={person.name} className={styles.profileImg} />
-                </div>
-                <div className={styles.info}>
-                  <p className={styles.name}>{person.name}</p>
-                  <p className={styles.role}>{person.role}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className={styles.section}>
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>Former Directors Details</h2>
-            <Link href="/company/employee" className={styles.viewAllBtn}>
-                View All Employee
-                <img
-                    src="/icons/chevron-right.svg"
-                    alt=""
-                    className={styles.arrowIcon}
-                />
-            </Link>
-        </div>
-        <div className={styles.membersOuterBox}>
-          <div className={styles.membersGrid}>
-            {directors.map((person, index) => (
-              <div key={index} className={styles.personCard}>
-                <div className={styles.imageContainer}>
-                  <img src={person.image} alt={person.name} className={styles.profileImg} />
-                </div>
-                <div className={styles.info}>
-                  <p className={styles.name}>{person.name}</p>
-                  <p className={styles.role}>{person.role}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <DirectorProfile />
     </div>
   );
 };
