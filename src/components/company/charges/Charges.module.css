@@ -1,0 +1,352 @@
+.container {
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    background-color: #ffffff;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(244, 244, 245, 1);
+    padding: 12px 24px;
+    border-radius: 100px;
+}
+
+.headerTitle {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 30px;
+    letter-spacing: 0;
+    color: rgba(24, 24, 27, 1);
+    margin: 0;
+}
+
+.headerInfo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.infoGroup {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.infoLabel {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0;
+    color: rgba(113, 113, 122, 1);
+}
+
+.infoValue {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0;
+    color: rgba(39, 39, 42, 1);
+}
+
+.infoDivider {
+    width: 1px;
+    height: 20px;
+    background-color: rgba(228, 228, 231, 1);
+    display: inline-block;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.statCard {
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid rgba(228, 228, 231, 1);
+}
+
+.blue {
+  background-color: rgba(239, 246, 255, 1);
+  border-color: rgba(191, 219, 254, 1);
+  color: rgba(37, 99, 235, 1);
+}
+
+.red {
+  background-color: rgba(254, 242, 242, 1);
+  border-color: rgba(254, 202, 202, 1);
+  color: rgba(220, 38, 38, 1);
+}
+
+.purple {
+  background-color: rgba(250, 245, 255, 1);
+  border-color: rgba(221, 214, 254, 1);
+  color: rgba(124, 58, 237, 1);
+}
+
+.green {
+  background-color: rgba(240, 253, 244, 1);
+  border-color: rgba(187, 247, 208, 1);
+  color: rgba(22, 163, 74, 1);
+}
+
+.statLabel {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 16px;
+}
+
+.statValue {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.chartAndSummary {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 20px;
+}
+
+.chartCard,
+.summaryCard {
+    background-color: white;
+    border: 1px solid rgba(228, 228, 231, 1);
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.cardTitle {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 32px;
+    color: rgba(39, 39, 42, 1);
+}
+
+.chartWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+    height: 200px;
+}
+
+.chartLegend {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+.legendDot {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    background-color: rgba(14, 165, 233, 1);
+}
+
+.legendText {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(39, 39, 42, 1);
+}
+
+.legendValue {
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(39, 39, 42, 1);
+}
+
+.summaryCardAlt {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.summaryRow {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 16px;
+    font-size: 14px;
+    background-color: rgba(250, 250, 250, 1);
+    border-radius: 8px;
+}
+
+.summaryRow span {
+    color: rgba(39, 39, 42, 1);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.summaryRow strong {
+    font-weight: 600;
+}
+
+
+.sectionTitle {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: rgba(39, 39, 42, 1);
+}
+
+.tableWrapper {
+    background-color: white;
+    border: 1px solid rgba(228, 228, 231, 1);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.table th {
+    background-color: rgba(250, 250, 250, 1);
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(113, 113, 122, 1);
+    border-bottom: 1px solid rgba(228, 228, 231, 1);
+}
+
+.table td {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(228, 228, 231, 1);
+    color: rgba(39, 39, 42, 1);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.actionCell img {
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.spacer {
+  margin-top: 32px;
+}
+
+.paginationRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding: 0 4px;
+}
+
+.showingText {
+  font-size: 14px;
+  color: rgba(113, 113, 122, 1);
+}
+
+.paginationControls {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.rowsLabel , .pageLabel {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(30, 41, 59, 1);
+}
+
+.selectBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid rgba(226, 232, 240, 1);
+  border-radius: 6px;
+  font-size: 14px;
+  color: rgba(30, 41, 59, 1);
+  cursor: pointer;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+}
+
+.navButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.navBtn, .navBtnDisabled {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(226, 232, 240, 1);
+  border-radius: 6px;
+  background-color: #ffffff;
+  cursor: pointer;
+  color: rgba(39, 39, 42, 1);
+  font-size: 16px;
+}
+
+.navBtnDisabled {
+  /* background-color: rgba(244, 244, 245, 1); */
+  color: rgba(161, 161, 170, 1);
+  cursor: not-allowed;
+}
+
+/* Responsiveness */
+@media (max-width: 1200px) {
+    .chartAndSummary {
+        grid-template-columns: 1fr;
+    }
+
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .tableWrapper {
+        overflow-x: auto;
+    }
+
+    .pagination {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+}
+
+@media (max-width: 480px) {
+    .statsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .chartWrapper {
+        flex-direction: column;
+        height: auto;
+        padding: 20px 0;
+    }
+}

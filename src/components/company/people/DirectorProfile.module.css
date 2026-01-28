@@ -4,10 +4,11 @@
     font-family: 'Inter', sans-serif;
 }
 
-.mainContainer{
-    display: flex;
-    border: 1px solid rgba(228, 228, 231, 1);
-    border-radius: 20px;
+.mainContainer {
+  display: flex;
+  border: 1px solid rgba(228, 228, 231, 1);
+  border-radius: 20px;
+  overflow: hidden;
 }
 
 .containerHeader {
@@ -206,8 +207,9 @@
 }
 
 /* Section Styling */
-.section {
+.section2 {
     margin-bottom: 32px;
+    margin-top: 32px;
 }
 
 .sectionHeading {
@@ -486,6 +488,11 @@
 .timelineItem:last-child .timelineLine {
     display: none;
 }
+
+.timelineItem:last-child {
+  margin-bottom: 0;
+}
+
 
 .timelineContent {
     flex: 1;
