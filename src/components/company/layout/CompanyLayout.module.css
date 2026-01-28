@@ -52,8 +52,8 @@
 }
 
 @media (max-width:1024px){
-  .contentRow{flex-direction:column;max-width:100%;padding:24px}
-  .sidebar{max-width:100%}
+  .contentRow{max-width:100%;padding:24px}
+  /* .sidebar{max-width:100%} */
 }
 
 @media (max-width:768px){
