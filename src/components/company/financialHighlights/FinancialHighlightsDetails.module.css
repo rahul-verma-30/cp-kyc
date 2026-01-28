@@ -58,6 +58,28 @@
   margin: 0;
 }
 
+.viewDetails {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  border: 1px solid var(--border, rgba(226, 232, 240, 1));
+  border-radius: 6px;
+  background: #fff;
+  color: rgba(225, 31, 53, 1);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.chevron {
+  width: 16px;
+  height: 16px;
+}
+
 .topGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

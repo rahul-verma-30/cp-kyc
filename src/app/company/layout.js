@@ -1,9 +1,9 @@
 "use client";
 
-import styles from "./CompanyLayout.module.css";
-import CompanyNewHeader from "../newHeader/newHeader";
-import CompanyNewSidebar from "../newSidebar/newSidebar";
-import { CompanySectionProvider } from "../context/CompanySectionContext";
+import styles from "@/components/company/layout/CompanyLayout.module.css";
+import CompanyNewHeader from "@/components/company/newHeader/newHeader";
+import CompanyNewSidebar from "@/components/company/newSidebar/newSidebar";
+import { CompanySectionProvider } from "@/components/company/context/CompanySectionContext";
 
 export default function CompanyLayout({ children }) {
   return (

@@ -16,7 +16,7 @@ const ProductDetails = () => {
 
   return (
     <div className={styles.container}>
-      <nav className={styles.breadcrumb}>
+      {/* <nav className={styles.breadcrumb}>
         <Link href="/company" className={styles.breadcrumbLink}>
           Company Details
         </Link>
@@ -28,7 +28,7 @@ const ProductDetails = () => {
           />
         </span>
         <span className={styles.breadcrumbActive}>Products Details</span>
-      </nav>
+      </nav> */}
 
       <h1 className={styles.title}>
         Products or Services related to Dabur India Limited

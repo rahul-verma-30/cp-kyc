@@ -6,18 +6,57 @@
   gap: 32px;
 }
 
-.mainHeader {
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: rgba(244, 244, 245, 1);
   padding: 12px 24px;
   border-radius: 100px;
 }
 
-.mainTitle {
-  font-size: 20px;
+.headerTitle {
   font-weight: 500;
-  color: rgba(4, 30, 66, 1);
+  font-size: 20px;
   line-height: 30px;
+  letter-spacing: 0;
+  color: rgba(24, 24, 27, 1);
   margin: 0;
+}
+
+.headerInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.infoGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.infoLabel {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(113, 113, 122, 1);
+}
+
+.infoValue {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(39, 39, 42, 1);
+}
+
+.infoDivider {
+  width: 1px;
+  height: 20px;
+  background-color: rgba(228, 228, 231, 1);
+  display: inline-block;
 }
 
 /* =====================
@@ -124,71 +163,6 @@
 }
 
 /* =====================
-   MEMBERS
-   ===================== */
-
-.membersOuterBox {
-  border: 1px solid rgba(228, 228, 231, 1);
-  border-radius: 20px;
-  padding: 20px;
-}
-
-.membersGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-
-.personCard {
-  border: 1px solid rgba(228, 228, 231, 1);
-  border-radius: 20px;
-  padding: 12px;
-  background-color: rgba(250, 250, 250, 1);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-height: 500px;
-}
-
-.imageContainer {
-  background-color: #ffffff;
-  border-radius: 12px;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.profileImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.info {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.name {
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 20px;
-  color: rgba(39, 39, 42, 1);
-}
-
-.role {
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 18px;
-  color: rgba(113, 113, 122, 1);
-  margin: 0;
-}
-
-/* =====================
    RESPONSIVE
    ===================== */
 
@@ -198,9 +172,6 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .membersGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 @media (max-width: 768px) {
@@ -220,13 +191,5 @@
   .statsGrid {
     grid-template-columns: 1fr;
   }
-
-  .membersGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .membersOuterBox {
-    padding: 12px;
-    border-radius: 16px;
-  }
 }
+

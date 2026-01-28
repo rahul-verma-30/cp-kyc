@@ -4,6 +4,10 @@ import React from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import styles from "./OwnershipSection.module.css";
 import Link from "next/link";
+import ShareHoldingsTables from "../shareHoldingsPattern/ShareHoldingsTables";
+import ShareHoldingsTables2 from "../shareHoldingsPattern/ShareHoldingsTables2";
+import SubsidiaryAccordion from "../subsidiary/SubsidiaryAccordion";
+import InvestmentPage from "../overseasDirectInvestment/OverseasDirectInvestment";
 
 const OwnershipSection = () => {
   const summaryStats = [
@@ -74,22 +78,38 @@ const OwnershipSection = () => {
 
   return (
     <div className={styles.mainWrapper}>
-      <header className={styles.mainHeader}>
-        <h1 className={styles.mainTitle}>Control & Ownership</h1>
-      </header>
+      <div className={styles.header}>
+        <h1 className={styles.headerTitle}>Control & Ownership</h1>
+        <div className={styles.headerInfo}>
+          <span className={styles.infoGroup}>
+            <span className={styles.infoLabel}>Source:</span>
+            <span className={styles.infoValue}>MCA</span>
+          </span>
+          <span className={styles.infoDivider}></span>
+          <span className={styles.infoGroup}>
+            <span className={styles.infoLabel}>Last Updated:</span>
+            <span className={styles.infoValue}>30-Dec-2024, 11:45 AM IST</span>
+          </span>
+        </div>
+      </div>
 
       <section className={styles.section}>
         <div className={styles.sectionWrapper}>
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>Share Holding Pattern</h2>
-            <Link href="/company/shareHoldings" className={styles.viewAllBtn}>
-                View Full Details
-                <img
-                    src="/icons/chevron-right.svg"
-                    alt=""
-                    className={styles.arrowIcon}
-                />
-            </Link>
+            {/* <Link
+              href="/company/shareHoldings"
+              className={styles.viewAllBtn}
+              onClick={(e) => e.preventDefault()}
+            >
+              View Full Details
+              <img
+                src="/icons/chevron-right.svg"
+                alt=""
+                className={styles.arrowIcon}
+              />
+            </Link> */}
+
           </div>
 
           <div className={styles.statsGrid}>
@@ -152,7 +172,8 @@ const OwnershipSection = () => {
           </div>
         ))}
       </section>
-
+        <ShareHoldingsTables />
+        <ShareHoldingsTables2 />
       <section className={styles.section}>
         <div className={styles.sectionWrapper}>
           <h2 className={styles.sectionTitle}>Group Structure</h2>
@@ -192,6 +213,8 @@ const OwnershipSection = () => {
           </table>
         </div>
       </section>
+      <SubsidiaryAccordion />
+      <InvestmentPage />
     </div>
   );
 };
