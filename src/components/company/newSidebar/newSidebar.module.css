@@ -1,0 +1,156 @@
+.sidebar {
+  font-family: 'Inter', sans-serif;
+  background-color: #ffffff;
+  min-width: 280px;
+  max-width: 320px;
+  height: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  position: sticky;
+  top: 0;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 8px;
+}
+
+.section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sectionHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  background: none;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s ease;
+}
+
+.headerActive {
+  background-color: rgba(241, 245, 249, 1);
+}
+
+.standaloneHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  background: none;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s ease;
+    font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(113, 113, 122, 1);
+}
+
+.title {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(113, 113, 122, 1);
+}
+
+.headerActive .title {
+  color: rgba(39, 39, 42, 1);
+  font-weight: 500;
+}
+
+.chevron {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.chevronDown {
+  transform: rotate(0deg);
+}
+
+.chevronUp {
+  transform: rotate(180deg);
+}
+
+
+.itemList {
+  list-style: none;
+  padding: 2px 8px;
+  margin: 0;
+  border-left: 1px solid rgba(228, 228, 231, 1);
+  margin-left: 8px;
+}
+
+.navItem {
+  padding: 6px 8px;
+  font-size: 15px;
+  color: rgba(113, 113, 122, 1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+    font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.navItem:hover {
+  color: rgba(31, 41, 44, 1);
+}
+
+.navItemActive {
+  background-color: rgba(241, 245, 249, 1);
+  color: rgba(39, 39, 42, 1);
+  font-weight: 500;
+  border-radius: 4px;
+}
+
+
+/* Responsive Breakpoints */
+
+@media (max-width: 1024px) {
+  .sidebar {
+    min-width: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    max-width: 100%;
+    min-width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(228, 228, 231, 1);
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 14px;
+  }
+  
+  .navItem {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+
+  .itemList {
+    margin-left: 20px;
+  }
+}

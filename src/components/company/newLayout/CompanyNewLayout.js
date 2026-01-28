@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import styles from "./CompanyNewLayout.module.css";
 import CompanyNewHeader from "../newHeader/newHeader";
+import CompanyNewSidebar from "../newSidebar/newSidebar";
 
 const CompanyNewLayout = () => {
   const [activeTab, setActiveTab] = useState("home");
@@ -19,11 +20,7 @@ const CompanyNewLayout = () => {
           <div className={styles.divider}></div>
 
           <div className={styles.searchContainer}>
-            <img
-              src="/icons/search.svg"
-              alt=""
-              className={styles.searchIcon}
-            />
+            <img src="/icons/search.svg" alt="" className={styles.searchIcon} />
             <input
               type="text"
               placeholder="Search by company name, CIN, LLPIN, or director name"
@@ -73,10 +70,22 @@ const CompanyNewLayout = () => {
           </div>
         </aside>
 
-        {/* Main Content Area */}
         <main className={styles.contentArea}>
-          <CompanyNewHeader />
+        {/* Company Page Header */}
+        <CompanyNewHeader />
+
+        {/* Company Page Body */}
+        <div className={styles.companyBody}>
+            {/* LEFT: Company Sidebar */}
+            <CompanyNewSidebar />
+
+            {/* RIGHT: Company Main Content */}
+            <div className={styles.companyContent}>
+            {/* future tabs / tables / sections */}
+            </div>
+        </div>
         </main>
+
       </div>
     </div>
   );
