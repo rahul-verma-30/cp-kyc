@@ -119,15 +119,27 @@ export default function DirectorProfile() {
   return (
     <div className={styles.container}>
       <div className={styles.containerHeader}>
-        <div
-          className={`${styles.sidebarTab} ${
-            directorTab === "current" ? styles.sidebarTabActive : ""
-          }`}
-          onClick={() => setDirectorTab("current")}
-        >
-          Current Directors & KMP
+        <div className={styles.sidebarTabs}>
+          <div
+            className={`${styles.sidebarTab} ${
+              directorTab === "current" ? styles.sidebarTabActive : ""
+            }`}
+            onClick={() => setDirectorTab("current")}
+          >
+            Current Directors & KMP
+          </div>
+
+          <div
+            className={`${styles.sidebarTab} ${
+              directorTab === "past" ? styles.sidebarTabActive : ""
+            }`}
+            onClick={() => setDirectorTab("past")}
+          >
+            Past Directors & KMP
+          </div>
         </div>
       </div>
+
       <div className={styles.mainContainer}>
         {/* LEFT SIDEBAR */}
         <aside className={styles.sidebar}>
@@ -393,7 +405,7 @@ export default function DirectorProfile() {
           </section>
 
           {/* KMP SECTION */}
-          <section className={styles.section}>
+          <section className={styles.section2}>
             <h2 className={styles.sectionHeading}>KMP-Specific Details</h2>
             <div className={styles.kmpContainer}>
               <div className={styles.kmpItem}>

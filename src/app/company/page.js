@@ -18,6 +18,10 @@ import FinancialHighlightsDetails from "@/components/company/financialHighlights
 import LigilationDetails from "@/components/company/ligilation/LigilationDetails";
 import Documents from "@/components/company/documents/Documents";
 
+import ChargesPage from "@/components/company/charges/Charges";
+import PeerComparison from "@/components/company/peerComparison/PeerComparison";
+import RelatedCorporates from "@/components/company/relatedCorporates/RelatedCorporates";
+
 export default function CompanyPage() {
   const { activeSection } = useCompanySection();
 
@@ -50,9 +54,31 @@ export default function CompanyPage() {
       {activeSection === "directorsKmp" && <DirectorsSection />}
 
       {/* 🟢 Control & Ownership */}
+
+      {activeSection === "controlOwnership" && (
+        <OwnershipSection />
+      )}
+
+      {/* 🟢 Charges */}
+      {activeSection === "charges" && (
+        <ChargesPage />
+      )}
+
+      {/* 🟢 Peer Comparison */}
+      {activeSection === "peerComparison" && (
+        <PeerComparison />
+      )}
+
+      {/* 🟢 Related Corporates */}
+      {activeSection === "relatedCorporates" && (
+        <RelatedCorporates />
+      )}
+
+
       {activeSection === "controlOwnership" && <OwnershipSection />}
       {activeSection === "litigation" && <LigilationDetails />}
       {activeSection === "documents" && <Documents />}
+
     </>
   );
 }

@@ -14,8 +14,11 @@
 /* Sidebar + Main layout */
 .contentRow {
   display: flex;
-  max-width: 1440px;
-  /* max-width: 1632px; */
+
+  /* max-width: 1440px; */
+        max-width: 1632px;
+
+
   width: 100%;
   margin: 0 auto;
   padding-top: 40px;
