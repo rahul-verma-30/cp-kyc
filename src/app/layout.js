@@ -11,7 +11,7 @@ export default function RootLayout({ children }) {
 
   const [activeTab, setActiveTab] = useState("home");
 
-  /* 🔁 Sync activeTab with URL */
+  // Sync activeTab with URL
   useEffect(() => {
     if (pathname === "/") {
       setActiveTab("home");
@@ -22,10 +22,14 @@ export default function RootLayout({ children }) {
     }
   }, [pathname]);
 
-  return (
+  const handleNav = (tab, path) => {
+    setActiveTab(tab);
+    router.push(path);
+  };
 
+  return (
     <CompanySectionProvider>
-      <html>
+      <html lang="en">
         <body>
           <div className={styles.layoutContainer}>
             {/* ===== TOP HEADER ===== */}
@@ -35,9 +39,9 @@ export default function RootLayout({ children }) {
                   src="/icons/logo2.svg"
                   alt="Corporate Professionals"
                   className={styles.logo}
-
                 />
-                <div className={styles.divider}></div>
+
+                <div className={styles.divider} />
 
                 <div className={styles.searchContainer}>
                   <img
@@ -54,103 +58,54 @@ export default function RootLayout({ children }) {
                 </div>
               </div>
 
-
-          <div className={styles.mainWrapper}>
-
-            {/* ===== LEFT SIDEBAR ===== */}
-            <aside className={styles.sidebar}>
-              <div className={styles.sidebarIcons}>
-
-                {/* 🏠 Home */}
-                <div
-                  className={`${styles.iconTab} ${
-                    activeTab === "home" ? styles.activeTab : ""
-                  }`}
-                  onClick={() => {
-                    setActiveTab("home");
-                    router.push("/");
-                  }}
-                >
-                  <img src="/icons/home-icon.svg" alt="Home" />
-
               <div className={styles.headerRight}>
                 <div className={styles.avatarWrapper}>
                   <div className={styles.avatarText}>DS</div>
-
                 </div>
               </div>
             </header>
 
-
-                {/* 🏢 Company Database */}
-                <div
-                  className={`${styles.iconTab} ${
-                    activeTab === "company" ? styles.activeTab : ""
-                  }`}
-                  onClick={() => {
-                    setActiveTab("company");
-                    router.push("/CompanyDatabase");
-                  }}
-                >
-                  <img src="/icons/company-icon.svg" alt="Companies" />
-                </div>
-
-                {/* 👤 People Database */}
-                <div
-                  className={`${styles.iconTab} ${
-                    activeTab === "profile" ? styles.activeTab : ""
-                  }`}
-                  onClick={() => {
-                    setActiveTab("profile");
-                    router.push("/PeopleDatabase");
-                  }}
-                >
-                  <img src="/icons/profile-icon.svg" alt="Profile" />
-                </div>
-
-              </div>
-            </aside>
-
-            {/* ===== PAGE CONTENT ===== */}
-            <main className={styles.contentArea}>
-              {children}
-            </main>
-
+            {/* ===== MAIN WRAPPER (SIDEBAR + CONTENT) ===== */}
             <div className={styles.mainWrapper}>
               {/* ===== LEFT SIDEBAR ===== */}
               <aside className={styles.sidebar}>
                 <div className={styles.sidebarIcons}>
-                  <div
+                  {/* 🏠 Home */}
+                  <button
+                    type="button"
                     className={`${styles.iconTab} ${
                       activeTab === "home" ? styles.activeTab : ""
                     }`}
-                    onClick={() => setActiveTab("home")}
+                    onClick={() => handleNav("home", "/")}
                   >
                     <img src="/icons/home-icon.svg" alt="Home" />
-                  </div>
+                  </button>
 
-                  <div
+                  {/* 🏢 Company Database */}
+                  <button
+                    type="button"
                     className={`${styles.iconTab} ${
                       activeTab === "company" ? styles.activeTab : ""
                     }`}
-                    onClick={() => setActiveTab("company")}
+                    onClick={() => handleNav("company", "/CompanyDatabase")}
                   >
                     <img src="/icons/company-icon.svg" alt="Companies" />
-                  </div>
+                  </button>
 
-                  <div
+                  {/* 👤 People Database */}
+                  <button
+                    type="button"
                     className={`${styles.iconTab} ${
                       activeTab === "profile" ? styles.activeTab : ""
                     }`}
-                    onClick={() => setActiveTab("profile")}
+                    onClick={() => handleNav("profile", "/PeopleDatabase")}
                   >
                     <img src="/icons/profile-icon.svg" alt="Profile" />
-                  </div>
+                  </button>
                 </div>
               </aside>
 
-
-              {/* 🔥 DYNAMIC CONTENT (NOT FIXED) */}
+              {/* ===== PAGE CONTENT ===== */}
               <main className={styles.contentArea}>{children}</main>
             </div>
           </div>
