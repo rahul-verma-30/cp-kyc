@@ -1,26 +1,80 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 
 import styles from "./LigilationDetails.module.css";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 import { litigationKpis, pendingCasesTable } from "./dummyData";
 import { ChevronsDownUp } from "lucide-react";
 
+import { createPortal } from "react-dom";
+
 function RowsPerPage({ value, onChange }) {
   const [open, setOpen] = useState(false);
+  const [coords, setCoords] = useState(null);
+
+  const triggerRef = useRef(null);
+  const dropdownRef = useRef(null);
+
+  const toggle = () => {
+    if (!triggerRef.current) return;
+
+    const rect = triggerRef.current.getBoundingClientRect();
+    const dropdownHeight = 176;
+
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const openUp = spaceBelow < dropdownHeight;
+
+    setCoords({
+      left: rect.left,
+      width: rect.width,
+      top: openUp ? rect.top - 135 : rect.bottom + 4,
+    });
+
+    setOpen(true);
+  };
+
+  // ✅ CLOSE ON OUTSIDE CLICK
+  useEffect(() => {
+    if (!open) return;
+
+    const handleClickOutside = (e) => {
+      if (
+        triggerRef.current?.contains(e.target) ||
+        dropdownRef.current?.contains(e.target)
+      ) {
+        return;
+      }
+      setOpen(false);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
+
+  // close on scroll / resize
+  useEffect(() => {
+    if (!open) return;
+    const close = () => setOpen(false);
+    window.addEventListener("scroll", close, true);
+    window.addEventListener("resize", close);
+    return () => {
+      window.removeEventListener("scroll", close, true);
+      window.removeEventListener("resize", close);
+    };
+  }, [open]);
 
   return (
-    <div className={styles.rowsWrapper}>
+    <>
       <div
+        ref={triggerRef}
         className={styles.pageSizeControl}
         onClick={(e) => {
           e.stopPropagation();
-          setOpen((o) => !o);
+          toggle();
         }}
       >
         <span className={styles.pageSizeValue}>{value}</span>
-
         <div className={styles.pageSizeArrows}>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path
@@ -34,25 +88,38 @@ function RowsPerPage({ value, onChange }) {
         </div>
       </div>
 
-      {open && (
-        <div className={styles.rowsDropdown}>
-          {[10, 20, 50, 100].map((val) => (
-            <button
-              key={val}
-              className={styles.rowsOption}
-              onClick={() => {
-                onChange(val);
-                setOpen(false);
-              }}
-            >
-              {val}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
+      {open &&
+        coords &&
+        createPortal(
+          <div
+            ref={dropdownRef}
+            className={styles.portalDropdown}
+            style={{
+              top: coords.top,
+              left: coords.left,
+              width: coords.width,
+            }}
+          >
+            {[10, 20, 50, 100].map((val) => (
+              <button
+                key={val}
+                className={styles.rowsOption}
+                onClick={() => {
+                  onChange(val);
+                  setOpen(false);
+                }}
+              >
+                {val}
+              </button>
+            ))}
+          </div>,
+          document.body,
+        )}
+    </>
   );
 }
+
+// export default RowsPerPage;
 
 const LigilationDetails = () => {
   const { setActiveSection } = useCompanySection();
@@ -107,7 +174,7 @@ const LigilationDetails = () => {
           ))}
         </div>
 
-        {litigationSections.map((section) => (
+        {litigationSections.map((section, index) => (
           <div
             key={section.id}
             id={section.id}
@@ -151,13 +218,17 @@ const LigilationDetails = () => {
                 <div className={styles.rowsPerpage}>
                   <span>Rows per page</span>
 
-                  <RowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
+                  <RowsPerPage
+                    forceUp={index === litigationSections.length - 1}
+                    value={rowsPerPage}
+                    onChange={setRowsPerPage}
+                  />
                 </div>
                 <div className={styles.controls}>
                   <span className={styles.pageInfo}>Page 1 of 10</span>
 
                   <div className={styles.pageControls}>
-                    <button>
+                    <button disabled>
                       <svg
                         width="16"
                         height="16"

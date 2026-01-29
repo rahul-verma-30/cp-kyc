@@ -376,7 +376,7 @@
   border: 1px solid #e4e4e7;
   border-radius: 12px;
   width: 100%;
-  overflow: hidden;
+  /* overflow: hidden; */
   background: #ffffff;
 }
 
@@ -507,6 +507,9 @@
 .pageControls button:hover {
   background: #f3f4f6;
 }
+.pageControls button:disabled{
+opacity: 0.5;
+}
 /* Page size selector */
 .pageSizeControl {
   max-height: 36px;
@@ -569,7 +572,7 @@
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
   z-index: 50;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .rowsOption {
@@ -584,6 +587,21 @@
 
 .rowsOption:hover {
   background: #f8fafc;
+}
+.dropdownDown {
+  top: 39px;
+}
+
+.dropdownUp {
+  bottom: 20px;
+}
+.portalDropdown {
+  position: fixed;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  z-index: 999999;
+  overflow: hidden;
 }
 
 @media (max-width: 1024px) {
