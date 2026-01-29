@@ -15,6 +15,8 @@ import ProductDetails from "@/components/company/productDetails/ProductDetails";
 import DirectorsSection from "@/components/company/people/DirectorsSection";
 import OwnershipSection from "@/components/company/ownership/OwnershipSection";
 import FinancialHighlightsDetails from "@/components/company/financialHighlights/FinancialHighlightsDetails";
+import LigilationDetails from "@/components/company/ligilation/LigilationDetails";
+import Documents from "@/components/company/documents/Documents";
 
 import ChargesPage from "@/components/company/charges/Charges";
 import PeerComparison from "@/components/company/peerComparison/PeerComparison";
@@ -46,16 +48,13 @@ export default function CompanyPage() {
       )}
 
       {/* 🟢 Financials */}
-      {activeSection === "financials" && (
-        <FinancialHighlights />
-      )}
+      {activeSection === "financials" && <FinancialHighlights />}
 
       {/* 🟢 Directors & KMP */}
-      {activeSection === "directorsKmp" && (
-        <DirectorsSection />
-      )}
+      {activeSection === "directorsKmp" && <DirectorsSection />}
 
       {/* 🟢 Control & Ownership */}
+
       {activeSection === "controlOwnership" && (
         <OwnershipSection />
       )}
@@ -74,6 +73,11 @@ export default function CompanyPage() {
       {activeSection === "relatedCorporates" && (
         <RelatedCorporates />
       )}
+
+
+      {activeSection === "controlOwnership" && <OwnershipSection />}
+      {activeSection === "litigation" && <LigilationDetails />}
+      {activeSection === "documents" && <Documents />}
 
     </>
   );

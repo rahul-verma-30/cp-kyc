@@ -8,14 +8,17 @@
 .headerWrapper {
   width: 100%;
 
-    border-bottom: 1px solid rgba(228, 228, 231, 1);
+  border-bottom: 1px solid rgba(228, 228, 231, 1);
 }
 
 /* Sidebar + Main layout */
 .contentRow {
   display: flex;
+
   /* max-width: 1440px; */
         max-width: 1632px;
+
+
   width: 100%;
   margin: 0 auto;
   padding-top: 40px;
@@ -25,7 +28,7 @@
 
 /* Sidebar */
 .sidebar {
-  max-width: 320px; 
+  max-width: 320px;
   width: 100%;
 }
 
@@ -37,29 +40,53 @@
   gap: 32px;
 }
 
-@media (max-width:1550px){
-  .contentRow{gap:28px}
+@media (max-width: 1550px) {
+  .contentRow {
+    gap: 28px;
+  }
+}
+@media (max-width:1487px) {
+  .contentRow{
+    padding-right: 10px;
+  }
 }
 
-@media (max-width:1440px){
-  .contentRow{padding:32px 24px}
-  .sidebar{max-width:300px}
+@media (max-width: 1440px) {
+  .contentRow {
+    padding: 32px 24px;
+  }
+  .sidebar {
+    max-width: 300px;
+  }
 }
 
-@media (max-width:1280px){
-  .contentRow{gap:24px}
-  .sidebar{max-width:280px}
+@media (max-width: 1280px) {
+  .contentRow {
+    gap: 24px;
+  }
+  .sidebar {
+    max-width: 280px;
+  }
 }
 
-@media (max-width:1024px){
-  .contentRow{max-width:100%;padding:24px}
+@media (max-width: 1024px) {
+  .contentRow {
+    max-width: 100%;
+    padding: 24px;
+  }
   /* .sidebar{max-width:100%} */
 }
 
-@media (max-width:768px){
-  .contentRow{padding:16px;gap:20px}
+@media (max-width: 768px) {
+  .contentRow {
+    padding: 16px;
+    gap: 20px;
+  }
 }
 
-@media (max-width:480px){
-  .contentRow{padding:12px;gap:16px}
+@media (max-width: 480px) {
+  .contentRow {
+    padding: 12px;
+    gap: 16px;
+  }
 }
