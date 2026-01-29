@@ -21,6 +21,7 @@ import Documents from "@/components/company/documents/Documents";
 import ChargesPage from "@/components/company/charges/Charges";
 import PeerComparison from "@/components/company/peerComparison/PeerComparison";
 import RelatedCorporates from "@/components/company/relatedCorporates/RelatedCorporates";
+import ComplianceDetails from "@/components/company/complianceDetails/ComplianceDetails";
 
 export default function CompanyPage() {
   const { activeSection } = useCompanySection();
@@ -79,6 +80,7 @@ export default function CompanyPage() {
       {activeSection === "litigation" && <LigilationDetails />}
       {activeSection === "documents" && <Documents />}
 
+      {activeSection === "compliance" && <ComplianceDetails />}
     </>
   );
 }
