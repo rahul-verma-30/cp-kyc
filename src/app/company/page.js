@@ -22,12 +22,14 @@ import ChargesPage from "@/components/company/charges/Charges";
 import PeerComparison from "@/components/company/peerComparison/PeerComparison";
 import RelatedCorporates from "@/components/company/relatedCorporates/RelatedCorporates";
 
+import AlertsContainer from "@/components/company/alerts/AlertsContainer";
+
 export default function CompanyPage() {
   const { activeSection } = useCompanySection();
 
   return (
     <>
-      {/* 🟢 Company Details */}
+      {/* Company Details */}
       {activeSection === "companyDetails" && (
         <>
           <CompanyOverview />
@@ -37,7 +39,7 @@ export default function CompanyPage() {
         </>
       )}
 
-      {/* 🟢 Company Highlights */}
+      {/* Company Highlights */}
       {activeSection === "companyHighlights" && (
         <>
           <CompanyHighlights />
@@ -47,32 +49,34 @@ export default function CompanyPage() {
         </>
       )}
 
-      {/* 🟢 Financials */}
+      {/* Financials */}
       {activeSection === "financials" && <FinancialHighlights />}
 
-      {/* 🟢 Directors & KMP */}
+      {/* Directors & KMP */}
       {activeSection === "directorsKmp" && <DirectorsSection />}
 
-      {/* 🟢 Control & Ownership */}
+      {/* Control & Ownership */}
 
       {activeSection === "controlOwnership" && (
         <OwnershipSection />
       )}
 
-      {/* 🟢 Charges */}
+      {/* Charges */}
       {activeSection === "charges" && (
         <ChargesPage />
       )}
 
-      {/* 🟢 Peer Comparison */}
+      {/* Peer Comparison */}
       {activeSection === "peerComparison" && (
         <PeerComparison />
       )}
 
-      {/* 🟢 Related Corporates */}
+      {/* Related Corporates */}
       {activeSection === "relatedCorporates" && (
         <RelatedCorporates />
       )}
+
+      {activeSection === "alerts" && <AlertsContainer />}
 
 
       {activeSection === "controlOwnership" && <OwnershipSection />}

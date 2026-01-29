@@ -38,6 +38,7 @@ body {
   height: 32px;
   width: auto;
   flex-shrink: 0;
+  cursor: pointer;
 }
 
 .divider {
@@ -58,6 +59,7 @@ body {
   align-items: center;
   padding: 6px 12px;
   gap: 8px;
+  cursor: pointer;
 }
 
 .searchIcon {
@@ -107,6 +109,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .avatarText {
