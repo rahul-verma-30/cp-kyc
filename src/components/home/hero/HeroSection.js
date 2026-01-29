@@ -24,36 +24,39 @@ export default function HeroSection() {
           </p>
         </div>
 
-        <div className={styles.searchContainer}>
-          <div className={styles.searchIcon}>
-            <div className={styles.squareIcon}>
-              <img
-                src="/icons/company.svg"
-                alt="Company Icon"
-                className={styles.iconImg}
-              />
-            </div>
-          </div>
+<div className={styles.searchOuter}>
+  <div className={styles.searchContainer}>
+    <div className={styles.searchIcon}>
+      <div className={styles.squareIcon}>
+        <img
+          src="/icons/company.svg"
+          alt="Company Icon"
+          className={styles.iconImg}
+        />
+      </div>
+    </div>
 
-          <input
-            type="text"
-            placeholder="Search by company name, CIN, LLPIN, or director name"
-            className={styles.input}
-          />
+    <input
+      type="text"
+      placeholder="Search by company name, CIN, LLPIN, or director name"
+      className={styles.input}
+    />
 
-          <button
-            className={styles.searchBtn}
-            onClick={handleSearch}
-          >
-            <span className={styles.arrowUp}>
-              <img
-                src="/icons/arrow-up.svg"
-                alt="Arrow up"
-                className={styles.arrowImg}
-              />
-            </span>
-          </button>
-        </div>
+    <button
+      className={styles.searchBtn}
+      onClick={handleSearch}
+    >
+      <span className={styles.arrowUp}>
+        <img
+          src="/icons/arrow-up.svg"
+          alt="Arrow up"
+          className={styles.arrowImg}
+        />
+      </span>
+    </button>
+  </div>
+</div>
+
       </div>
 
       <div className={styles.gridOverlay}></div>
