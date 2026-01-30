@@ -22,7 +22,7 @@
 
 .row {
     display: flex;
-    gap: 24px;
+    gap: 16px;
     width: 100%;
     min-width: 0;
 }

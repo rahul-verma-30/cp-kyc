@@ -1,5 +1,5 @@
 "use client";
-
+import { useRef, useEffect } from "react";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 
 import CompanyOverview from "@/components/company/overview/CompanyOverview";
@@ -26,17 +26,47 @@ import ComplianceDetails from "@/components/company/complianceDetails/Compliance
 import AlertsContainer from "@/components/company/alerts/AlertsContainer";
 
 export default function CompanyPage() {
-  const { activeSection } = useCompanySection();
+  const { activeSection, activeSubSection } = useCompanySection();
+
+  const overviewRef = useRef(null);
+  const nameHistoryRef = useRef(null);
+  const contactRef = useRef(null);
+
+  /* 🔥 Scroll when sidebar sub-item changes */
+  useEffect(() => {
+    if (activeSection !== "companyDetails") return;
+
+    const map = {
+      Summary: overviewRef,
+      "Name History": nameHistoryRef,
+      "Contact Details": contactRef,
+    };
+
+    const targetRef = map[activeSubSection];
+    if (targetRef?.current) {
+      targetRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [activeSection, activeSubSection]);
 
   return (
     <>
-      {/* Company Details */}
       {activeSection === "companyDetails" && (
         <>
-          <CompanyOverview />
-          <CompanyDetails />
-          <NameHistory />
-          <ContactAddressSection />
+          <div ref={overviewRef}>
+            <CompanyOverview />
+            <CompanyDetails />
+          </div>
+
+          <div ref={nameHistoryRef}>
+            <NameHistory />
+          </div>
+
+          <div ref={contactRef}>
+            <ContactAddressSection />
+          </div>
         </>
       )}
 

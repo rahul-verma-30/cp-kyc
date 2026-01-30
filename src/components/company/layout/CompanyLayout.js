@@ -15,14 +15,14 @@ export default function CompanyLayout({ children }) {
         </div>
 
         {/* Sidebar + Content */}
-        <div className={styles.contentRow}>
-          <aside className={styles.sidebar}>
-            <CompanyNewSidebar />
-          </aside>
+        <div className={styles.contentWrapper}>
+          <div className={styles.contentRow}>
+            <aside className={styles.sidebar}>
+              <CompanyNewSidebar />
+            </aside>
 
-          <main className={styles.main}>
-            {children}
-          </main>
+            <main className={styles.main}>{children}</main>
+          </div>
         </div>
       </div>
     </CompanySectionProvider>

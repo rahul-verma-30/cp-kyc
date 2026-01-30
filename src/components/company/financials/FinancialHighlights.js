@@ -13,27 +13,152 @@ import {
 } from "recharts";
 import styles from "./FinancialHighlights.module.css";
 import FinancialHighlightsTables from "../financialHighlights/FinancialHighlightsTables";
+import { useCompanySection } from "@/components/company/context/CompanySectionContext";
+import { useEffect, useRef } from "react";
 
 const FinancialHighlights = () => {
+  const { activeSubSection } = useCompanySection();
+
+  const containerRef = useRef(null);
+  const balanceSheetRef = useRef(null);
+  const profitLossRef = useRef(null);
+  const cashFlowRef = useRef(null);
+  const ratioRef = useRef(null);
+  const auditorsRef = useRef(null);
+  useEffect(() => {
+    if (!activeSubSection) return;
+
+    const scroll = (ref) => {
+      ref?.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    };
+
+    switch (activeSubSection) {
+      case "Financials Highlights":
+        scroll(containerRef);
+        break;
+
+      case "Balance Sheet":
+        scroll(balanceSheetRef);
+        break;
+
+      case "Profit & Loss":
+        scroll(profitLossRef);
+        break;
+
+      case "Cash Flow":
+        scroll(cashFlowRef);
+        break;
+
+      case "Ratios":
+        scroll(ratioRef);
+        break;
+
+      case "Auditors Details":
+        scroll(auditorsRef);
+        break;
+
+      default:
+        break;
+    }
+  }, [activeSubSection]);
+
   const topCards = [
-    { label: "Revenue", value: "₹ 9,522.65 Cr", change: "-0.32 %", isNegative: true },
-    { label: "Profit", value: "₹ 1,403.22 Cr", change: "-7.02 %", isNegative: true },
-    { label: "Cash & Bank Balance", value: "₹ 24.16 Cr", change: "+124.33 %", isNegative: false },
-    { label: "Net Worth", value: "₹ 7,423.29 Cr", change: "+124.33 %", isNegative: false },
-    { label: "Assets", value: "₹ 11,005.47 Cr", change: "+124.33 %", isNegative: false },
-    { label: "Outsiders' Liabilities", value: "₹ 3,582.18 Cr", change: "+124.33 %", isNegative: false },
+    {
+      label: "Revenue",
+      value: "₹ 9,522.65 Cr",
+      change: "-0.32 %",
+      isNegative: true,
+    },
+    {
+      label: "Profit",
+      value: "₹ 1,403.22 Cr",
+      change: "-7.02 %",
+      isNegative: true,
+    },
+    {
+      label: "Cash & Bank Balance",
+      value: "₹ 24.16 Cr",
+      change: "+124.33 %",
+      isNegative: false,
+    },
+    {
+      label: "Net Worth",
+      value: "₹ 7,423.29 Cr",
+      change: "+124.33 %",
+      isNegative: false,
+    },
+    {
+      label: "Assets",
+      value: "₹ 11,005.47 Cr",
+      change: "+124.33 %",
+      isNegative: false,
+    },
+    {
+      label: "Outsiders' Liabilities",
+      value: "₹ 3,582.18 Cr",
+      change: "+124.33 %",
+      isNegative: false,
+    },
   ];
 
   const ratioData = [
-    { label: "EBITDA", value: "₹ 1,706.91 Cr", change: "-7.19%", isNegative: true },
-    { label: "Net Prot Margin", value: "15.47%", change: "-1.05%", isNegative: true },
-    { label: "Sales to Fixed Asset", value: "4.46", change: "-8.23%", isNegative: true },
-    { label: "Debt to EBITDA", value: "0.17", change: "-55.26%", isNegative: true },
-    { label: "Interest Coverage Ratio", value: "17.14", change: "-24.39%", isNegative: true },
-    { label: "Net Worth Margin", value: "0.19%", change: "-0.03%", isNegative: true },
-    { label: "Debt to Equity", value: "0.04", change: "-60.00%", isNegative: true },
-    { label: "Return on Equity", value: "18.9%", change: "-2.92%", isNegative: true },
-    { label: "Equity Multiplier", value: "1.48", change: "-2.63%", isNegative: true },
+    {
+      label: "EBITDA",
+      value: "₹ 1,706.91 Cr",
+      change: "-7.19%",
+      isNegative: true,
+    },
+    {
+      label: "Net Prot Margin",
+      value: "15.47%",
+      change: "-1.05%",
+      isNegative: true,
+    },
+    {
+      label: "Sales to Fixed Asset",
+      value: "4.46",
+      change: "-8.23%",
+      isNegative: true,
+    },
+    {
+      label: "Debt to EBITDA",
+      value: "0.17",
+      change: "-55.26%",
+      isNegative: true,
+    },
+    {
+      label: "Interest Coverage Ratio",
+      value: "17.14",
+      change: "-24.39%",
+      isNegative: true,
+    },
+    {
+      label: "Net Worth Margin",
+      value: "0.19%",
+      change: "-0.03%",
+      isNegative: true,
+    },
+    {
+      label: "Debt to Equity",
+      value: "0.04",
+      change: "-60.00%",
+      isNegative: true,
+    },
+    {
+      label: "Return on Equity",
+      value: "18.9%",
+      change: "-2.92%",
+      isNegative: true,
+    },
+    {
+      label: "Equity Multiplier",
+      value: "1.48",
+      change: "-2.63%",
+      isNegative: true,
+    },
   ];
 
   const chartData = [
@@ -51,7 +176,7 @@ const FinancialHighlights = () => {
   ];
 
   return (
-    <div className={styles.container}>
+    <div ref={containerRef} className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.headerTitle}>Financials</h1>
         <div className={styles.headerInfo}>

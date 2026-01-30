@@ -2,8 +2,39 @@ import styles from "./Charges.module.css";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import RowsPerPage from "@/components/common/RowsPerPage";
 import { useState } from "react";
+import { useEffect, useRef } from "react";
+import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 
 export default function ChargesPage() {
+  const { activeSubSection } = useCompanySection();
+
+  const containerRef = useRef(null);
+  const closedChargesRef = useRef(null);
+
+  useEffect(() => {
+    if (!activeSubSection) return;
+
+    const scroll = (ref) => {
+      ref?.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    };
+
+    switch (activeSubSection) {
+      case "Open Charges":
+        scroll(containerRef);
+        break;
+
+      case "Closed Charges":
+        scroll(closedChargesRef);
+        break;
+
+      default:
+        break;
+    }
+  }, [activeSubSection]);
+
   const closedCharges = [
     {
       id: "100592955",
@@ -95,9 +126,8 @@ export default function ChargesPage() {
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-
   return (
-    <div className={styles.container}>
+    <div ref={containerRef} className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.headerTitle}>Charges</h1>
         <div className={styles.headerInfo}>
@@ -224,8 +254,9 @@ export default function ChargesPage() {
         </div>
       </section>
 
-      <section className={styles.tableSection}>
+      <section ref={closedChargesRef} className={styles.tableSection}>
         <h2 className={styles.sectionTitle}>Closed Charges</h2>
+
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
             <thead>
@@ -260,10 +291,7 @@ export default function ChargesPage() {
           <span className={styles.showingText}>Showing 1-10 of 20</span>
           <div className={styles.paginationControls}>
             <span className={styles.rowsLabel}>Rows per page</span>
-           <RowsPerPage
-  value={rowsPerPage}
-  onChange={setRowsPerPage}
-/>
+            <RowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
 
             <span className={styles.pageLabel}>Page 1 of 10</span>
             <div className={styles.navButtons}>

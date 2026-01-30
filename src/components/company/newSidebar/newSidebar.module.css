@@ -3,17 +3,17 @@
   background-color: #ffffff;
   min-width: 280px;
   max-width: 320px;
-  height: auto;
 
   display: flex;
   flex-direction: column;
 
   position: sticky;
+  top: 10px;
+
   padding-left: 12px;
-  top: 0;
   border-left: 4px solid rgba(228, 228, 231, 1);
-  position: relative;
 }
+
 
 .activeIndicator {
   position: absolute;
@@ -131,18 +131,17 @@
 
 .navItem {
   padding: 6px 8px;
-  font-size: 15px;
-  color: rgba(113, 113, 122, 1);
-  cursor: pointer;
-  transition: all 0.2s ease;
-    font-weight: 400;
   font-size: 14px;
   line-height: 20px;
   letter-spacing: 0;
+  font-weight: 400;
+  color: rgba(113, 113, 122, 1);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.navItem:hover {
-  color: rgba(31, 41, 44, 1);
+.navItem:not(.navItemActive):hover {
+  background-color: rgba(248, 250, 252, 1);
 }
 
 .navItemActive {
@@ -150,7 +149,9 @@
   color: rgba(39, 39, 42, 1);
   font-weight: 500;
   border-radius: 4px;
+  cursor: default;
 }
+
 
 
 /* Responsive Breakpoints */

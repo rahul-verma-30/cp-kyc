@@ -8,8 +8,48 @@ import ShareHoldingsTables from "../shareHoldingsPattern/ShareHoldingsTables";
 import ShareHoldingsTables2 from "../shareHoldingsPattern/ShareHoldingsTables2";
 import SubsidiaryAccordion from "../subsidiary/SubsidiaryAccordion";
 import InvestmentPage from "../overseasDirectInvestment/OverseasDirectInvestment";
+import { useCompanySection } from "@/components/company/context/CompanySectionContext";
+import { useEffect, useRef } from "react";
 
 const OwnershipSection = () => {
+  const { activeSubSection } = useCompanySection();
+  const mainWrapperRef = useRef(null); // Shareholding
+  const securitiesRef = useRef(null); // Securities Allotment
+  const groupStructureRef = useRef(null); // Group Structure
+  const odiRef = useRef(null); // ODI
+
+  useEffect(() => {
+    if (!activeSubSection) return;
+
+    const scroll = (ref) => {
+      ref?.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    };
+
+    switch (activeSubSection) {
+      case "Shareholding":
+        scroll(mainWrapperRef);
+        break;
+
+      case "Securities Allotment":
+        scroll(securitiesRef);
+        break;
+
+      case "Group Structure":
+        scroll(groupStructureRef);
+        break;
+
+      case "Overseas Direct Investment (ODI)":
+        scroll(odiRef);
+        break;
+
+      default:
+        break;
+    }
+  }, [activeSubSection]);
+
   const summaryStats = [
     { label: "Latest Annual Return", value: "31 Mar 2024", type: "blue" },
     { label: "Promoter Shares", value: "1174000355.00", type: "red" },
@@ -77,7 +117,7 @@ const OwnershipSection = () => {
   ];
 
   return (
-    <div className={styles.mainWrapper}>
+    <div ref={mainWrapperRef} className={styles.mainWrapper}>
       <div className={styles.header}>
         <h1 className={styles.headerTitle}>Control & Ownership</h1>
         <div className={styles.headerInfo}>
@@ -109,7 +149,6 @@ const OwnershipSection = () => {
                 className={styles.arrowIcon}
               />
             </Link> */}
-
           </div>
 
           <div className={styles.statsGrid}>
@@ -172,11 +211,15 @@ const OwnershipSection = () => {
           </div>
         ))}
       </section>
+      <div ref={securitiesRef}>
         <ShareHoldingsTables />
         <ShareHoldingsTables2 />
-      <section className={styles.section}>
+      </div>
+
+      <section ref={groupStructureRef} className={styles.section}>
         <div className={styles.sectionWrapper}>
           <h2 className={styles.sectionTitle}>Group Structure</h2>
+
           <div className={styles.statsGrid}>
             {groupStats.map((stat, idx) => (
               <div
@@ -214,7 +257,9 @@ const OwnershipSection = () => {
         </div>
       </section>
       <SubsidiaryAccordion />
-      <InvestmentPage />
+      <div ref={odiRef}>
+        <InvestmentPage />
+      </div>
     </div>
   );
 };

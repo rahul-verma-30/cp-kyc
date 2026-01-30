@@ -7,20 +7,24 @@ import { CompanySectionProvider } from "@/components/company/context/CompanySect
 
 export default function CompanyLayout({ children }) {
   return (
-    <div className={styles.container}>
-      {/* Header */}
-      <div className={styles.headerWrapper}>
-        <CompanyNewHeader />
-      </div>
+    <CompanySectionProvider>
+      <div className={styles.container}>
+        {/* Header */}
+        <div className={styles.headerWrapper}>
+          <CompanyNewHeader />
+        </div>
 
-      {/* Sidebar + Content */}
-      <div className={styles.contentRow}>
-        <aside className={styles.sidebar}>
-          <CompanyNewSidebar />
-        </aside>
+        {/* Sidebar + Content */}
+        {/* <div className={styles.contentWrapper}> */}
+          <div className={styles.contentRow}>
+            <aside className={styles.sidebar}>
+              <CompanyNewSidebar />
+            </aside>
 
-        <main className={styles.main}>{children}</main>
+            <main className={styles.main}>{children}</main>
+          </div>
+        {/* </div> */}
       </div>
-    </div>
+    </CompanySectionProvider>
   );
 }

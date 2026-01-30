@@ -12,6 +12,11 @@
 }
 
 /* Sidebar + Main layout */
+/* .contentWrapper {
+  width: 100%;
+  padding: 40px 24px; 
+} */
+
 .contentRow {
   display: flex;
 

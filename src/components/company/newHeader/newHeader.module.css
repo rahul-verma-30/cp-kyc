@@ -430,8 +430,9 @@
 .riskSummaryHeader {
     display: flex;
     gap: 16px;
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 24px;
+
 }
 
 .riskIconBox {
@@ -580,17 +581,20 @@
     margin-left: auto;
     background: rgba(239, 68, 68, 1);
     color: white;
-    padding: 2px 12px;
+    padding: 4px 12px;
     border-radius: 100px;
     font-size: 12px;
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .severityBadgeMed {
     margin-left: auto;
     background: rgba(245, 158, 11, 1);
     color: white;
-    padding: 2px 12px;
+    padding: 4px 12px;
     border-radius: 100px;
     font-size: 12px;
     font-weight: 600;
