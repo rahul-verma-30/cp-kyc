@@ -23,7 +23,9 @@ import PeerComparison from "@/components/company/peerComparison/PeerComparison";
 import RelatedCorporates from "@/components/company/relatedCorporates/RelatedCorporates";
 import ComplianceDetails from "@/components/company/complianceDetails/ComplianceDetails";
 
+
 import AlertsContainer from "@/components/company/alerts/AlertsContainer";
+
 
 export default function CompanyPage() {
   const { activeSection } = useCompanySection();
