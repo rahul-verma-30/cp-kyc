@@ -7,7 +7,7 @@ import { CompanySectionProvider } from "../context/CompanySectionContext";
 
 export default function CompanyLayout({ children }) {
   return (
-    // <CompanySectionProvider>
+    <CompanySectionProvider>
       <div className={styles.container}>
         {/* Header */}
         <div className={styles.headerWrapper}>
@@ -25,6 +25,6 @@ export default function CompanyLayout({ children }) {
           </main>
         </div>
       </div>
-    // </CompanySectionProvider>
+    </CompanySectionProvider>
   );
 }

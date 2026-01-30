@@ -34,17 +34,24 @@ const RiskCard = ({
         <p className={styles.cardDesc}>{description}</p>
 
         <div className={styles.cardFooter}>
-          <div className={styles.footerItem}>
-            <img src="/icons/footer_calender.svg" alt="date" />
-            <span>{date}</span>
+          <div className={styles.footerMeta}>
+            <div className={styles.footerItem}>
+              <img src="/icons/footer_calender2.svg" alt="date" />
+              <span>{date}</span>
+            </div>
+
+            <span className={styles.footerDivider}></span>
+
+            <div className={styles.footerItem}>
+              <img src="/icons/footer_file.svg" alt="source" />
+              <span>{source}</span>
+            </div>
           </div>
 
-          <span className={styles.footerDivider}></span>
-
-          <div className={styles.footerItem}>
-            <img src="/icons/footer_file.svg" alt="source" />
-            <span>{source}</span>
-          </div>
+          <a href="#" className={styles.viewDetails}>
+            View Details
+            <img src="/icons/arrow-up-right.svg" alt="" />
+          </a>
         </div>
       </div>
 

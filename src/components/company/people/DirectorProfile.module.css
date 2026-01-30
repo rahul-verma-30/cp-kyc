@@ -5,34 +5,34 @@
 }
 
 .mainContainer {
-  display: flex;
-  border: 1px solid rgba(228, 228, 231, 1);
-  border-radius: 20px;
-  overflow: hidden;
+    display: flex;
+    border: 1px solid rgba(228, 228, 231, 1);
+    border-radius: 20px;
+    overflow: hidden;
 }
 
 .containerHeader {
-  width: 100%;
+    width: 100%;
 }
 
 .sidebarTabs {
-  display: flex;
-  gap: 24px; 
-  padding: 0 24px;
+    display: flex;
+    gap: 24px;
+    padding: 0 24px;
 }
 
 .sidebarTab {
-  padding: 12px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  color: rgba(113, 113, 122, 1); 
-  cursor: pointer;
-  transition: all 0.2s ease;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(113, 113, 122, 1);
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .sidebarTabActive {
-  color: rgba(4, 30, 66, 1); 
-  border-bottom: 2px solid rgba(4, 30, 66, 1); 
+    color: rgba(4, 30, 66, 1);
+    border-bottom: 2px solid rgba(4, 30, 66, 1);
 }
 
 /* Sidebar Styling */
@@ -142,12 +142,13 @@
     align-items: center;
     gap: 6px;
 }
+
 .grayDot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background-color: rgba(113, 113, 122, 1);
-  flex-shrink: 0;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: rgba(113, 113, 122, 1);
+    flex-shrink: 0;
 }
 
 
@@ -275,7 +276,7 @@
     gap: 8px;
 }
 
-.companyIconWrapper{
+.companyIconWrapper {
     height: 40px;
     width: 40px;
     display: flex;
@@ -283,6 +284,24 @@
     justify-content: center;
     background-color: rgba(244, 244, 245, 1);
     border-radius: 6px;
+}
+
+.promoterTag {
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: rgba(245, 243, 255, 1);
+    border: 1px solid rgba(221, 214, 254, 1);
+    color: rgba(139, 92, 246, 1);
+    font-size: 14px;
+}
+
+.nonPromoterTag {
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: rgba(250, 250, 250, 1);
+    border: 1px solid rgba(228, 228, 231, 1);
+    color: rgba(113, 113, 122, 1);
+    font-size: 14px;
 }
 
 .companyIcon {
@@ -300,11 +319,13 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
-.kmpItem{
+
+.kmpItem {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
+
 .kmpItem label {
     display: block;
     font-size: 14px;
@@ -342,7 +363,7 @@
 }
 
 .checkTitle {
-        color: #27272a;
+    color: #27272a;
     margin: 0 0 12px;
     font-size: 18px;
 }
@@ -420,9 +441,10 @@
 
 /* Timeline */
 
-.section{
+.section {
     margin-top: 32px;
 }
+
 .timeline {
     background-color: rgba(250, 250, 250, 1);
     border-radius: 20px;
@@ -490,7 +512,7 @@
 }
 
 .timelineItem:last-child {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 
