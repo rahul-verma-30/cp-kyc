@@ -122,7 +122,8 @@ function RowsPerPage({ value, onChange }) {
 // export default RowsPerPage;
 
 const LigilationDetails = () => {
-  const { setActiveSection } = useCompanySection();
+  const { activeSubSection } = useCompanySection();
+
   const [rowsOpen, setRowsOpen] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const litigationSections = [
@@ -144,6 +145,26 @@ const LigilationDetails = () => {
     },
   ];
   const sectionRefs = React.useRef({});
+  useEffect(() => {
+    if (!activeSubSection) return;
+
+    const refMap = {
+      "Pending Cases Filed against Company": "pending-against",
+      "Pending Cases Led by Company": "pending-by",
+      "Disposed Cases Led Against Company": "disposed-against",
+      "Disposed Cases Led by Company": "disposed-by",
+    };
+
+    const targetId = refMap[activeSubSection];
+    const targetEl = sectionRefs.current[targetId];
+
+    if (targetEl) {
+      targetEl.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [activeSubSection]);
 
   return (
     <div className={styles.mainWrapper}>

@@ -12,6 +12,11 @@
 }
 
 /* Sidebar + Main layout */
+.contentWrapper {
+  width: 100%;
+  padding: 40px 0; 
+}
+
 .contentRow {
   display: flex;
 
@@ -24,6 +29,7 @@
   padding-top: 40px;
   padding-bottom: 40px;
   gap: 32px;
+  padding: 0 24px;
 }
 
 /* Sidebar */

@@ -1,7 +1,12 @@
 import React from 'react';
 import styles from './ShareHoldingsTables2.module.css';
+import RowsPerPage from "@/components/common/RowsPerPage";
+import { useState } from "react";
+
 
 const ShareHoldingsTables2 = () => {
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
   const directorsData = [
     { name: 'Pritam Das Narang', type: 'Equity', held: '4317558.00', percent: '0.24%' },
     { name: 'Mohit Malhotra', type: 'Equity', held: '1464613.00', percent: '0.08%' },
@@ -100,10 +105,10 @@ const ShareHoldingsTables2 = () => {
         <span className={styles.showingText}>Showing 1-10 of 20</span>
         <div className={styles.paginationControls}>
           <span className={styles.rowsLabel}>Rows per page</span>
-          <div className={styles.selectBox}>
-            10
-            <img src="/icons/chevrons-up-down.svg" alt="down" className={styles.icon} />
-          </div>
+          <RowsPerPage
+            value={rowsPerPage}
+            onChange={setRowsPerPage}
+          />
           <span className={styles.pageLabel}>Page 1 of 10</span>
           <div className={styles.navButtons}>
             <button className={styles.navBtnDisabled}>«</button>
@@ -152,10 +157,10 @@ const ShareHoldingsTables2 = () => {
         <span className={styles.showingText}>Showing 1-10 of 20</span>
         <div className={styles.paginationControls}>
           <span className={styles.rowsLabel}>Rows per page</span>
-          <div className={styles.selectBox}>
-            10
-            <img src="/icons/chevrons-up-down.svg" alt="down" className={styles.icon} />
-          </div>
+          <RowsPerPage
+            value={rowsPerPage}
+            onChange={setRowsPerPage}
+          />
           <span className={styles.pageLabel}>Page 1 of 10</span>
           <div className={styles.navButtons}>
             <button className={styles.navBtnDisabled}>«</button>

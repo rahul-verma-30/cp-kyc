@@ -10,21 +10,35 @@ export function CompanySectionProvider({ children }) {
   const searchParams = useSearchParams();
 
   const sectionFromUrl = searchParams.get("section") || "companyDetails";
-  const [activeSection, setActiveSection] = useState(sectionFromUrl);
+  const subFromUrl = searchParams.get("sub");
 
-  // Keep state in sync with URL 
+  const [activeSection, setActiveSection] = useState(sectionFromUrl);
+  const [activeSubSection, setActiveSubSection] = useState(subFromUrl);
+
   useEffect(() => {
     setActiveSection(sectionFromUrl);
-  }, [sectionFromUrl]);
+    setActiveSubSection(subFromUrl);
+  }, [sectionFromUrl, subFromUrl]);
 
-  const updateSection = (section) => {
+  const updateSection = (section, sub = null) => {
     setActiveSection(section);
-    router.push(`?section=${section}`, { scroll: false });
+    setActiveSubSection(sub);
+
+    const params = new URLSearchParams();
+    params.set("section", section);
+    if (sub) params.set("sub", sub);
+
+    router.push(`?${params.toString()}`, { scroll: false });
   };
 
   return (
     <CompanySectionContext.Provider
-      value={{ activeSection, setActiveSection: updateSection }}
+      value={{
+        activeSection,
+        activeSubSection,
+        setActiveSection: updateSection,
+        setActiveSubSection,
+      }}
     >
       {children}
     </CompanySectionContext.Provider>

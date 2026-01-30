@@ -7,7 +7,12 @@ import { useRef, useLayoutEffect } from "react";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 
 const CompanyNewSidebar = () => {
-  const { activeSection, setActiveSection } = useCompanySection();
+  const {
+    activeSection,
+    setActiveSection,
+    setActiveSubSection, // ✅ ADD THIS
+  } = useCompanySection();
+
   const [expandedSections, setExpandedSections] = useState({
     companyDetails: true,
     directorsKmp: true,
@@ -133,7 +138,20 @@ const CompanyNewSidebar = () => {
                 className={`${styles.standaloneHeader} ${
                   activeSection === section.id ? styles.headerActive : ""
                 }`}
-                onClick={() => activateSection(section)}
+                onClick={() => {
+                  // Collapse ONLY if clicking the currently active section
+                  if (activeSection === section.id) {
+                    toggleSection(section.id);
+                  } else {
+                    // Ensure it stays expanded
+                    setExpandedSections((prev) => ({
+                      ...prev,
+                      [section.id]: true,
+                    }));
+                  }
+
+                  activateSection(section);
+                }}
               >
                 {section.title}
               </div>
@@ -145,7 +163,17 @@ const CompanyNewSidebar = () => {
                     activeSection === section.id ? styles.headerActive : ""
                   }`}
                   onClick={() => {
-                    toggleSection(section.id);
+                    // Collapse ONLY if clicking the currently active section
+                    if (activeSection === section.id) {
+                      toggleSection(section.id);
+                    } else {
+                      // Ensure it stays expanded
+                      setExpandedSections((prev) => ({
+                        ...prev,
+                        [section.id]: true,
+                      }));
+                    }
+
                     activateSection(section);
                   }}
                 >
@@ -175,6 +203,7 @@ const CompanyNewSidebar = () => {
                           onClick={() => {
                             setActiveTab(item);
                             setActiveSection(section.id);
+                            setActiveSubSection(item); // 🔥 ADD THIS LINE
                           }}
                         >
                           <span

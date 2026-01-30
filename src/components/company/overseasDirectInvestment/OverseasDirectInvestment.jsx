@@ -1,6 +1,11 @@
 import styles from './OverseasDirectInvestment.module.css';
+import RowsPerPage from "@/components/common/RowsPerPage";
+import { useState } from "react";
+
 
 export default function InvestmentPage() {
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
   const data = [
     { year: '2023', month: 'September', name: 'DERMOVIVA SKIN ESSENTIALS INC. UNITED STATES OF AMERICA', type: 'Wos', activity: 'Manufacturing', equity: '0.5', loan: '-', guarantee: '-', total: '0.5' },
     { year: '2014', month: 'November', name: 'Dabur International Ltd. United Arab Emirates', type: 'Wholly Owned Subsidiary', activity: 'Manufacturing', equity: '0.5', loan: '-', guarantee: '10.1061', total: '10.1061' },
@@ -59,10 +64,10 @@ export default function InvestmentPage() {
         <div className={styles.controls}>
           <div className={styles.rowsPerPage}>
             <span className={styles.rowsPerPageText}>Rows per page</span>
-            <div className={styles.selectBox}>
-              <span>10</span>
-              <img src="/icons/chevrons-up-down.svg" alt="" className={styles.iconSmall} />
-            </div>
+            <RowsPerPage
+              value={rowsPerPage}
+              onChange={setRowsPerPage}
+            />
           </div>
           <div className={styles.pageNavigation}>
             <span className={styles.pageNavigationText}>Page 1 of 10</span>
