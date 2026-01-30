@@ -79,8 +79,6 @@ export default function CompanyPage() {
 
       {activeSection === "alerts" && <AlertsContainer />}
 
-
-      {activeSection === "controlOwnership" && <OwnershipSection />}
       {activeSection === "litigation" && <LigilationDetails />}
       {activeSection === "documents" && <Documents />}
 

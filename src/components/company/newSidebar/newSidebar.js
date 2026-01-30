@@ -2,13 +2,12 @@
 
 import React, { useState } from "react";
 import styles from "./newSidebar.module.css";
+import { useRef, useLayoutEffect } from "react";
 
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 
 const CompanyNewSidebar = () => {
   const { activeSection, setActiveSection } = useCompanySection();
-
-  // Set default states to true to match the expanded look of the image
   const [expandedSections, setExpandedSections] = useState({
     companyDetails: true,
     directorsKmp: true,
@@ -27,6 +26,8 @@ const CompanyNewSidebar = () => {
       [sectionId]: !prev[sectionId],
     }));
   };
+
+  const sectionRefs = useRef({});
 
   const menuData = [
     {
@@ -102,27 +103,50 @@ const CompanyNewSidebar = () => {
     { id: "documents", title: "Documents", isStandalone: true },
   ];
 
+  const activateSection = (section) => {
+    setActiveSection(section.id);
+    if (section.items && section.items.length > 0) {
+      setActiveTab(section.items[0]);
+    } else {
+      setActiveTab(null);
+    }
+  };
+  const [indicatorTop, setIndicatorTop] = useState(0);
+
+  useLayoutEffect(() => {
+    const el = sectionRefs.current[activeSection];
+    if (el) {
+      setIndicatorTop(el.offsetTop);
+    }
+  }, [activeSection, expandedSections]);
+
   return (
     <aside className={styles.sidebar}>
+      <div className={styles.activeIndicator} style={{ top: indicatorTop }} />
+
       <nav className={styles.nav}>
         {menuData.map((section) => (
           <div key={section.id} className={styles.section}>
             {section.isStandalone ? (
               <div
-                className={styles.standaloneHeader}
-                onClick={() => setActiveSection(section.id)}
+                ref={(el) => (sectionRefs.current[section.id] = el)}
+                className={`${styles.standaloneHeader} ${
+                  activeSection === section.id ? styles.headerActive : ""
+                }`}
+                onClick={() => activateSection(section)}
               >
                 {section.title}
               </div>
             ) : (
               <>
                 <button
+                  ref={(el) => (sectionRefs.current[section.id] = el)}
                   className={`${styles.sectionHeader} ${
                     activeSection === section.id ? styles.headerActive : ""
                   }`}
                   onClick={() => {
                     toggleSection(section.id);
-                    setActiveSection(section.id);
+                    activateSection(section);
                   }}
                 >
                   <span className={styles.title}>{section.title}</span>

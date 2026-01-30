@@ -1,0 +1,55 @@
+/* Wrapper */
+.rowsWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Trigger */
+.pageSizeControl {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #ffffff;
+  font-size: 14px;
+}
+
+/* Dropdown */
+.rowsDropdown {
+  position: absolute;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  z-index: 50;
+  overflow: hidden;
+}
+
+/* ⬇️ Open below */
+.dropdownDown {
+  top: calc(100% + 8px);
+}
+
+/* ⬆️ Open above */
+.dropdownUp {
+  bottom: calc(100% + 8px);
+}
+
+/* Options */
+.rowsOption {
+  width: 100%;
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 14px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.rowsOption:hover {
+  background: #f8fafc;
+}

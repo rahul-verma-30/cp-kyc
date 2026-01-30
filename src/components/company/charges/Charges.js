@@ -1,31 +1,99 @@
-import styles from './Charges.module.css';
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-} from "recharts";
+import styles from "./Charges.module.css";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import RowsPerPage from "@/components/common/RowsPerPage";
+import { useState } from "react";
 
 export default function ChargesPage() {
   const closedCharges = [
-    { id: '100592955', lender: 'Yes Bank Limited', amount: '5.00', created: '20 Jun 2022', modified: '-', satisfied: '27 Feb 2024' },
-    { id: '100592956', lender: 'HDFC Bank Limited', amount: '6.25', created: '15 Aug 2022', modified: '-', satisfied: '30 Dec 2024' },
-    { id: '100592957', lender: 'ICICI Bank Limited', amount: '4.50', created: '10 Sep 2022', modified: '-', satisfied: '15 Mar 2025' },
-    { id: '100592958', lender: 'State Bank of India', amount: '5.75', created: '25 Oct 2022', modified: '-', satisfied: '01 Jan 2025' },
-    { id: '100592959', lender: 'Kotak Mahindra Bank', amount: '6.00', created: '12 Nov 2022', modified: '-', satisfied: '10 Jul 2024' },
-    { id: '100592960', lender: 'Axis Bank Limited', amount: '5.50', created: '18 Dec 2022', modified: '-', satisfied: '22 Aug 2024' },
-    { id: '100592961', lender: 'Punjab National Bank', amount: '4.75', created: '30 Jan 2023', modified: '-', satisfied: '05 Sep 2024' },
-    { id: '100592962', lender: 'Bank of Baroda', amount: '5.10', created: '14 Feb 2023', modified: '-', satisfied: '13 Oct 2025' },
-    { id: '100592963', lender: 'Union Bank of India', amount: '5.30', created: '20 Mar 2023', modified: '-', satisfied: '28 Nov 2024' },
-    { id: '100592964', lender: 'Canara Bank', amount: '6.00', created: '05 Apr 2023', modified: '-', satisfied: '19 Jun 2025' },
+    {
+      id: "100592955",
+      lender: "Yes Bank Limited",
+      amount: "5.00",
+      created: "20 Jun 2022",
+      modified: "-",
+      satisfied: "27 Feb 2024",
+    },
+    {
+      id: "100592956",
+      lender: "HDFC Bank Limited",
+      amount: "6.25",
+      created: "15 Aug 2022",
+      modified: "-",
+      satisfied: "30 Dec 2024",
+    },
+    {
+      id: "100592957",
+      lender: "ICICI Bank Limited",
+      amount: "4.50",
+      created: "10 Sep 2022",
+      modified: "-",
+      satisfied: "15 Mar 2025",
+    },
+    {
+      id: "100592958",
+      lender: "State Bank of India",
+      amount: "5.75",
+      created: "25 Oct 2022",
+      modified: "-",
+      satisfied: "01 Jan 2025",
+    },
+    {
+      id: "100592959",
+      lender: "Kotak Mahindra Bank",
+      amount: "6.00",
+      created: "12 Nov 2022",
+      modified: "-",
+      satisfied: "10 Jul 2024",
+    },
+    {
+      id: "100592960",
+      lender: "Axis Bank Limited",
+      amount: "5.50",
+      created: "18 Dec 2022",
+      modified: "-",
+      satisfied: "22 Aug 2024",
+    },
+    {
+      id: "100592961",
+      lender: "Punjab National Bank",
+      amount: "4.75",
+      created: "30 Jan 2023",
+      modified: "-",
+      satisfied: "05 Sep 2024",
+    },
+    {
+      id: "100592962",
+      lender: "Bank of Baroda",
+      amount: "5.10",
+      created: "14 Feb 2023",
+      modified: "-",
+      satisfied: "13 Oct 2025",
+    },
+    {
+      id: "100592963",
+      lender: "Union Bank of India",
+      amount: "5.30",
+      created: "20 Mar 2023",
+      modified: "-",
+      satisfied: "28 Nov 2024",
+    },
+    {
+      id: "100592964",
+      lender: "Canara Bank",
+      amount: "6.00",
+      created: "05 Apr 2023",
+      modified: "-",
+      satisfied: "19 Jun 2025",
+    },
   ];
-const openChargesData = [
-  { name: "Others", value: 158 },
-  { name: "Remaining", value: 165 - 158 },
-];
+  const openChargesData = [
+    { name: "Others", value: 158 },
+    { name: "Remaining", value: 165 - 158 },
+  ];
 
-const COLORS = ["#0EA5E9", "rgba(244, 244, 245, 1)"];
+  const COLORS = ["#0EA5E9", "rgba(244, 244, 245, 1)"];
 
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
 
   return (
@@ -88,10 +156,10 @@ const COLORS = ["#0EA5E9", "rgba(244, 244, 245, 1)"];
               </ResponsiveContainer>
 
               <div className={styles.chartLegend}>
-               <div className={styles.legendItem}>
-  <span className={styles.legendDot}></span>
-  <span className={styles.legendText}>Others Charges:</span>
-</div>
+                <div className={styles.legendItem}>
+                  <span className={styles.legendDot}></span>
+                  <span className={styles.legendText}>Others Charges:</span>
+                </div>
 
                 <span className={styles.legendValue}>158 Crores</span>
               </div>
@@ -99,7 +167,6 @@ const COLORS = ["#0EA5E9", "rgba(244, 244, 245, 1)"];
           </div>
         </div>
         <div className={`${styles.summaryCard} ${styles.summaryCardAlt}`}>
-
           <div className={styles.summaryRow}>
             <span>Total Open Charges</span>
             <strong>₹1,575.00 M</strong>
@@ -189,23 +256,24 @@ const COLORS = ["#0EA5E9", "rgba(244, 244, 245, 1)"];
             </tbody>
           </table>
         </div>
-      <div className={styles.paginationRow}>
-        <span className={styles.showingText}>Showing 1-10 of 20</span>
-        <div className={styles.paginationControls}>
-          <span className={styles.rowsLabel}>Rows per page</span>
-          <div className={styles.selectBox}>
-            10
-            <img src="/icons/chevrons-up-down.svg" alt="down" className={styles.icon} />
-          </div>
-          <span className={styles.pageLabel}>Page 1 of 10</span>
-          <div className={styles.navButtons}>
-            <button className={styles.navBtnDisabled}>«</button>
-            <button className={styles.navBtnDisabled}>‹</button>
-            <button className={styles.navBtn}>›</button>
-            <button className={styles.navBtn}>»</button>
+        <div className={styles.paginationRow}>
+          <span className={styles.showingText}>Showing 1-10 of 20</span>
+          <div className={styles.paginationControls}>
+            <span className={styles.rowsLabel}>Rows per page</span>
+           <RowsPerPage
+  value={rowsPerPage}
+  onChange={setRowsPerPage}
+/>
+
+            <span className={styles.pageLabel}>Page 1 of 10</span>
+            <div className={styles.navButtons}>
+              <button className={styles.navBtnDisabled}>«</button>
+              <button className={styles.navBtnDisabled}>‹</button>
+              <button className={styles.navBtn}>›</button>
+              <button className={styles.navBtn}>»</button>
+            </div>
           </div>
         </div>
-      </div>
       </section>
     </div>
   );

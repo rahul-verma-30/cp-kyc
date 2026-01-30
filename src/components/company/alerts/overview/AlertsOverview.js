@@ -910,94 +910,190 @@ export default function AlertsOverview() {
                               </tbody>
                             </table>
                           </div>
+                          {/* Pagination Footer based on image data */}
+                          <div
+                            className={`${styles.paginationRow} ${styles.paginationRowExtra}`}
+                          >
+                            <span className={styles.showingText}>
+                              Showing 1-10 of 20
+                            </span>
+                            <div className={styles.paginationControls}>
+                              <span className={styles.rowsLabel}>
+                                Rows per page
+                              </span>
+                              <div className={styles.selectBox}>
+                                10
+                                <img
+                                  src="/icons/chevrons-up-down.svg"
+                                  alt="down"
+                                  className={styles.icon}
+                                />
+                              </div>
+                              <span className={styles.pageLabel}>
+                                Page 1 of 10
+                              </span>
+                              <div className={styles.navButtons}>
+                                <button className={styles.navBtnDisabled}>
+                                  «
+                                </button>
+                                <button className={styles.navBtnDisabled}>
+                                  ‹
+                                </button>
+                                <button className={styles.navBtn}>›</button>
+                                <button className={styles.navBtn}>»</button>
+                              </div>
+                            </div>
+                          </div>
                         </>
                       )}
 
                       {/* ================= DIRECTOR TAB ================= */}
                       {activeTabIndex === 1 && (
-                        <div className={styles.tableWrapper}>
-                          <table className={styles.detailTable}>
-                            <thead>
-                              <tr>
-                                {item.directorHeaders.map((h, i) => (
-                                  <th key={i}>{h}</th>
-                                ))}
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {item.directorRows.map((row, rIdx) => (
-                                <tr key={rIdx}>
-                                  {/* Person Column */}
-                                  <td>
-                                    <div className={styles.companyNameCell}>
-                                      <div className={styles.entityWrapper}>
-                                        <img
-                                          src={row.personIcon}
-                                          alt=""
-                                          className={styles.avatarIcon}
-                                        />
-                                        <div className={styles.nameGroup}>
-                                          <div
-                                            className={styles.companyNameMain}
-                                          >
-                                            {row.personName}
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className={styles.companySubText}>
-                                        {row.personSub}
-                                      </div>
-                                    </div>
-                                  </td>
-                                  {/* Company Column */}
-                                  <td>
-                                    <div className={styles.companyNameCell}>
-                                      <div className={styles.entityWrapper}>
-                                        <img
-                                          src={row.companyIcon}
-                                          alt=""
-                                          className={styles.entityIcon}
-                                        />
-                                        <div className={styles.nameGroup}>
-                                          <div
-                                            className={styles.companyNameMain}
-                                          >
-                                            {row.companyName}
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className={styles.companySubText}>
-                                        {row.companySub}
-                                      </div>
-                                    </div>
-                                  </td>
-                                  {/* Regulator Column */}
-                                  <td>
-                                    <div className={styles.regCellInner}>
-                                      <div className={styles.regLogoContainer}>
-                                        <img
-                                          src={row.regIcon}
-                                          alt=""
-                                          className={styles.regLogo}
-                                        />
-                                      </div>
-                                      <span>{row.reg}</span>
-                                    </div>
-                                  </td>
-                                  {/* Action/Charges/Advancement Columns */}
-                                  <td className={styles.chgCell}>{row.chg}</td>
-                                  <td
-                                    className={styles.actionCell}
-                                    style={{ color: "rgba(59, 130, 246, 1)", fontSize: "12px" }}
-                                  >
-                                    {row.act}
-                                  </td>
-                                  <td className={styles.advCell}>{row.adv}</td>
+                        <>
+                          <div className={styles.regulatoryFilterText}>
+                            Directors named in any violations or offence
+                          </div>
+
+                          <div className={styles.regulatoryTags}>
+                            {[
+                              "MCA (37)",
+                              "SEBI (16)",
+                              "Banks (6)",
+                              "BSL (2)",
+                              "DRT (2)",
+                            ].map((tag, i) => (
+                              <span key={i} className={styles.regTag}>
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                          <div className={styles.tableWrapper}>
+                            <table className={styles.detailTable}>
+                              <thead>
+                                <tr>
+                                  {item.directorHeaders.map((h, i) => (
+                                    <th key={i}>{h}</th>
+                                  ))}
                                 </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
+                              </thead>
+                              <tbody>
+                                {item.directorRows.map((row, rIdx) => (
+                                  <tr key={rIdx}>
+                                    {/* Person Column */}
+                                    <td>
+                                      <div className={styles.companyNameCell}>
+                                        <div className={styles.entityWrapper}>
+                                          <img
+                                            src={row.personIcon}
+                                            alt=""
+                                            className={styles.avatarIcon}
+                                          />
+                                          <div className={styles.nameGroup}>
+                                            <div
+                                              className={styles.companyNameMain}
+                                            >
+                                              {row.personName}
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div className={styles.companySubText}>
+                                          {row.personSub}
+                                        </div>
+                                      </div>
+                                    </td>
+                                    {/* Company Column */}
+                                    <td>
+                                      <div className={styles.companyNameCell}>
+                                        <div className={styles.entityWrapper}>
+                                          <img
+                                            src={row.companyIcon}
+                                            alt=""
+                                            className={styles.entityIcon}
+                                          />
+                                          <div className={styles.nameGroup}>
+                                            <div
+                                              className={styles.companyNameMain}
+                                            >
+                                              {row.companyName}
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div className={styles.companySubText}>
+                                          {row.companySub}
+                                        </div>
+                                      </div>
+                                    </td>
+                                    {/* Regulator Column */}
+                                    <td>
+                                      <div className={styles.regCellInner}>
+                                        <div
+                                          className={styles.regLogoContainer}
+                                        >
+                                          <img
+                                            src={row.regIcon}
+                                            alt=""
+                                            className={styles.regLogo}
+                                          />
+                                        </div>
+                                        <span>{row.reg}</span>
+                                      </div>
+                                    </td>
+                                    {/* Action/Charges/Advancement Columns */}
+                                    <td className={styles.chgCell}>
+                                      {row.chg}
+                                    </td>
+                                    <td
+                                      className={styles.actionCell}
+                                      style={{
+                                        color: "rgba(59, 130, 246, 1)",
+                                        fontSize: "12px",
+                                      }}
+                                    >
+                                      {row.act}
+                                    </td>
+                                    <td className={styles.advCell}>
+                                      {row.adv}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                          {/* Pagination Footer based on image data */}
+                          <div
+                            className={`${styles.paginationRow} ${styles.paginationRowExtra}`}
+                          >
+                            <span className={styles.showingText}>
+                              Showing 1-10 of 20
+                            </span>
+                            <div className={styles.paginationControls}>
+                              <span className={styles.rowsLabel}>
+                                Rows per page
+                              </span>
+                              <div className={styles.selectBox}>
+                                10
+                                <img
+                                  src="/icons/chevrons-up-down.svg"
+                                  alt="down"
+                                  className={styles.icon}
+                                />
+                              </div>
+                              <span className={styles.pageLabel}>
+                                Page 1 of 10
+                              </span>
+                              <div className={styles.navButtons}>
+                                <button className={styles.navBtnDisabled}>
+                                  «
+                                </button>
+                                <button className={styles.navBtnDisabled}>
+                                  ‹
+                                </button>
+                                <button className={styles.navBtn}>›</button>
+                                <button className={styles.navBtn}>»</button>
+                              </div>
+                            </div>
+                          </div>
+                        </>
                       )}
                     </div>
                   </div>
