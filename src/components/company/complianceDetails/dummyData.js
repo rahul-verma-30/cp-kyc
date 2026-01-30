@@ -374,7 +374,8 @@ export const inactiveEstablishmentTable = [
     dueDate: "25 Feb 2026",
     delay: "Delay in Filing",
     status: "Inactive",
-  },{
+  },
+  {
     gstin: "18AAACD0474C1Z4",
     state: "Assam",
     lastFiling: "11 Nov 2025",
@@ -405,7 +406,8 @@ export const inactiveEstablishmentTable = [
     dueDate: "25 Feb 2026",
     delay: "Delay in Filing",
     status: "Inactive",
-  },{
+  },
+  {
     gstin: "18AAACD0474C1Z4",
     state: "Assam",
     lastFiling: "11 Nov 2025",
@@ -413,5 +415,117 @@ export const inactiveEstablishmentTable = [
     delay: "No delay",
     status: "Inactive",
   },
- 
 ];
+
+export const csrDetails2021_22 = [
+  {
+    state: "Assam",
+    sector: "Art And Culture",
+    project: "Traditional Folk Dance Workshop - Assam",
+    amountSpent: "100000.00",
+    outlay: "-",
+  },
+  {
+    state: "Assam",
+    sector: "Health Care",
+    project: "Traditional Folk Dance Workshop - Assam",
+    amountSpent: "100000.00",
+    outlay: "-",
+  },
+  {
+    state: "Assam",
+    sector: "Livelihood Enhancement Projects",
+    project: "Traditional Folk Dance Workshop - Assam",
+    amountSpent: "100000.00",
+    outlay: "-",
+  },
+  {
+    state: "Assam",
+    sector: "Poverty, Eradicating Hunger, Malnutrition",
+    project: "Traditional Folk Dance Workshop - Assam",
+    amountSpent: "100000.00",
+    outlay: "-",
+  },
+  {
+    state: "Assam",
+    sector: "Training To Promote Sports",
+    project: "Traditional Folk Dance Workshop - Assam",
+    amountSpent: "100000.00",
+    outlay: "-",
+  },
+  {
+    state: "Bihar",
+    sector: "Health Care",
+    project: "Traditional Folk Dance Workshop - Assam",
+    amountSpent: "100000.00",
+    outlay: "-",
+  },
+  {
+    state: "Delhi",
+    sector: "Health Care",
+    project: "Traditional Folk Dance Workshop - Assam",
+    amountSpent: "100000.00",
+    outlay: "-",
+  },
+  {
+    state: "Himachal Pradesh",
+    sector: "Environmental Sustainability",
+    project: "Traditional Folk Dance Workshop - Assam",
+    amountSpent: "100000.00",
+    outlay: "-",
+  },
+];
+
+export const creditRatingDates = [
+  "2023-11-24",
+  "2023-04-04",
+  "2022-04-29",
+  "2021-05-27",
+  "2020-05-19",
+  "2019-05-30",
+  "2018-06-22",
+  "2017-06-23",
+  "2016-06-08",
+];
+
+export const creditRatings = {
+  CRISIL: {
+    "2023-11-24": [
+      {
+        category: "DI - COMMERCIAL PAPER / ST",
+        amount: "200.0",
+        rating: "A1+",
+        action: "REAFFIRMED",
+      },
+      {
+        category: "DI - BONDS/NCD / LT",
+        amount: "20.0",
+        rating: "AAA (Stable)",
+        action: "REAFFIRMED",
+      },
+      {
+        category: "BLR - BANK GUARANTEE / ST",
+        amount: "32.5",
+        rating: "A1+",
+        action: "REAFFIRMED",
+      },
+      {
+        category: "BLR - BANK FACILITY / LT",
+        amount: "125.0",
+        rating: "AAA (Stable)",
+        action: "REAFFIRMED",
+      },
+    ],
+  },
+
+  ICRA: {
+    "2023-11-24": [
+      {
+        category: "DI - COMMERCIAL PAPER / ST",
+        amount: "150.0",
+        rating: "A1+",
+        action: "REAFFIRMED",
+      },
+    ],
+  },
+};

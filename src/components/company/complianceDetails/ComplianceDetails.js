@@ -4,7 +4,13 @@ import styles from "./ComplianceDetails.module.css";
 import React, { useRef, useEffect, useState } from "react";
 
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
-import { complianceKpis, pendingCasesTable } from "./dummyData";
+import {
+  complianceKpis,
+  creditRatingDates,
+  creditRatings,
+  csrDetails2021_22,
+  pendingCasesTable,
+} from "./dummyData";
 import { ChevronsDownUp } from "lucide-react";
 
 import { createPortal } from "react-dom";
@@ -13,6 +19,32 @@ import { inactiveGstTable } from "./dummyData";
 import { activeGstTable } from "./dummyData";
 import { inactiveEstablishmentTable } from "./dummyData";
 import { activeEstablishmentTable } from "./dummyData";
+import EpfoSummaryChart from "./EpfoSummaryChart";
+import CSRYearlyBarChart from "./CSRYearlyBarChart";
+import CSRSectorDonutChart from "./CSRSectorDonutChart";
+
+const defaultSectorWiseData = [
+  {
+    name: "Poverty, Eradicating Hunger, Malnutrition",
+    value: 108.81,
+    color: "#0EA5E9",
+  },
+  { name: "Health Care", value: 99.62, color: "#041E42" },
+  { name: "Environmental Sustainability", value: 51.86, color: "#F59E0B" },
+  { name: "Education", value: 15.42, color: "#EAB308" },
+  { name: "Livelihood Enhancement Projects", value: 2.2, color: "#22C55E" },
+];
+
+const defaultYearWiseData = [
+  { year: "2015", value: 135 },
+  { year: "2016", value: 160 },
+  { year: "2017", value: 190 },
+  { year: "2018", value: 220 },
+  { year: "2019", value: 250 },
+  { year: "2020", value: 270 },
+  { year: "2021", value: 290 },
+  { year: "2022", value: 300 },
+];
 
 function RowsPerPage({ value, onChange }) {
   const [open, setOpen] = useState(false);
@@ -124,12 +156,28 @@ function RowsPerPage({ value, onChange }) {
   );
 }
 
+// epfoData.ts
+export const epfoSummaryGraphData = [
+  { period: "Jul-Sep 23", employees: 2000, amount: 28 },
+  { period: "Oct-Dec 23", employees: 5600, amount: 65 },
+  { period: "Jan-Mar 24", employees: 5450, amount: 63 },
+  { period: "Apr-Jun 24", employees: 5500, amount: 64 },
+  { period: "Jul-Sep 24", employees: 5520, amount: 64.5 },
+  { period: "Oct-Dec 24", employees: 5480, amount: 63.8 },
+
+  // { period: "Oct-Dec 24", employees: 7000, amount: 63.8 },
+];
+
 // export default RowsPerPage;
 
 const ComplianceDetails = () => {
   const { setActiveSection } = useCompanySection();
   const [rowsOpen, setRowsOpen] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const [agency, setAgency] = useState("CRISIL");
+  const [selectedDate, setSelectedDate] = useState("2023-11-24");
+
   const complianceTableSections = [
     {
       id: "active-gst",
@@ -139,7 +187,6 @@ const ComplianceDetails = () => {
       id: "inactive-gst",
       label: "Inactive Gst",
     },
-   
   ];
 
   const complianceTableSections3 = [
@@ -350,7 +397,9 @@ const ComplianceDetails = () => {
                               : styles.inactiveNormalText
                           }`}
                         >
-                         <span className={styles.statusText}>{row.status}</span>
+                          <span className={styles.statusText}>
+                            {row.status}
+                          </span>
                         </span>
                       </td>
                     </tr>
@@ -450,12 +499,12 @@ const ComplianceDetails = () => {
         {/* EPFO graph */}
 
         <div className={styles.epfoGrapgAndTitleContainer}>
-           <h6
-            className={styles.tableTitle}
-          >{`EPFO Summary`}</h6>
+          <h6 className={styles.tableTitle}>{`EPFO Summary`}</h6>
+
+          <div className={styles.epfoGraphContainer}>
+            <EpfoSummaryChart epfoSummaryData={epfoSummaryGraphData} />
+          </div>
         </div>
-
-
 
         {complianceTableSections3.map((section, index) => (
           <div
@@ -597,6 +646,125 @@ const ComplianceDetails = () => {
             </div>
           </div>
         ))}
+
+        {/* CSR Details */}
+
+        <div className={styles.epfoGrapgAndTitleContainer}>
+          <h6 className={styles.tableTitle}>{`CSR Details`}</h6>
+
+          <div className={styles.csrChartsGrid}>
+            <CSRYearlyBarChart
+              data={defaultYearWiseData}
+              styles={styles}
+              title="CSR amounts spent by organization for specific financial years."
+            />
+
+            <CSRSectorDonutChart
+              data={defaultSectorWiseData}
+              styles={styles}
+              title="CSR amounts spent by organization for specific sectors."
+            />
+          </div>
+        </div>
+
+        {/* Financial year 2021-22 table */}
+        <div className={styles.tableSection}>
+          <h6 className={styles.tableTitle}>{`Financial year 2021-22`}</h6>
+
+          <div className={styles.tableContainer}>
+            <table className={styles.litigationTable}>
+              <thead>
+                <tr>
+                  <th>State</th>
+                  <th>Sector</th>
+                  <th>CSR Project</th>
+                  <th>Amount Spent</th>
+                  <th>Outlay</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {csrDetails2021_22.map((row, idx) => (
+                  <tr key={idx}>
+                    <td>{row.state}</td>
+                    <td className={styles.ellipsis}>{row.sector}</td>
+                    <td className={styles.ellipsis}>{row.project}</td>
+                    <td>{row.amountSpent}</td>
+                    <td>{row.outlay}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Credit Rating section */}
+        <div className={styles.tableSection}>
+          {/* Header */}
+          <div className={styles.creditHeader}>
+            <h6 className={styles.tableTitle}>Credit Rating</h6>
+
+            {/* Toggle tabs */}
+            <div className={styles.togglletabs}>
+              <button
+                className={`${styles.toggleTab} ${
+                  agency === "CRISIL" ? styles.activeTab : ""
+                }`}
+                onClick={() => setAgency("CRISIL")}
+              >
+                CRISIL
+              </button>
+              <button
+                className={`${styles.toggleTab} ${
+                  agency === "ICRA" ? styles.activeTab : ""
+                }`}
+                onClick={() => setAgency("ICRA")}
+              >
+                ICRA
+              </button>
+            </div>
+          </div>
+
+          {/* Date tabs */}
+          <div className={styles.dateTabs}>
+            {creditRatingDates.map((date) => (
+              <button
+                key={date}
+                className={`${styles.dateTab} ${
+                  selectedDate === date ? styles.activeDateTab : ""
+                }`}
+                onClick={() => setSelectedDate(date)}
+              >
+                {date}
+              </button>
+            ))}
+          </div>
+
+          {/* Table */}
+          <div className={styles.tableContainer}>
+            <table className={styles.litigationTable}>
+              <thead>
+                <tr>
+                  <th>Category/ Sub-Category/ Tenor</th>
+                  <th>Amount (Rs.crore)</th>
+                  <th>Rating (Outlook)</th>
+                  <th>Rating Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {creditRatings?.[agency]?.[selectedDate]?.map((row, idx) => (
+                  <tr key={idx}>
+                    <td className={styles.ellipsis}>{row.category}</td>
+                    <td>{row.amount}</td>
+                    <td>{row.rating}</td>
+                    <td>{row.action}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   );
