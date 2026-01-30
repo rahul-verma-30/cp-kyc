@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import styles from "./AlertOverview.module.css";
+import RowsPerPage from "@/components/common/RowsPerPage";
 
 export default function AlertsOverview() {
   const [expandedRow, setExpandedRow] = useState(null);
@@ -12,6 +13,8 @@ export default function AlertsOverview() {
 
   const [activeSidebarIndex, setActiveSidebarIndex] = useState(0);
   const [activeTabIndex, setActiveTabIndex] = useState(0); // 0 = Company, 1 = Director
+
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   /**
    * DATA CONFIGURATION
@@ -722,14 +725,11 @@ export default function AlertsOverview() {
                       </span>
                       <div className={styles.paginationControls}>
                         <span className={styles.rowsLabel}>Rows per page</span>
-                        <div className={styles.selectBox}>
-                          10
-                          <img
-                            src="/icons/chevrons-up-down.svg"
-                            alt="down"
-                            className={styles.icon}
-                          />
-                        </div>
+                        <RowsPerPage
+                          value={rowsPerPage}
+                          onChange={setRowsPerPage}
+                        />
+
                         <span className={styles.pageLabel}>Page 1 of 10</span>
                         <div className={styles.navButtons}>
                           <button className={styles.navBtnDisabled}>«</button>
@@ -921,14 +921,11 @@ export default function AlertsOverview() {
                               <span className={styles.rowsLabel}>
                                 Rows per page
                               </span>
-                              <div className={styles.selectBox}>
-                                10
-                                <img
-                                  src="/icons/chevrons-up-down.svg"
-                                  alt="down"
-                                  className={styles.icon}
-                                />
-                              </div>
+                              <RowsPerPage
+                                value={rowsPerPage}
+                                onChange={setRowsPerPage}
+                              />
+
                               <span className={styles.pageLabel}>
                                 Page 1 of 10
                               </span>
@@ -1070,14 +1067,11 @@ export default function AlertsOverview() {
                               <span className={styles.rowsLabel}>
                                 Rows per page
                               </span>
-                              <div className={styles.selectBox}>
-                                10
-                                <img
-                                  src="/icons/chevrons-up-down.svg"
-                                  alt="down"
-                                  className={styles.icon}
-                                />
-                              </div>
+                              <RowsPerPage
+                                value={rowsPerPage}
+                                onChange={setRowsPerPage}
+                              />
+
                               <span className={styles.pageLabel}>
                                 Page 1 of 10
                               </span>

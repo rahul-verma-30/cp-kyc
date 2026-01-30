@@ -12,8 +12,6 @@ const RiskCard = ({
   source,
   variant,
 }) => {
-  const isHigh = severity === "High";
-
   return (
     <div className={`${styles.riskCard} ${styles[variant]}`}>
       {/* LEFT ICON */}
@@ -128,6 +126,28 @@ const CompanyNewHeader = () => {
   const [isExpanded, setIsExpanded] = useState(false); // State to track expansion
 
   const toggleExpand = () => setIsExpanded(!isExpanded);
+  const [actionsOpen, setActionsOpen] = useState(false);
+  const [actionsDirection, setActionsDirection] = useState("down");
+  const actionsRef = React.useRef(null);
+  const toggleActions = () => {
+    if (!actionsRef.current) return;
+
+    const rect = actionsRef.current.getBoundingClientRect();
+    const dropdownHeight = 160;
+    const spaceBelow = window.innerHeight - rect.bottom;
+
+    setActionsDirection(spaceBelow > dropdownHeight ? "down" : "up");
+    setActionsOpen((prev) => !prev);
+  };
+  React.useEffect(() => {
+    const close = (e) => {
+      if (!actionsRef.current?.contains(e.target)) {
+        setActionsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, []);
 
   return (
     <div className={styles.wrapper}>
@@ -263,14 +283,39 @@ const CompanyNewHeader = () => {
                 />
                 Save
               </button>
-              <button className={styles.actionsButton}>
-                Actions{" "}
-                <img
-                  src="/icons/chevron-down.svg"
-                  alt=""
-                  className={styles.chevronDown}
-                />
-              </button>
+              <div ref={actionsRef} className={styles.actionsWrapper}>
+                <button
+                  className={styles.actionsButton}
+                  onClick={toggleActions}
+                >
+                  Actions
+                  <img
+                    src="/icons/chevron-down.svg"
+                    alt=""
+                    className={`${styles.chevronDown} ${
+                      actionsOpen ? styles.rotated : ""
+                    }`}
+                  />
+                </button>
+
+                {actionsOpen && (
+                  <div
+                    className={`${styles.actionsDropdown} ${
+                      actionsDirection === "up"
+                        ? styles.dropdownUp
+                        : styles.dropdownDown
+                    }`}
+                  >
+                    <button className={styles.dropdownItem}>
+                      View Company
+                    </button>
+                    <button className={styles.dropdownItem}>
+                      Download Report
+                    </button>
+                    <button className={styles.dropdownItem}>Share</button>
+                  </div>
+                )}
+              </div>
             </div>
             <div className={styles.lastUpdated}>
               <span>Last Updated:</span>{" "}

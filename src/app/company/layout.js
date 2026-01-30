@@ -15,7 +15,7 @@ export default function CompanyLayout({ children }) {
         </div>
 
         {/* Sidebar + Content */}
-        {/* <div className={styles.contentWrapper}> */}
+        <div className={styles.contentWrapper}>
           <div className={styles.contentRow}>
             <aside className={styles.sidebar}>
               <CompanyNewSidebar />
@@ -23,7 +23,7 @@ export default function CompanyLayout({ children }) {
 
             <main className={styles.main}>{children}</main>
           </div>
-        {/* </div> */}
+        </div>
       </div>
     </CompanySectionProvider>
   );
