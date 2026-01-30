@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import styles from './ShareHoldingsTables2.module.css';
 import RowsPerPage from "@/components/common/RowsPerPage";

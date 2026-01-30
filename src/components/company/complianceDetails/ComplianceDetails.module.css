@@ -272,8 +272,9 @@
 
 .chartTitle {
   font-size: 16px;
-  font-weight: 500;
-  color: rgba(30, 41, 59, 1);
+  line-height: 24px;
+  font-weight: 600;
+  color: #27272a;
   margin: 0;
 }
 
@@ -638,7 +639,7 @@
   overflow: hidden;
 }
 .statusText {
-  display: block;            /* 🔑 REQUIRED */
+  display: block; /* 🔑 REQUIRED */
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -648,16 +649,157 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  max-width: 100%;           /* 🔑 IMPORTANT */
+  max-width: 100%; /* 🔑 IMPORTANT */
   padding: 6px 12px;
   border-radius: 999px;
   white-space: nowrap;
 }
-.epfoGrapgAndTitleContainer{
+.epfoGrapgAndTitleContainer {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
+
+.epfoGraphContainer {
+  border: 1px solid #e4e4e7;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.creditHeader {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.togglletabs {
+  display: flex;
+  padding: 4px;
+  background-color: #f4f4f5;
+  border-radius: 100px;
+  max-height: 40px;
+}
+
+.toggleTab {
+  padding: 6px 12px;
+  border-radius: 100px;
+  min-width: 56px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  width: 96px;
+  cursor: pointer;
+}
+
+.activeTab {
+  background: #ffffff;
+  box-shadow: 0px 1px 2px 0px #0000000d;
+
+  font-weight: 500;
+}
+
+.dateTabs {
+  display: flex;
+  /* padding-bottom: 8px; */
+  border-bottom: 1px solid #e4e4e7;
+}
+
+.dateTab {
+  background: none;
+  border: none;
+  font-size: 14px;
+  padding: 12px 16px;
+  line-height: 20px;
+  padding-top: 8px;
+
+  border-bottom: 2px solid transparent;
+
+  transition: all 0.3s ease;
+  font-weight: 500;
+  color: #71717a;
+  cursor: pointer;
+}
+
+.activeDateTab {
+  color: #041e42;
+  border-bottom: 2px solid #041e42;
+}
+.csrChartsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  /* margin-top: 16px; */
+}
+
+.csrChartCard {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.csrChartTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  margin-bottom: 20px;
+}
+
+.csrChartTitleDonut {
+  margin-bottom: 24px;
+}
+.csrChartBody {
+  width: 100%;
+}
+.csrChartBodyDonut {
+  display: flex;
+  height: 336px;
+  align-items: center;
+}
+.csrDonutWrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  gap: 24px;
+}
+
+.csrLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.csrLegendRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  color: #27272a;
+}
+
+.csrLegendDot {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.csrLegendLabel {
+  flex: 1;
+}
+
+.csrLegendValue {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+}
+
 @media (max-width: 1024px) {
   .topGrid {
     grid-template-columns: repeat(2, 1fr);
