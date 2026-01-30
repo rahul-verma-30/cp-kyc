@@ -27,12 +27,14 @@
   overflow-x: auto;
   border-radius: 12px;
   border: 1px solid rgba(228, 228, 231, 1);
+  overflow-y: hidden;
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 900px;
+  table-layout: auto;
+  /* min-width: 900px; */
 }
 
 /* Base cell styling with internal borders only */

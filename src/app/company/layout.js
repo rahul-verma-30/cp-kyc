@@ -1,18 +1,34 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import styles from "@/components/company/layout/CompanyLayout.module.css";
 import CompanyNewHeader from "@/components/company/newHeader/newHeader";
+import CompanyStickyHeader from "@/components/company/newHeader/CompanyStickyHeader";
 import CompanyNewSidebar from "@/components/company/newSidebar/newSidebar";
 import { CompanySectionProvider } from "@/components/company/context/CompanySectionContext";
 
 export default function CompanyLayout({ children }) {
+  const [showStickyHeader, setShowStickyHeader] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setShowStickyHeader(window.scrollY > 220);
+    };
+
+    onScroll();
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <CompanySectionProvider>
+      {/* 🔹 Compact sticky header */}
+      <CompanyStickyHeader visible={showStickyHeader} />
+
       <div className={styles.container}>
-        {/* Header */}
-        <div className={styles.headerWrapper}>
-          <CompanyNewHeader />
-        </div>
+        {/* 🔹 Full header */}
+        <CompanyNewHeader />
 
         {/* Sidebar + Content */}
         <div className={styles.contentWrapper}>

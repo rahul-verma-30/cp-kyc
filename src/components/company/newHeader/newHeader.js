@@ -12,6 +12,7 @@ const RiskCard = ({
   source,
   variant,
 }) => {
+  const isHigh = severity === "High";
   return (
     <div className={`${styles.riskCard} ${styles[variant]}`}>
       {/* LEFT ICON */}

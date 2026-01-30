@@ -114,7 +114,6 @@ export default function RootLayout({ children }) {
               </aside>
 
               {/* ===== PAGE CONTENT ===== */}
-              {/* ===== PAGE CONTENT ===== */}
               <main className={styles.contentArea}>{children}</main>
             </div>
           </div>
