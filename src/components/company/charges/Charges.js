@@ -2,8 +2,11 @@ import styles from "./Charges.module.css";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import RowsPerPage from "@/components/common/RowsPerPage";
 import { useState } from "react";
+<<<<<<< HEAD
 import { useEffect, useRef } from "react";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
+=======
+>>>>>>> origin/main
 
 export default function ChargesPage() {
   const { activeSubSection } = useCompanySection();
@@ -121,8 +124,15 @@ export default function ChargesPage() {
     { name: "Others", value: 158 },
     { name: "Remaining", value: 165 - 158 },
   ];
+<<<<<<< HEAD
 
   const COLORS = ["#0EA5E9", "rgba(244, 244, 245, 1)"];
+=======
+
+  const COLORS = ["#0EA5E9", "rgba(244, 244, 245, 1)"];
+
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+>>>>>>> origin/main
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -291,7 +301,14 @@ export default function ChargesPage() {
           <span className={styles.showingText}>Showing 1-10 of 20</span>
           <div className={styles.paginationControls}>
             <span className={styles.rowsLabel}>Rows per page</span>
+<<<<<<< HEAD
             <RowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
+=======
+           <RowsPerPage
+  value={rowsPerPage}
+  onChange={setRowsPerPage}
+/>
+>>>>>>> origin/main
 
             <span className={styles.pageLabel}>Page 1 of 10</span>
             <div className={styles.navButtons}>

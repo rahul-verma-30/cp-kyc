@@ -7,12 +7,16 @@ import { useRef, useLayoutEffect } from "react";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 
 const CompanyNewSidebar = () => {
+<<<<<<< HEAD
   const {
     activeSection,
     setActiveSection,
     setActiveSubSection, // ✅ ADD THIS
   } = useCompanySection();
 
+=======
+  const { activeSection, setActiveSection } = useCompanySection();
+>>>>>>> origin/main
   const [expandedSections, setExpandedSections] = useState({
     companyDetails: true,
     directorsKmp: true,
@@ -138,6 +142,7 @@ const CompanyNewSidebar = () => {
                 className={`${styles.standaloneHeader} ${
                   activeSection === section.id ? styles.headerActive : ""
                 }`}
+<<<<<<< HEAD
                 onClick={() => {
                   // Collapse ONLY if clicking the currently active section
                   if (activeSection === section.id) {
@@ -152,6 +157,9 @@ const CompanyNewSidebar = () => {
 
                   activateSection(section);
                 }}
+=======
+                onClick={() => activateSection(section)}
+>>>>>>> origin/main
               >
                 {section.title}
               </div>
@@ -163,6 +171,7 @@ const CompanyNewSidebar = () => {
                     activeSection === section.id ? styles.headerActive : ""
                   }`}
                   onClick={() => {
+<<<<<<< HEAD
                     // Collapse ONLY if clicking the currently active section
                     if (activeSection === section.id) {
                       toggleSection(section.id);
@@ -174,6 +183,9 @@ const CompanyNewSidebar = () => {
                       }));
                     }
 
+=======
+                    toggleSection(section.id);
+>>>>>>> origin/main
                     activateSection(section);
                   }}
                 >

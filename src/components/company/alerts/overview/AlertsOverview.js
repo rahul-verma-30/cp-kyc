@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import styles from "./AlertOverview.module.css";
+<<<<<<< HEAD
 import RowsPerPage from "@/components/common/RowsPerPage";
+=======
+>>>>>>> origin/main
 
 export default function AlertsOverview() {
   const [expandedRow, setExpandedRow] = useState(null);
@@ -14,8 +17,11 @@ export default function AlertsOverview() {
   const [activeSidebarIndex, setActiveSidebarIndex] = useState(0);
   const [activeTabIndex, setActiveTabIndex] = useState(0); // 0 = Company, 1 = Director
 
+<<<<<<< HEAD
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
+=======
+>>>>>>> origin/main
   /**
    * DATA CONFIGURATION
    */
