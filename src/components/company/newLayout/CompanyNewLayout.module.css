@@ -149,25 +149,35 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  /* padding: 6px 8px; */
   cursor: pointer;
   transition: all 0.2s;
+  border: none;
+  background: none;
+}
+
+.iconTab:hover {
+  background-color: rgba(244, 244, 245, 1);
 }
 
 .iconTab img {
   width: 16px;
   height: 16px;
-  filter: brightness(0); 
+  filter: brightness(0);
 }
 
 .activeTab {
-  background-color: rgba(4, 30, 66, 1); 
+  background-color: rgba(4, 30, 66, 1);
 }
 
 .activeTab img {
-  filter: brightness(0) invert(1); 
+  filter: brightness(0) invert(1);
   opacity: 1;
 }
+
+.activeTab:hover {
+  background-color: rgba(4, 30, 66, 1);
+}
+
 
 .contentArea {
   flex: 1;

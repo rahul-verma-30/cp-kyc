@@ -9,8 +9,22 @@
   flex-direction: column;
 
   position: sticky;
+  padding-left: 12px;
   top: 0;
+  border-left: 4px solid rgba(228, 228, 231, 1);
+  position: relative;
 }
+
+.activeIndicator {
+  position: absolute;
+  left: -4px;
+  width: 4px;
+  height: 40px;
+  background-color: rgba(4, 30, 66, 1);
+  border-radius: 2px;
+  transition: top 0.25s ease;
+}
+
 
 .nav {
   display: flex;
@@ -44,6 +58,13 @@
   background-color: rgba(241, 245, 249, 1);
 }
 
+.headerActive,
+.headerActive .title {
+  color: rgba(39, 39, 42, 1);
+  font-weight: 500;
+}
+
+
 .standaloneHeader {
   width: 100%;
   display: flex;
@@ -63,6 +84,13 @@
   color: rgba(113, 113, 122, 1);
 }
 
+.standaloneHeader.headerActive {
+  background-color: rgba(241, 245, 249, 1);
+  color: rgba(39, 39, 42, 1);
+  font-weight: 500;
+}
+
+
 .title {
   font-weight: 400;
   font-size: 14px;
@@ -71,10 +99,12 @@
   color: rgba(113, 113, 122, 1);
 }
 
+.standaloneHeader.headerActive .title,
 .headerActive .title {
   color: rgba(39, 39, 42, 1);
   font-weight: 500;
 }
+
 
 .chevron {
   width: 16px;
