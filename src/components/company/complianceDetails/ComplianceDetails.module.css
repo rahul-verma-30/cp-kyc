@@ -317,7 +317,7 @@
 /* ===== KPI SECTION ===== */
 .kpiSection {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   /* margin: 20px 0 28px; */
 }
@@ -507,8 +507,8 @@
 .pageControls button:hover {
   background: #f3f4f6;
 }
-.pageControls button:disabled{
-opacity: 0.5;
+.pageControls button:disabled {
+  opacity: 0.5;
 }
 /* Page size selector */
 .pageSizeControl {
@@ -603,7 +603,61 @@ opacity: 0.5;
   z-index: 999999;
   overflow: hidden;
 }
+.kpiSectionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+} /* Status pill base */
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  /* font-size: 12px; */
+  /* font-weight: 500; */
+  /* line-height: 16px; */
+  white-space: nowrap;
+}
 
+/* Active */
+.statusActive {
+  background-color: #dcfce7; /* green-100 */
+  color: #16a34a; /* green-600 */
+}
+
+/* Inactive / Cancelled */
+.statusInactive {
+  background-color: #fee2e2; /* red-100 */
+  color: #dc2626; /* red-600 */
+}
+.statusCol {
+  max-width: 204px;
+  width: 204px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.statusText {
+  display: block;            /* 🔑 REQUIRED */
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;           /* 🔑 IMPORTANT */
+  padding: 6px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.epfoGrapgAndTitleContainer{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 @media (max-width: 1024px) {
   .topGrid {
     grid-template-columns: repeat(2, 1fr);
