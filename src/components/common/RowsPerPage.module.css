@@ -33,6 +33,11 @@
 .dropdownDown {
   top: calc(100% + 8px);
 }
+.openOntop {
+  bottom: 32px;
+  left: -2px;
+  top: unset;
+}
 
 /* ⬆️ Open above */
 .dropdownUp {
@@ -53,4 +58,3 @@
 .rowsOption:hover {
   background: #f8fafc;
 }
-
