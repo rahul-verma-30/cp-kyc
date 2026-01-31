@@ -9,6 +9,7 @@ import {
   creditRatingDates,
   creditRatings,
   csrDetails2021_22,
+  epfoYearlyTableData,
   pendingCasesTable,
 } from "./dummyData";
 import { ChevronsDownUp } from "lucide-react";
@@ -197,9 +198,6 @@ const ComplianceDetails = () => {
     {
       id: "inactive-establishment",
       label: "Inactive Establishment",
-    },
-    {
-      id: null,
     },
   ];
   const sectionRefs = React.useRef({});
@@ -503,6 +501,42 @@ const ComplianceDetails = () => {
 
           <div className={styles.epfoGraphContainer}>
             <EpfoSummaryChart epfoSummaryData={epfoSummaryGraphData} />
+          </div>
+        </div>
+
+        {/* EPFO Year-wise Summary Table */}
+        <div className={styles.tableSection}>
+          <h6 className={styles.tableTitle}>{`EPFO Year-wise Summary`}</h6>
+
+          <div className={styles.tableContainer}>
+            <table className={styles.litigationTable}>
+              <thead>
+                <tr>
+                  <th className={styles.financialYearHead}>Financial Year</th>
+                  <th>Number of Employees</th>
+                  <th>PF Contribution</th>
+                  <th>Entity with Delay</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {epfoYearlyTableData.map((row, idx) => (
+                  <tr key={idx}>
+                    <td>{row.year}</td>
+                    <td>{row.employees}</td>
+                    <td>{row.contribution}</td>
+                    <td
+                      style={{
+                        color: row.delay > 0 ? "#EF4444" : "inherit",
+                        fontWeight: row.delay > 0 ? 500 : 400,
+                      }}
+                    >
+                      {row.delay}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
 

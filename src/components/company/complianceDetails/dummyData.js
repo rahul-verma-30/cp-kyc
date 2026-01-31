@@ -529,3 +529,67 @@ export const creditRatings = {
     ],
   },
 };
+
+
+export const epfoYearlyTableData = [
+  {
+    year: "2025-2026",
+    employees: 5738,
+    contribution: "33,146,773",
+    delay: 1,
+  },
+  {
+    year: "2024-2025",
+    employees: 5738,
+    contribution: "33,146,773",
+    delay: 2,
+  },
+  {
+    year: "2023-2024",
+    employees: 5738,
+    contribution: "33,146,773",
+    delay: 2,
+  },
+  {
+    year: "2022-2023",
+    employees: 5738,
+    contribution: "33,146,773",
+    delay: 9,
+  },
+  {
+    year: "2021-2022",
+    employees: 5738,
+    contribution: "33,146,773",
+    delay: 8,
+  },
+  {
+    year: "2020-2021",
+    employees: 5738,
+    contribution: "33,146,773",
+    delay: 5,
+  },
+  {
+    year: "2019-2020",
+    employees: 5738,
+    contribution: "33,146,773",
+    delay: 7,
+  },
+  {
+    year: "2018-2019",
+    employees: 5738,
+    contribution: "33,146,773",
+    delay: 7,
+  },
+  {
+    year: "2017-2018",
+    employees: 5738,
+    contribution: "33,146,773",
+    delay: 7,
+  },
+  {
+    year: "2016-2017",
+    employees: 5738,
+    contribution: "33,146,773",
+    delay: 7,
+  },
+];
