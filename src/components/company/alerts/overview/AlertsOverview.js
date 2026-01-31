@@ -1144,6 +1144,7 @@ export default function AlertsOverview() {
                             </table>
                           </div>
                           {/* Pagination Footer based on image data */}
+                          <div className={styles.paginationFloating}>
                           <div
                             className={`${styles.paginationRow} ${styles.paginationRowExtra}`}
                           >
@@ -1195,7 +1196,7 @@ export default function AlertsOverview() {
                                 </button>
                               </div>
                             </div>
-                          </div>
+                          </div></div>
                         </>
                       )}
                     </div>

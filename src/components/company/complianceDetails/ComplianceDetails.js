@@ -172,9 +172,36 @@ export const epfoSummaryGraphData = [
 // export default RowsPerPage;
 
 const ComplianceDetails = () => {
-  const { setActiveSection } = useCompanySection();
+  const { activeSubSection } = useCompanySection();
+
+  // ✅ ADD THIS EXACT useEffect HERE
+  useEffect(() => {
+    if (!activeSubSection) return;
+
+    const sectionMap = {
+      "Auditors' Remarks": "auditors-remarks",
+      CARO: "caro",
+      "Goods & Service Tax (GST)": "gst",
+      EPFO: "epfo",
+      "CSR Credit Rating": "csr",
+    };
+
+    const targetId = sectionMap[activeSubSection];
+    if (!targetId) return;
+
+    const element = document.getElementById(targetId);
+    if (!element) return;
+
+    element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, [activeSubSection]);
+
+  // ⬇️ keep your states AFTER this
   const [rowsOpen, setRowsOpen] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
 
   const [agency, setAgency] = useState("CRISIL");
   const [selectedDate, setSelectedDate] = useState("2023-11-24");
@@ -218,7 +245,7 @@ const ComplianceDetails = () => {
           </div>
         </div>
         {/* Auditors' Remarks Standalone table */}
-        <div className={styles.tableSection}>
+        <div id="auditors-remarks" className={styles.tableSection}>
           {" "}
           <h6
             className={styles.tableTitle}
@@ -280,7 +307,7 @@ const ComplianceDetails = () => {
         </div>
 
         {/* CARO Standalone table*/}
-        <div className={styles.tableSection}>
+        <div id="caro" className={styles.tableSection}>
           {" "}
           <h6 className={styles.tableTitle}>{`CARO Standalone`}</h6>
           <div className={styles.tableContainer}>
@@ -337,7 +364,7 @@ const ComplianceDetails = () => {
           </div>
         </div>
         {/* KPI SECTION */}
-        <div className={styles.kpiSectionContainer}>
+        <div id="gst" className={styles.kpiSectionContainer}>
           <h6 className={styles.tableTitle}>{`Gstin Details`}</h6>
           <div className={styles.kpiSection}>
             {complianceKpis.map((kpi, idx) => (
@@ -495,8 +522,7 @@ const ComplianceDetails = () => {
         ))}
 
         {/* EPFO graph */}
-
-        <div className={styles.epfoGrapgAndTitleContainer}>
+        <div id="epfo" className={styles.epfoGrapgAndTitleContainer}>
           <h6 className={styles.tableTitle}>{`EPFO Summary`}</h6>
 
           <div className={styles.epfoGraphContainer}>
@@ -683,7 +709,7 @@ const ComplianceDetails = () => {
 
         {/* CSR Details */}
 
-        <div className={styles.epfoGrapgAndTitleContainer}>
+        <div id="csr" className={styles.epfoGrapgAndTitleContainer}>
           <h6 className={styles.tableTitle}>{`CSR Details`}</h6>
 
           <div className={styles.csrChartsGrid}>

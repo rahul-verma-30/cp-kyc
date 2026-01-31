@@ -6,6 +6,7 @@ import styles from "../components/company/newLayout/CompanyNewLayout.module.css"
 import { CompanySectionProvider } from "@/components/company/context/CompanySectionContext";
 import "./globals.css";
 import { Inter } from "next/font/google";
+import { useRef } from "react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -34,6 +35,24 @@ export default function RootLayout({ children }) {
     router.push(path);
   };
 
+  const searchInputRef = useRef(null);
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const isMac = navigator.platform.toUpperCase().includes("MAC");
+
+      if (
+        (isMac && e.metaKey && e.key.toLowerCase() === "k") ||
+        (!isMac && e.ctrlKey && e.key.toLowerCase() === "k")
+      ) {
+        e.preventDefault(); // stop browser search
+        searchInputRef.current?.focus();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <Suspense fallback={null}>
       <CompanySectionProvider>
@@ -58,10 +77,12 @@ export default function RootLayout({ children }) {
                       className={styles.searchIcon}
                     />
                     <input
+                      ref={searchInputRef}
                       type="text"
                       placeholder="Search by company name, CIN, LLPIN, or director name"
                       className={styles.searchInput}
                     />
+
                     <div className={styles.shortcut}>⌘ K</div>
                   </div>
                 </div>

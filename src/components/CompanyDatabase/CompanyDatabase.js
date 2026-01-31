@@ -3,7 +3,6 @@ import styles from "./CompanyDatabase.module.css";
 import { useState, useRef, useEffect } from "react";
 import RowsPerPage from "@/components/common/RowsPerPage";
 
-
 const data = [
   {
     name: "One 97 Communications Limited",
@@ -98,11 +97,40 @@ const data = [
 ];
 
 export default function CompanyDatabase() {
+  const bulkRef = useRef(null);
+
+  const [bulkOpen, setBulkOpen] = useState(false);
+  const [bulkDirection, setBulkDirection] = useState("down");
+  const toggleBulk = () => {
+    if (!bulkRef.current) return;
+
+    const rect = bulkRef.current.getBoundingClientRect();
+    const dropdownHeight = 140; // adjust if needed
+    const spaceBelow = window.innerHeight - rect.bottom;
+
+    setBulkDirection(spaceBelow > dropdownHeight ? "down" : "up");
+    setBulkOpen((prev) => !prev);
+  };
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (!bulkRef.current?.contains(e.target)) {
+        setBulkOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
+
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const headerCheckboxRef = useRef(null);
 
   const [selectedRows, setSelectedRows] = useState([]);
+  const [open, setOpen] = useState(false);
+  const dateInputRef = useRef(null);
+
+  const [selectedDate, setSelectedDate] = useState("");
 
   const allChecked = selectedRows.length === data.length;
   const someChecked = selectedRows.length > 0 && !allChecked;
@@ -152,18 +180,57 @@ export default function CompanyDatabase() {
           </div>
         </div>
         <div className={styles.rightTools}>
-          <div className={styles.datePicker}>
+          <div
+            className={styles.datePicker}
+            onClick={() => dateInputRef.current?.showPicker()}
+          >
             <img src="/icons/Calender.svg" alt="" className={styles.icon} />
-            <span>Date of incorporation</span>
-          </div>
-          <button className={styles.bulkActionBtn}>
-            Bulk Action
-            <img
-              src="/icons/chevron-down.svg"
-              alt=""
-              className={styles.chevron}
+            <span>
+              {selectedDate
+                ? new Date(selectedDate).toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })
+                : "Date of incorporation"}
+            </span>
+
+            <input
+              ref={dateInputRef}
+              type="date"
+              className={styles.hiddenDateInput}
+              onChange={(e) => {
+                setSelectedDate(e.target.value);
+              }}
             />
-          </button>
+          </div>
+
+          <div ref={bulkRef} className={styles.bulkWrapper}>
+            <button className={styles.bulkActionBtn} onClick={toggleBulk}>
+              Bulk Action
+              <img
+                src="/icons/chevron-down.svg"
+                alt=""
+                className={`${styles.chevron} ${bulkOpen ? styles.rotated : ""}`}
+              />
+            </button>
+
+            {bulkOpen && (
+              <div
+                className={`${styles.bulkDropdown} ${
+                  bulkDirection === "up"
+                    ? styles.dropdownUp
+                    : styles.dropdownDown
+                }`}
+              >
+                <button className={styles.dropdownItem}>Export Selected</button>
+                <button className={styles.dropdownItem}>
+                  Mark as Inactive
+                </button>
+                <button className={styles.dropdownItem}>Delete</button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -249,10 +316,10 @@ export default function CompanyDatabase() {
         <div className={styles.footerRight}>
           <div className={styles.paginationControls}>
             <div className={styles.rowsPerPage}>
-                        <div className={styles.rowsPerPage}>
-            <span className={styles.rowsPerPageText}>Rows per page</span>
-            <RowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
-          </div>
+              <div className={styles.rowsPerPage}>
+                <span className={styles.rowsPerPageText}>Rows per page</span>
+                <RowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
+              </div>
             </div>
             <span className={styles.pageLabel}>Page 1 of 10</span>
             <div className={styles.navButtons}>

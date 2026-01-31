@@ -245,7 +245,7 @@
 }
 
 .detailTable th {
-  padding: 12px 16px;
+  padding: 13.25px 10px;
   font-size: 14px;
   font-weight: 500;
   color: rgba(113, 113, 122, 1);
@@ -255,7 +255,7 @@
 }
 
 .detailTable td {
-  padding: 12px 16px;
+  padding: 12px 10px;
   font-size: 14px;
   border-bottom: 1px solid rgba(228, 228, 231, 1);
   color: rgba(39, 39, 42, 1);
@@ -268,6 +268,32 @@
 .detailTable tr:last-child td {
   border-bottom: none;
 }
+/* Target ONLY Regulatory Alerts table (8 columns) */
+.detailTable:has(th:nth-child(8)) {
+  table-layout: fixed;
+}
+
+/* First 7 columns: slightly wider */
+.detailTable:has(th:nth-child(8)) th:not(:nth-child(8)),
+.detailTable:has(th:nth-child(8)) td:not(:nth-child(8)) {
+  width: calc(100% / 7);
+}
+
+/* Last column: MORE narrow */
+.detailTable:has(th:nth-child(8)) th:nth-child(8),
+.detailTable:has(th:nth-child(8)) td:nth-child(8) {
+  width: calc(100% / 20);
+}
+
+
+/* Target ONLY Regulatory Alerts table */
+.detailTable:has(th:nth-child(8)) th:nth-child(6),
+.detailTable:has(th:nth-child(8)) td:nth-child(6) {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 
 
 /* Litigation Layouts */
@@ -275,6 +301,11 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.litigationWrapper .tableWrapper .detailTable td{
+  height: 56px;
+  box-sizing: border-box;
 }
 
 .litigationCards {
@@ -339,6 +370,8 @@
   padding: 0 4px;
   z-index: 1;
 }
+
+
 
 .paginationInfo {
   display: flex;
@@ -620,7 +653,7 @@
 .companySubText {
   font-size: 12px;
   color: rgba(113, 113, 122, 1);
-  white-space: nowrap;
+  /* white-space: nowrap; */
 }
 /* .companyNameCell .companySubText:first-of-type {
   width: 200px;
