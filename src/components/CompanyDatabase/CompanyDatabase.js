@@ -1,7 +1,8 @@
 "use client";
 import styles from "./CompanyDatabase.module.css";
-import { useRef } from "react";
-import { useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
+import RowsPerPage from "@/components/common/RowsPerPage";
+
 
 const data = [
   {
@@ -97,11 +98,34 @@ const data = [
 ];
 
 export default function CompanyDatabase() {
-  const checkboxRef = useRef(null);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
+  const headerCheckboxRef = useRef(null);
+
+  const [selectedRows, setSelectedRows] = useState([]);
+
+  const allChecked = selectedRows.length === data.length;
+  const someChecked = selectedRows.length > 0 && !allChecked;
   useEffect(() => {
-    checkboxRef.current.indeterminate = true;
-  }, []);
+    if (headerCheckboxRef.current) {
+      headerCheckboxRef.current.indeterminate = someChecked;
+    }
+  }, [someChecked]);
+  const handleSelectAll = () => {
+    if (allChecked) {
+      setSelectedRows([]);
+    } else {
+      setSelectedRows(data.map((_, i) => i));
+    }
+  };
+  const handleRowSelect = (index) => {
+    setSelectedRows((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
+    );
+  };
+
+  const visibleData = data.slice(0, rowsPerPage);
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -150,7 +174,13 @@ export default function CompanyDatabase() {
               <th className={styles.checkboxCell}>
                 <div className={styles.checkboxOuter}>
                   <label className={styles.checkboxWrapper}>
-                    <input ref={checkboxRef} type="checkbox" />
+                    <input
+                      ref={headerCheckboxRef}
+                      type="checkbox"
+                      checked={allChecked}
+                      onChange={handleSelectAll}
+                    />
+
                     <span className={styles.customCheckbox}></span>
                   </label>
                 </div>
@@ -166,12 +196,17 @@ export default function CompanyDatabase() {
             </tr>
           </thead>
           <tbody>
-            {data.map((company, index) => (
+            {visibleData.map((company, index) => (
               <tr key={index}>
                 <td className={styles.checkboxCell}>
                   <div className={styles.checkboxOuter}>
                     <label className={styles.checkboxWrapper}>
-                      <input ref={checkboxRef} type="checkbox" />
+                      <input
+                        type="checkbox"
+                        checked={selectedRows.includes(index)}
+                        onChange={() => handleRowSelect(index)}
+                      />
+
                       <span className={styles.customCheckbox}></span>
                     </label>
                   </div>
@@ -201,7 +236,10 @@ export default function CompanyDatabase() {
       <footer className={styles.footer}>
         <div className={styles.footerLeft}>
           <span className={styles.mutedText}>
-            Loaded: <span className={styles.boldText}>10 Companies</span>
+            Loaded:{" "}
+            <span className={styles.boldText}>
+              {visibleData.length} Companies
+            </span>
           </span>
           <span className={styles.separator}>|</span>
           <span className={styles.mutedText}>
@@ -210,21 +248,42 @@ export default function CompanyDatabase() {
         </div>
         <div className={styles.footerRight}>
           <div className={styles.paginationControls}>
-            <span className={styles.rowsLabel}>Rows per page</span>
-            <div className={styles.selectBox}>
-              10
-              <img
-                src="/icons/chevrons-up-down.svg"
-                alt="down"
-                className={styles.icon}
-              />
+            <div className={styles.rowsPerPage}>
+                        <div className={styles.rowsPerPage}>
+            <span className={styles.rowsPerPageText}>Rows per page</span>
+            <RowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
+          </div>
             </div>
             <span className={styles.pageLabel}>Page 1 of 10</span>
             <div className={styles.navButtons}>
-              <button className={styles.navBtnDisabled}>«</button>
-              <button className={styles.navBtnDisabled}>‹</button>
-              <button className={styles.navBtn}>›</button>
-              <button className={styles.navBtn}>»</button>
+              <button className={styles.navBtnDisabled}>
+                <img
+                  src="/icons/chevrons-left.svg"
+                  alt="First page"
+                  className={styles.navIcon}
+                />
+              </button>
+              <button className={styles.navBtnDisabled}>
+                <img
+                  src="/icons/chevron-left.svg"
+                  alt="First page"
+                  className={styles.navIcon}
+                />
+              </button>
+              <button className={styles.navBtn}>
+                <img
+                  src="/icons/chevron-right-black.svg"
+                  alt="First page"
+                  className={styles.navIcon}
+                />
+              </button>
+              <button className={styles.navBtn}>
+                <img
+                  src="/icons/chevrons-right.svg"
+                  alt="First page"
+                  className={styles.navIcon}
+                />
+              </button>
             </div>
           </div>
         </div>

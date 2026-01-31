@@ -81,7 +81,7 @@
 .fullTable {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1000px;
+  /* min-width: 1000px; */
 }
 
 .fullTable th {
@@ -97,14 +97,27 @@
 .fullTable td {
   padding: 12px 16px;
   font-size: 13px;
-  border-bottom: 1px solid #E5E7EB;
+  border-bottom: 1px solid rgba(228, 228, 231, 1);
   color: rgba(39, 39, 42, 1);
 }
+
+.fullTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
 
 .companyCell {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.companyName {
+  max-width: 140px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
 .companyIcon {

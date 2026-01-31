@@ -251,6 +251,7 @@ const FinancialHighlights = () => {
             <div className={styles.legendItem}>
               <span className={styles.blueDot}></span> Revenue
             </div>
+            <div className={styles.legendDivider}></div>
             <div className={styles.legendItem}>
               <span className={styles.greenDot}></span> Profit
             </div>
@@ -260,7 +261,7 @@ const FinancialHighlights = () => {
           <ResponsiveContainer width="100%" height={400}>
             <BarChart
               data={chartData}
-              margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
+              margin={{ top: 20, right: 10, left: 0, bottom: 0 }}
             >
               {/* Added strokeDasharray="5 5" for the dotted horizontal lines shown in design */}
               <CartesianGrid
@@ -270,17 +271,18 @@ const FinancialHighlights = () => {
               />
               <XAxis
                 dataKey="year"
-                axisLine={false}
+                axisLine={{ stroke: "rgba(229, 231, 235, 1)" }}
                 tickLine={false}
                 tick={{
                   fill: "rgba(113, 113, 122, 1)",
                   fontSize: 14,
                   fontWeight: 500,
                 }}
-                dy={15}
+                dy={6}
               />
               <YAxis
-                axisLine={false}
+                width={70}
+                axisLine={{ stroke: "rgba(229, 231, 235, 1)" }}
                 tickLine={false}
                 tick={{
                   fill: "rgba(55, 65, 81, 1)",
@@ -300,13 +302,13 @@ const FinancialHighlights = () => {
                 dataKey="revenue"
                 fill="rgba(59, 130, 246, 1)"
                 radius={[20, 20, 0, 0]}
-                barSize={28}
+                barSize={32.73}
               />
               <Bar
                 dataKey="profit"
                 fill="rgba(34, 197, 94, 1)"
                 radius={[20, 20, 0, 0]}
-                barSize={20}
+                barSize={32.73}
               />
             </BarChart>
           </ResponsiveContainer>

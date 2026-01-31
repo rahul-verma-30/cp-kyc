@@ -71,7 +71,7 @@
 
 
 .datePicker {
-  min-width: 240px;
+  min-width: 214px;
   padding: 7px 12px;
 }
 
@@ -118,16 +118,24 @@
   border-bottom: 1px solid rgba(228, 228, 231, 1);
 }
 
+.checkboxCell{
+  padding-right: 0;
+}
+
 .table td {
   padding: 12px 16px;
   font-size: 14px;
   color: rgba(39, 39, 42, 1);
   border-bottom: 1px solid #E5E7EB;
 }
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
 
 .checkboxCell {
-  width: 40px;
-  text-align: center;
+  width: 32px;
+  text-align: right;
 }
 
 .checkboxOuter {
@@ -247,6 +255,12 @@
     font-size: 14px;
     font-weight: 500;
     color: rgba(30, 41, 59, 1);
+}
+
+.rowsPerPage , .pageNavigation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .selectBox {

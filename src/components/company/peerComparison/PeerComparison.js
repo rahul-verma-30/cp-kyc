@@ -80,7 +80,7 @@ export default function PeerComparison() {
       <section className={styles.sectionCard}>
         <div className={styles.barChartContainer}>
           <ResponsiveContainer width="100%" height={450}>
-            <BarChart data={barData} margin={{ top: 20, right: 20, left: 20, bottom: 80 }}>
+            <BarChart data={barData} margin={{ top: 20, right: 10, left: 10, bottom: 50 }}>
               <CartesianGrid strokeDasharray="4 4" vertical={false} stroke="#E5E7EB" />
               <XAxis 
                 dataKey="name" 
@@ -90,7 +90,7 @@ export default function PeerComparison() {
                 tick={<CustomXAxisTick />}
               />
               <YAxis 
-                axisLine={false} 
+                axisLine={{ stroke: '#E5E7EB' }}
                 tickLine={false} 
                 tick={{ fontSize: 12, fill: 'rgba(55, 65, 81, 1)' }}
                 ticks={[0, 20, 40, 60, 80, 100, 120, 140]}
@@ -126,9 +126,10 @@ export default function PeerComparison() {
             {peerData.map((row, i) => (
               <tr key={i}>
                 <td className={styles.companyCell}>
-                  <img src="/icons/Image.svg" alt="" className={styles.companyIcon} />
-                  {row.name}
-                </td>
+  <img src="/icons/Image.svg" alt="" className={styles.companyIcon} />
+  <span className={styles.companyName}>{row.name}</span>
+</td>
+
                 <td>{row.cin}</td>
                 <td>{row.date}</td>
                 <td>{row.capital}</td>

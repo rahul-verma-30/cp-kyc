@@ -27,7 +27,7 @@ const FinancialHighlightsTables = () => {
     },
     { label: "Other Equity", values: ["0.00", "0.00", "0.00", "0.00", "0.00"] },
     {
-      type: "total",
+      type: "header",
       label: "Total Equity",
       values: [
         "742,329.00",

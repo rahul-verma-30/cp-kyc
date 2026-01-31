@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
 import styles from "./PeopleDatabase.module.css";
+import { useState, useRef, useEffect } from "react";
+import RowsPerPage from "@/components/common/RowsPerPage";
 
 const peopleData = [
   {
@@ -76,6 +78,30 @@ const peopleData = [
 ];
 
 export default function PeopleDatabase() {
+  const headerCheckboxRef = useRef(null);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const allChecked = selectedRows.length === peopleData.length;
+  const someChecked = selectedRows.length > 0 && !allChecked;
+  useEffect(() => {
+    if (headerCheckboxRef.current) {
+      headerCheckboxRef.current.indeterminate = someChecked;
+    }
+  }, [someChecked]);
+  const handleSelectAll = () => {
+    if (allChecked) {
+      setSelectedRows([]);
+    } else {
+      setSelectedRows(peopleData.map((_, i) => i));
+    }
+  };
+  const handleRowSelect = (index) => {
+    setSelectedRows((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
+    );
+  };
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const visiblePeople = peopleData.slice(0, rowsPerPage);
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
@@ -100,7 +126,13 @@ export default function PeopleDatabase() {
                   <th className={styles.checkboxCol}>
                     <div className={styles.checkboxOuter}>
                       <label className={styles.checkboxWrapper}>
-                        <input type="checkbox" />
+                        <input
+                          ref={headerCheckboxRef}
+                          type="checkbox"
+                          checked={allChecked}
+                          onChange={handleSelectAll}
+                        />
+
                         <span className={styles.customCheckbox}></span>
                       </label>
                     </div>
@@ -114,12 +146,17 @@ export default function PeopleDatabase() {
                 </tr>
               </thead>
               <tbody>
-                {peopleData.map((person, index) => (
+                {visiblePeople.map((person, index) => (
                   <tr key={index}>
                     <td className={styles.checkboxCol}>
                       <div className={styles.checkboxOuter}>
                         <label className={styles.checkboxWrapper}>
-                          <input type="checkbox" />
+                          <input
+                            type="checkbox"
+                            checked={selectedRows.includes(index)}
+                            onChange={() => handleRowSelect(index)}
+                          />
+
                           <span className={styles.customCheckbox}></span>
                         </label>
                       </div>
@@ -147,7 +184,10 @@ export default function PeopleDatabase() {
         <footer className={styles.footer}>
           <div className={styles.footerLeft}>
             <span className={styles.mutedText}>
-              Loaded: <span className={styles.boldText}>10 Companies</span>
+              Loaded:{" "}
+              <span className={styles.boldText}>
+                {visiblePeople.length} Companies
+              </span>
             </span>
             <span className={styles.separator}>|</span>
             <span className={styles.mutedText}>
@@ -156,21 +196,28 @@ export default function PeopleDatabase() {
           </div>
           <div className={styles.footerRight}>
             <div className={styles.paginationControls}>
-              <span className={styles.rowsLabel}>Rows per page</span>
-              <div className={styles.selectBox}>
-                10
-                <img
-                  src="/icons/chevrons-up-down.svg"
-                  alt="down"
-                  className={styles.icon}
-                />
+              <div className={styles.rowsPerPage}>
+                          <div className={styles.rowsPerPage}>
+            <span className={styles.rowsPerPageText}>Rows per page</span>
+            <RowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
+          </div>
               </div>
+
               <span className={styles.pageLabel}>Page 1 of 10</span>
+
               <div className={styles.navButtons}>
-                <button className={styles.navBtnDisabled}>«</button>
-                <button className={styles.navBtnDisabled}>‹</button>
-                <button className={styles.navBtn}>›</button>
-                <button className={styles.navBtn}>»</button>
+                <button className={styles.navBtnDisabled} disabled>
+                  <img src="/icons/chevrons-left.svg" alt="First page" />
+                </button>
+                <button className={styles.navBtnDisabled} disabled>
+                  <img src="/icons/chevron-left.svg" alt="Prev page" />
+                </button>
+                <button className={styles.navBtn}>
+                  <img src="/icons/chevron-right-black.svg" alt="Next page" />
+                </button>
+                <button className={styles.navBtn}>
+                  <img src="/icons/chevrons-right.svg" alt="Last page" />
+                </button>
               </div>
             </div>
           </div>

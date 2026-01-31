@@ -71,6 +71,7 @@
   line-height: 28px;
   color: rgba(39, 39, 42, 1);
   margin-top: 20px;
+  margin-bottom: 0;
 }
 
 .viewDetails {
@@ -159,6 +160,7 @@ border: 1px solid rgba(228, 228, 231, 1);
   gap: 16px;
   display: flex;
   flex-direction: column;
+  margin-top: 8px;
 }
 
 .tableRow {
@@ -222,6 +224,7 @@ border: 1px solid rgba(228, 228, 231, 1);
 border: 1px solid rgba(228, 228, 231, 1);
   border-radius: 20px;
   padding: 20px;
+  margin-top: 8px;
 }
 
 .chartHeader {

@@ -2,6 +2,7 @@
   font-family: 'Inter', sans-serif;
   width: 100%;
   background-color: #ffffff;
+  margin-top: 32px;
 }
 
 .tableTitle {
@@ -114,6 +115,12 @@
   margin-top: 32px;
 }
 
+.paginationInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .paginationRow {
   display: flex;
   justify-content: space-between;
@@ -179,6 +186,7 @@
   /* background-color: rgba(244, 244, 245, 1); */
   color: rgba(161, 161, 170, 1);
   cursor: not-allowed;
+  opacity: 40%;
 }
 
 @media (max-width: 768px) {

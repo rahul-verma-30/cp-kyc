@@ -64,7 +64,7 @@ const OwnershipSection = () => {
         {
           name: "Other than promoters:",
           value: 33.77,
-          color: "rgba(59, 130, 246, 1)",
+          color: "rgba(14, 165, 233, 1)",
         },
       ],
     },
@@ -137,7 +137,7 @@ const OwnershipSection = () => {
         <div className={styles.sectionWrapper}>
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>Share Holding Pattern</h2>
-            {/* <Link
+            <Link
               href="/company/shareHoldings"
               className={styles.viewAllBtn}
               onClick={(e) => e.preventDefault()}
@@ -148,7 +148,7 @@ const OwnershipSection = () => {
                 alt=""
                 className={styles.arrowIcon}
               />
-            </Link> */}
+            </Link>
           </div>
 
           <div className={styles.statsGrid}>
@@ -174,10 +174,11 @@ const OwnershipSection = () => {
                     <Pie
                       data={item.data}
                       innerRadius={60}
-                      outerRadius={80}
+                      outerRadius={100}
                       paddingAngle={0}
                       dataKey="value"
                       stroke="none"
+                      minAngle={2} 
                     >
                       {item.data.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
@@ -232,7 +233,7 @@ const OwnershipSection = () => {
             ))}
           </div>
         </div>
-        <div className={styles.tableWrapper}>
+        {/* <div className={styles.tableWrapper}>
           <table className={styles.activityTable}>
             <thead>
               <tr>
@@ -254,7 +255,7 @@ const OwnershipSection = () => {
               </tr>
             </tbody>
           </table>
-        </div>
+        </div> */}
       </section>
       <SubsidiaryAccordion />
       <div ref={odiRef}>
