@@ -641,9 +641,9 @@
 .statusText {
   display: block; /* 🔑 REQUIRED */
   max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  /* overflow: hidden; */
+  /* text-overflow: ellipsis; */
+  white-space: wrap;
 }
 .statusPill {
   display: inline-flex;
@@ -663,6 +663,7 @@
 .epfoGraphContainer {
   border: 1px solid #e4e4e7;
   border-radius: 20px;
+  height: 438px;
   padding: 20px;
 }
 

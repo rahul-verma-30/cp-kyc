@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -32,6 +33,73 @@ function getNiceTicks(values, tickCount = 11) {
   return { ticks, domain: [niceMin, niceMax] };
 }
 
+const CustomLegend = ({ payload }) => {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        position: "static",
+        marginBottom: 20,
+        alignItems: "center",
+        gap: 24,
+      }}
+    >
+      {[...payload]
+        .sort((a, b) => {
+          if (a.value === "Employees") return -1;
+          if (b.value === "Employees") return 1;
+          return 0;
+        })
+        .map((entry, index, arr) => (
+          <React.Fragment key={entry.value}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+              }}
+            >
+              {/* Dot */}
+              <span
+                style={{
+                  width: 16,
+                  height: 16,
+                  borderRadius: "50%",
+                  backgroundColor: entry.color,
+                  display: "inline-block",
+                }}
+              />
+
+              {/* Text */}
+              <span
+                style={{
+                  color: "#444444",
+                  fontWeight: 500,
+                  fontSize: 14,
+                  lineHeight: "20px",
+                }}
+              >
+                {entry.value}
+              </span>
+            </div>
+
+            {/* Vertical separator (except after last item) */}
+            {index !== arr.length - 1 && (
+              <span
+                style={{
+                  width: 1,
+                  height: 20,
+                  backgroundColor: "#D1D5DB",
+                }}
+              />
+            )}
+          </React.Fragment>
+        ))}
+    </div>
+  );
+};
+
 export default function EpfoSummaryChart({ epfoSummaryData }) {
   const START = 1500;
   const STEP = 500;
@@ -60,12 +128,17 @@ export default function EpfoSummaryChart({ epfoSummaryData }) {
   return (
     <div style={{ width: "100%", height: 380 }}>
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={epfoSummaryData}>
+        <AreaChart margin={{ left: 8, right: 8 }} data={epfoSummaryData}>
           {/* Gradient */}
           <defs>
             <linearGradient id="employeesGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#3B82F6" stopOpacity={0.9} />
               <stop offset="100%" stopColor="#3B82F6" stopOpacity={0} />
+            </linearGradient>
+
+            <linearGradient id="amountGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#0EA5E9" stopOpacity={0.9} />
+              <stop offset="100%" stopColor="#0EA5E9" stopOpacity={0} />
             </linearGradient>
           </defs>
 
@@ -80,11 +153,11 @@ export default function EpfoSummaryChart({ epfoSummaryData }) {
           {/* X Axis */}
           <XAxis
             dataKey="period"
-            // tick={{ fill: "#6B7280", fontSize: 12 }}
-            // axisLine={false}
+            interval="preserveStartEnd"
             tickLine={false}
             axisLine={{ stroke: "#E5E7EB", strokeWidth: 1 }}
             tick={{ fill: "#71717A", fontSize: 14, fontWeight: 500 }}
+            padding={{ left: 24, right: 24 }}
           />
 
           {/* Left Y Axis – Employees */}
@@ -149,9 +222,27 @@ export default function EpfoSummaryChart({ epfoSummaryData }) {
           <Legend
             verticalAlign="top"
             align="center"
-            iconType="circle"
-            iconSize={10}
+            content={<CustomLegend />}
+            wrapperStyle={{
+              top: 0,
+              left: 0,
+              position: "relative", // visually static
+            }}
           />
+
+          {/* Amount Line */}
+          <Area
+            yAxisId="right"
+            type="monotone"
+            dataKey="amount"
+            stroke="#0EA5E9"
+            strokeWidth={2}
+            fill="url(#amountGradient)"
+            dot={{ r: 4, fill: "#0EA5E9" }}
+            activeDot={{ r: 5, fill: "#0EA5E9" }}
+            name="Amount"
+          />
+
           {/* Employees Area */}
           <Area
             yAxisId="left"
@@ -163,19 +254,6 @@ export default function EpfoSummaryChart({ epfoSummaryData }) {
             dot={{ r: 4, fill: "#3B82F6" }}
             activeDot={{ r: 5, fill: "#3B82F6" }}
             name="Employees"
-          />
-
-          {/* Amount Line */}
-          <Area
-            yAxisId="right"
-            type="monotone"
-            dataKey="amount"
-            stroke="#0EA5E9"
-            strokeWidth={2}
-            fill="transparent"
-            dot={{ r: 4, fill: "#0EA5E9" }}
-            activeDot={{ r: 5, fill: "#0EA5E9" }}
-            name="Amount"
           />
         </AreaChart>
       </ResponsiveContainer>
