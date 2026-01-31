@@ -860,3 +860,9 @@
     font-size: 11px;
   }
 }
+
+.tableSection,
+.kpiSectionContainer,
+.epfoGrapgAndTitleContainer {
+  scroll-margin-top: 170px;
+}

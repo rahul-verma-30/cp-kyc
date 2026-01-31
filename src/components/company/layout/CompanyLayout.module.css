@@ -20,7 +20,7 @@
 /* CENTERED CONTAINER — HAS PADDING */
 .contentRow {
   display: flex;
-  max-width: 1632px;
+  max-width: 1680px;
   margin: 0 auto;
   gap: 32px;
 
