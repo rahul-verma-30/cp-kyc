@@ -29,8 +29,8 @@ body{
 .pageWrapper::after {
   content: "";
   position: absolute;
-  top: calc(40vh + 180px);
-  bottom: 80px;
+  top: calc(30vh + 180px);
+  bottom: 10px;
   left: 0;
   right: 0;
 

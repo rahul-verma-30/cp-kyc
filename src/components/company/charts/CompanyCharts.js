@@ -52,14 +52,14 @@ const CompanyCharts = () => {
         <div className={styles.card}>
           <div className={styles.pieChartContainer}>
             <div className={styles.pieWrapper}>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width={242} height={242}>
                 <PieChart>
                   <Pie
                     data={pieData}
                     cx="50%"
                     cy="50%"
                     innerRadius={0}
-                    outerRadius={100}
+                    outerRadius={121}
                     paddingAngle={0}
                     dataKey="value"
                     stroke="none"

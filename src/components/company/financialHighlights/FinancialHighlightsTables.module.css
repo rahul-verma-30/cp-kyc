@@ -85,7 +85,7 @@
 }
 
 .labelCell {
-  padding: 14px 16px;
+  padding: 12px 16px;
   font-size: 14px;
   font-weight: 400;
   color: rgba(39, 39, 42, 1);
@@ -94,7 +94,7 @@
 }
 
 .valueCell {
-  padding: 14px 16px;
+  padding: 12px 16px;
   font-size: 14px;
   font-weight: 400;
   color: rgba(39, 39, 42, 1);
@@ -109,7 +109,7 @@
 
 .totalRow .labelCell,
 .totalRow .valueCell {
-  font-weight: 700;
+  font-weight: 600;
   color: rgba(39, 39, 42, 1);
     padding: 16px;
 }

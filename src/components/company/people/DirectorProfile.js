@@ -10,7 +10,6 @@ export default function DirectorProfile() {
   const [activeTab, setActiveTab] = useState("current");
   const [directorTab, setDirectorTab] = useState("current");
 
-
   // Helper to detect and style status/pills
   const renderCellContent = (value) => {
     if (typeof value !== "string") return value;
@@ -47,18 +46,20 @@ export default function DirectorProfile() {
   // Example Dynamic Data Array
   const regulatoryData = [
     {
+      tableKey: "negativeMedia",
       title: "Negative / Adverse Media",
       headers: ["Source", "Description", "Severity", "Date"],
       rows: [
         {
           source: "Economic Times",
-          desc: "Named in regulatory inquiry...",
+          desc: "Named in regulatory inquiry regarding related party transactions",
           sev: "High",
           date: "15 Mar 2024",
         },
       ],
     },
     {
+      tableKey: "bankingDefault",
       title: "Banking / Default Declaration",
       headers: ["Default Type", "Declaration Status", "Remarks"],
       rows: [
@@ -70,6 +71,7 @@ export default function DirectorProfile() {
       ],
     },
     {
+      tableKey: "regulatoryHistory",
       title: "Regulatory / Compliance History",
       headers: ["Regulator", "Nature of Action", "Period", "Status"],
       rows: [
@@ -82,6 +84,7 @@ export default function DirectorProfile() {
       ],
     },
     {
+      tableKey: "pepSanctions",
       title: "PEP & Sanctions Check",
       headers: ["Check Type", "Status", "Remarks"],
       rows: [
@@ -98,6 +101,7 @@ export default function DirectorProfile() {
       ],
     },
     {
+      tableKey: "riskEDD",
       title: "Risk & EDD (Individual)",
       headers: [
         "Risk Category",
@@ -109,7 +113,7 @@ export default function DirectorProfile() {
         {
           cat: "Low",
           edd: "No",
-          drivers: "Clean regulatory record...",
+          drivers: "Clean regulatory record, no adverse findings",
           date: "05 Jan 2026",
         },
       ],
@@ -200,21 +204,21 @@ export default function DirectorProfile() {
           <div className={styles.detailsGrid}>
             <InfoBlock label="DIN" value="05208674" />
             <InfoBlock label="PAN" value="AABPB1234F" />
-            <InfoBlock label="NATIONALITY" value="British" />
-            <InfoBlock label="DATE OF BIRTH" value="15-Jun-1967 (58 years)" />
-            <InfoBlock label="GENDER" value="Male" />
-            <InfoBlock label="RESIDENTIAL STATUS" value="Resident" />
-            <InfoBlock label="EMAIL ID" value="mohit.burman@dabur.com" />
-            <InfoBlock label="MOBILE NUMBER" value="+91-11-23456789" />
+            <InfoBlock label="Nationality" value="British" />
+            <InfoBlock label="Date of Birth" value="15-Jun-1967 (58 years)" />
+            <InfoBlock label="Gender" value="Male" />
+            <InfoBlock label="Residential Status" value="Resident" />
+            <InfoBlock label="Email ID" value="mohit.burman@dabur.com" />
+            <InfoBlock label="Mobile Number" value="+91-11-23456789" />
           </div>
 
           <div className={styles.addressGrid}>
             <InfoBlock
-              label="CURRENT RESIDENTIAL ADDRESS"
+              label="Current Residential Address"
               value="8/3, Asaf Ali Road, New Delhi - 110002, India"
             />
             <InfoBlock
-              label="PERMANENT ADDRESS"
+              label="Permanent Address"
               value="8/3, Asaf Ali Road, New Delhi - 110002, India"
             />
           </div>
@@ -444,7 +448,11 @@ export default function DirectorProfile() {
             <section key={index} className={styles.checkContainer}>
               <div className={styles.checkTitle}>{section.title}</div>
               <div className={styles.cardFrame}>
-                <table className={styles.dataTable}>
+                <table
+                  className={`${styles.dataTable} ${
+                    styles[section.tableKey] || ""
+                  }`}
+                >
                   <thead>
                     <tr>
                       {section.headers.map((header) => (
@@ -559,7 +567,12 @@ function TimelineItem({ date, name, role, active }) {
           <span>{role.split("•")[1]?.trim()}</span>
         </div>
       </div>
-      {active && <div className={styles.activeTag}>Active</div>}
+      {active && (
+  <div className={`${styles.activeTag} ${styles.statusBadge}`}>
+    Active
+  </div>
+)}
+
     </div>
   );
 }

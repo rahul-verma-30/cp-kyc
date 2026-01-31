@@ -2,15 +2,16 @@
 
 import React, { useState } from "react";
 import styles from "./newSidebar.module.css";
-import { useRef, useLayoutEffect } from "react";
+import { useRef, useLayoutEffect, useEffect } from "react";
 
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 
 const CompanyNewSidebar = () => {
   const {
     activeSection,
+    activeSubSection, // 👈 ADD THIS
     setActiveSection,
-    setActiveSubSection, // ✅ ADD THIS
+    setActiveSubSection,
   } = useCompanySection();
 
   const [expandedSections, setExpandedSections] = useState({
@@ -23,7 +24,7 @@ const CompanyNewSidebar = () => {
     litigation: true,
   });
 
-  const [activeTab, setActiveTab] = useState("Summary");
+  const [activeTab, setActiveTab] = useState(null);
 
   const toggleSection = (sectionId) => {
     setExpandedSections((prev) => ({
@@ -125,6 +126,17 @@ const CompanyNewSidebar = () => {
     }
   }, [activeSection, expandedSections]);
 
+  useEffect(() => {
+    if (activeSubSection) {
+      setActiveTab(activeSubSection);
+    } else {
+      const section = menuData.find((s) => s.id === activeSection);
+      if (section?.items?.length) {
+        setActiveTab(section.items[0]);
+      }
+    }
+  }, [activeSection, activeSubSection]);
+
   return (
     <aside className={styles.sidebar}>
       <div className={styles.activeIndicator} style={{ top: indicatorTop }} />
@@ -203,7 +215,7 @@ const CompanyNewSidebar = () => {
                           onClick={() => {
                             setActiveTab(item);
                             setActiveSection(section.id);
-                            setActiveSubSection(item); // 🔥 ADD THIS LINE
+                            setActiveSubSection(item); 
                           }}
                         >
                           <span

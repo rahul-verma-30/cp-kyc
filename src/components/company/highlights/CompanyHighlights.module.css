@@ -98,9 +98,32 @@ box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.06);
 }
 
 .chartLine {
+  position: relative;
+  flex: 1;
   height: 1px;
   background-color: rgba(229, 231, 235, 1);
-  flex: 1;
+}
+
+/* LEFT vertical line — only for first chartLine */
+.chartLine:first-child::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -6px;
+  width: 1px;
+  height: 12px;
+  background-color: rgba(229, 231, 235, 1);
+}
+
+/* RIGHT vertical line — only for second chartLine */
+.chartLine:last-child::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -6px;
+  width: 1px;
+  height: 12px;
+  background-color: rgba(229, 231, 235, 1);
 }
 
 .chartHeaderText {

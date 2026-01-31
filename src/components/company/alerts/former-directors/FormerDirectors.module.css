@@ -42,11 +42,12 @@
   font-weight: 400;
   color: rgba(39, 39, 42, 1);
   border-bottom: 1px solid rgba(228, 228, 231, 1);
-  vertical-align: top;
+  /* vertical-align: top; */
 }
 
 .entityCell{
     word-break: break-all; 
+    max-width: 200px;
 }
 
 .table tr:last-child td {

@@ -567,15 +567,15 @@ export default function AlertsOverview() {
             >
               <div className={styles.leftSection}>
                 <img
-                  src={
-                    expandedRow === index
-                      ? "/icons/chevron-down2.svg"
-                      : "/icons/chevron-right2.svg"
-                  }
+                  src="/icons/chevron-right2.svg"
                   alt=""
                   width="24"
                   height="24"
+                  className={`${styles.chevron} ${
+                    expandedRow === index ? styles.chevronOpen : ""
+                  }`}
                 />
+
                 <span className={styles.label}>{item.label}</span>
               </div>
               <div className={styles.rightSection}>
@@ -603,6 +603,7 @@ export default function AlertsOverview() {
 
             {expandedRow === index && (
               <div className={styles.details}>
+                <div className={styles.detailsInner}>
                 {/* Condition 1: Basic Tables */}
                 {item.type === "table" && (
                   <div className={styles.tableWrapper}>
@@ -724,18 +725,46 @@ export default function AlertsOverview() {
                         Showing 1-10 of 20
                       </span>
                       <div className={styles.paginationControls}>
-                        <span className={styles.rowsLabel}>Rows per page</span>
-                        <RowsPerPage
-                          value={rowsPerPage}
-                          onChange={setRowsPerPage}
-                        />
+                        <div className={styles.paginationInfo}>
+                          <span className={styles.rowsLabel}>
+                            Rows per page
+                          </span>
+                          <RowsPerPage
+                            value={rowsPerPage}
+                            onChange={setRowsPerPage}
+                          />
+                        </div>
 
                         <span className={styles.pageLabel}>Page 1 of 10</span>
                         <div className={styles.navButtons}>
-                          <button className={styles.navBtnDisabled}>«</button>
-                          <button className={styles.navBtnDisabled}>‹</button>
-                          <button className={styles.navBtn}>›</button>
-                          <button className={styles.navBtn}>»</button>
+                          <button className={styles.navBtnDisabled}>
+                            <img
+                              src="/icons/chevrons-left.svg"
+                              alt="First page"
+                              className={styles.navIcon}
+                            />
+                          </button>
+                          <button className={styles.navBtnDisabled}>
+                            <img
+                              src="/icons/chevron-left.svg"
+                              alt="First page"
+                              className={styles.navIcon}
+                            />
+                          </button>
+                          <button className={styles.navBtn}>
+                            <img
+                              src="/icons/chevron-right-black.svg"
+                              alt="First page"
+                              className={styles.navIcon}
+                            />
+                          </button>
+                          <button className={styles.navBtn}>
+                            <img
+                              src="/icons/chevrons-right.svg"
+                              alt="First page"
+                              className={styles.navIcon}
+                            />
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -825,7 +854,9 @@ export default function AlertsOverview() {
                           </div>
 
                           <div className={styles.tableWrapper}>
-                            <table className={styles.detailTable}>
+                            <table
+                              className={`${styles.detailTable} ${styles.customDetailTable}`}
+                            >
                               <thead>
                                 <tr>
                                   {item.headers.map((h, i) => (
@@ -903,7 +934,24 @@ export default function AlertsOverview() {
                                       {row.act}
                                     </td>
                                     <td className={styles.advCell}>
-                                      {row.adv}
+                                      {(() => {
+                                        const match = row.adv.match(
+                                          /(.*?)(\d{2}\s[A-Za-z]{3}\s\d{4})$/,
+                                        );
+
+                                        if (!match) return row.adv;
+
+                                        return (
+                                          <>
+                                            <div className={styles.advText}>
+                                              {match[1].trim()}
+                                            </div>
+                                            <div className={styles.advDate}>
+                                              {match[2]}
+                                            </div>
+                                          </>
+                                        );
+                                      })()}
                                     </td>
                                   </tr>
                                 ))}
@@ -918,26 +966,48 @@ export default function AlertsOverview() {
                               Showing 1-10 of 20
                             </span>
                             <div className={styles.paginationControls}>
-                              <span className={styles.rowsLabel}>
-                                Rows per page
-                              </span>
-                              <RowsPerPage
-                                value={rowsPerPage}
-                                onChange={setRowsPerPage}
-                              />
+                              <div className={styles.paginationInfo}>
+                                <span className={styles.rowsLabel}>
+                                  Rows per page
+                                </span>
+                                <RowsPerPage
+                                  value={rowsPerPage}
+                                  onChange={setRowsPerPage}
+                                />
+                              </div>
 
                               <span className={styles.pageLabel}>
                                 Page 1 of 10
                               </span>
                               <div className={styles.navButtons}>
                                 <button className={styles.navBtnDisabled}>
-                                  «
+                                  <img
+                                    src="/icons/chevrons-left.svg"
+                                    alt="First page"
+                                    className={styles.navIcon}
+                                  />
                                 </button>
                                 <button className={styles.navBtnDisabled}>
-                                  ‹
+                                  <img
+                                    src="/icons/chevron-left.svg"
+                                    alt="First page"
+                                    className={styles.navIcon}
+                                  />
                                 </button>
-                                <button className={styles.navBtn}>›</button>
-                                <button className={styles.navBtn}>»</button>
+                                <button className={styles.navBtn}>
+                                  <img
+                                    src="/icons/chevron-right-black.svg"
+                                    alt="First page"
+                                    className={styles.navIcon}
+                                  />
+                                </button>
+                                <button className={styles.navBtn}>
+                                  <img
+                                    src="/icons/chevrons-right.svg"
+                                    alt="First page"
+                                    className={styles.navIcon}
+                                  />
+                                </button>
                               </div>
                             </div>
                           </div>
@@ -1049,7 +1119,24 @@ export default function AlertsOverview() {
                                       {row.act}
                                     </td>
                                     <td className={styles.advCell}>
-                                      {row.adv}
+                                      {(() => {
+                                        const match = row.adv.match(
+                                          /(.*?)(\d{2}\s[A-Za-z]{3}\s\d{4})$/,
+                                        );
+
+                                        if (!match) return row.adv;
+
+                                        return (
+                                          <>
+                                            <div className={styles.advText}>
+                                              {match[1].trim()}
+                                            </div>
+                                            <div className={styles.advDate}>
+                                              {match[2]}
+                                            </div>
+                                          </>
+                                        );
+                                      })()}
                                     </td>
                                   </tr>
                                 ))}
@@ -1064,26 +1151,48 @@ export default function AlertsOverview() {
                               Showing 1-10 of 20
                             </span>
                             <div className={styles.paginationControls}>
-                              <span className={styles.rowsLabel}>
-                                Rows per page
-                              </span>
-                              <RowsPerPage
-                                value={rowsPerPage}
-                                onChange={setRowsPerPage}
-                              />
+                              <div className={styles.paginationInfo}>
+                                <span className={styles.rowsLabel}>
+                                  Rows per page
+                                </span>
+                                <RowsPerPage
+                                  value={rowsPerPage}
+                                  onChange={setRowsPerPage}
+                                />
+                              </div>
 
                               <span className={styles.pageLabel}>
                                 Page 1 of 10
                               </span>
                               <div className={styles.navButtons}>
                                 <button className={styles.navBtnDisabled}>
-                                  «
+                                  <img
+                                    src="/icons/chevrons-left.svg"
+                                    alt="First page"
+                                    className={styles.navIcon}
+                                  />
                                 </button>
                                 <button className={styles.navBtnDisabled}>
-                                  ‹
+                                  <img
+                                    src="/icons/chevron-left.svg"
+                                    alt="First page"
+                                    className={styles.navIcon}
+                                  />
                                 </button>
-                                <button className={styles.navBtn}>›</button>
-                                <button className={styles.navBtn}>»</button>
+                                <button className={styles.navBtn}>
+                                  <img
+                                    src="/icons/chevron-right-black.svg"
+                                    alt="First page"
+                                    className={styles.navIcon}
+                                  />
+                                </button>
+                                <button className={styles.navBtn}>
+                                  <img
+                                    src="/icons/chevrons-right.svg"
+                                    alt="First page"
+                                    className={styles.navIcon}
+                                  />
+                                </button>
                               </div>
                             </div>
                           </div>
@@ -1092,6 +1201,7 @@ export default function AlertsOverview() {
                     </div>
                   </div>
                 )}
+                </div>
               </div>
             )}
           </div>

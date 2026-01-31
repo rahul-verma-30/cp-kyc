@@ -167,13 +167,13 @@ export default function ChargesPage() {
           <h2 className={styles.cardTitle}>Open charges</h2>
           <div className={styles.chartWrapper}>
             <div className={styles.chartWrapper}>
-              <ResponsiveContainer width={160} height={160}>
+              <ResponsiveContainer width={200} height={200}>
                 <PieChart>
                   <Pie
                     data={openChargesData}
                     dataKey="value"
-                    innerRadius={50}
-                    outerRadius={70}
+                    innerRadius={60}
+                    outerRadius={100}
                     paddingAngle={2}
                     startAngle={90}
                     endAngle={-270}
@@ -199,36 +199,38 @@ export default function ChargesPage() {
         <div className={`${styles.summaryCard} ${styles.summaryCardAlt}`}>
           <div className={styles.summaryRow}>
             <span>Total Open Charges</span>
-            <strong>₹1,575.00 M</strong>
+            <p className={styles.strong}>₹1,575.00 M</p>
           </div>
           <div className={styles.summaryRow}>
             <span>Total Satised Charges</span>
-            <strong>₹8,603.15 M</strong>
+            <p className={styles.strong}>₹8,603.15 M</p>
           </div>
           <div className={styles.summaryRow}>
             <span>Total No. of Lender(s)</span>
-            <strong>37</strong>
+            <p className={styles.strong}>37</p>
           </div>
           <div className={styles.summaryRow}>
             <span>Top Lender</span>
-            <strong>Others</strong>
+            <p className={styles.strong}>Others</p>
           </div>
           <div className={styles.summaryRow}>
             <span>Last Charge Activity</span>
-            <strong>Satisfaction</strong>
+            <p className={styles.strong}>Satisfaction</p>
           </div>
           <div className={styles.summaryRow}>
             <span>Last Charge Date</span>
-            <strong>20 Mar 2024</strong>
+            <p className={styles.strong}>20 Mar 2024</p>
           </div>
           <div className={styles.summaryRow}>
             <span>Last Charge Amount</span>
-            <strong>₹ 50.33 M</strong>
+            <p className={styles.strong}>₹ 50.33 M</p>
           </div>
         </div>
       </section>
 
-      <section className={styles.tableSection}>
+      <section
+        className={`${styles.tableSection} ${styles.openChargesSection}`}
+      >
         <h2 className={styles.sectionTitle}>Open Charges</h2>
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
@@ -287,21 +289,49 @@ export default function ChargesPage() {
             </tbody>
           </table>
         </div>
-        <div className={styles.paginationRow}>
-          <span className={styles.showingText}>Showing 1-10 of 20</span>
-          <div className={styles.paginationControls}>
+      <div className={styles.paginationRow}>
+        <span className={styles.showingText}>Showing 1-10 of 20</span>
+        <div className={styles.paginationControls}>
+          <div className={styles.paginationInfo}>
             <span className={styles.rowsLabel}>Rows per page</span>
             <RowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
-
+          </div>
             <span className={styles.pageLabel}>Page 1 of 10</span>
-            <div className={styles.navButtons}>
-              <button className={styles.navBtnDisabled}>«</button>
-              <button className={styles.navBtnDisabled}>‹</button>
-              <button className={styles.navBtn}>›</button>
-              <button className={styles.navBtn}>»</button>
-            </div>
+          <div className={styles.navButtons}>
+            <button className={styles.navBtnDisabled}>
+              <img
+                src="/icons/chevrons-left.svg"
+                alt="First page"
+                className={styles.navIcon}
+              />
+            </button>
+
+            <button className={styles.navBtnDisabled}>
+              <img
+                src="/icons/chevron-left.svg"
+                alt="First page"
+                className={styles.navIcon}
+              />
+            </button>
+            <button className={styles.navBtn}>
+              {" "}
+              <img
+                src="/icons/chevron-right-black.svg"
+                alt="First page"
+                className={styles.navIcon}
+              />
+            </button>
+            <button className={styles.navBtn}>
+              {" "}
+              <img
+                src="/icons/chevrons-right.svg"
+                alt="First page"
+                className={styles.navIcon}
+              />
+            </button>
           </div>
         </div>
+      </div>
       </section>
     </div>
   );

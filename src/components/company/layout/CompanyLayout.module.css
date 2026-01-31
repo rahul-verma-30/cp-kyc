@@ -14,22 +14,18 @@
 /* Sidebar + Main layout */
 .contentWrapper {
   width: 100%;
-  padding: 40px 0; 
+  padding: 40px 0;   /* vertical only */
 }
 
+/* CENTERED CONTAINER — HAS PADDING */
 .contentRow {
   display: flex;
-
-  /* max-width: 1440px; */
-        max-width: 1632px;
-
-
-  width: 100%;
+  max-width: 1632px;
   margin: 0 auto;
-  padding-top: 40px;
-  padding-bottom: 40px;
   gap: 32px;
-  padding: 0 24px;
+
+  padding: 0 24px;     /* ✅ LEFT–RIGHT PADDING HERE */
+  box-sizing: border-box;
 }
 
 /* Sidebar */
@@ -53,13 +49,13 @@
 }
 @media (max-width:1487px) {
   .contentRow{
-    padding-right: 10px;
+    /* padding-right: 10px; */
   }
 }
 
 @media (max-width: 1440px) {
   .contentRow {
-    padding: 32px 24px;
+    /* padding: 32px 24px; */
   }
   .sidebar {
     max-width: 300px;
@@ -78,21 +74,21 @@
 @media (max-width: 1024px) {
   .contentRow {
     max-width: 100%;
-    padding: 24px;
+    /* padding: 24px; */
   }
   /* .sidebar{max-width:100%} */
 }
 
 @media (max-width: 768px) {
   .contentRow {
-    padding: 16px;
+    /* padding: 16px; */
     gap: 20px;
   }
 }
 
 @media (max-width: 480px) {
   .contentRow {
-    padding: 12px;
+    /* padding: 12px; */
     gap: 16px;
   }
 }
