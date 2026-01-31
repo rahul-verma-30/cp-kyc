@@ -2,11 +2,7 @@
   font-family: 'Inter', sans-serif;
   display: flex;
   flex-direction: column;
-<<<<<<< HEAD
-  gap: 20px;
-=======
   gap: 32px;
->>>>>>> origin/ayush-sharma
   background-color: #FFFFFF;
 }
 
@@ -14,10 +10,6 @@
   display: flex;
   gap: 24px;
   width: 100%;
-<<<<<<< HEAD
-  margin-bottom: 12px;
-=======
->>>>>>> origin/ayush-sharma
 }
 
 .warningCard,
@@ -114,22 +106,13 @@
 .list {
   display: flex;
   flex-direction: column;
-<<<<<<< HEAD
-  gap: 12px;
-=======
   gap: 20px;
->>>>>>> origin/ayush-sharma
 }
 
 .rowContainer {
   border: 1px solid rgba(228, 228, 231, 1);
   border-radius: 20px;
-<<<<<<< HEAD
-  margin-bottom: 12px;
-  /* overflow: hidden; */
-=======
   overflow: hidden;
->>>>>>> origin/ayush-sharma
 }
 
 .row {
@@ -139,10 +122,7 @@
   padding: 20px;
   background-color: #ffffff;
   transition: background-color 0.2s ease; 
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/ayush-sharma
 }
 
 .row:hover {
@@ -213,28 +193,6 @@
   text-align: right;
 }
 
-<<<<<<< HEAD
-/* Expanded Detail Section */
-.details {
-  border-top: 1px solid rgba(228, 228, 231, 1);
-  background: rgba(250, 250, 250, 1);
-  padding: 20px;
-  max-height: 0;
-  /* overflow: hidden; */
-  opacity: 0;
-
-  transition:
-    max-height 0.4s ease,
-    opacity 0.25s ease;
-}
-
-.expanded .details {
-  padding: 20px;
-  max-height: 3000px;
-  opacity: 1;
-}
-
-=======
 .chevron {
   transition: transform 0.3s ease; /* smooth rotation */
 }
@@ -274,16 +232,11 @@
 
 
 
->>>>>>> origin/ayush-sharma
 .tableWrapper {
   border: 1px solid rgba(228, 228, 231, 1);
   border-radius: 12px;
   background: rgba(255, 255, 255, 1);
-<<<<<<< HEAD
-  /* overflow: hidden; */
-=======
   overflow: hidden;
->>>>>>> origin/ayush-sharma
 }
 
 .detailTable {
@@ -292,11 +245,7 @@
 }
 
 .detailTable th {
-<<<<<<< HEAD
-  padding: 12px 16px;
-=======
   padding: 13.25px 10px;
->>>>>>> origin/ayush-sharma
   font-size: 14px;
   font-weight: 500;
   color: rgba(113, 113, 122, 1);
@@ -306,21 +255,12 @@
 }
 
 .detailTable td {
-<<<<<<< HEAD
-  padding: 12px 16px;
-=======
   padding: 12px 10px;
->>>>>>> origin/ayush-sharma
   font-size: 14px;
   border-bottom: 1px solid rgba(228, 228, 231, 1);
   color: rgba(39, 39, 42, 1);
 }
 
-<<<<<<< HEAD
-.detailTable tr:last-child td {
-  border-bottom: none;
-}
-=======
 .customDetailTable td {
   font-size: 12px;
 }
@@ -354,7 +294,6 @@
   word-break: break-word;
 }
 
->>>>>>> origin/ayush-sharma
 
 
 /* Litigation Layouts */
@@ -364,14 +303,11 @@
   gap: 20px;
 }
 
-<<<<<<< HEAD
-=======
 .litigationWrapper .tableWrapper .detailTable td{
   height: 56px;
   box-sizing: border-box;
 }
 
->>>>>>> origin/ayush-sharma
 .litigationCards {
   display: flex;
   gap: 24px;
@@ -432,8 +368,6 @@
   align-items: center;
   margin-top: -8px;
   padding: 0 4px;
-<<<<<<< HEAD
-=======
   z-index: 1;
 }
 
@@ -443,7 +377,6 @@
   display: flex;
   align-items: center;
   gap: 8px;
->>>>>>> origin/ayush-sharma
 }
 
 .showingText {
@@ -506,10 +439,7 @@
   /* background-color: rgba(244, 244, 245, 1); */
   color: rgba(161, 161, 170, 1);
   cursor: not-allowed;
-<<<<<<< HEAD
-=======
   opacity: 40%;
->>>>>>> origin/ayush-sharma
 }
 
 .commonDirectorshipWrapper {
@@ -525,10 +455,7 @@
   border: 1px solid rgba(228, 228, 231, 1);
   border-radius: 12px;
   height: max-content;
-<<<<<<< HEAD
-=======
   overflow: hidden;
->>>>>>> origin/ayush-sharma
 }
 
 .sidebarTitle {
@@ -557,14 +484,11 @@
   background: rgba(244, 244, 245, 1);
 }
 
-<<<<<<< HEAD
-=======
 .sideItem .dotRedSmall{
   width: 14px;
   height: 14px;
 }
 
->>>>>>> origin/ayush-sharma
 .sideLabelGroup {
   display: flex;
   align-items: center;
@@ -599,15 +523,9 @@
 .tabs {
   display: flex;
   /* Matching the subtle border in the image */
-<<<<<<< HEAD
-  border-bottom: 1px solid #e4e4e7;
-  margin-bottom: 20px;
-  gap: 8px;
-=======
   border-bottom: 1px solid rgba(228, 228, 231, 1);
   margin-bottom: 20px;
   /* gap: 8px; */
->>>>>>> origin/ayush-sharma
   /* Spacing between the two main tabs */
 }
 
@@ -656,12 +574,6 @@
 .regulatoryTags {
   display: flex;
   flex-wrap: wrap;
-<<<<<<< HEAD
-  gap: 20px;
-  margin: 20px 0;
-}
-
-=======
 
   column-gap: 20px; 
   row-gap: 12px;  
@@ -670,7 +582,6 @@
 }
 
 
->>>>>>> origin/ayush-sharma
 .regTag {
   font-size: 14px;
   color: rgba(113, 113, 122, 1);
@@ -742,10 +653,6 @@
 .companySubText {
   font-size: 12px;
   color: rgba(113, 113, 122, 1);
-<<<<<<< HEAD
-  white-space: nowrap;
-}
-=======
   /* white-space: nowrap; */
 }
 /* .companyNameCell .companySubText:first-of-type {
@@ -753,7 +660,6 @@
 } */
 
 
->>>>>>> origin/ayush-sharma
 
 .subValue {
   color: rgba(39, 39, 42, 1);
@@ -766,17 +672,12 @@
   object-fit: cover;
 }
 
-<<<<<<< HEAD
-.actionCell {
-  color: rgba(59, 130, 246, 1);
-=======
 .customDetailTable{
     font-size: 12px !important;
 }
 
 .actionCell {
   color: rgba(59, 130, 246, 1) !important;
->>>>>>> origin/ayush-sharma
   font-size: 12px;
 }
 
@@ -785,8 +686,6 @@
   color: rgba(113, 113, 122, 1);
 }
 
-<<<<<<< HEAD
-=======
 .advText {
   color: rgba(39, 39, 42, 1);
 }
@@ -798,7 +697,6 @@
 }
 
 
->>>>>>> origin/ayush-sharma
 /* Pagination Footer */
 .paginationRowExtra{
   margin-top: 12px;
@@ -830,11 +728,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-<<<<<<< HEAD
-  line-height: 1;
-=======
   /* line-height: 1; */
->>>>>>> origin/ayush-sharma
   white-space: nowrap;
   width: max-content;
 }
