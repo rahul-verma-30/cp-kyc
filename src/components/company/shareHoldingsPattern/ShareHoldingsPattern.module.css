@@ -16,6 +16,8 @@
 
 .breadcrumbLink {
   color: rgba(113, 113, 122, 1);
+    cursor: pointer;
+  text-decoration: none;
 }
 
 .breadcrumbSeparator {

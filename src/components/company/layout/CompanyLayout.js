@@ -1,25 +1,30 @@
+"use client";
+
 import styles from "./CompanyLayout.module.css";
-import CompanySidebar from "../sidebar/CompanySidebar";
-import CompanyHeader from "../header/CompanyHeader";
+import CompanyNewHeader from "../newHeader/newHeader";
+import CompanyNewSidebar from "../newSidebar/newSidebar";
+import { CompanySectionProvider } from "../context/CompanySectionContext";
 
 export default function CompanyLayout({ children }) {
   return (
-    <div className={styles.container}>
-      {/* Full width header */}
-      <div className={styles.headerWrapper}>
-        <CompanyHeader />
-      </div>
+    <CompanySectionProvider>
+      <div className={styles.container}>
+        {/* Header */}
+        <div className={styles.headerWrapper}>
+          <CompanyNewHeader />
+        </div>
 
-      {/* Sidebar + Main */}
-      <div className={styles.contentRow}>
-        <aside className={styles.sidebar}>
-          <CompanySidebar />
-        </aside>
+        {/* Sidebar + Content */}
+        <div className={styles.contentWrapper}>
+          <div className={styles.contentRow}>
+            <aside className={styles.sidebar}>
+              <CompanyNewSidebar />
+            </aside>
 
-        <main className={styles.main}>
-          {children}
-        </main>
+            <main className={styles.main}>{children}</main>
+          </div>
+        </div>
       </div>
-    </div>
+    </CompanySectionProvider>
   );
 }

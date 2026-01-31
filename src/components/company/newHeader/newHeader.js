@@ -12,6 +12,10 @@ const RiskCard = ({
   source,
   variant,
 }) => {
+<<<<<<< HEAD
+=======
+  const isHigh = severity === "High";
+>>>>>>> origin/ayush-sharma
   return (
     <div className={`${styles.riskCard} ${styles[variant]}`}>
       {/* LEFT ICON */}

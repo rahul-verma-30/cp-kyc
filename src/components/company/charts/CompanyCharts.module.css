@@ -40,15 +40,22 @@ border: 1px solid rgba(228, 228, 231, 1);
 
 .pieWrapper {
   position: relative;
+  width: 100%;
+  max-width: 600px;
+
+  aspect-ratio: 3 / 2; 
+  
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
+
 
 .pieLabelPrimary {
   position: absolute;
-  top: 10%;
-  left: 0;
+top: 16%;
+    left: 20px;
 font-weight: 500;
 font-size: 16px;
 line-height: 24px;
@@ -59,8 +66,9 @@ color: rgba(107, 33, 168, 1);
 
 .pieLabelSecondary {
   position: absolute;
-  bottom: 0;
-  right: 15%;
+    bottom: 35px;
+    right: 7%;
+
   color: rgba(22, 101, 52, 1);
 font-weight: 500;
 font-size: 16px;
@@ -126,6 +134,8 @@ border: 1px solid rgba(228, 228, 231, 1);
 border-radius: 20px;
 gap: 20px;
   padding: 20px;
+
+  margin-top: 8px;
 }
 
 .tableHeader {
@@ -140,6 +150,7 @@ font-size: 16px;
 line-height: 24px;
 letter-spacing: 0;
 color: rgba(39, 39, 42, 1);
+flex: 1;
 }
 
 .headerRight {
@@ -148,6 +159,7 @@ font-size: 16px;
 line-height: 24px;
 letter-spacing: 0;
 color: rgba(39, 39, 42, 1);
+flex: 1;
 }
 
 .greenText {
@@ -168,18 +180,19 @@ color: rgba(39, 39, 42, 1);
   color: rgba(113, 113, 122, 1);
   font-size: 14px;
   font-weight: 500;
-  padding: 12px 16px;
+  padding: 11.5px 16px;
   line-height: 20px;
   text-align: left;
   border-bottom: 1px solid rgba(228, 228, 231, 1);
 }
 
 .activityTable td {
-  padding: 16px;
+  padding: 17.5px 16px;
   font-size: 14px;
   color: rgba(39, 39, 42, 1);
   line-height: 20px;
   border-bottom: 1px solid #F3F4F6;
+  text-align: left;
 }
 
 .activityTable tr:last-child td {
@@ -188,7 +201,7 @@ color: rgba(39, 39, 42, 1);
 
 
 .textCenter { text-align: center; }
-.textRight { text-align: right; }
+.textRight { text-align: left; }
 
 /* Tablet Responsiveness */
 @media (max-width: 1024px) {

@@ -14,6 +14,7 @@
 /* Sidebar + Main layout */
 .contentWrapper {
   width: 100%;
+<<<<<<< HEAD
   padding: 40px 0; 
 }
 
@@ -25,11 +26,24 @@
 
 
   width: 100%;
+=======
+  padding: 40px 0;   /* vertical only */
+}
+
+/* CENTERED CONTAINER — HAS PADDING */
+.contentRow {
+  display: flex;
+  max-width: 1680px;
+>>>>>>> origin/ayush-sharma
   margin: 0 auto;
-  padding-top: 40px;
-  padding-bottom: 40px;
   gap: 32px;
+<<<<<<< HEAD
   padding: 0 24px;
+=======
+
+  padding: 0 24px;     /* ✅ LEFT–RIGHT PADDING HERE */
+  box-sizing: border-box;
+>>>>>>> origin/ayush-sharma
 }
 
 /* Sidebar */
@@ -53,13 +67,21 @@
 }
 @media (max-width:1487px) {
   .contentRow{
+<<<<<<< HEAD
     padding-right: 10px;
+=======
+    /* padding-right: 10px; */
+>>>>>>> origin/ayush-sharma
   }
 }
 
 @media (max-width: 1440px) {
   .contentRow {
+<<<<<<< HEAD
     padding: 32px 24px;
+=======
+    /* padding: 32px 24px; */
+>>>>>>> origin/ayush-sharma
   }
   .sidebar {
     max-width: 300px;
@@ -78,21 +100,33 @@
 @media (max-width: 1024px) {
   .contentRow {
     max-width: 100%;
+<<<<<<< HEAD
     padding: 24px;
+=======
+    /* padding: 24px; */
+>>>>>>> origin/ayush-sharma
   }
   /* .sidebar{max-width:100%} */
 }
 
 @media (max-width: 768px) {
   .contentRow {
+<<<<<<< HEAD
     padding: 16px;
+=======
+    /* padding: 16px; */
+>>>>>>> origin/ayush-sharma
     gap: 20px;
   }
 }
 
 @media (max-width: 480px) {
   .contentRow {
+<<<<<<< HEAD
     padding: 12px;
+=======
+    /* padding: 12px; */
+>>>>>>> origin/ayush-sharma
     gap: 16px;
   }
 }

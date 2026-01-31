@@ -1,22 +1,38 @@
+body{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .pageWrapper {
   position: relative;
-  min-height: 100vh;
-  background-image: url("/images/BG_Gradiant.svg");
+  height: calc(100vh - 64px);
+
+  background-image: url("/images/BGGradiant2.svg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: top;
 
-  overflow-x: hidden;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding-top: 180px;
+  padding-bottom: 100px;
+
+  box-sizing: border-box;
 }
 
-/* Grid */
+
 .pageWrapper::after {
   content: "";
   position: absolute;
-  top: 40vh;
+  top: calc(30vh + 180px);
+  bottom: 10px;
   left: 0;
-  width: 100%;
-  height: calc(100% - 40vh);
+  right: 0;
 
   background-image: url("/images/BG_Grid.svg");
   background-repeat: repeat;

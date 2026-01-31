@@ -567,6 +567,7 @@ export default function AlertsOverview() {
             >
               <div className={styles.leftSection}>
                 <img
+<<<<<<< HEAD
                   src={
                     expandedRow === index
                       ? "/icons/chevron-down2.svg"
@@ -576,6 +577,17 @@ export default function AlertsOverview() {
                   width="24"
                   height="24"
                 />
+=======
+                  src="/icons/chevron-right2.svg"
+                  alt=""
+                  width="24"
+                  height="24"
+                  className={`${styles.chevron} ${
+                    expandedRow === index ? styles.chevronOpen : ""
+                  }`}
+                />
+
+>>>>>>> origin/ayush-sharma
                 <span className={styles.label}>{item.label}</span>
               </div>
               <div className={styles.rightSection}>
@@ -603,6 +615,7 @@ export default function AlertsOverview() {
 
             {expandedRow === index && (
               <div className={styles.details}>
+<<<<<<< HEAD
                 {/* Condition 1: Basic Tables */}
                 {item.type === "table" && (
                   <div className={styles.tableWrapper}>
@@ -1092,6 +1105,628 @@ export default function AlertsOverview() {
                     </div>
                   </div>
                 )}
+=======
+                <div className={styles.detailsInner}>
+                  {/* Condition 1: Basic Tables */}
+                  {item.type === "table" && (
+                    <div className={styles.tableWrapper}>
+                      <table className={styles.detailTable}>
+                        <thead>
+                          <tr>
+                            {item.headers.map((h, i) => (
+                              <th key={i}>{h}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {item.rows.map((row, rIdx) => (
+                            <tr key={rIdx}>
+                              {Object.entries(row).map(([key, val], cIdx) => (
+                                <td key={cIdx}>
+                                  {key === "action" ? (
+                                    <img
+                                      src="/icons/eye.svg"
+                                      alt="view"
+                                      width="20"
+                                      height="20"
+                                    />
+                                  ) : (
+                                    renderBadge(val, item.id)
+                                  )}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {/* Condition 2: Empty State */}
+                  {item.type === "empty" && (
+                    <div className={styles.emptyStateContainer}>
+                      <span className={styles.mutedItalic}>{item.message}</span>
+                    </div>
+                  )}
+
+                  {/* Condition 3: Litigation Specific Layout */}
+                  {item.type === "litigation" && (
+                    <div className={styles.litigationWrapper}>
+                      <div className={styles.litigationCards}>
+                        {item.summary.map((s, i) => (
+                          <div key={i} className={s.style}>
+                            <span className={styles.litLabel}>{s.label}</span>
+                            <span className={styles.litValue}>{s.val}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Table 1: Summary by Court Type */}
+                      <div className={styles.tableWrapper}>
+                        <table className={styles.detailTable}>
+                          <thead>
+                            <tr>
+                              {item.table1.headers.map((h, i) => (
+                                <th key={i}>{h}</th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {item.table1.rows.map((row, rIdx) => (
+                              <tr key={rIdx}>
+                                <td>{row.type}</td>
+                                <td>{row.by}</td>
+                                <td>{row.ag}</td>
+                                <td>
+                                  <span className={styles.textOrange}>
+                                    {row.pen}
+                                  </span>
+                                </td>
+                                <td>{row.tot}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      <h5 className={styles.subHeading}>
+                        Detailed Litigation Cases
+                      </h5>
+
+                      {/* Table 2: Detailed Cases */}
+                      <div className={styles.tableWrapper}>
+                        <table className={styles.detailTable}>
+                          <thead>
+                            <tr>
+                              {item.table2.headers.map((h, i) => (
+                                <th key={i}>{h}</th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {item.table2.rows.map((row, rIdx) => (
+                              <tr key={rIdx}>
+                                <td>{row.type}</td>
+                                <td>{row.cType}</td>
+                                <td>{row.by}</td>
+                                <td>{row.ag}</td>
+                                <td>
+                                  <span className={styles.textOrange}>
+                                    {row.pen}
+                                  </span>
+                                </td>
+                                <td>{row.tot}</td>
+                                <td>{renderBadge(row.sev)}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      {/* Pagination Footer based on image data */}
+                      <div className={styles.paginationRow}>
+                        <span className={styles.showingText}>
+                          Showing 1-10 of 20
+                        </span>
+                        <div className={styles.paginationControls}>
+                          <div className={styles.paginationInfo}>
+                            <span className={styles.rowsLabel}>
+                              Rows per page
+                            </span>
+                            <RowsPerPage
+                              openTop={true}
+                              value={rowsPerPage}
+                              onChange={setRowsPerPage}
+                            />
+                          </div>
+
+                          <span className={styles.pageLabel}>Page 1 of 10</span>
+                          <div className={styles.navButtons}>
+                            <button className={styles.navBtnDisabled}>
+                              <img
+                                src="/icons/chevrons-left.svg"
+                                alt="First page"
+                                className={styles.navIcon}
+                              />
+                            </button>
+                            <button className={styles.navBtnDisabled}>
+                              <img
+                                src="/icons/chevron-left.svg"
+                                alt="First page"
+                                className={styles.navIcon}
+                              />
+                            </button>
+                            <button className={styles.navBtn}>
+                              <img
+                                src="/icons/chevron-right-black.svg"
+                                alt="First page"
+                                className={styles.navIcon}
+                              />
+                            </button>
+                            <button className={styles.navBtn}>
+                              <img
+                                src="/icons/chevrons-right.svg"
+                                alt="First page"
+                                className={styles.navIcon}
+                              />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Condition 4: Sidebar / Common Directorship */}
+                  {item.type === "sidebar" && (
+                    <div className={styles.commonDirectorshipWrapper}>
+                      {/* LEFT SIDEBAR */}
+                      <div className={styles.sidebar}>
+                        <span className={styles.sidebarTitle}>Categories</span>
+
+                        {item.sidebarItems.map((s, i) => (
+                          <div
+                            key={i}
+                            className={`${styles.sideItem} ${
+                              activeSidebarIndex === i ? styles.activeItem : ""
+                            }`}
+                            onClick={() => setActiveSidebarIndex(i)}
+                          >
+                            <div className={styles.sideLabelGroup}>
+                              <span className={styles.dotRedSmall}></span>
+                              {s.label}
+                            </div>
+
+                            <div className={styles.sideCountWrapper}>
+                              <span className={styles.sideCount}>
+                                {s.count}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* RIGHT CONTENT */}
+                      <div className={styles.mainContent}>
+                        {/* Tabs */}
+                        <div className={styles.tabs}>
+                          {item.tabs.map((t, i) => (
+                            <span
+                              key={i}
+                              className={`${styles.tabItem} ${
+                                activeTabIndex === i ? styles.activeTab : ""
+                              }`}
+                              onClick={() => setActiveTabIndex(i)}
+                            >
+                              {t.label}
+                              {t.red && (
+                                <span className={styles.statusDotRed}></span>
+                              )}
+                              <span className={styles.tabBadgeGray}>
+                                {t.count}
+                              </span>
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* ================= COMPANY TAB ================= */}
+                        {activeTabIndex === 0 && (
+                          <>
+                            <div className={styles.regulatoryFilterText}>
+                              Companies named in any violations or offence
+                            </div>
+
+                            <div className={styles.regulatoryTags}>
+                              {[
+                                "EPFO (9)",
+                                "BSE (10)",
+                                "CDSL (5)",
+                                "NSDL (4)",
+                                "SEBI (8)",
+                                "BANKS (1)",
+                                "MSEI (1)",
+                                "NSE (1)",
+                                "DRT (1)",
+                                "DSE (2)",
+                                "NCLT (2)",
+                                "NHB (6)",
+                                "CLB (1)",
+                                "IRDA (26)",
+                                "RBI (1)",
+                                "FIU (1)",
+                              ].map((tag, i) => (
+                                <span key={i} className={styles.regTag}>
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+
+                            <div className={styles.tableWrapper}>
+                              <table
+                                className={`${styles.detailTable} ${styles.customDetailTable}`}
+                              >
+                                <thead>
+                                  <tr>
+                                    {item.headers.map((h, i) => (
+                                      <th key={i}>{h}</th>
+                                    ))}
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {item.rows.map((row, rIdx) => (
+                                    <tr key={rIdx}>
+                                      <td className={styles.regCell}>
+                                        <div className={styles.regCellInner}>
+                                          <div
+                                            className={styles.regLogoContainer}
+                                          >
+                                            <img
+                                              src={row.regIcon}
+                                              alt={row.reg}
+                                              className={styles.regLogo}
+                                            />
+                                          </div>
+                                          <span>{row.reg}</span>
+                                        </div>
+                                      </td>
+
+                                      <td>
+                                        <div className={styles.companyNameCell}>
+                                          <div className={styles.entityWrapper}>
+                                            <img
+                                              src={row.companyIcon}
+                                              alt="entity"
+                                              className={styles.entityIcon}
+                                            />
+
+                                            <div className={styles.nameGroup}>
+                                              <div
+                                                className={
+                                                  styles.companyNameMain
+                                                }
+                                              >
+                                                {row.name}
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                          {row.subText && (
+                                            <div
+                                              className={styles.companySubText}
+                                            >
+                                              {(() => {
+                                                const [label, value] =
+                                                  row.subText.split(":");
+                                                return (
+                                                  <>
+                                                    <span
+                                                      className={
+                                                        styles.subLabel
+                                                      }
+                                                    >
+                                                      {label}:
+                                                    </span>
+                                                    <span
+                                                      className={
+                                                        styles.subValue
+                                                      }
+                                                    >
+                                                      {value}
+                                                    </span>
+                                                  </>
+                                                );
+                                              })()}
+                                            </div>
+                                          )}
+                                        </div>
+                                      </td>
+
+                                      <td className={styles.chgCell}>
+                                        {row.chg}
+                                      </td>
+                                      <td className={styles.actionCell}>
+                                        {row.act}
+                                      </td>
+                                      <td className={styles.advCell}>
+                                        {(() => {
+                                          const match = row.adv.match(
+                                            /(.*?)(\d{2}\s[A-Za-z]{3}\s\d{4})$/,
+                                          );
+
+                                          if (!match) return row.adv;
+
+                                          return (
+                                            <>
+                                              <div className={styles.advText}>
+                                                {match[1].trim()}
+                                              </div>
+                                              <div className={styles.advDate}>
+                                                {match[2]}
+                                              </div>
+                                            </>
+                                          );
+                                        })()}
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                            {/* Pagination Footer based on image data */}
+                            <div
+                              className={`${styles.paginationRow} ${styles.paginationRowExtra}`}
+                            >
+                              <span className={styles.showingText}>
+                                Showing 1-10 of 20
+                              </span>
+                              <div className={styles.paginationControls}>
+                                <div className={styles.paginationInfo}>
+                                  <span className={styles.rowsLabel}>
+                                    Rows per page
+                                  </span>
+                                  <RowsPerPage
+                                    openTop={true}
+                                    value={rowsPerPage}
+                                    onChange={setRowsPerPage}
+                                  />
+                                </div>
+
+                                <span className={styles.pageLabel}>
+                                  Page 1 of 10
+                                </span>
+                                <div className={styles.navButtons}>
+                                  <button className={styles.navBtnDisabled}>
+                                    <img
+                                      src="/icons/chevrons-left.svg"
+                                      alt="First page"
+                                      className={styles.navIcon}
+                                    />
+                                  </button>
+                                  <button className={styles.navBtnDisabled}>
+                                    <img
+                                      src="/icons/chevron-left.svg"
+                                      alt="First page"
+                                      className={styles.navIcon}
+                                    />
+                                  </button>
+                                  <button className={styles.navBtn}>
+                                    <img
+                                      src="/icons/chevron-right-black.svg"
+                                      alt="First page"
+                                      className={styles.navIcon}
+                                    />
+                                  </button>
+                                  <button className={styles.navBtn}>
+                                    <img
+                                      src="/icons/chevrons-right.svg"
+                                      alt="First page"
+                                      className={styles.navIcon}
+                                    />
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </>
+                        )}
+
+                        {/* ================= DIRECTOR TAB ================= */}
+                        {activeTabIndex === 1 && (
+                          <>
+                            <div className={styles.regulatoryFilterText}>
+                              Directors named in any violations or offence
+                            </div>
+
+                            <div className={styles.regulatoryTags}>
+                              {[
+                                "MCA (37)",
+                                "SEBI (16)",
+                                "Banks (6)",
+                                "BSL (2)",
+                                "DRT (2)",
+                              ].map((tag, i) => (
+                                <span key={i} className={styles.regTag}>
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                            <div className={styles.tableWrapper}>
+                              <table className={styles.detailTable}>
+                                <thead>
+                                  <tr>
+                                    {item.directorHeaders.map((h, i) => (
+                                      <th key={i}>{h}</th>
+                                    ))}
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {item.directorRows.map((row, rIdx) => (
+                                    <tr key={rIdx}>
+                                      {/* Person Column */}
+                                      <td>
+                                        <div className={styles.companyNameCell}>
+                                          <div className={styles.entityWrapper}>
+                                            <img
+                                              src={row.personIcon}
+                                              alt=""
+                                              className={styles.avatarIcon}
+                                            />
+                                            <div className={styles.nameGroup}>
+                                              <div
+                                                className={
+                                                  styles.companyNameMain
+                                                }
+                                              >
+                                                {row.personName}
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div
+                                            className={styles.companySubText}
+                                          >
+                                            {row.personSub}
+                                          </div>
+                                        </div>
+                                      </td>
+                                      {/* Company Column */}
+                                      <td>
+                                        <div className={styles.companyNameCell}>
+                                          <div className={styles.entityWrapper}>
+                                            <img
+                                              src={row.companyIcon}
+                                              alt=""
+                                              className={styles.entityIcon}
+                                            />
+                                            <div className={styles.nameGroup}>
+                                              <div
+                                                className={
+                                                  styles.companyNameMain
+                                                }
+                                              >
+                                                {row.companyName}
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div
+                                            className={styles.companySubText}
+                                          >
+                                            {row.companySub}
+                                          </div>
+                                        </div>
+                                      </td>
+                                      {/* Regulator Column */}
+                                      <td>
+                                        <div className={styles.regCellInner}>
+                                          <div
+                                            className={styles.regLogoContainer}
+                                          >
+                                            <img
+                                              src={row.regIcon}
+                                              alt=""
+                                              className={styles.regLogo}
+                                            />
+                                          </div>
+                                          <span>{row.reg}</span>
+                                        </div>
+                                      </td>
+                                      {/* Action/Charges/Advancement Columns */}
+                                      <td className={styles.chgCell}>
+                                        {row.chg}
+                                      </td>
+                                      <td
+                                        className={styles.actionCell}
+                                        style={{
+                                          color: "rgba(59, 130, 246, 1)",
+                                          fontSize: "12px",
+                                        }}
+                                      >
+                                        {row.act}
+                                      </td>
+                                      <td className={styles.advCell}>
+                                        {(() => {
+                                          const match = row.adv.match(
+                                            /(.*?)(\d{2}\s[A-Za-z]{3}\s\d{4})$/,
+                                          );
+
+                                          if (!match) return row.adv;
+
+                                          return (
+                                            <>
+                                              <div className={styles.advText}>
+                                                {match[1].trim()}
+                                              </div>
+                                              <div className={styles.advDate}>
+                                                {match[2]}
+                                              </div>
+                                            </>
+                                          );
+                                        })()}
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                            {/* Pagination Footer based on image data */}
+                            <div className={styles.paginationFloating}>
+                              <div
+                                className={`${styles.paginationRow} ${styles.paginationRowExtra}`}
+                              >
+                                <span className={styles.showingText}>
+                                  Showing 1-10 of 20
+                                </span>
+                                <div className={styles.paginationControls}>
+                                  <div className={styles.paginationInfo}>
+                                    <span className={styles.rowsLabel}>
+                                      Rows per page
+                                    </span>
+                                    <RowsPerPage
+                                      openTop={true}
+                                      value={rowsPerPage}
+                                      onChange={setRowsPerPage}
+                                    />
+                                  </div>
+
+                                  <span className={styles.pageLabel}>
+                                    Page 1 of 10
+                                  </span>
+                                  <div className={styles.navButtons}>
+                                    <button className={styles.navBtnDisabled}>
+                                      <img
+                                        src="/icons/chevrons-left.svg"
+                                        alt="First page"
+                                        className={styles.navIcon}
+                                      />
+                                    </button>
+                                    <button className={styles.navBtnDisabled}>
+                                      <img
+                                        src="/icons/chevron-left.svg"
+                                        alt="First page"
+                                        className={styles.navIcon}
+                                      />
+                                    </button>
+                                    <button className={styles.navBtn}>
+                                      <img
+                                        src="/icons/chevron-right-black.svg"
+                                        alt="First page"
+                                        className={styles.navIcon}
+                                      />
+                                    </button>
+                                    <button className={styles.navBtn}>
+                                      <img
+                                        src="/icons/chevrons-right.svg"
+                                        alt="First page"
+                                        className={styles.navIcon}
+                                      />
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+>>>>>>> origin/ayush-sharma
               </div>
             )}
           </div>
