@@ -8,24 +8,47 @@
 .headerWrapper {
   width: 100%;
 
-    border-bottom: 1px solid rgba(228, 228, 231, 1);
+  border-bottom: 1px solid rgba(228, 228, 231, 1);
 }
 
 /* Sidebar + Main layout */
+.contentWrapper {
+  width: 100%;
+<<<<<<< HEAD
+  padding: 40px 0; 
+}
+
 .contentRow {
   display: flex;
-  max-width: 1440px;
-        /* max-width: 1632px; */
+
+  /* max-width: 1440px; */
+        max-width: 1632px;
+
+
   width: 100%;
+=======
+  padding: 40px 0;   /* vertical only */
+}
+
+/* CENTERED CONTAINER — HAS PADDING */
+.contentRow {
+  display: flex;
+  max-width: 1680px;
+>>>>>>> origin/ayush-sharma
   margin: 0 auto;
-  padding-top: 40px;
-  padding-bottom: 40px;
   gap: 32px;
+<<<<<<< HEAD
+  padding: 0 24px;
+=======
+
+  padding: 0 24px;     /* ✅ LEFT–RIGHT PADDING HERE */
+  box-sizing: border-box;
+>>>>>>> origin/ayush-sharma
 }
 
 /* Sidebar */
 .sidebar {
-  max-width: 320px; 
+  max-width: 320px;
   width: 100%;
 }
 
@@ -35,4 +58,75 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
+}
+
+@media (max-width: 1550px) {
+  .contentRow {
+    gap: 28px;
+  }
+}
+@media (max-width:1487px) {
+  .contentRow{
+<<<<<<< HEAD
+    padding-right: 10px;
+=======
+    /* padding-right: 10px; */
+>>>>>>> origin/ayush-sharma
+  }
+}
+
+@media (max-width: 1440px) {
+  .contentRow {
+<<<<<<< HEAD
+    padding: 32px 24px;
+=======
+    /* padding: 32px 24px; */
+>>>>>>> origin/ayush-sharma
+  }
+  .sidebar {
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 1280px) {
+  .contentRow {
+    gap: 24px;
+  }
+  .sidebar {
+    max-width: 280px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .contentRow {
+    max-width: 100%;
+<<<<<<< HEAD
+    padding: 24px;
+=======
+    /* padding: 24px; */
+>>>>>>> origin/ayush-sharma
+  }
+  /* .sidebar{max-width:100%} */
+}
+
+@media (max-width: 768px) {
+  .contentRow {
+<<<<<<< HEAD
+    padding: 16px;
+=======
+    /* padding: 16px; */
+>>>>>>> origin/ayush-sharma
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contentRow {
+<<<<<<< HEAD
+    padding: 12px;
+=======
+    /* padding: 12px; */
+>>>>>>> origin/ayush-sharma
+    gap: 16px;
+  }
 }

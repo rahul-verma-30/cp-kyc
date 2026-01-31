@@ -10,15 +10,68 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: rgba(244, 244, 245, 1);
+  padding: 12px 24px;
+  border-radius: 100px;
 }
 
-.title {
+.headerTitle {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  letter-spacing: 0;
+  color: rgba(24, 24, 27, 1);
+  margin: 0;
+}
+
+.headerInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.infoGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.infoLabel {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(113, 113, 122, 1);
+}
+
+.infoValue {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(39, 39, 42, 1);
+}
+
+.infoDivider {
+  width: 1px;
+  height: 20px;
+  background-color: rgba(228, 228, 231, 1);
+  display: inline-block;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sectionTitle {
   font-weight: 500;
   font-size: 18px;
   line-height: 28px;
-  letter-spacing: 0;
   color: rgba(39, 39, 42, 1);
-  margin: 0;
+  margin-top: 20px;
+  margin-bottom: 0;
 }
 
 .viewDetails {
@@ -35,6 +88,7 @@
   line-height: 24px;
   letter-spacing: 0;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .chevron {
@@ -106,6 +160,7 @@ border: 1px solid rgba(228, 228, 231, 1);
   gap: 16px;
   display: flex;
   flex-direction: column;
+  margin-top: 8px;
 }
 
 .tableRow {
@@ -169,6 +224,7 @@ border: 1px solid rgba(228, 228, 231, 1);
 border: 1px solid rgba(228, 228, 231, 1);
   border-radius: 20px;
   padding: 20px;
+  margin-top: 8px;
 }
 
 .chartHeader {

@@ -4,8 +4,52 @@ import React from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import styles from "./OwnershipSection.module.css";
 import Link from "next/link";
+import ShareHoldingsTables from "../shareHoldingsPattern/ShareHoldingsTables";
+import ShareHoldingsTables2 from "../shareHoldingsPattern/ShareHoldingsTables2";
+import SubsidiaryAccordion from "../subsidiary/SubsidiaryAccordion";
+import InvestmentPage from "../overseasDirectInvestment/OverseasDirectInvestment";
+import { useCompanySection } from "@/components/company/context/CompanySectionContext";
+import { useEffect, useRef } from "react";
 
 const OwnershipSection = () => {
+  const { activeSubSection } = useCompanySection();
+  const mainWrapperRef = useRef(null); // Shareholding
+  const securitiesRef = useRef(null); // Securities Allotment
+  const groupStructureRef = useRef(null); // Group Structure
+  const odiRef = useRef(null); // ODI
+
+  useEffect(() => {
+    if (!activeSubSection) return;
+
+    const scroll = (ref) => {
+      ref?.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    };
+
+    switch (activeSubSection) {
+      case "Shareholding":
+        scroll(mainWrapperRef);
+        break;
+
+      case "Securities Allotment":
+        scroll(securitiesRef);
+        break;
+
+      case "Group Structure":
+        scroll(groupStructureRef);
+        break;
+
+      case "Overseas Direct Investment (ODI)":
+        scroll(odiRef);
+        break;
+
+      default:
+        break;
+    }
+  }, [activeSubSection]);
+
   const summaryStats = [
     { label: "Latest Annual Return", value: "31 Mar 2024", type: "blue" },
     { label: "Promoter Shares", value: "1174000355.00", type: "red" },
@@ -20,7 +64,7 @@ const OwnershipSection = () => {
         {
           name: "Other than promoters:",
           value: 33.77,
-          color: "rgba(59, 130, 246, 1)",
+          color: "rgba(14, 165, 233, 1)",
         },
       ],
     },
@@ -73,22 +117,37 @@ const OwnershipSection = () => {
   ];
 
   return (
-    <div className={styles.mainWrapper}>
-      <header className={styles.mainHeader}>
-        <h1 className={styles.mainTitle}>Control & Ownership</h1>
-      </header>
+    <div ref={mainWrapperRef} className={styles.mainWrapper}>
+      <div className={styles.header}>
+        <h1 className={styles.headerTitle}>Control & Ownership</h1>
+        <div className={styles.headerInfo}>
+          <span className={styles.infoGroup}>
+            <span className={styles.infoLabel}>Source:</span>
+            <span className={styles.infoValue}>MCA</span>
+          </span>
+          <span className={styles.infoDivider}></span>
+          <span className={styles.infoGroup}>
+            <span className={styles.infoLabel}>Last Updated:</span>
+            <span className={styles.infoValue}>30-Dec-2024, 11:45 AM IST</span>
+          </span>
+        </div>
+      </div>
 
       <section className={styles.section}>
         <div className={styles.sectionWrapper}>
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>Share Holding Pattern</h2>
-            <Link href="/company/shareHoldings" className={styles.viewAllBtn}>
-                View Full Details
-                <img
-                    src="/icons/chevron-right.svg"
-                    alt=""
-                    className={styles.arrowIcon}
-                />
+            <Link
+              href="/company/shareHoldings"
+              className={styles.viewAllBtn}
+              onClick={(e) => e.preventDefault()}
+            >
+              View Full Details
+              <img
+                src="/icons/chevron-right.svg"
+                alt=""
+                className={styles.arrowIcon}
+              />
             </Link>
           </div>
 
@@ -115,10 +174,11 @@ const OwnershipSection = () => {
                     <Pie
                       data={item.data}
                       innerRadius={60}
-                      outerRadius={80}
+                      outerRadius={100}
                       paddingAngle={0}
                       dataKey="value"
                       stroke="none"
+                      minAngle={2} 
                     >
                       {item.data.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
@@ -152,10 +212,15 @@ const OwnershipSection = () => {
           </div>
         ))}
       </section>
+      <div ref={securitiesRef}>
+        <ShareHoldingsTables />
+        <ShareHoldingsTables2 />
+      </div>
 
-      <section className={styles.section}>
+      <section ref={groupStructureRef} className={styles.section}>
         <div className={styles.sectionWrapper}>
           <h2 className={styles.sectionTitle}>Group Structure</h2>
+
           <div className={styles.statsGrid}>
             {groupStats.map((stat, idx) => (
               <div
@@ -168,7 +233,7 @@ const OwnershipSection = () => {
             ))}
           </div>
         </div>
-        <div className={styles.tableWrapper}>
+        {/* <div className={styles.tableWrapper}>
           <table className={styles.activityTable}>
             <thead>
               <tr>
@@ -190,8 +255,12 @@ const OwnershipSection = () => {
               </tr>
             </tbody>
           </table>
-        </div>
+        </div> */}
       </section>
+      <SubsidiaryAccordion />
+      <div ref={odiRef}>
+        <InvestmentPage />
+      </div>
     </div>
   );
 };

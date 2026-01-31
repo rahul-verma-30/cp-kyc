@@ -3,6 +3,7 @@
 import React from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import styles from "./ShareHoldingsPattern.module.css";
+import Link from "next/link";
 
 const ShareHoldingsPattern = () => {
   const summaryStats = [
@@ -74,7 +75,9 @@ const ShareHoldingsPattern = () => {
   return (
     <div className={styles.mainWrapper}>
       <nav className={styles.breadcrumb}>
-        <span className={styles.breadcrumbLink}>Company Details</span>
+        <Link href="/company" className={styles.breadcrumbLink}>
+          Company Details
+        </Link>
         <span className={styles.breadcrumbSeparator}>
           <img
             src="/icons/arrow-right-black.svg"
