@@ -221,7 +221,7 @@ const FinancialHighlightsDetails = () => {
                     dy={6}
                   />
                   <YAxis
-                  width={70}
+                    width={70}
                     axisLine={{ stroke: "rgba(229, 231, 235, 1)" }}
                     tickLine={false}
                     tick={{
