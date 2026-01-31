@@ -319,13 +319,13 @@ const ShareHoldingsTables2 = () => {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th className={styles.thLeft}>Allotment Date</th>
-              <th className={styles.thLeft}>Allotment Type</th>
-              <th className={styles.thLeft}>Instrument</th>
-              <th className={styles.thLeft}>Amount (Cr)</th>
-              <th className={styles.thLeft}>No. of Securities Allotted</th>
-              <th className={styles.thLeft}>Nominal Value</th>
-              <th className={styles.thLeft}>Premium Value</th>
+              <th className={styles.thLeft1}>Allotment Date</th>
+              <th className={styles.thLeft1}>Allotment Type</th>
+              <th className={styles.thLeft1}>Instrument</th>
+              <th className={styles.thLeft1}>Amount (Cr)</th>
+              <th className={styles.thLeft1}>No. of Securities Allotted</th>
+              <th className={styles.thLeft1}>Nominal Value</th>
+              <th className={styles.thLeft1}>Premium Value</th>
             </tr>
           </thead>
           <tbody>

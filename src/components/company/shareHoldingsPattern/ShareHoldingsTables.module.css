@@ -40,7 +40,7 @@
 /* Base cell styling with internal borders only */
 .table th, 
 .table td {
-  padding: 12px 16px;
+  padding: 11.75px 16px;
   font-size: 14px;
   line-height: 20px;
   text-align: left;
@@ -48,12 +48,18 @@
   border-bottom: 1px solid rgba(228, 228, 231, 1);
 }
 
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+
 /* Headers */
 .categoryHeader {
   background-color: rgba(250, 250, 250, 1);
   color: rgba(113, 113, 122, 1);
   font-weight: 500;
   width: 33%;
+  padding: 11.5px 16px;
 }
 
 .groupHeader {
@@ -81,10 +87,19 @@
   font-weight: 600;
   color: rgba(39, 39, 42, 1);
 }
+
+.sectionHeaderRow td {
+  height: 36px;
+  padding: 7px 16px !important;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
 .sectionHeaderRow .categoryName{
   background-color: rgba(244, 244, 245, 1);
   font-weight: 600;
   color: rgba(39, 39, 42, 1);
+    height: 56px;
 }
 
 .sectionHeaderRow .valueCell{
@@ -97,6 +112,8 @@
   color: rgba(39, 39, 42, 1);
   font-weight: 400;
   background-color: #ffffff !important;
+  height: 56px;
+  box-sizing: border-box;
 }
 
 .valueCell {

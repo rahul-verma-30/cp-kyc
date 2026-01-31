@@ -9,13 +9,13 @@
   flex-direction: column;
 
   position: sticky;
-  top: 150px;
+  top: 170px;
   padding-left: 16px;
 
   /* 🔥 FAKE left border */
   box-shadow: inset 4px 0 0 rgba(228, 228, 231, 1);
 
-  height: calc(100vh - 150px);
+  height: calc(100vh - 200px);
   overflow-y: auto;
   overflow-x: hidden;
 }
