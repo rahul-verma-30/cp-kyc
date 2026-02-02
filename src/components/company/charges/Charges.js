@@ -282,56 +282,63 @@ export default function ChargesPage() {
                   <td>{item.modified}</td>
                   <td>{item.satisfied}</td>
                   <td className={styles.actionCell}>
-                    <img src="/icons/eye.svg" alt="View" />
+                    <div className={styles.actionIcon}>
+                      <img
+                        src="/icons/eye.svg"
+                        alt="View"
+                        width="20"
+                        height="20"
+                      />
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      <div className={styles.paginationRow}>
-        <span className={styles.showingText}>Showing 1-10 of 20</span>
-        <div className={styles.paginationControls}>
-          <div className={styles.paginationInfo}>
-            <span className={styles.rowsLabel}>Rows per page</span>
-            <RowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
-          </div>
+        <div className={styles.paginationRow}>
+          <span className={styles.showingText}>Showing 1-10 of 20</span>
+          <div className={styles.paginationControls}>
+            <div className={styles.paginationInfo}>
+              <span className={styles.rowsLabel}>Rows per page</span>
+              <RowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
+            </div>
             <span className={styles.pageLabel}>Page 1 of 10</span>
-          <div className={styles.navButtons}>
-            <button className={styles.navBtnDisabled}>
-              <img
-                src="/icons/chevrons-left.svg"
-                alt="First page"
-                className={styles.navIcon}
-              />
-            </button>
+            <div className={styles.navButtons}>
+              <button className={styles.navBtnDisabled}>
+                <img
+                  src="/icons/chevrons-left.svg"
+                  alt="First page"
+                  className={styles.navIcon}
+                />
+              </button>
 
-            <button className={styles.navBtnDisabled}>
-              <img
-                src="/icons/chevron-left.svg"
-                alt="First page"
-                className={styles.navIcon}
-              />
-            </button>
-            <button className={styles.navBtn}>
-              {" "}
-              <img
-                src="/icons/chevron-right-black.svg"
-                alt="First page"
-                className={styles.navIcon}
-              />
-            </button>
-            <button className={styles.navBtn}>
-              {" "}
-              <img
-                src="/icons/chevrons-right.svg"
-                alt="First page"
-                className={styles.navIcon}
-              />
-            </button>
+              <button className={styles.navBtnDisabled}>
+                <img
+                  src="/icons/chevron-left.svg"
+                  alt="First page"
+                  className={styles.navIcon}
+                />
+              </button>
+              <button className={styles.navBtn}>
+                {" "}
+                <img
+                  src="/icons/chevron-right-black.svg"
+                  alt="First page"
+                  className={styles.navIcon}
+                />
+              </button>
+              <button className={styles.navBtn}>
+                {" "}
+                <img
+                  src="/icons/chevrons-right.svg"
+                  alt="First page"
+                  className={styles.navIcon}
+                />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
       </section>
     </div>
   );

@@ -100,7 +100,12 @@ export default function PeopleDatabase() {
     );
   };
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const visiblePeople = peopleData.slice(0, rowsPerPage);
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredPeople = peopleData.filter((person) =>
+    person.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
+  const visiblePeople = filteredPeople.slice(0, rowsPerPage);
 
   return (
     <div className={styles.wrapper}>
@@ -112,8 +117,10 @@ export default function PeopleDatabase() {
             <img src="/icons/search.svg" alt="" className={styles.searchIcon} />
             <input
               type="text"
-              placeholder="Search Din/Pan E.g. Din no, Pan numeer"
+              placeholder="Search Din/Pan E.g. Din no, Pan number"
               className={styles.searchInput}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
         </div>
@@ -186,7 +193,7 @@ export default function PeopleDatabase() {
             <span className={styles.mutedText}>
               Loaded:{" "}
               <span className={styles.boldText}>
-                {visiblePeople.length} Companies
+                {visiblePeople.length} People
               </span>
             </span>
             <span className={styles.separator}>|</span>
@@ -197,10 +204,10 @@ export default function PeopleDatabase() {
           <div className={styles.footerRight}>
             <div className={styles.paginationControls}>
               <div className={styles.rowsPerPage}>
-                          <div className={styles.rowsPerPage}>
-            <span className={styles.rowsPerPageText}>Rows per page</span>
-            <RowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
-          </div>
+                <div className={styles.rowsPerPage}>
+                  <span className={styles.rowsPerPageText}>Rows per page</span>
+                  <RowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
+                </div>
               </div>
 
               <span className={styles.pageLabel}>Page 1 of 10</span>

@@ -8,56 +8,56 @@
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: rgba(244, 244, 245, 1);
-    padding: 12px 24px;
-    border-radius: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(244, 244, 245, 1);
+  padding: 12px 24px;
+  border-radius: 100px;
 }
 
 .headerTitle {
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 30px;
-    letter-spacing: 0;
-    color: rgba(24, 24, 27, 1);
-    margin: 0;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  letter-spacing: 0;
+  color: rgba(24, 24, 27, 1);
+  margin: 0;
 }
 
 .headerInfo {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .infoGroup {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .infoLabel {
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-    letter-spacing: 0;
-    color: rgba(113, 113, 122, 1);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(113, 113, 122, 1);
 }
 
 .infoValue {
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 20px;
-    letter-spacing: 0;
-    color: rgba(39, 39, 42, 1);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(39, 39, 42, 1);
 }
 
 .infoDivider {
-    width: 1px;
-    height: 20px;
-    background-color: rgba(228, 228, 231, 1);
-    display: inline-block;
+  width: 1px;
+  height: 20px;
+  background-color: rgba(228, 228, 231, 1);
+  display: inline-block;
 }
 
 .sectionCard {
@@ -90,30 +90,37 @@
   font-size: 13px;
   font-weight: 500;
   text-align: left;
-  padding: 14px 16px;
+  padding: 14px 12px;
   border-bottom: 1px solid rgba(228, 228, 231, 1);
 }
 
 .fullTable td {
-  padding: 7.5px 16px;
+  padding: 7.25px 12px;
   font-size: 13px;
-  border-bottom: 1px solid rgba(228, 228, 231, 1);
+  /* border-bottom: 1px solid rgba(228, 228, 231, 1); */
   color: rgba(39, 39, 42, 1);
+  vertical-align: middle;
+}
+.fullTable tr {
+  border-bottom: 1px solid rgba(228, 228, 231, 1);
 }
 
-.fullTable tbody tr:last-child td {
+/* .fullTable tbody tr:last-child td {
+  border-bottom: none;
+} */
+
+.fullTable tbody tr:last-child {
   border-bottom: none;
 }
-
-
 .companyCell {
+  padding: 7.5px 16px !important;
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
 .companyName {
-  max-width: 140px; 
+  max-width: 140px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -127,11 +134,26 @@
 }
 
 /* Responsiveness */
+
+@media(max-width:1500px) {
+  .companyCell {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .fullTable td {
+    word-break: break-all;
+    white-space: normal;
+  }
+
+}
+
 @media (max-width: 1024px) {
   .pieContent {
     flex-direction: column;
     gap: 20px;
   }
+
   .pieLegend {
     width: 100%;
   }
@@ -143,14 +165,17 @@
     align-items: flex-start;
     gap: 8px;
   }
+
   .headerRight {
     display: flex;
     flex-direction: column;
     gap: 4px;
   }
+
   .metaText {
     margin-left: 0;
   }
+
   .tableHeaderInfo {
     flex-direction: column;
     gap: 8px;
@@ -161,10 +186,13 @@
   .mainContainer {
     padding: 12px;
   }
+
   .sectionCard {
     padding: 16px;
   }
-  .labelManufacturing, .labelFood {
+
+  .labelManufacturing,
+  .labelFood {
     font-size: 10px;
   }
 }

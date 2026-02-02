@@ -51,7 +51,18 @@ export default function ObservationPage() {
     if (val === "High") return <span className={`${styles.badge} ${styles.high}`}><span className={styles.dotRed}></span>High</span>;
     if (val === "Yes") return <span className={`${styles.badge} ${styles.yes}`}>Yes</span>;
     if (val === "Pending") return <span className={`${styles.badge} ${styles.pending}`}>Pending</span>;
-    if (key === "hasAction") return <img src="/icons/eye.svg" className={styles.icon} alt="View" width="20" height="20" />;
+    if (key === "hasAction")
+  return (
+    <div className={styles.actionIcon}>
+      <img
+        src="/icons/eye.svg"
+        alt="View"
+        width="20"
+        height="20"
+      />
+    </div>
+  );
+
     return val;
   };
 

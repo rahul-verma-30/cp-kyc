@@ -621,12 +621,14 @@ export default function AlertsOverview() {
                               {Object.entries(row).map(([key, val], cIdx) => (
                                 <td key={cIdx}>
                                   {key === "action" ? (
-                                    <img
-                                      src="/icons/eye.svg"
-                                      alt="view"
-                                      width="20"
-                                      height="20"
-                                    />
+                                    <div className={styles.actionIcon}>
+                                      <img
+                                        src="/icons/eye.svg"
+                                        alt="view"
+                                        width="20"
+                                        height="20"
+                                      />
+                                    </div>
                                   ) : (
                                     renderBadge(val, item.id)
                                   )}

@@ -1,7 +1,7 @@
 .stickyHeader {
   position: fixed;
   top: 64px; 
-  left: 0;
+  left: 48px;
   right: 0;
   height: 72px;
 
@@ -224,4 +224,52 @@
 
 .dropdownItem:hover {
     background-color: rgba(244, 244, 245, 1);
+}
+
+@media(max-width:1440px){
+    .inner{
+        gap: 16px;
+    }
+    .statsContainer{
+        gap: 16px;
+    }
+}
+
+@media(max-width:1400px){
+    .inner{
+        gap: 5px;
+    }
+    .statsContainer{
+        gap: 5px;
+    }
+    .titleRow{
+        gap: 5px;
+    }
+    .buttonGroup{
+        gap: 5px;
+    }
+    .saveButton{
+        padding: 7px 10px;
+    }
+    .actionsButton{
+        padding: 7px 10px;
+    }
+    .statItem{
+        gap: 4px;
+    }
+}
+
+@media(max-width:1280px){
+    .companyName{
+        font-size: 20px;
+    }
+    .statLabel{
+        font-size: 12px;
+    }
+    .saveButton{
+        font-size: 12px;
+    }
+    .actionsButton{
+        font-size: 12px;
+    }
 }

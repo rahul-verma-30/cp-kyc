@@ -102,3 +102,18 @@
   .container { padding: 16px; }
   .sectionTitle { font-size: 16px; }
 }
+
+.actionIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+
+  transition: background-color 0.2s ease;
+}
+
+.actionIcon:hover {
+  background-color: #E2E8F0;
+}

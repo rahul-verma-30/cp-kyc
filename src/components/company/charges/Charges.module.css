@@ -191,7 +191,7 @@
 }
 
 .summaryRow .strong {
-    font-weight: 500;
+    font-weight: 600;
     margin: 0;
 }
 
@@ -199,6 +199,7 @@
 .sectionTitle {
     font-size: 18px;
     font-weight: 500;
+    margin: 0;
     margin-bottom: 12px;
     color: rgba(39, 39, 42, 1);
 }
@@ -362,4 +363,19 @@
         height: auto;
         padding: 20px 0;
     }
+}
+
+.actionIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+
+  transition: background-color 0.2s ease;
+}
+
+.actionIcon:hover {
+  background-color: #E2E8F0;
 }

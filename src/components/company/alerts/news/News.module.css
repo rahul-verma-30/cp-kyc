@@ -68,20 +68,36 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  cursor: pointer;
+
+  color: rgba(39, 39, 42, 1);
+}
+
+.headlineContainer:hover {
+  color: rgba(37, 99, 235, 1);
+  text-decoration: underline;
 }
 
 .headline {
   font-size: 14px;
   font-weight: 500;
-  color: rgba(39, 39, 42, 1);
   line-height: 20px;
+  color: inherit; 
 }
 
 .externalIcon {
   width: 12px;
   height: 12px;
   display: block;
+
+  transition: filter 0.2s ease;
 }
+
+.headlineContainer:hover .externalIcon {
+  filter: invert(32%) sepia(94%) saturate(1860%)
+          hue-rotate(210deg) brightness(95%) contrast(101%);
+}
+
 
 .loadMoreContainer {
   display: flex;
