@@ -128,11 +128,21 @@
     object-fit: cover;
 }
 
+.nameRow {
+  display: flex;
+  gap: 10px;
+}
+
 .profileTitle h1 {
     font-size: 20px;
     font-weight: 600;
     margin: 0 0 8px 0;
     color: rgba(39, 39, 42, 1);
+}
+
+.socialIcon{
+    height: 24px;
+    width: 24px;
 }
 
 .profileSubtitle {
@@ -313,6 +323,10 @@
     border: 1px solid rgba(228, 228, 231, 1);
     color: rgba(113, 113, 122, 1);
     font-size: 14px;
+}
+
+.secondaryTag {
+  color: #27272A;
 }
 
 .companyIcon {

@@ -11,6 +11,7 @@
     max-width: 1632px;
     width: 100%;
     margin: 0 auto;
+    align-items: center;
 }
 
 /* Logo Styles */
@@ -367,8 +368,20 @@
     border-left: 4px solid rgba(4, 30, 66, 1);
     background-color: rgba(255, 247, 237, 1);
     border-top: 1px solid rgba(228, 228, 231, 1);
-    border-bottom: 1px solid rgba(228, 228, 231, 1);
+    /* border-bottom: 1px solid rgba(228, 228, 231, 1); */
     padding: 20px 24px;
+    cursor: pointer;
+    position: relative;
+}
+
+.observationsBar::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;             
+  right: 0;
+  height: 1px;
+  background-color: rgba(228, 228, 231, 1);
 }
 
 .observationsContent {
@@ -782,4 +795,56 @@
         flex-direction: column;
         gap: 8px;
     }
+}
+
+.companyTagsWrapper {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-family: Inter, sans-serif;
+}
+
+.companyTagItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.companyTagLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(24, 24, 27, 1);
+}
+
+.companyTagBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.companyTagFmcg {
+  background-color: rgba(244, 244, 245, 1);
+  color: rgba(39, 39, 42, 1);
+}
+
+.companyTagListing {
+  background-color: rgba(220, 252, 231, 1);
+  color: rgba(22, 163, 74, 1);
+}
+
+.companyTagIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+
+.companyTagIcon img {
+  width: 16px;
+  height: 16px;
 }

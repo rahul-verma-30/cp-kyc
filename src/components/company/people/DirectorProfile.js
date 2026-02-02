@@ -119,7 +119,7 @@ export default function DirectorProfile() {
       ],
     },
   ];
-const [activeIndex, setActiveIndex] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(null);
   return (
     <div className={styles.container}>
       <div className={styles.containerHeader}>
@@ -159,28 +159,28 @@ const [activeIndex, setActiveIndex] = useState(null);
               className={styles.searchInput}
             />
           </div>
-    <div className={styles.sidebarList}>
-      {sidebarItems.map((item, idx) => (
-        <div
-          key={idx}
-          className={`${styles.sidebarItem} ${
-            activeIndex === idx ? styles.active : ""
-          }`}
-          onClick={() => setActiveIndex(idx)}
-        >
-          <img
-            src="/images/owner.svg"
-            alt="thumb"
-            className={styles.sidebarImg}
-          />
+          <div className={styles.sidebarList}>
+            {sidebarItems.map((item, idx) => (
+              <div
+                key={idx}
+                className={`${styles.sidebarItem} ${
+                  activeIndex === idx ? styles.active : ""
+                }`}
+                onClick={() => setActiveIndex(idx)}
+              >
+                <img
+                  src="/images/owner.svg"
+                  alt="thumb"
+                  className={styles.sidebarImg}
+                />
 
-          <div className={styles.sidebarInfo}>
-            <span className={styles.sidebarName}>{item.name}</span>
-            <span className={styles.sidebarRole}>{item.role}</span>
+                <div className={styles.sidebarInfo}>
+                  <span className={styles.sidebarName}>{item.name}</span>
+                  <span className={styles.sidebarRole}>{item.role}</span>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      ))}
-    </div>
         </aside>
 
         {/* MAIN CONTENT */}
@@ -194,7 +194,15 @@ const [activeIndex, setActiveIndex] = useState(null);
                 className={styles.profilePic}
               />
               <div className={styles.profileTitle}>
-                <h1>Saket Burman</h1>
+                <div className={styles.nameRow}>
+                  <h1>Saket Burman</h1>
+                  <img
+                    src="/icons/li.svg"
+                    alt="linkedin"
+                    className={styles.socialIcon}
+                  />
+                </div>
+
                 <div className={styles.profileSubtitle}>
                   <span>DIN: 05208674</span>
                   <span className={styles.grayDot}></span>
@@ -217,6 +225,7 @@ const [activeIndex, setActiveIndex] = useState(null);
             <InfoBlock label="Residential Status" value="Resident" />
             <InfoBlock label="Email ID" value="mohit.burman@dabur.com" />
             <InfoBlock label="Mobile Number" value="+91-11-23456789" />
+            <InfoBlock label="Type" value="Executive" />
           </div>
 
           <div className={styles.addressGrid}>
@@ -311,6 +320,8 @@ const [activeIndex, setActiveIndex] = useState(null);
                     <tr>
                       <th>Company/LLP name</th>
                       <th>Designation</th>
+                      <th>Type</th> {/* New Header */}
+                      <th>Period</th> {/* New Header */}
                       <th>Appointment Date</th>
                     </tr>
                   </thead>
@@ -318,16 +329,22 @@ const [activeIndex, setActiveIndex] = useState(null);
                     <AssociationRow
                       name="Dabur India Limited"
                       role="Managing Director"
+                      type="Executive"
+                      period="2015 - Present"
                       date="01-Apr-2015"
                     />
                     <AssociationRow
                       name="Dabur Nepal Pvt. Ltd."
                       role="Director"
+                      type="Non-Executive"
+                      period="2018 - Present"
                       date="15-Jun-2018"
                     />
                     <AssociationRow
                       name="Aviva Life Insurance Company India Ltd."
-                      role="Independent Director"
+                      role="Managing Director"
+                      type="Executive"
+                      period="2018 - Present"
                       date="15-Jun-2018"
                     />
                   </tbody>
@@ -344,21 +361,23 @@ const [activeIndex, setActiveIndex] = useState(null);
                       <th>Tenure</th>
                     </tr>
                   </thead>
+
                   <tbody>
-                    <AssociationRow
+                    <PreviousAssociationRow
                       name="H&R Johnson (India) Ltd."
                       role="Non-Executive Director"
-                      date="2010 - 2015"
+                      tenure="2010 - 2015"
                     />
-                    <AssociationRow
+                    <PreviousAssociationRow
                       name="Fresenius Kabi Oncology Limited"
                       role="Independent Director"
-                      date="2012 - 2019"
+                      tenure="2012 - 2019"
                     />
                   </tbody>
                 </table>
               </div>
             )}
+
             {activeTab === "shareholding" && (
               <div className={styles.tableContainer}>
                 <table className={styles.dataTable}>
@@ -531,7 +550,7 @@ function InfoBlock({ label, value }) {
   );
 }
 
-function AssociationRow({ name, role, date }) {
+function AssociationRow({ name, role, type, period, date }) {
   return (
     <tr>
       <td>
@@ -543,12 +562,38 @@ function AssociationRow({ name, role, date }) {
               alt=""
             />
           </div>
-
           {name}
         </div>
       </td>
       <td>{role}</td>
+      <td>
+        <span className={`${styles.nonPromoterTag} ${styles.secondaryTag}`}>
+          {type}
+        </span>
+      </td>
+      <td>{period}</td>
       <td>{date}</td>
+    </tr>
+  );
+}
+
+function PreviousAssociationRow({ name, role, tenure }) {
+  return (
+    <tr>
+      <td>
+        <div className={styles.companyRow}>
+          <div className={styles.companyIconWrapper}>
+            <img
+              src="/icons/dabur-logo.svg"
+              className={styles.companyIcon}
+              alt=""
+            />
+          </div>
+          {name}
+        </div>
+      </td>
+      <td>{role}</td>
+      <td>{tenure}</td>
     </tr>
   );
 }
@@ -575,11 +620,10 @@ function TimelineItem({ date, name, role, active }) {
         </div>
       </div>
       {active && (
-  <div className={`${styles.activeTag} ${styles.statusBadge}`}>
-    Active
-  </div>
-)}
-
+        <div className={`${styles.activeTag} ${styles.statusBadge}`}>
+          Active
+        </div>
+      )}
     </div>
   );
 }

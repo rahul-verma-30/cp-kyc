@@ -418,6 +418,10 @@
   vertical-align: middle;
 }
 
+.csrTableTable td{
+  white-space: normal;
+}
+
 /* Cells */
 .caseNumber {
   font-weight: 500;

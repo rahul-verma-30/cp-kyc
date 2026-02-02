@@ -732,7 +732,7 @@ const ComplianceDetails = () => {
           <h6 className={styles.tableTitle}>{`Financial year 2021-22`}</h6>
 
           <div className={styles.tableContainer}>
-            <table className={styles.litigationTable}>
+            <table className={`${styles.litigationTable} ${styles.csrTableTable}`}>
               <thead>
                 <tr>
                   <th>State</th>

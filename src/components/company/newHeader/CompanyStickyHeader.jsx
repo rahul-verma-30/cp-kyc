@@ -49,7 +49,7 @@ export default function CompanyStickyHeader({ visible }) {
             </div>
             <h1 className={styles.companyName}>Dabur India</h1>
 
-            <div className={styles.statsContainer}>
+            {/* <div className={styles.statsContainer}>
               <div className={styles.statItem}>
                 <span className={styles.statLabel}>Growth Score</span>
                 <span className={styles.scoreBadgeRed}>69</span>
@@ -84,6 +84,38 @@ export default function CompanyStickyHeader({ visible }) {
                 <span className={styles.statLabel}>CIN</span>
                 <span className={styles.cinBadge}>L24230DL1975PLC007908</span>
               </div>
+            </div> */}
+            <div className={styles.companyHeaderWrapper}>
+              <div
+                className={`${styles.companyHeaderBadge} ${styles.companyHeaderFmcg}`}
+              >
+                FMCG
+              </div>
+
+              <div className={styles.companyHeaderDivider} />
+
+              <div
+                className={`${styles.companyHeaderBadge} ${styles.companyHeaderListing}`}
+              >
+                <span className={styles.companyHeaderIcon}>
+                  <img src="/icons/check-circle2.svg" alt="verified" />
+                </span>
+                NSE &amp; BSE
+              </div>
+
+              <div className={styles.companyHeaderDivider} />
+
+              <span className={styles.companyHeaderMeta}>Funded 1884</span>
+
+              <div className={styles.companyHeaderDivider} />
+
+              <span className={styles.companyHeaderMeta}>Public</span>
+
+              <div className={styles.companyHeaderDivider} />
+
+              <span className={styles.companyHeaderMeta}>
+                Ghaziabad, Uttar Pradesh, India
+              </span>
             </div>
           </div>
         </div>

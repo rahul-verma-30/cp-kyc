@@ -6,8 +6,8 @@ const DirectorsSection = () => {
   const stats = [
     { label: 'Current Directors', value: '12', colorClass: styles.blueStat },
     { label: 'Past Directors', value: '30', colorClass: styles.redStat },
-    { label: 'KMP Proles', value: '3', colorClass: styles.purpleStat },
-    { label: 'Directors Proles', value: '42', colorClass: styles.greenStat },
+    { label: 'Current KMP(s)', value: '3', colorClass: styles.purpleStat },
+    { label: 'Past KMP(s)', value: '42', colorClass: styles.greenStat },
   ];
 
   const directors = [

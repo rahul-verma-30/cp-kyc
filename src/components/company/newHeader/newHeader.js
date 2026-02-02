@@ -166,8 +166,8 @@ const CompanyNewHeader = () => {
 
           <div className={styles.contentSection}>
             <div className={styles.titleRow}>
-              <h1 className={styles.companyName}>Dabur India</h1>
-              <div className={styles.statsContainer}>
+              <h1 className={styles.companyName}>Dabur India Limited</h1>
+              {/* <div className={styles.statsContainer}>
                 <div className={styles.statItem}>
                   <span className={styles.statLabel}>Growth Score</span>
                   <span className={styles.scoreBadgeRed}>69</span>
@@ -199,13 +199,36 @@ const CompanyNewHeader = () => {
                   <span className={styles.statLabel}>CIN</span>
                   <span className={styles.cinBadge}>L24230DL1975PLC007908</span>
                 </div>
-              </div>
+              </div> */}
             </div>
 
-            <p className={styles.description}>
+            {/* <p className={styles.description}>
               Dabur is an India's leading FMCG Companies with Revenues of over
               Rs 7,680 Crore & Market Capitalisation of over Rs 48,800 Crore.
-            </p>
+            </p> */}
+
+            <div className={styles.companyTagsWrapper}>
+              <div className={styles.companyTagItem}>
+                <span className={styles.companyTagLabel}>Industry:</span>
+                <div
+                  className={`${styles.companyTagBadge} ${styles.companyTagFmcg}`}
+                >
+                  FMCG
+                </div>
+              </div>
+
+              <div className={styles.companyTagItem}>
+                <span className={styles.companyTagLabel}>Listing Status:</span>
+                <div
+                  className={`${styles.companyTagBadge} ${styles.companyTagListing}`}
+                >
+                  <span className={styles.companyTagIcon}>
+                    <img src="/icons/check-circle2.svg" alt="Verified" />
+                  </span>
+                  NSE &amp; BSE
+                </div>
+              </div>
+            </div>
 
             <div className={styles.infoMetaRow}>
               <div className={styles.metaItem}>
@@ -327,7 +350,10 @@ const CompanyNewHeader = () => {
       </header>
 
       {/* ================= OBSERVATIONS BAR ================= */}
-      <div className={styles.observationsBar}>
+      <div
+        className={styles.observationsBar}
+        onClick={() => setIsExpanded((prev) => !prev)}
+      >
         <div className={styles.observationsContent}>
           <div className={styles.obsLeft}>
             <span className={styles.dot}></span>
@@ -353,7 +379,6 @@ const CompanyNewHeader = () => {
             className={`${styles.obsChevron} ${
               isExpanded ? styles.rotated : ""
             }`}
-            onClick={() => setIsExpanded(!isExpanded)}
           />
         </div>
       </div>

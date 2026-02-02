@@ -48,8 +48,8 @@ body {
 
 .divider {
   width: 1px;
-  height: 32px;
-  background-color: rgba(255, 255, 255, 0.2);
+  height: 24px;
+  background-color: rgba(113, 113, 122, 1);
   flex-shrink: 0;
 }
 

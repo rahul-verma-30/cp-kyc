@@ -1,4 +1,4 @@
-.wrapper {
+/* .wrapper {
     font-family: 'Inter', sans-serif;
     background-color: #ffffff;
     display: flex;
@@ -78,9 +78,6 @@
     font-weight: 500;
     color: #374151;
     line-height: 20px;
-    /* width: 100%; */
-
-    /* ✅ TEXT OVERFLOW FIX */
     overflow-wrap: anywhere;
     word-break: break-word;
     white-space: normal;
@@ -94,7 +91,6 @@
     display: flex;
     gap: 16px;
     align-items: center;
-    /* width: 100%; */
     min-width: 0;
 }
 
@@ -104,9 +100,6 @@
     cursor: pointer;
 }
 
-/* =========================
-   RESPONSIVENESS (UNCHANGED)
-   ========================= */
 
 @media (max-width:1550px){
   .row{gap:20px}
@@ -142,4 +135,105 @@
   .content{padding-bottom:16px}
   .valueBox,.socialBox{padding:10px}
   .socialIcon{width:20px;height:20px}
+} */
+
+.wrapper {
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.sectionTitle {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 28px;
+    letter-spacing: 0;
+    color: rgba(39, 39, 42, 1);
+    margin: 0;
+}
+
+.container {
+  background: #ffffff;
+  border: 1px solid rgba(228, 228, 231, 1);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 24px;
+  width: 100%;
+}
+
+.label {
+  font-size: 14px;
+  color: rgba(113, 113, 122, 1); 
+  white-space: nowrap;
+  width: 140px;
+  font-weight: 500;
+}
+
+.spacer {
+  flex-shrink: 0;
+  height: 1px;
+  max-width: 140px;
+  width: 140px;
+  background-image: repeating-linear-gradient(
+    to right,
+    rgba(228, 228, 231, 1) 0px,
+    rgba(228, 228, 231, 1) 6px,  
+    transparent 6px,
+    transparent 10px         
+  );
+}
+
+.value {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(39, 39, 42, 1);
+  word-break: break-word;
+}
+
+
+.websiteLink {
+  color: rgba(37, 99, 235, 1);
+  text-decoration: none;
+}
+
+.socialBox {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.socialIcon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .spacer {
+    display: none; 
+  }
+  .value {
+    text-align: left;
+    max-width: 100%;
+  }
 }

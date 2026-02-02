@@ -27,6 +27,7 @@
   padding: 8px 12px;
   max-width: 320px;
   gap: 4px;
+  box-sizing: border-box;
 }
 
 .searchIcon {

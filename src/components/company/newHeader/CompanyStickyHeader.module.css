@@ -226,6 +226,59 @@
     background-color: rgba(244, 244, 245, 1);
 }
 
+.companyHeaderWrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-family: Inter, sans-serif;
+  color: #1a1a1a;
+}
+
+.companyHeaderBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.companyHeaderFmcg {
+  background-color: rgba(244, 244, 245, 1);
+  color: rgba(39, 39, 42, 1);
+}
+
+.companyHeaderListing {
+  background-color: rgba(220, 252, 231, 1);
+  color: rgba(22, 163, 74, 1);
+}
+
+.companyHeaderDivider {
+  width: 1px;
+  height: 20px;
+  background-color: rgba(228, 228, 231, 1);
+}
+
+.companyHeaderMeta {
+  font-size: 14px;
+  color: rgba(113, 113, 122, 1);
+}
+
+.companyHeaderIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+
+.companyHeaderIcon img {
+  width: 16px;
+  height: 16px;
+}
+
+
 @media(max-width:1440px){
     .inner{
         gap: 16px;
@@ -237,16 +290,16 @@
 
 @media(max-width:1400px){
     .inner{
-        gap: 5px;
+        gap: 10px;
     }
     .statsContainer{
-        gap: 5px;
+        gap: 10px;
     }
     .titleRow{
-        gap: 5px;
+        gap: 10px;
     }
     .buttonGroup{
-        gap: 5px;
+        gap: 10px;
     }
     .saveButton{
         padding: 7px 10px;
@@ -256,6 +309,9 @@
     }
     .statItem{
         gap: 4px;
+    }
+    .companyHeaderWrapper{
+        gap: 10px;
     }
 }
 
