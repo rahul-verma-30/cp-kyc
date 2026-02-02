@@ -122,7 +122,6 @@
   padding: 20px;
   background-color: #ffffff;
   transition: background-color 0.2s ease; 
-
 }
 
 .row:hover {
@@ -803,6 +802,24 @@
 }
 
 /* Responsive */
+
+@media(max-width: 1600px){
+    .companyNameMain{
+    white-space: normal;
+  }
+}
+
+@media (max-width: 1440px) {
+  .commonDirectorshipWrapper{
+    flex-direction: column;
+  }
+  .sidebar{
+    width: 100%;
+  }
+  .companyNameMain{
+    white-space: normal;
+  }
+}
 @media (max-width: 768px) {
 
   .cards,
@@ -827,4 +844,19 @@
   .sidebar {
     width: 100%;
   }
+}
+
+.actionIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+
+  transition: background-color 0.2s ease;
+}
+
+.actionIcon:hover {
+  background-color: #E2E8F0;
 }

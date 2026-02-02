@@ -595,3 +595,29 @@
         gap: 12px;
     }
 }
+
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  gap: 12px;
+  border-bottom: 1px solid rgba(228, 228, 231, 1);
+  cursor: pointer;
+
+  transition: background-color 0.2s ease;
+
+    border-bottom: 1px solid transparent;
+  border-left: 3px solid transparent;
+}
+
+/* hover only when NOT active */
+.sidebarItem:not(.active):hover {
+  background: rgba(244, 244, 245, 1);
+}
+
+/* clicked / active */
+.active {
+  background: rgba(219, 234, 254, 1);
+  border-bottom: 1px solid rgba(37, 99, 235, 1);
+  border-left: 3px solid rgba(37, 99, 235, 1);
+}

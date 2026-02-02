@@ -204,6 +204,18 @@ flex: 1;
 .textRight { text-align: left; }
 
 /* Tablet Responsiveness */
+
+@media (max-width: 1550px){
+  .pieChartContainer{
+    grid-template-columns: 2fr 1fr;
+
+  }
+}
+@media (max-width: 1350px){
+  .pieChartContainer{
+    grid-template-columns: initial;
+  }
+}
 @media (max-width: 1024px) {
   .pieChartContainer {
     grid-template-columns: 1fr;
@@ -217,6 +229,11 @@ flex: 1;
 }
 
 /* Mobile Responsiveness */
+@media(max-width: 1350px){
+  .activityTable th {
+  min-width: 120px;
+  }
+}
 @media (max-width: 768px) {
   .corporateHeader {
     flex-direction: column;

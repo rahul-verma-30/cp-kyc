@@ -119,7 +119,7 @@ export default function DirectorProfile() {
       ],
     },
   ];
-
+const [activeIndex, setActiveIndex] = useState(null);
   return (
     <div className={styles.container}>
       <div className={styles.containerHeader}>
@@ -159,21 +159,28 @@ export default function DirectorProfile() {
               className={styles.searchInput}
             />
           </div>
-          <div className={styles.sidebarList}>
-            {sidebarItems.map((item, idx) => (
-              <div key={idx} className={styles.sidebarItem}>
-                <img
-                  src="/images/owner.svg"
-                  alt="thumb"
-                  className={styles.sidebarImg}
-                />
-                <div className={styles.sidebarInfo}>
-                  <span className={styles.sidebarName}>{item.name}</span>
-                  <span className={styles.sidebarRole}>{item.role}</span>
-                </div>
-              </div>
-            ))}
+    <div className={styles.sidebarList}>
+      {sidebarItems.map((item, idx) => (
+        <div
+          key={idx}
+          className={`${styles.sidebarItem} ${
+            activeIndex === idx ? styles.active : ""
+          }`}
+          onClick={() => setActiveIndex(idx)}
+        >
+          <img
+            src="/images/owner.svg"
+            alt="thumb"
+            className={styles.sidebarImg}
+          />
+
+          <div className={styles.sidebarInfo}>
+            <span className={styles.sidebarName}>{item.name}</span>
+            <span className={styles.sidebarRole}>{item.role}</span>
           </div>
+        </div>
+      ))}
+    </div>
         </aside>
 
         {/* MAIN CONTENT */}

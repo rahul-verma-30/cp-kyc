@@ -458,7 +458,7 @@
     max-height: 2000px;
     opacity: 1;
     transform: translateY(0);
-    padding: 20px 0;
+    padding: 20px 24px;
 }
 
 .expandedClosed {
@@ -694,6 +694,31 @@
     transform: rotate(180deg);
 }
 
+@media (max-width: 1600px) {
+  .logoCircle {
+    width: 140px;
+    height: 140px;
+  }
+
+  .logoImage {
+    width: 96px;
+  }
+
+  .companyName {
+    font-size: 22px;
+    line-height: 30px;
+  }
+
+  .statsContainer {
+    gap: 20px;
+  }
+
+  .riskGrid {
+    gap: 20px;
+  }
+}
+
+
 @media (max-width: 768px) {
     .riskGrid {
         grid-template-columns: 1fr;
@@ -701,19 +726,17 @@
 }
 
 /* Responsiveness */
-@media (max-width: 1024px) {
+@media (max-width: 1540px) {
     .mainLayout {
         flex-wrap: wrap;
     }
 
     .actionSection {
-        width: 100%;
         flex-direction: row;
         align-items: center;
         min-height: auto;
-        margin-top: 20px;
-        border-top: 1px solid rgba(228, 228, 231, 1);
-        padding-top: 20px;
+        gap: 12px;
+        padding-left: 164px;
     }
 }
 

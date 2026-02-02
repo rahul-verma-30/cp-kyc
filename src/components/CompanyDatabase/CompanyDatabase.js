@@ -152,7 +152,13 @@ export default function CompanyDatabase() {
     );
   };
 
-  const visibleData = data.slice(0, rowsPerPage);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredData = data.filter((company) =>
+    company.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
+  const visibleData = filteredData.slice(0, rowsPerPage);
 
   return (
     <div className={styles.container}>
@@ -168,6 +174,8 @@ export default function CompanyDatabase() {
               type="text"
               placeholder="Search for company name"
               className={styles.searchInput}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
           <div className={styles.filterDropdown}>
