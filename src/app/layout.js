@@ -66,6 +66,8 @@ export default function RootLayout({ children }) {
                     src="/icons/logo2.svg"
                     alt="Corporate Professionals"
                     className={styles.logo}
+                    onClick={() => handleNav("home", "/")}
+                    style={{ cursor: "pointer" }}
                   />
 
                   <div className={styles.divider} />
