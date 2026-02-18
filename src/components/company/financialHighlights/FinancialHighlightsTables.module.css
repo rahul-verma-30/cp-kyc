@@ -6,12 +6,82 @@
   font-family: 'Inter', sans-serif;
 }
 
-.headerRow1 {
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding-bottom: 12px;
+}
+
+.headerTitle,
+.headerRow1 {
   font-size: 18px;
   font-weight: 500;
   color: rgba(39, 39, 42, 1);
+}
 
+.headerControls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.currencyText {
+    font-size: 12px;
+    font-weight: 400;
+    color: #71717A;
+}
+
+.toggleContainer {
+    display: flex;
+    background-color: #F4F4F5;
+    border-radius: 20px;
+    padding: 4px;
+    gap: 4px;
+    position: relative;
+    width: 200px; /* Approximate width to hold both buttons */
+}
+
+.toggleBtn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #71717A;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    z-index: 2;
+    position: relative;
+    text-align: center;
+}
+
+.activeToggle {
+    color: #09090B;
+    font-weight: 500;
+}
+
+.toggleSlider {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    width: calc(50% - 6px);
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+.sliderStandalone {
+    transform: translateX(0);
+}
+
+.sliderConsolidated {
+    transform: translateX(calc(100% + 4px));
 }
 .tableWrapper {
   width: 100%;

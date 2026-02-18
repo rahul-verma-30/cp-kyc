@@ -213,136 +213,183 @@ const ShareHoldingsTables2 = () => {
   ];
   // --- End of new added code ---
 
+  // --- End of new added code ---
+
+  const [isDirectorsOpen, setIsDirectorsOpen] = useState(true);
+  const [isFiiOpen, setIsFiiOpen] = useState(true);
+  const [isAllotmentOpen, setIsAllotmentOpen] = useState(true);
+
   return (
     <div className={styles.container}>
-      <h2 className={styles.tableTitle}>Directors Shareholdings</h2>
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th className={styles.thLeft}>Director Name</th>
-              <th className={styles.thRight}>Share Type</th>
-              <th className={styles.thRight}>Shares Held</th>
-              <th className={styles.thRight}>Percentage</th>
-            </tr>
-          </thead>
-          <tbody>
-            {directorsData.map((director, index) => (
-              <tr key={index}>
-                <td className={styles.tdName}>{director.name}</td>
-                <td className={styles.tdValue}>{director.type}</td>
-                <td className={styles.tdValue}>{director.held}</td>
-                <td className={styles.tdValue}>{director.percent}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div 
+        className={styles.headerRow}
+        onClick={() => setIsDirectorsOpen(!isDirectorsOpen)}
+      >
+         <h2 className={styles.tableTitle}>Directors Shareholdings</h2>
+         <img 
+            src="/icons/chevron-down-dark.svg" 
+            alt="Expand" 
+            className={`${styles.expandIcon} ${isDirectorsOpen ? styles.rotateIcon : ""}`} 
+          />
       </div>
+      
+      {isDirectorsOpen && (
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th className={styles.thLeft}>Director Name</th>
+                <th className={styles.thRight}>Share Type</th>
+                <th className={styles.thRight}>Shares Held</th>
+                <th className={styles.thRight}>Percentage</th>
+              </tr>
+            </thead>
+            <tbody>
+              {directorsData.map((director, index) => (
+                <tr key={index}>
+                  <td className={styles.tdName}>{director.name}</td>
+                  <td className={styles.tdValue}>{director.type}</td>
+                  <td className={styles.tdValue}>{director.held}</td>
+                  <td className={styles.tdValue}>{director.percent}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* --- Start of added code --- */}
       <div className={styles.spacer}></div>
 
-      <h2 className={styles.tableTitle}>Foreign Institutional Investor</h2>
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th className={styles.thLeft}>Name of the FII</th>
-              <th className={styles.thRight}>Share Type</th>
-              <th className={styles.thRight}>Shares Held</th>
-              <th className={styles.thRight}>Percentage</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fiiData.map((fii, index) => (
-              <tr key={index}>
-                <td className={styles.tdName}>{fii.name}</td>
-                <td className={styles.tdValue}>{fii.type}</td>
-                <td className={styles.tdValue}>{fii.held}</td>
-                <td className={styles.tdValue}>{fii.percent}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div 
+        className={styles.headerRow}
+        onClick={() => setIsFiiOpen(!isFiiOpen)}
+      >
+        <h2 className={styles.tableTitle}>Foreign Institutional Investor</h2>
+        <img 
+            src="/icons/chevron-down-dark.svg" 
+            alt="Expand" 
+            className={`${styles.expandIcon} ${isFiiOpen ? styles.rotateIcon : ""}`} 
+          />
       </div>
 
-      <div className={styles.paginationRow}>
-        <span className={styles.showingText}>Showing 1-10 of 20</span>
-        <div className={styles.paginationControls}>
-          <div className={styles.paginationInfo}>
-            <span className={styles.rowsLabel}>Rows per page</span>
-            <RowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
+      {isFiiOpen && (
+        <>
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th className={styles.thLeft}>Name of the FII</th>
+                  <th className={styles.thRight}>Share Type</th>
+                  <th className={styles.thRight}>Shares Held</th>
+                  <th className={styles.thRight}>Percentage</th>
+                </tr>
+              </thead>
+              <tbody>
+                {fiiData.map((fii, index) => (
+                  <tr key={index}>
+                    <td className={styles.tdName}>{fii.name}</td>
+                    <td className={styles.tdValue}>{fii.type}</td>
+                    <td className={styles.tdValue}>{fii.held}</td>
+                    <td className={styles.tdValue}>{fii.percent}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-            <span className={styles.pageLabel}>Page 1 of 10</span>
-          <div className={styles.navButtons}>
-            <button className={styles.navBtnDisabled}>
-              <img
-                src="/icons/chevrons-left.svg"
-                alt="First page"
-                className={styles.navIcon}
-              />
-            </button>
-
-            <button className={styles.navBtnDisabled}>
-              <img
-                src="/icons/chevron-left.svg"
-                alt="First page"
-                className={styles.navIcon}
-              />
-            </button>
-            <button className={styles.navBtn}>
-              {" "}
-              <img
-                src="/icons/chevron-right-black.svg"
-                alt="First page"
-                className={styles.navIcon}
-              />
-            </button>
-            <button className={styles.navBtn}>
-              {" "}
-              <img
-                src="/icons/chevrons-right.svg"
-                alt="First page"
-                className={styles.navIcon}
-              />
-            </button>
+    
+          <div className={styles.paginationRow}>
+            <span className={styles.showingText}>Showing 1-10 of 20</span>
+            <div className={styles.paginationControls}>
+              <div className={styles.paginationInfo}>
+                <span className={styles.rowsLabel}>Rows per page</span>
+                <RowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
+              </div>
+                <span className={styles.pageLabel}>Page 1 of 10</span>
+              <div className={styles.navButtons}>
+                <button className={styles.navBtnDisabled}>
+                  <img
+                    src="/icons/chevrons-left.svg"
+                    alt="First page"
+                    className={styles.navIcon}
+                  />
+                </button>
+    
+                <button className={styles.navBtnDisabled}>
+                  <img
+                    src="/icons/chevron-left.svg"
+                    alt="First page"
+                    className={styles.navIcon}
+                  />
+                </button>
+                <button className={styles.navBtn}>
+                  {" "}
+                  <img
+                    src="/icons/chevron-right-black.svg"
+                    alt="First page"
+                    className={styles.navIcon}
+                  />
+                </button>
+                <button className={styles.navBtn}>
+                  {" "}
+                  <img
+                    src="/icons/chevrons-right.svg"
+                    alt="First page"
+                    className={styles.navIcon}
+                  />
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
       {/* --- End of added code --- */}
 
       {/* --- Start of new added code for Securities Allotment --- */}
       <div className={styles.spacer}></div>
 
-      <h2 className={styles.tableTitle}>Securities Allotment</h2>
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th className={styles.thLeft1}>Allotment Date</th>
-              <th className={styles.thLeft1}>Allotment Type</th>
-              <th className={styles.thLeft1}>Instrument</th>
-              <th className={styles.thLeft1}>Amount (Cr)</th>
-              <th className={styles.thLeft1}>No. of Securities Allotted</th>
-              <th className={styles.thLeft1}>Nominal Value</th>
-              <th className={styles.thLeft1}>Premium Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allotmentData.map((item, index) => (
-              <tr key={index}>
-                <td className={styles.tdName}>{item.date}</td>
-                <td className={styles.tdName}>{item.type}</td>
-                <td className={styles.tdName}>{item.instrument}</td>
-                <td className={styles.tdName}>{item.amount}</td>
-                <td className={styles.tdName}>{item.count}</td>
-                <td className={styles.tdName}>{item.nominal}</td>
-                <td className={styles.tdName}>{item.premium}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div 
+        className={styles.headerRow}
+        onClick={() => setIsAllotmentOpen(!isAllotmentOpen)}
+      >
+        <h2 className={styles.tableTitle}>Securities Allotment</h2>
+        <img 
+            src="/icons/chevron-down-dark.svg" 
+            alt="Expand" 
+            className={`${styles.expandIcon} ${isAllotmentOpen ? styles.rotateIcon : ""}`} 
+          />
       </div>
+
+      {isAllotmentOpen && (
+        <>
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th className={styles.thLeft1}>Allotment Date</th>
+                <th className={styles.thLeft1}>Allotment Type</th>
+                <th className={styles.thLeft1}>Instrument</th>
+                <th className={styles.thLeft1}>Amount (Cr)</th>
+                <th className={styles.thLeft1}>No. of Securities Allotted</th>
+                <th className={styles.thLeft1}>Nominal Value</th>
+                <th className={styles.thLeft1}>Premium Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              {allotmentData.map((item, index) => (
+                <tr key={index}>
+                  <td className={styles.tdName}>{item.date}</td>
+                  <td className={styles.tdName}>{item.type}</td>
+                  <td className={styles.tdName}>{item.instrument}</td>
+                  <td className={styles.tdName}>{item.amount}</td>
+                  <td className={styles.tdName}>{item.count}</td>
+                  <td className={styles.tdName}>{item.nominal}</td>
+                  <td className={styles.tdName}>{item.premium}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
       <div className={styles.paginationRow}>
         <span className={styles.showingText}>Showing 1-10 of 20</span>
@@ -387,6 +434,8 @@ const ShareHoldingsTables2 = () => {
           </div>
         </div>
       </div>
+      </>
+      )}
       <div className={styles.spacer}></div>
       <h2 className={styles.tableTitle}>
         Details of Shares/Debentures Transfers

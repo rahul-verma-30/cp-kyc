@@ -3,7 +3,10 @@
     background-color: #ffffff;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 20px;
+    padding: 20px;
+    border: 1px solid rgba(228, 228, 231, 1);
+    border-radius: 20px;
 }
 
 .sectionTitle {
@@ -13,6 +16,94 @@
     letter-spacing: 0;
     color: rgba(39, 39, 42, 1);
     margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+}
+
+.label {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    color: #71717A;
+    width: 140px; 
+    /* flex-shrink: 0; */
+}
+
+.dashedLine {
+    flex-grow: 1;
+    border-bottom: 1px dashed #E4E4E7;
+    height: 1px;
+    max-width: 140px;
+    align-items: center;
+    text-align: center;
+    margin: 0 4px; /* Optional spacing if gap isn't enough */
+}
+
+.valueBox {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 24px;
+    flex: 1; /* Take remaining space */
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+.link {
+    color: #2563EB; /* Blue link color */
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.socialBox {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.socialIcon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+/* =========================
+   RESPONSIVENESS
+   ========================= */
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+  }
+  
+  .dashedLine {
+    display: none;
+  }
+  
+  .label {
+    font-size: 12px;
+    margin-bottom: 2px;
+  }
+  
+  .valueBox {
+    max-width: 100%;
+    font-size: 14px;
+  }
 }
 
 .container {
@@ -61,22 +152,15 @@
     min-width: 0;
 }
 
-.label {
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 24px;
-    letter-spacing: 0;
-    color: rgba(39, 39, 42, 1);
-}
+
 
 .valueBox {
-    background: rgba(250, 250, 250, 1);
-    border: 1px solid rgba(228, 228, 231, 1);
+    
     border-radius: 12px;
-    padding: 16px;
-    font-size: 14px;
+    /* padding: 16px; */
+    font-size: 16px;
     font-weight: 500;
-    color: #374151;
+    color: #27272A;
     line-height: 20px;
     /* width: 100%; */
 
@@ -87,8 +171,6 @@
 }
 
 .socialBox {
-    background: rgba(250, 250, 250, 1);
-    border: 1px solid rgba(228, 228, 231, 1);
     border-radius: 8px;
     padding: 16px;
     display: flex;

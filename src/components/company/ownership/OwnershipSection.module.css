@@ -17,10 +17,10 @@
 
 .headerTitle {
   font-weight: 500;
-  font-size: 20px;
-  line-height: 30px;
+  font-size: 18px;
+  line-height: 28px;
   letter-spacing: 0;
-  color: rgba(24, 24, 27, 1);
+  color: #27272A;
   margin: 0;
 }
 
@@ -327,4 +327,418 @@
   .statValue {
     font-size: 20px;
   }
+}
+
+/* Shareholding New Styles */
+.shareholdingSection {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.chartLine {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background-color: rgba(229, 231, 235, 1);
+}
+
+.chartLine:first-child::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -6px;
+  width: 1px;
+  height: 12px;
+  background-color: rgba(229, 231, 235, 1);
+}
+
+.chartLine:last-child::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -6px;
+  width: 1px;
+  height: 12px;
+  background-color: rgba(229, 231, 235, 1);
+}
+
+.chartHeaderText {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(30, 41, 59, 1);
+}
+
+.progressContainer {
+    margin-top: 8px;
+    margin-bottom: 24px;
+}
+
+.progressBar {
+  height: 16px;
+  width: 100%;
+  display: flex;
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+
+
+.progressPromoter {
+  background-color: rgba(191, 219, 254, 1);
+}
+
+.progressNonPromoter {
+  background-color: rgba(233, 213, 255, 1);
+}
+
+.legendGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.legendItem {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.dotPromoter {
+  background-color: rgba(191, 219, 254, 1);
+}
+
+.dotNonPromoter {
+  background-color: rgba(233, 213, 255, 1);
+}
+
+.legendLabel {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: rgba(100, 116, 139, 1);
+  margin: 0 0 2px 0;
+}
+
+.legendValue {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0;
+  color: rgba(39, 39, 42, 1);
+  margin: 0;
+}
+
+/* Scoped Shareholding Stats */
+.shareholdingSection .statsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-bottom: 20px;
+}
+
+.shareholdingSection .statItem {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.shareholdingSection .statLabel {
+    font-size: 14px;
+    font-weight: 400;
+    color: #71717A;
+    line-height: 20px;
+}
+
+.shareholdingSection .statValue {
+    font-size: 16px;
+    font-weight: 600;
+    color: #27272A;
+    line-height: 24px;
+}
+
+.statItemFirst {
+  text-align: left;
+  border-right: 1px solid rgba(228, 228, 231, 1);
+  padding-right: 16px;
+}
+
+.statItemMiddle {
+  text-align: center;
+  border-right: 1px solid rgba(228, 228, 231, 1);
+  padding: 0 16px;
+}
+
+.statItemLast {
+  text-align: right;
+  padding-left: 16px;
+}
+
+@media (max-width: 480px) {
+    .shareholdingSection .statsGrid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .statItemFirst, .statItemMiddle {
+        text-align: left;
+        border-right: none;
+        padding: 0;
+        border-bottom: 1px solid rgba(228, 228, 231, 1);
+        padding-bottom: 12px;
+    }
+
+    .statItemLast {
+        text-align: left;
+        padding: 0;
+        border-bottom: none;
+    }
+}
+
+/* Control Insight Styles */
+.controlInsightCard {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    background-color: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    border-radius: 12px;
+}
+
+.controlInsightHeader {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.controlInsightIcon {
+    width: 20px;
+    height: 20px;
+}
+
+.controlInsightTitle {
+    font-size: 16px;
+    font-weight: 500;
+    color: #27272A;
+    margin: 0;
+}
+
+.controlInsightText {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    color: #3F3F46;
+    margin: 0;
+}
+
+/* Promoter Holding Styles */
+.promoterHoldingSection {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background-color: #FFFFFF;
+    border: 1px solid #E4E4E7;
+    border-radius: 20px;
+    padding: 24px;
+}
+
+.promoterHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.promoterTitle {
+    font-size: 18px;
+    font-weight: 600;
+    color: #27272A;
+    margin: 0;
+}
+
+.expandIcon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.rotateIcon {
+    transform: rotate(180deg);
+}
+
+.promoterContent {
+    display: flex;
+    gap: 48px;
+}
+
+.promoterLeft {
+    flex: 0 0 250px;
+    display: flex;
+    width: 306px;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.promoterStatBig {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: end;
+}
+
+.promoterStatValue {
+    font-size: 24px;
+    font-weight: 600;
+    color: #27272A;
+}
+
+.promoterStatLabel {
+    font-size: 14px;
+    color: #71717A;
+}
+
+.promoterBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    background-color: #F4F4F5;
+    border-radius: 6px;
+    align-items: end;
+    width: fit-content;
+}
+
+.promoterBadgeValue {
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 600;
+    color: #27272A;
+    margin-right: 8px;
+}
+
+.promoterBadgeLabel {
+    font-size: 14px;
+    color: #71717A;
+}
+
+.promoterDescription {
+    font-size: 14px;
+    line-height: 20px;
+    color: #71717A;
+    margin: 0;
+}
+
+.pledgeLockin {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pledgeBox {
+    background-color: #F4F4F5;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #71717A;
+}
+
+.promoterRight {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 20px 32px;
+    border-left: 1px solid rgba(228, 228, 231, 1);
+}
+
+.chartTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: #27272A;
+    margin: 0;
+}
+
+.chartContainer {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    justify-content: space-between;
+}
+
+.donutWrapper {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.chartLegendGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    max-width: 300px;
+    flex: 1;
+}
+
+.chartLegendItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+.legendLeft {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legendColor {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+}
+
+.legendName {
+    color: #71717A;
+}
+
+.legendPercent {
+    font-weight: 600;
+    color: #27272A;
+}
+
+@media (max-width: 768px) {
+    .promoterContent {
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .promoterLeft {
+        flex: auto;
+    }
+    
+    .chartContainer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }

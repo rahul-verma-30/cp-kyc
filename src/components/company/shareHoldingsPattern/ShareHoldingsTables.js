@@ -42,117 +42,149 @@ const ShareHoldingsTables = () => {
     { category: "Others", isSectionHeader: true, equityShares: "30252812.00", equityPercent: "1.71%", preferenceShares: "0.00", preferencePercent: "0.00%" },
   ];
 
+  const [isPromotersOpen, setIsPromotersOpen] = React.useState(true);
+  const [isPublicOpen, setIsPublicOpen] = React.useState(true);
+
   return (
     <div className={styles.container}>
       {/* ---------------- FIRST TABLE (UNCHANGED) ---------------- */}
-      <div className={styles.headerRow}>
-        <span className={styles.title}>Promoters</span>
-        <span className={styles.date}>31 Mar 2024</span>
+      <div 
+        className={styles.headerRow} 
+        onClick={() => setIsPromotersOpen(!isPromotersOpen)}
+      >
+        <div className={styles.headerContent}>
+          <span className={styles.title}>Promoters</span>
+          <span className={styles.date}>31 Mar 2024</span>
+        </div>
+        <div className={styles.headerActions}>
+           <img 
+            src="/icons/chevron-down-dark.svg" 
+            alt="Expand" 
+            className={`${styles.expandIcon} ${isPromotersOpen ? styles.rotateIcon : ""}`} 
+          />
+        </div>
       </div>
 
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th rowSpan="2" className={styles.categoryHeader}>Category</th>
-              <th colSpan="2" className={styles.groupHeader}>Equity</th>
-              <th colSpan="2" className={styles.groupHeader}>Preference</th>
-            </tr>
-            <tr>
-              <th className={styles.subHeader}>Number of shares</th>
-              <th className={styles.subHeader}>Percentage</th>
-              <th className={styles.subHeader}>Number of shares</th>
-              <th className={styles.subHeader}>Percentage</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row, index) => {
-              const hasValues = row.equityShares !== undefined;
-              if (row.isSectionHeader && !hasValues) {
+
+      {isPromotersOpen && (
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th rowSpan="2" className={styles.categoryHeader}>Category</th>
+                <th colSpan="2" className={styles.groupHeader}>Equity</th>
+                <th colSpan="2" className={styles.groupHeader}>Preference</th>
+              </tr>
+              <tr>
+                <th className={styles.subHeader}>Number of shares</th>
+                <th className={styles.subHeader}>Percentage</th>
+                <th className={styles.subHeader}>Number of shares</th>
+                <th className={styles.subHeader}>Percentage</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((row, index) => {
+                const hasValues = row.equityShares !== undefined;
+                if (row.isSectionHeader && !hasValues) {
+                  return (
+                    <tr key={index} className={styles.sectionHeaderRow}>
+                      <td colSpan="5" className={styles.sectionTitle}>{row.category}</td>
+                    </tr>
+                  );
+                }
                 return (
-                  <tr key={index} className={styles.sectionHeaderRow}>
-                    <td colSpan="5" className={styles.sectionTitle}>{row.category}</td>
+                  <tr key={index} className={row.isSectionHeader ? styles.sectionHeaderRow : ""}>
+                    <td className={styles.categoryName}>{row.category}</td>
+                    <td className={styles.valueCell}>{row.equityShares || "0.00"}</td>
+                    <td className={styles.valueCell}>{row.equityPercent || "0.00%"}</td>
+                    <td className={styles.valueCell}>{row.preferenceShares || "0.00"}</td>
+                    <td className={styles.valueCell}>{row.preferencePercent || "0.00%"}</td>
                   </tr>
                 );
-              }
-              return (
-                <tr key={index} className={row.isSectionHeader ? styles.sectionHeaderRow : ""}>
-                  <td className={styles.categoryName}>{row.category}</td>
-                  <td className={styles.valueCell}>{row.equityShares || "0.00"}</td>
-                  <td className={styles.valueCell}>{row.equityPercent || "0.00%"}</td>
-                  <td className={styles.valueCell}>{row.preferenceShares || "0.00"}</td>
-                  <td className={styles.valueCell}>{row.preferencePercent || "0.00%"}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-          <tfoot>
-            <tr className={styles.footerRow}>
-              <td className={styles.categoryName}>Total</td>
-              <td className={styles.valueCell}>1174000355.00</td>
-              <td className={styles.valueCell}>66.26%</td>
-              <td className={styles.valueCell}>0.00%</td>
-              <td className={styles.valueCell}>0.00%</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+              })}
+            </tbody>
+            <tfoot>
+              <tr className={styles.footerRow}>
+                <td className={styles.categoryName}>Total</td>
+                <td className={styles.valueCell}>1174000355.00</td>
+                <td className={styles.valueCell}>66.26%</td>
+                <td className={styles.valueCell}>0.00%</td>
+                <td className={styles.valueCell}>0.00%</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      )}
 
       {/* ---------------- SECOND TABLE ---------------- */}
       <div style={{ margin: "32px 0" }} />
 
-      <div className={styles.headerRow}>
-        <span className={styles.title}>Public / Other Than Promoters</span>
-        <span className={styles.date}>31 Mar 2024</span>
+      <div 
+        className={styles.headerRow}
+        onClick={() => setIsPublicOpen(!isPublicOpen)}
+      >
+        <div className={styles.headerContent}>
+          <span className={styles.title}>Public / Other Than Promoters</span>
+          <span className={styles.date}>31 Mar 2024</span>
+        </div>
+        <div className={styles.headerActions}>
+           <img 
+            src="/icons/chevron-down-dark.svg" 
+            alt="Expand" 
+            className={`${styles.expandIcon} ${isPublicOpen ? styles.rotateIcon : ""}`} 
+          />
+        </div>
       </div>
 
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th rowSpan="2" className={styles.categoryHeader}>Category</th>
-              <th colSpan="2" className={styles.groupHeader}>Equity</th>
-              <th colSpan="2" className={styles.groupHeader}>Preference</th>
-            </tr>
-            <tr>
-              <th className={styles.subHeader}>Number of shares</th>
-              <th className={styles.subHeader}>Percentage</th>
-              <th className={styles.subHeader}>Number of shares</th>
-              <th className={styles.subHeader}>Percentage</th>
-            </tr>
-          </thead>
-          <tbody>
-            {publicData.map((row, index) => {
-              const hasValues = row.equityShares !== undefined;
-              if (row.isSectionHeader && !hasValues) {
+      {isPublicOpen && (
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th rowSpan="2" className={styles.categoryHeader}>Category</th>
+                <th colSpan="2" className={styles.groupHeader}>Equity</th>
+                <th colSpan="2" className={styles.groupHeader}>Preference</th>
+              </tr>
+              <tr>
+                <th className={styles.subHeader}>Number of shares</th>
+                <th className={styles.subHeader}>Percentage</th>
+                <th className={styles.subHeader}>Number of shares</th>
+                <th className={styles.subHeader}>Percentage</th>
+              </tr>
+            </thead>
+            <tbody>
+              {publicData.map((row, index) => {
+                const hasValues = row.equityShares !== undefined;
+                if (row.isSectionHeader && !hasValues) {
+                  return (
+                    <tr key={`pub-${index}`} className={styles.sectionHeaderRow}>
+                      <td colSpan="5" className={styles.sectionTitle}>{row.category}</td>
+                    </tr>
+                  );
+                }
                 return (
-                  <tr key={`pub-${index}`} className={styles.sectionHeaderRow}>
-                    <td colSpan="5" className={styles.sectionTitle}>{row.category}</td>
+                  <tr key={`pub-${index}`} className={row.isSectionHeader ? styles.sectionHeaderRow : ""}>
+                    <td className={styles.categoryName}>{row.category}</td>
+                    <td className={styles.valueCell}>{row.equityShares || "0.00"}</td>
+                    <td className={styles.valueCell}>{row.equityPercent || "0.00%"}</td>
+                    <td className={styles.valueCell}>{row.preferenceShares || "0.00"}</td>
+                    <td className={styles.valueCell}>{row.preferencePercent || "0.00%"}</td>
                   </tr>
                 );
-              }
-              return (
-                <tr key={`pub-${index}`} className={row.isSectionHeader ? styles.sectionHeaderRow : ""}>
-                  <td className={styles.categoryName}>{row.category}</td>
-                  <td className={styles.valueCell}>{row.equityShares || "0.00"}</td>
-                  <td className={styles.valueCell}>{row.equityPercent || "0.00%"}</td>
-                  <td className={styles.valueCell}>{row.preferenceShares || "0.00"}</td>
-                  <td className={styles.valueCell}>{row.preferencePercent || "0.00%"}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-          <tfoot>
-            <tr className={styles.footerRow}>
-              <td className={styles.categoryName}>Total</td>
-              <td className={styles.valueCell}>598038807.00</td>
-              <td className={styles.valueCell}>33.77%</td>
-              <td className={styles.valueCell}>0.00%</td>
-              <td className={styles.valueCell}>-</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+              })}
+            </tbody>
+            <tfoot>
+              <tr className={styles.footerRow}>
+                <td className={styles.categoryName}>Total</td>
+                <td className={styles.valueCell}>598038807.00</td>
+                <td className={styles.valueCell}>33.77%</td>
+                <td className={styles.valueCell}>0.00%</td>
+                <td className={styles.valueCell}>-</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

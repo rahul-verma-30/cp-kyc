@@ -119,7 +119,16 @@ export default function DirectorProfile() {
       ],
     },
   ];
-const [activeIndex, setActiveIndex] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [activeFilter, setActiveFilter] = useState("All");
+
+  const filters = [
+    "All",
+    "Managing Director",
+    "Full-Time Director",
+    "Company Secretary",
+  ];
+
   return (
     <div className={styles.container}>
       <div className={styles.containerHeader}>
@@ -159,7 +168,23 @@ const [activeIndex, setActiveIndex] = useState(null);
               className={styles.searchInput}
             />
           </div>
-    <div className={styles.sidebarList}>
+
+          {/* Filter Tags */}
+          <div className={styles.filterContainer}>
+            {filters.map((filter) => (
+              <div
+                key={filter}
+                className={`${styles.filterTag} ${
+                  activeFilter === filter ? styles.activeFilter : ""
+                }`}
+                onClick={() => setActiveFilter(filter)}
+              >
+                {filter}
+              </div>
+            ))}
+          </div>
+
+          <div className={styles.sidebarList}>
       {sidebarItems.map((item, idx) => (
         <div
           key={idx}
@@ -194,7 +219,10 @@ const [activeIndex, setActiveIndex] = useState(null);
                 className={styles.profilePic}
               />
               <div className={styles.profileTitle}>
-                <h1>Saket Burman</h1>
+                <div className={styles.profileTitleWrapper}>
+                  <h1>Saket Burman</h1>
+                  <img src="/images/linkedln.svg" alt="linkedln" />
+                </div>
                 <div className={styles.profileSubtitle}>
                   <span>DIN: 05208674</span>
                   <span className={styles.grayDot}></span>
@@ -217,6 +245,7 @@ const [activeIndex, setActiveIndex] = useState(null);
             <InfoBlock label="Residential Status" value="Resident" />
             <InfoBlock label="Email ID" value="mohit.burman@dabur.com" />
             <InfoBlock label="Mobile Number" value="+91-11-23456789" />
+            <InfoBlock label="Type" value="Executive" />
           </div>
 
           <div className={styles.addressGrid}>
@@ -231,7 +260,7 @@ const [activeIndex, setActiveIndex] = useState(null);
           </div>
 
           {/* ROLE & APPOINTMENT */}
-          <section className={styles.section}>
+          {/* <section className={styles.section}>
             <h2 className={styles.sectionHeading}>
               Role & Appointment Details
             </h2>
@@ -268,7 +297,7 @@ const [activeIndex, setActiveIndex] = useState(null);
                 </tbody>
               </table>
             </div>
-          </section>
+          </section> */}
 
           {/* OTHER ASSOCIATIONS */}
           <section className={styles.section}>
@@ -311,6 +340,8 @@ const [activeIndex, setActiveIndex] = useState(null);
                     <tr>
                       <th>Company/LLP name</th>
                       <th>Designation</th>
+                      <th>Type</th>
+                      <th>Period</th>
                       <th>Appointment Date</th>
                     </tr>
                   </thead>
@@ -318,16 +349,22 @@ const [activeIndex, setActiveIndex] = useState(null);
                     <AssociationRow
                       name="Dabur India Limited"
                       role="Managing Director"
+                      type="Executive"
+                      period="2015 - Present"
                       date="01-Apr-2015"
                     />
                     <AssociationRow
                       name="Dabur Nepal Pvt. Ltd."
                       role="Director"
+                      type="Non-Executive"
+                      period="2015 - Present"
                       date="15-Jun-2018"
                     />
                     <AssociationRow
                       name="Aviva Life Insurance Company India Ltd."
                       role="Independent Director"
+                      type="Executive"
+                      period="2015 - Present"
                       date="15-Jun-2018"
                     />
                   </tbody>
@@ -416,7 +453,7 @@ const [activeIndex, setActiveIndex] = useState(null);
           </section>
 
           {/* KMP SECTION */}
-          <section className={styles.section2}>
+          {/* <section className={styles.section2}>
             <h2 className={styles.sectionHeading}>KMP-Specific Details</h2>
             <div className={styles.kmpContainer}>
               <div className={styles.kmpItem}>
@@ -443,7 +480,7 @@ const [activeIndex, setActiveIndex] = useState(null);
                 </p>
               </div>
             </div>
-          </section>
+          </section> */}
 
           {/* REGULATORY GROUP HEADER */}
           <div className={styles.regulatoryHeader}>
@@ -515,6 +552,47 @@ const [activeIndex, setActiveIndex] = useState(null);
               />
             </div>
           </section>
+
+          {/* QUALIFICATIONS SECTION */}
+          <section className={styles.section}>
+            <h2 className={styles.sectionHeading}>Qualifications</h2>
+            <div className={styles.qualList}>
+              <QualificationItem
+                icon="/images/placeholder.svg"
+                title="Chartered Financial Analyst (CFA)"
+                inst="CFA Institute, USA"
+                year="1995"
+              />
+              <QualificationItem
+                icon="/images/placeholder.svg"
+                title="Master of Business Administration (MBA)"
+                inst="Indian Institute of Management, Ahmedabad"
+                spec="Finance"
+                year="1990 - 1992"
+              />
+              <QualificationItem
+                icon="/images/placeholder.svg"
+                title="Bachelor of Commerce (B.Com)"
+                inst="Shri Ram College of Commerce, Delhi University"
+                spec="Commerce & Accountancy"
+                year="1987 - 1990"
+              />
+              <QualificationItem
+                icon="/images/placeholder.svg"
+                title="Higher Secondary Certificate (Class XII)"
+                inst="Delhi Public School, R.K. Puram, New Delhi"
+                spec="Science Stream (PCM)"
+                year="1985"
+              />
+              <QualificationItem  
+                icon="/images/placeholder.svg"
+                title="Secondary School Certificate (Class X)"
+                inst="Delhi Public School, R.K. Puram, New Delhi"
+                spec="CBSE Board"
+                year="1983"
+              />
+            </div>
+          </section>
         </main>
       </div>
     </div>
@@ -522,6 +600,32 @@ const [activeIndex, setActiveIndex] = useState(null);
 }
 
 /* Helper Components to keep JSX clean */
+function QualificationItem({ icon,title, inst, spec, year }) {
+  return (
+    <div className={styles.qualItem}>
+      <div className={styles.qualIconWrapper}> 
+        <img src={icon} alt="" />
+      </div>
+      <div className={styles.qualContent}>
+        <h3 className={styles.qualTitle}>{title}</h3>
+        <p className={styles.qualInst}>{inst}</p>
+        {(spec || year) && (
+          <div className={styles.qualMeta}>
+            {spec && (
+              <>
+                <span className={styles.qualSpecLabel}>Specialization:</span>
+                <span className={styles.specTag}>{spec}</span>
+              </>
+            )}
+            
+          </div>
+        )}
+        {year && <span className={styles.qualYear}>{year}</span>}
+      </div>
+    </div>
+  );
+}
+
 function InfoBlock({ label, value }) {
   return (
     <div className={styles.infoBlock}>
@@ -531,7 +635,7 @@ function InfoBlock({ label, value }) {
   );
 }
 
-function AssociationRow({ name, role, date }) {
+function AssociationRow({ name, role, type, period, date }) {
   return (
     <tr>
       <td>
@@ -548,6 +652,12 @@ function AssociationRow({ name, role, date }) {
         </div>
       </td>
       <td>{role}</td>
+      {type && (
+        <td>
+          <span className={styles.typeTag}>{type}</span>
+        </td>
+      )}
+      {period && <td>{period}</td>}
       <td>{date}</td>
     </tr>
   );
@@ -578,6 +688,7 @@ function TimelineItem({ date, name, role, active }) {
   <div className={`${styles.activeTag} ${styles.statusBadge}`}>
     Active
   </div>
+  
 )}
 
     </div>

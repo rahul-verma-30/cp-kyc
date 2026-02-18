@@ -9,12 +9,30 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  cursor: pointer;
 }
 
 .title {
   font-size: 18px;
   font-weight: 500;
   color: rgba(39, 39, 42, 1);
+}
+
+.headerContent {
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  gap: 8px;
+}
+
+.expandIcon {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+}
+
+.rotateIcon {
+    transform: rotate(180deg);
 }
 
 .date {

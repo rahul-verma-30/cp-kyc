@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import styles from "./OwnershipSection.module.css";
 import Link from "next/link";
 import ShareHoldingsTables from "../shareHoldingsPattern/ShareHoldingsTables";
@@ -10,6 +9,8 @@ import SubsidiaryAccordion from "../subsidiary/SubsidiaryAccordion";
 import InvestmentPage from "../overseasDirectInvestment/OverseasDirectInvestment";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 import { useEffect, useRef } from "react";
+
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 const OwnershipSection = () => {
   const { activeSubSection } = useCompanySection();
@@ -50,64 +51,23 @@ const OwnershipSection = () => {
     }
   }, [activeSubSection]);
 
-  const summaryStats = [
-    { label: "Latest Annual Return", value: "31 Mar 2024", type: "blue" },
-    { label: "Promoter Shares", value: "1174000355.00", type: "red" },
-    { label: "Non Promoter Shares", value: "4598038807.002", type: "green" },
+  const promoterHoldingData = [
+    { name: "Indian", value: 4.55, color: "#818CF8" },
+    { name: "Non-Resident Indian (NRI)", value: 0.28, color: "#A78BFA" },
+    { name: "Insurance Companies", value: 5.01, color: "#84CC16" },
+    { name: "Banks", value: 0.11, color: "#C084FC" },
+    { name: "Foreign Institutional Investor", value: 15.83, color: "#0F172A" },
+    { name: "Mutual Fund", value: 5.98, color: "#0EA5E9" },
+    { name: "Body Corporate", value: 0.30, color: "#14B8A6" },
+    { name: "Others", value: 1.71, color: "#D946EF" },
   ];
 
-  const shareholdingData = [
-    {
-      title: "Total Shareholders",
-      data: [
-        { name: "Promoters:", value: 66.26, color: "rgba(4, 30, 66, 1)" },
-        {
-          name: "Other than promoters:",
-          value: 33.77,
-          color: "rgba(14, 165, 233, 1)",
-        },
-      ],
-    },
-    {
-      title: "Total Shareholders",
-      data: [
-        { name: "Promoters", value: 0.08, color: "rgba(132, 204, 22, 1)" },
-        {
-          name: "Other than promoters:",
-          value: 0.07,
-          color: "rgba(168, 85, 247, 1)",
-        },
-        { name: "Body Corporate:", value: 66.11, color: "rgba(4, 30, 66, 1)" },
-        { name: "Remaining", value: 33.74, color: "rgba(244, 244, 245, 1)" },
-      ],
-    },
-    {
-      title: "Total Shareholders",
-      data: [
-        { name: "Indian:", value: 4.55, color: "rgba(99, 102, 241, 1)" },
-        {
-          name: "Non-Resident Indian (NRI):",
-          value: 0.28,
-          color: "rgba(139, 92, 246, 1)",
-        },
-        {
-          name: "Insurance Companies:",
-          value: 5.01,
-          color: "rgba(132, 204, 22, 1)",
-        },
-        { name: "Banks:", value: 0.11, color: "rgba(168, 85, 247, 1)" },
-        {
-          name: "Foreign Institutional Investor:",
-          value: 15.83,
-          color: "rgba(4, 30, 66, 1)",
-        },
-        { name: "Mutual Fund:", value: 5.98, color: "rgba(14, 165, 233, 1)" },
-        { name: "Body Corporate:", value: 0.3, color: "rgba(20, 184, 166, 1)" },
-        { name: "Others:", value: 1.71, color: "rgba(217, 70, 239, 1)" },
-        { name: "Remaining", value: 70.23, color: "rgba(244, 244, 245, 1)" },
-      ],
-    },
-  ];
+  /* 
+    Calculate remaining to make 100% just in case, 
+    but for this UI we just render what is given
+  */
+
+  const [isPromoterOpen, setIsPromoterOpen] = React.useState(false);
 
   const groupStats = [
     { label: "Holding Company", value: "-", type: "blue" },
@@ -134,83 +94,163 @@ const OwnershipSection = () => {
       </div>
 
       <section className={styles.section}>
-        <div className={styles.sectionWrapper}>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Share Holding Pattern</h2>
-            <Link
-              href="/company/shareHoldings"
-              className={styles.viewAllBtn}
-              onClick={(e) => e.preventDefault()}
-            >
-              View Full Details
-              <img
-                src="/icons/chevron-right.svg"
-                alt=""
-                className={styles.arrowIcon}
-              />
-            </Link>
-          </div>
 
-          <div className={styles.statsGrid}>
-            {summaryStats.map((stat, idx) => (
-              <div
-                key={idx}
-                className={`${styles.statCard} ${styles[stat.type + "Stat"]}`}
-              >
-                <p className={styles.statLabel}>{stat.label}</p>
-                <p className={styles.statValue}>{stat.value}</p>
-              </div>
-            ))}
-          </div>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>Shareholding</h2>
         </div>
 
-        {shareholdingData.map((item, idx) => (
-          <div key={idx} className={styles.card}>
-            <p className={styles.cardLabelInside}>{item.title}</p>
-            <div className={styles.pieChartContainer}>
-              <div className={styles.pieWrapper}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={item.data}
-                      innerRadius={60}
-                      outerRadius={100}
-                      paddingAngle={0}
-                      dataKey="value"
-                      stroke="none"
-                      minAngle={2} 
-                    >
-                      {item.data.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
+        <div className={styles.card}>
+          <div className={styles.shareholdingSection}>
+            <div className={styles.statsGrid}>
+              <div className={`${styles.statItem} ${styles.statItemFirst}`}>
+                <span className={styles.statLabel}>Total Equity Shares</span>
+                <span className={styles.statValue}>1,777,039,162</span>
               </div>
-              <div className={styles.pieLegend}>
-                {item.data
-                  .filter((d) => d.name !== "Remaining")
-                  .map((row, rIdx, filteredArr) => (
-                    <React.Fragment key={rIdx}>
-                      <div className={styles.legendRow}>
-                        <div className={styles.legendIndicator}>
-                          <div
-                            className={styles.dot}
-                            style={{ backgroundColor: row.color }}
-                          ></div>
-                          <span className={styles.legendText}>{row.name}</span>
-                        </div>
-                        <span className={styles.legendValue}>{row.value}%</span>
-                      </div>
-                      {rIdx < filteredArr.length - 1 && (
-                        <div className={styles.legendDivider}></div>
-                      )}
-                    </React.Fragment>
-                  ))}
+              <div className={`${styles.statItem} ${styles.statItemMiddle}`}>
+                <span className={styles.statLabel}>Promoter Holding</span>
+                <span className={styles.statValue}>1,178,176,964</span>
+              </div>
+              <div className={`${styles.statItem} ${styles.statItemLast}`}>
+                <span className={styles.statLabel}>Non-Promoter Holding</span>
+                <span className={styles.statValue}>598,862,198</span>
+              </div>
+            </div>
+            <div className={styles.chartHeader}>
+              <div className={styles.chartLine}></div>
+              <span className={styles.chartHeaderText}>Shareholding</span>
+              <div className={styles.chartLine}></div>
+            </div>
+
+            <div className={styles.progressContainer}>
+              <div className={styles.progressBar}>
+                <div
+                  className={styles.progressPromoter}
+                  style={{ width: "75%" }}
+                ></div>
+                <div
+                  className={styles.progressNonPromoter}
+                  style={{ width: "25%" }}
+                ></div>
               </div>
             </div>
           </div>
-        ))}
+
+          <div className={styles.legendGrid}>
+            <div className={styles.legendItem}>
+              <div className={`${styles.dot} ${styles.dotPromoter}`}></div>
+              <div>
+                <p className={styles.legendLabel}>Promoter </p>
+                <p className={styles.legendValue}>66.3%</p>
+              </div>
+            </div>
+            <div className={styles.legendItem}>
+              <div className={`${styles.dot} ${styles.dotNonPromoter}`}></div>
+              <div>
+                <p className={styles.legendLabel}>Non Promoter</p>
+                <p className={styles.legendValue}>33.7%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Control Insight */}
+        <div className={styles.controlInsightCard}>
+          <div className={styles.controlInsightHeader}>
+             <img src="/icons/blacktick.svg" alt="" className={styles.controlInsightIcon} /> 
+             {/* Using a placeholder SVG if needed, or check-circle if available. 
+                 Assuming a check icon is needed. 
+             */}
+             <h3 className={styles.controlInsightTitle}>Control Insight</h3>
+          </div>
+          <p className={styles.controlInsightText}>
+            Promotors hold a controlling majority (66.25%), enabling full control over ordinary and special resoltuions, with sufficient public float for liquidity.
+          </p>
+        </div>
+
+        {/* Promoter Holding Section */}
+        <div className={styles.promoterHoldingSection}>
+           <div 
+             className={styles.promoterHeader} 
+             onClick={() => setIsPromoterOpen(!isPromoterOpen)}
+             style={{ cursor: "pointer" }}
+           >
+              <h3 className={styles.promoterTitle}>Promoter Holding</h3>
+              <img 
+                src="/icons/chevron-down-dark.svg" 
+                alt="Expand" 
+                className={`${styles.expandIcon} ${isPromoterOpen ? styles.rotateIcon : ""}`} 
+              />
+           </div>
+           
+           {isPromoterOpen && (
+             <div className={styles.promoterContent}>
+                {/* LEFT COLUMN */}
+                <div className={styles.promoterLeft}>
+                    <div className={styles.promoterStatBig}>
+                        <span className={styles.promoterStatValue}>1,777,039,162</span>
+                        <span className={styles.promoterStatLabel}>Shares</span>
+                    </div>
+
+                    <div className={styles.promoterBadge}>
+                        <span className={styles.promoterBadgeValue}>66.25%</span>
+                        <span className={styles.promoterBadgeLabel}>of total equity</span>
+                    </div>
+
+                    <p className={styles.promoterDescription}>
+                        Detailed classification not available in current fillings.
+                    </p>
+
+                    <div className={styles.pledgeLockin}>
+                        <div className={styles.pledgeBox}>Pledge: Not disclosed</div>
+                        <div className={styles.pledgeBox}>Lock-in: Not disclosed</div>
+                    </div>
+                </div>
+
+                
+
+                {/* RIGHT COLUMN - Donut Chart */}
+                <div className={styles.promoterRight}>
+                   <h4 className={styles.chartTitle}>Non-Promotor Holding</h4>
+                   <div className={styles.chartContainer}>
+                      <div className={styles.donutWrapper}>
+                          <ResponsiveContainer width="100%" height="100%">
+                              <PieChart>
+                                  <Pie
+                                      data={promoterHoldingData}
+                                      innerRadius={60}
+                                      outerRadius={80}
+                                      paddingAngle={2}
+                                      dataKey="value"
+                                      stroke="none"
+                                  >
+                                      {promoterHoldingData.map((entry, index) => (
+                                          <Cell key={`cell-${index}`} fill={entry.color} />
+                                      ))}
+                                  </Pie>
+                              </PieChart>
+                          </ResponsiveContainer>
+                      </div>
+
+                      <div className={styles.chartLegendGrid}>
+                          {promoterHoldingData.map((item, idx) => (
+                              <div key={idx} className={styles.chartLegendItem}>
+                                  <div className={styles.legendLeft}>
+                                      <div 
+                                          className={styles.legendColor} 
+                                          style={{ backgroundColor: item.color }}
+                                      ></div>
+                                      <span className={styles.legendName}>{item.name}:</span>
+                                  </div>
+                                  <span className={styles.legendPercent}>{item.value}%</span>
+                              </div>
+                          ))}
+                      </div>
+                   </div>
+                </div>
+             </div>
+           )}
+        </div>
+      
       </section>
       <div ref={securitiesRef}>
         <ShareHoldingsTables />
