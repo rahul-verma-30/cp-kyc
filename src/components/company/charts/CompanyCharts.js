@@ -49,6 +49,7 @@ const CompanyCharts = () => {
       {/* BUSINESS ACTIVITY SECTION */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Business Activity</h2>
+        <div className={styles.businessActivityWrapper}>
         <div className={styles.card}>
           <div className={styles.pieChartContainer}>
             <div className={styles.pieWrapper}>
@@ -70,8 +71,7 @@ const CompanyCharts = () => {
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
-              <div className={styles.pieLabelPrimary}>Manufacturing: 81.33%</div>
-              <div className={styles.pieLabelSecondary}>Food & Beverages: 18.67%</div>
+              
             </div>
 
             <div className={styles.pieLegend}>
@@ -121,6 +121,7 @@ const CompanyCharts = () => {
               </tbody>
             </table>
           </div>
+        </div>
       </section>
     </div>
   );
