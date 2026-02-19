@@ -11,6 +11,7 @@ import { useRef } from "react";
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  variable: "--font-inter",
 });
 
 export default function RootLayout({ children }) {
@@ -57,7 +58,7 @@ export default function RootLayout({ children }) {
     <Suspense fallback={null}>
       <CompanySectionProvider>
         <html lang="en">
-          <body className={inter.className}>
+          <body className={`${inter.className} ${inter.variable}`}>
             <div className={styles.layoutContainer}>
               {/* ===== TOP HEADER ===== */}
               <header className={styles.header}>

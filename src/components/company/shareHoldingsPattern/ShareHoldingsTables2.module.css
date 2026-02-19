@@ -5,13 +5,30 @@
   margin-top: 32px;
 }
 
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
 .tableTitle {
   font-size: 18px;
   font-weight: 500;
   line-height: 28px;
   color: rgba(39, 39, 42, 1);
-  margin-top: 0px;
-  margin-bottom: 12px;
+  margin: 0;
+}
+
+.expandIcon {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+}
+
+.rotateIcon {
+    transform: rotate(180deg);
 }
 
 .tableWrapper {

@@ -768,11 +768,40 @@ const FinancialHighlightsTables = () => {
     </tbody>
   );
 
+  const [viewType, setViewType] = React.useState("Standalone");
+
   return (
     <div className={styles.container}>
-      <div ref={balanceSheetRef}style={{ marginTop: "20px" }} className={styles.headerRow1}>
-        Balance Sheet Standalone - AOC-4 (Lakh)
+      <div 
+        ref={balanceSheetRef} 
+        style={{ marginTop: "20px" }} 
+        className={styles.headerContainer}
+      >
+        <div className={styles.headerTitle}>Balance Sheet</div>
+        <div className={styles.headerControls}>
+          <span className={styles.currencyText}>Values in Cr.</span>
+          <div className={styles.toggleContainer}>
+            <div
+              className={`${styles.toggleSlider} ${
+                viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
+              }`}
+            ></div>
+            <button 
+              className={`${styles.toggleBtn} ${viewType === "Standalone" ? styles.activeToggle : ""}`}
+              onClick={() => setViewType("Standalone")}
+            >
+              Standalone
+            </button>
+            <button 
+              className={`${styles.toggleBtn} ${viewType === "Consolidated" ? styles.activeToggle : ""}`}
+              onClick={() => setViewType("Consolidated")}
+            >
+              Consolidated
+            </button>
+          </div>
+        </div>
       </div>
+      
 
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
