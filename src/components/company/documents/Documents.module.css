@@ -158,10 +158,11 @@
 .chevron {
   font-size: 14px;
   color: #6b7280;
+  rotate:180deg;
   transition: all 0.2s ease;
 }
 .chevron.open {
-  transform: rotate(-180deg);
+  transform: rotate(180deg);
 }
 /* Options */
 .filterOptions {
@@ -226,9 +227,9 @@
   justify-content: center;
   background: transparent;
   transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  background-color 0.2s ease,
+  border-color 0.2s ease,
+  box-shadow 0.2s ease;
   flex-shrink: 0;
   position: relative;
 }

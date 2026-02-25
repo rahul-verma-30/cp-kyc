@@ -93,6 +93,22 @@
     vertical-align: middle;
 }
 
+.scoreBadgeGreen {
+    background-color: #DCFCE7;
+    color: #16A34A;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+
 .cinBadge {
     background-color: rgba(244, 244, 245, 1);
     color: rgba(39, 39, 42, 1);
@@ -350,9 +366,13 @@
 }
 
 
-.arrowDownRed {
+.arrowDownGreen {
     width: 14px;
-    filter: invert(39%) sepia(87%) saturate(3000%) hue-rotate(340deg) brightness(95%) contrast(90%);
+    filter: invert(45%) sepia(88%) saturate(520%) hue-rotate(95deg) brightness(92%) contrast(95%);
+}
+
+.checkGreen {
+    width: 14px;
 }
 
 /* Container to group header and observation bar */
