@@ -118,6 +118,7 @@
 .chevron {
   width: 16px;
   height: 16px;
+  rotate: 180deg;
   transition: transform 0.2s ease;
 }
 
