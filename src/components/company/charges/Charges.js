@@ -174,7 +174,7 @@ export default function ChargesPage() {
                     dataKey="value"
                     innerRadius={60}
                     outerRadius={100}
-                    paddingAngle={2}
+                    paddingAngle={0.1}
                     startAngle={90}
                     endAngle={-270}
                   >

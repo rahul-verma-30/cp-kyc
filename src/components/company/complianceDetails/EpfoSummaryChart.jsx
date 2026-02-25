@@ -139,15 +139,16 @@ export default function EpfoSummaryChart({ epfoSummaryData }) {
             <linearGradient id="amountGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#0EA5E9" stopOpacity={0.9} />
               <stop offset="100%" stopColor="#0EA5E9" stopOpacity={0} />
-            </linearGradient>
+            </linearGradient> 
           </defs>
 
           {/* Grid */}
           <CartesianGrid
             stroke="#E5E7EB"
             strokeDasharray="4 4"
-            vertical={false}
+            vertical={true}
             horizontal={true}
+            yAxisId="left"
           />
 
           {/* X Axis */}
@@ -260,3 +261,4 @@ export default function EpfoSummaryChart({ epfoSummaryData }) {
     </div>
   );
 }
+                                                    

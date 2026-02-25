@@ -167,45 +167,30 @@ const CompanyNewHeader = () => {
           <div className={styles.contentSection}>
             <div className={styles.titleRow}>
               <h1 className={styles.companyName}>Dabur India</h1>
-              <div className={styles.statsContainer}>
-                <div className={styles.statItem}>
-                  <span className={styles.statLabel}>Growth Score</span>
-                  <span className={styles.scoreBadgeRed}>69</span>
-                  <img
-                    src="/icons/arrow-down.svg"
-                    alt="arrow down"
-                    className={styles.arrowDownRed}
-                  />
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statLabel}>CB Rank</span>
-                  <span className={styles.scoreBadgeRed}>268240</span>
-                  <img
-                    src="/icons/arrow-down.svg"
-                    alt="arrow down"
-                    className={styles.arrowDownRed}
-                  />
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statLabel}>Heat Score</span>
-                  <span className={styles.scoreBadgeRed}>59</span>
-                  <img
-                    src="/icons/arrow-down.svg"
-                    alt="arrow down"
-                    className={styles.arrowDownRed}
-                  />
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statLabel}>CIN</span>
-                  <span className={styles.cinBadge}>L24230DL1975PLC007908</span>
-                </div>
-              </div>
             </div>
 
-            <p className={styles.description}>
+            <div className={styles.statsContainer}>
+              <div className={styles.statItem}>
+                  <span className={styles.statLabel}>Industry :</span>
+                  <span className={styles.cinBadge}>FMCG</span>
+                </div>
+                <div className={styles.statItem}>
+                  <span className={styles.statLabel}>Limiting Status :</span>
+                  <span className={styles.scoreBadgeGreen}>
+                     <img
+                    src="/icons/greencheck.svg"
+                    alt="arrow down"
+                    className={styles.checkGreen}
+                  />
+                  NSE & BSE</span>
+                 
+                </div>
+              </div>
+
+            {/* <p className={styles.description}>
               Dabur is an India's leading FMCG Companies with Revenues of over
               Rs 7,680 Crore & Market Capitalisation of over Rs 48,800 Crore.
-            </p>
+            </p> */}
 
             <div className={styles.infoMetaRow}>
               <div className={styles.metaItem}>

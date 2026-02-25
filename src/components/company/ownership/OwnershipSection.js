@@ -217,9 +217,9 @@ const OwnershipSection = () => {
                               <PieChart>
                                   <Pie
                                       data={promoterHoldingData}
-                                      innerRadius={60}
+                                      innerRadius={55}
                                       outerRadius={80}
-                                      paddingAngle={2}
+                                      paddingAngle={0.5}
                                       dataKey="value"
                                       stroke="none"
                                   >

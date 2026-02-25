@@ -61,7 +61,7 @@ const CompanyHighlights = () => {
     <div className={styles.container}>
       {/* Header Section */}
       <div className={styles.header}>
-        <h1 className={styles.headerTitle}>Corporate Highlights</h1>
+        <h1 className={styles.headerTitle}>Company Highlights</h1>
         <div className={styles.headerInfo}>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Source:</span>

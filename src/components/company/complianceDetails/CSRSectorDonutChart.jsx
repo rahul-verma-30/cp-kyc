@@ -22,7 +22,7 @@ export default function CSRSectorDonutChart({
                 dataKey="value"
                 innerRadius={60}
                 outerRadius={100}
-                paddingAngle={2}
+                paddingAngle={1}
               >
                 {data.map((entry, index) => (
                   <Cell key={index} fill={entry.color} />

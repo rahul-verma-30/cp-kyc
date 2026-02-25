@@ -532,7 +532,7 @@ const ComplianceDetails = () => {
 
         {/* EPFO Year-wise Summary Table */}
         <div className={styles.tableSection}>
-          <h6 className={styles.tableTitle}>{`EPFO Year-wise Summary`}</h6>
+          {/* <h6 className={styles.tableTitle}>{`EPFO Year-wise Summary`}</h6> */}
 
           <div className={styles.tableContainer}>
             <table className={styles.litigationTable}>
@@ -739,7 +739,7 @@ const ComplianceDetails = () => {
                   <th>Sector</th>
                   <th>CSR Project</th>
                   <th>Amount Spent</th>
-                  <th>Outlay</th>
+                  <th>Qutlay</th>
                 </tr>
               </thead>
 

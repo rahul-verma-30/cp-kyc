@@ -115,6 +115,39 @@
     vertical-align: middle;
 }
 
+.scoreBadgeGreen {
+    background-color: #DCFCE7;
+    color: #16A34A;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.infoMetaItem {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    color: rgba(113, 113, 122, 1);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0;
+    text-align: center;
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background-color: #E4E4E7;
+}
+
 .cinBadge {
     background-color: rgba(244, 244, 245, 1);
     color: rgba(39, 39, 42, 1);
@@ -132,6 +165,11 @@
     height: 18px;
     display: inline-block;
 }
+
+.checkGreen {
+    width: 14px;
+}
+
 
 /* Action Section Styles */
 .actionSection {

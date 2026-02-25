@@ -822,9 +822,31 @@ const FinancialHighlightsTables = () => {
       <div
         ref={profitLossRef}
         style={{ marginTop: "32px" }}
-        className={styles.headerRow1}
+        className={styles.headerContainer}
       >
-        Profit & Loss Standalone - AOC-4 (Lakh)
+        <div className={styles.headerTitle}>Profit & Loss </div>
+        <div className={styles.headerControls}>
+          <span className={styles.currencyText}>Values in Cr.</span>
+          <div className={styles.toggleContainer}>
+            <div
+              className={`${styles.toggleSlider} ${
+                viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
+              }`}
+            ></div>
+            <button 
+              className={`${styles.toggleBtn} ${viewType === "Standalone" ? styles.activeToggle : ""}`}
+              onClick={() => setViewType("Standalone")}
+            >
+              Standalone
+            </button>
+            <button 
+              className={`${styles.toggleBtn} ${viewType === "Consolidated" ? styles.activeToggle : ""}`}
+              onClick={() => setViewType("Consolidated")}
+            >
+              Consolidated
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className={styles.tableWrapper}>
@@ -846,9 +868,31 @@ const FinancialHighlightsTables = () => {
       <div
         ref={cashFlowRef}
         style={{ marginTop: "32px" }}
-        className={styles.headerRow1}
+        className={styles.headerContainer}
       >
-        Cash Flow Standalone - AOC-4 (Lakh)
+        <div className={styles.headerTitle}>Cash Flow Standalone </div>
+        <div className={styles.headerControls}>
+          <span className={styles.currencyText}>Values in Cr.</span>
+          <div className={styles.toggleContainer}>
+            <div
+              className={`${styles.toggleSlider} ${
+                viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
+              }`}
+            ></div>
+            <button 
+              className={`${styles.toggleBtn} ${viewType === "Standalone" ? styles.activeToggle : ""}`}
+              onClick={() => setViewType("Standalone")}
+            >
+              Standalone
+            </button>
+            <button 
+              className={`${styles.toggleBtn} ${viewType === "Consolidated" ? styles.activeToggle : ""}`}
+              onClick={() => setViewType("Consolidated")}
+            >
+              Consolidated
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className={`${styles.tableWrapper} ${styles.cashFlowTable}`}>
@@ -868,11 +912,33 @@ const FinancialHighlightsTables = () => {
       </div>
 
       <div
-        ref={ratioRef}
+        ref={cashFlowRef}
         style={{ marginTop: "32px" }}
-        className={styles.headerRow1}
+        className={styles.headerContainer}
       >
-        Ratio Standalone
+        <div className={styles.headerTitle}>Ratio Standalone </div>
+        <div className={styles.headerControls}>
+          <span className={styles.currencyText}>Values in Cr.</span>
+          <div className={styles.toggleContainer}>
+            <div
+              className={`${styles.toggleSlider} ${
+                viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
+              }`}
+            ></div>
+            <button 
+              className={`${styles.toggleBtn} ${viewType === "Standalone" ? styles.activeToggle : ""}`}
+              onClick={() => setViewType("Standalone")}
+            >
+              Standalone
+            </button>
+            <button 
+              className={`${styles.toggleBtn} ${viewType === "Consolidated" ? styles.activeToggle : ""}`}
+              onClick={() => setViewType("Consolidated")}
+            >
+              Consolidated
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className={styles.tableWrapper}>
@@ -890,12 +956,35 @@ const FinancialHighlightsTables = () => {
           {renderTableBody(ratioData)}
         </table>
       </div>
+     
       <div
-        ref={auditorsRef}
+        ref={cashFlowRef}
         style={{ marginTop: "32px" }}
-        className={styles.headerRow1}
+        className={styles.headerContainer}
       >
-        Auditor&apos;s Detail Standalone
+        <div className={styles.headerTitle}>Auditor&apos;s Detail </div>
+        <div className={styles.headerControls}>
+          <span className={styles.currencyText}>Values in Cr.</span>
+          <div className={styles.toggleContainer}>
+            <div
+              className={`${styles.toggleSlider} ${
+                viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
+              }`}
+            ></div>
+            <button 
+              className={`${styles.toggleBtn} ${viewType === "Standalone" ? styles.activeToggle : ""}`}
+              onClick={() => setViewType("Standalone")}
+            >
+              Standalone
+            </button>
+            <button 
+              className={`${styles.toggleBtn} ${viewType === "Consolidated" ? styles.activeToggle : ""}`}
+              onClick={() => setViewType("Consolidated")}
+            >
+              Consolidated
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className={`${styles.tableWrapper} ${styles.auditorTable}`}>

@@ -50,40 +50,37 @@ export default function CompanyStickyHeader({ visible }) {
             <h1 className={styles.companyName}>Dabur India</h1>
 
             <div className={styles.statsContainer}>
-              <div className={styles.statItem}>
-                <span className={styles.statLabel}>Growth Score</span>
-                <span className={styles.scoreBadgeRed}>69</span>
-                <img
-                  src="/icons/arrow-down.svg"
-                  alt=""
-                  className={styles.arrowDownRed}
-                />
+
+               <div className={styles.statItem}>
+                <span className={styles.cinBadge}>FMCG</span>
               </div>
 
+              <div className={styles.divider}></div>
               <div className={styles.statItem}>
-                <span className={styles.statLabel}>CB Rank</span>
-                <span className={styles.scoreBadgeRed}>268240</span>
-                <img
-                  src="/icons/arrow-down.svg"
-                  alt=""
-                  className={styles.arrowDownRed}
-                />
+               <span className={styles.scoreBadgeGreen}>
+                     <img
+                    src="/icons/greencheck.svg"
+                    alt="arrow down"
+                    className={styles.arrowDownGreen}
+                  />
+                  NSE & BSE</span>
               </div>
 
-              <div className={styles.statItem}>
-                <span className={styles.statLabel}>Heat Score</span>
-                <span className={styles.scoreBadgeRed}>59</span>
-                <img
-                  src="/icons/arrow-down.svg"
-                  alt=""
-                  className={styles.arrowDownRed}
-                />
+              <div className={styles.divider}></div>
+              <div className={styles.infoMetaItem}>
+                <span>Funded 1884</span>
               </div>
 
-              <div className={styles.statItem}>
-                <span className={styles.statLabel}>CIN</span>
-                <span className={styles.cinBadge}>L24230DL1975PLC007908</span>
+              <div className={styles.divider}></div>
+              <div className={styles.infoMetaItem}>
+                <span>Public</span>
               </div>
+
+              <div className={styles.divider}></div>
+              <div className={styles.infoMetaItem}>
+                <span>Ghaziabad, Uttar Pradesh, India</span>
+              </div>
+  
             </div>
           </div>
         </div>

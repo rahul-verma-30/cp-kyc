@@ -53,6 +53,7 @@ const CompanyCharts = () => {
         <div className={styles.card}>
           <div className={styles.pieChartContainer}>
             <div className={styles.pieWrapper}>
+              <div className={styles.pieLabelPrimary}>Manufacturing: 81.33% </div>
               <ResponsiveContainer width={242} height={242}>
                 <PieChart>
                   <Pie
@@ -71,13 +72,14 @@ const CompanyCharts = () => {
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
+              <div className={styles.pieLabelSecondary}>Food & Beverages: 18.67%</div>
               
             </div>
 
             <div className={styles.pieLegend}>
               <div className={styles.legendRow}>
                 <div className={styles.legendIndicator}>
-                  <div className={styles.dot} style={{ backgroundColor: 'rgba(59, 130, 246, 1)' }}></div>
+                  <div className={styles.dot} style={{ backgroundColor: '#D8B4FE' }}></div>
                   <span className={styles.legendText}>Manufacturing</span>
                 </div>
                 <span className={styles.legendValue}>81.33</span>
@@ -85,7 +87,7 @@ const CompanyCharts = () => {
               <div className={styles.legendDivider}></div>
               <div className={styles.legendRow}>
                 <div className={styles.legendIndicator}>
-                  <div className={styles.dot} style={{ backgroundColor: 'rgba(59, 130, 246, 1)' }}></div>
+                  <div className={styles.dot} style={{ backgroundColor: '#BBF7D0' }}></div>
                   <span className={styles.legendText}>Food & Beverages</span>
                 </div>
                 <span className={styles.legendValue}>18.67</span>
