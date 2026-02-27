@@ -17,6 +17,8 @@ import { useCompanySection } from "@/components/company/context/CompanySectionCo
 import { useEffect, useRef } from "react";
 
 const FinancialHighlights = () => {
+
+  
   const { activeSubSection } = useCompanySection();
 
   const containerRef = useRef(null);

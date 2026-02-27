@@ -1,25 +1,35 @@
 import React from 'react';
 import styles from './CompanyDetails.module.css';
 
-const CompanyDetails = () => {
+const CompanyDetails = ({companyData}) => {
+   if (!companyData || !companyData.company_information) {
+    return (
+      <div className={styles.container}>
+        <p>Loading company details...</p>
+      </div>
+    );
+  }
+ const info=companyData.company_information;
+
+  
   const data = [
-    { label: 'CIN/LLPIN', value: 'L24230DL1975PLC007908' },
-    { label: 'PAN', value: 'AAACD0474C' },
-    { label: 'LEI Number', value: '335800MJPUA2E1FSFL38' },
-    { label: 'Company Legal Name', value: 'Dabur India Limited' },
-    { label: 'ROC Code', value: 'Roc Delhi' },
-    { label: 'Company No', value: '007908' },
-    { label: 'Company Classication', value: 'Public Limited Indian Non-Government Company' },
-    { label: 'Authorised Capital', value: '20,700.00 lakh' },
-    { label: 'Active Compliance', value: 'Active Compliant' },
-    { label: 'Paid up Capital', value: '17,736.90 lakh' },
-    { label: 'Incorporation Date', value: '16 Sep 1975' },
-    { label: 'Date of AGM', value: '07 Aug 2025' },
-    { label: 'Date of Balance Sheet', value: '31 Mar 2025' },
-    { label: 'Listing Status', value: 'Listed' },
-    { label: 'Stock Symbol', value: 'BSE : 500096 NSE : DABUR' },
-    { label: 'Industry', value: 'FMCG' },
-    { label: 'Segment', value: 'Home Care & Cleaning Products Personal Care & Skincare Products', fullWidth: true },
+    { label: 'CIN/LLPIN', value: info.cin || 'N/A' },
+    { label: 'PAN', value: info.pan || 'N/A' },
+    { label: 'LEI Number', value: info.lei_number || 'N/A' },
+    { label: 'Company Legal Name', value: info.company_legal_name || 'N/A' },
+    { label: 'ROC Code', value: info.roc_code || 'N/A' },
+    { label: 'Company No', value: info.company_no || 'N/A' },
+    { label: 'Company Classication', value: info.company_classification || 'N/A' },
+    { label: 'Authorised Capital', value: info.authorised_capital || 'N/A' },
+    { label: 'Active Compliance', value:info.active_compliance || 'N/A' },
+    { label: 'Paid up Capital', value: info.paid_up_capital || 'N/A' },
+    { label: 'Incorporation Date', value: info.incorporation_date || 'N/A' },
+    { label: 'Date of AGM', value: info.date_of_agm || 'N/A' },
+    { label: 'Date of Balance Sheet', value: info.date_of_balance_sheet || 'N/A' },
+    { label: 'Listing Status', value: info.listing_status || 'N/A' },
+    { label: 'Stock Symbol', value: info.stock_symbol || 'N/A' },
+    { label: 'Industry', value: info.industry || 'N/A' },
+    { label: 'Segment', value: info.segment || 'N/A', fullWidth: true },
   ];
 
   return (

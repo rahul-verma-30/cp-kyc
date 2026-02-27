@@ -30,6 +30,7 @@ export default function CompanyPage() {
   const { activeSection, activeSubSection } = useCompanySection();
   const [searchCompany, setSearchCompany] = useState(null);
   const [companyData, setCompanyData] = useState(null);
+  const [financialHighlights, setFinancialHighlights] = useState(null);
 
   const overviewRef = useRef(null);
   const nameHistoryRef = useRef(null);
@@ -66,9 +67,36 @@ export default function CompanyPage() {
       }
     };
 
+    const getFinancialHighlights = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/financial-highlights`
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setFinancialHighlights(data);
+        console.log(data);
+
+      } catch (error) {
+        console.error("Error fetching company's financial highlights:", error);
+      }
+    };
+    
+    
     getCompanyDetails();
+    getFinancialHighlights();
+
+
+
 
   }, [rawCompanyName]); // 🔥 This is important
+
+
+  
 
   /* 🔥 Scroll when sidebar sub-item changes */
   useEffect(() => {
@@ -94,16 +122,16 @@ export default function CompanyPage() {
       {activeSection === "companyDetails" && (
         <>
           <div ref={overviewRef}>
-            <CompanyOverview />
-            <CompanyDetails />
+            <CompanyOverview companyData={companyData}/>
+            <CompanyDetails companyData={companyData}/>
           </div>
 
           <div ref={nameHistoryRef}>
-            <NameHistory />
+            <NameHistory companyData={companyData}/>
           </div>
 
           <div ref={contactRef}>
-            <ContactAddressSection />
+            <ContactAddressSection companyData={companyData}/>
           </div>
         </>
       )}
@@ -111,15 +139,15 @@ export default function CompanyPage() {
       {/* Company Highlights */}
       {activeSection === "companyHighlights" && (
         <>
-          <CompanyHighlights />
-          <FinancialHighlightsDetails />
-          <CompanyCharts />
-          <ProductDetails />
+          <CompanyHighlights companyData={companyData} financialHighlights={financialHighlights} />
+          <FinancialHighlightsDetails companyData={companyData} />
+          <CompanyCharts companyData={companyData} />
+          <ProductDetails companyData={companyData} />
         </>
       )}
 
       {/* Financials */}
-      {activeSection === "financials" && <FinancialHighlights />}
+      {activeSection === "financials" && <FinancialHighlights financialHighlights={financialHighlights}/>}
 
       {/* Directors & KMP */}
       {activeSection === "directorsKmp" && <DirectorsSection />}

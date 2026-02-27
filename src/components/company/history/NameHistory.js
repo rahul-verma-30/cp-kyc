@@ -1,17 +1,29 @@
 import React from 'react';
 import styles from './NameHistory.module.css';
 
-const NameHistory = () => {
-  const historyData = [
-    {
-      name: 'Vishal Chemical (India) Limited',
-      tillDate: '19 Sep 1987',
-    },
-    {
-      name: 'Vishal Chemical (India) Limited',
-      tillDate: '19 Sep 1987',
-    },
-  ];
+const NameHistory = (companyData) => {
+
+  const historyData = companyData?.name_history || [];
+
+  if (!historyData.length) {
+    return (
+      <div className={styles.container}>
+        <h2 className={styles.title}>Name History</h2>
+        <p>No name history available.</p>
+      </div>
+    );
+  }
+
+  // const historyData = [
+  //   {
+  //     name: 'Vishal Chemical (India) Limited',
+  //     tillDate: '19 Sep 1987',
+  //   },
+  //   {
+  //     name: 'Vishal Chemical (India) Limited',
+  //     tillDate: '19 Sep 1987',
+  //   },
+  // ];
 
   return (
     <div className={styles.container}>
