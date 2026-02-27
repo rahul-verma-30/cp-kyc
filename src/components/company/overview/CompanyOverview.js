@@ -1,7 +1,18 @@
 import React from 'react';
 import styles from './CompanyOverview.module.css';
 
-const CompanyOverview = () => {
+
+const CompanyOverview = ({companyData}) => {
+
+  if (!companyData) {
+    return (
+      <div className={styles.container}>
+        <p>Loading company details...</p>
+      </div>
+    );
+  }
+
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -9,12 +20,12 @@ const CompanyOverview = () => {
         <div className={styles.metaInfo}>
           <div className={styles.metaItem}>
             <span className={styles.metaLabel}>Source:</span>
-            <span className={styles.metaValue}>MCA</span>
+            <span className={styles.metaValue}>{companyData?.header?.source || "N/A"}</span>
           </div>
           <div className={styles.divider}></div>
           <div className={styles.metaItem}>
             <span className={styles.metaLabel}>Last Updated:</span>
-            <span className={styles.metaValueText}>30-Dec-2024, 11:45 AM IST</span>
+            <span className={styles.metaValueText}>{companyData?.header?.last_updated || "N/A"}</span>
           </div>
         </div>
       </div>
@@ -24,7 +35,8 @@ const CompanyOverview = () => {
 
   <div className={styles.contentBox}>
     <p className={styles.description}>
-      Dabur India Limited is a FMCG company that is known for its wide range of personal-care,
+      {companyData?.about?.description || "N/A"}
+      {/* Dabur India Limited is a FMCG company that is known for its wide range of personal-care,
       healthcare, and food products. According to its credit rating report, the company is
       involved in the manufacturing of these products. With over 18 brands under its name,
       Dabur India Limited has established itself as a prominent player in the market. In 2005,
@@ -36,7 +48,7 @@ const CompanyOverview = () => {
       manufacturer and marketer of hair-care and skin-care products in Turkey, was acquired in
       October 2010. In January 2011, Dabur India Limited acquired Namaste Labs, a company that
       specializes in hair-care products and has a strong presence in the US, Africa, the Middle
-      East, Europe, and the Caribbean region.
+      East, Europe, and the Caribbean region. */}
     </p>
   </div>
 </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./CompanyHighlights.module.css";
 
-const CompanyHighlights = () => {
+const CompanyHighlights = ({companyData}) => {
   const [activeTab, setActiveTab] = useState("open");
 
   const chargesData = [
