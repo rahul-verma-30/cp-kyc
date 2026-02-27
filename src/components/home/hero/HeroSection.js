@@ -2,12 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import styles from "./HeroSection.module.css";
+import { useState } from "react";
 
 export default function HeroSection() {
   const router = useRouter();
+  const [companyName, setCompanyName]= useState(null)
 
   const handleSearch = () => {
-    router.push("/company");
+    router.push(`/company/${companyName}`);
   };
 
   return (
@@ -40,6 +42,7 @@ export default function HeroSection() {
       type="text"
       placeholder="Search by company name, CIN, LLPIN, or director name"
       className={styles.input}
+      onChange={(e)=>setCompanyName(e.target.value)}
     />
 
     <button
