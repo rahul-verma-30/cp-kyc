@@ -28,14 +28,14 @@ export default function CompanyLayout({ children }) {
 
       <div className={styles.container}>
         {/* 🔹 Full header */}
-        <CompanyNewHeader />
+        {/* <CompanyNewHeader /> */}
 
         {/* Sidebar + Content */}
         <div className={styles.contentWrapper}>
           <div className={styles.contentRow}>
-            <aside className={styles.sidebar}>
+            {/* <aside className={styles.sidebar}>
               <CompanyNewSidebar />
-            </aside>
+            </aside> */}
 
             <main className={styles.main}>{children}</main>
           </div>
