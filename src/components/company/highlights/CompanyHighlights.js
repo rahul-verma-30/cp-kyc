@@ -1,61 +1,98 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./CompanyHighlights.module.css";
 
-const CompanyHighlights = ({companyData}) => {
+const CompanyHighlights = ({ companyHighlights ,page,limit,loading,error,setPage,setLimit }) => {
+
+
   const [activeTab, setActiveTab] = useState("open");
+ 
 
-  const chargesData = [
-    {
-      id: "10036700",
-      lender: "Others",
-      amount: "15,750.00",
-      creationDate: "29 Jan 2007",
-      modificationDate: "24 Jul 2020",
-    },
-  ];
+if (loading) {
+  return <div className={styles.container}>Loading highlights...</div>;
+}
 
-  const closedChargesData = [
-    {
-      id: "100592955",
-      lender: "Yes Bank Limited",
-      amount: "5.00",
-      creationDate: "20 Jun 2022",
-      modificationDate: "-",
-      satisfactionDate: "27 Feb 2024",
-    },
-    {
-      id: "100592956",
-      lender: "HDFC Bank Limited",
-      amount: "6.25",
-      creationDate: "15 Aug 2022",
-      modificationDate: "-",
-      satisfactionDate: "30 Dec 2024",
-    },
-    {
-      id: "100592957",
-      lender: "ICICI Bank Limited",
-      amount: "4.50",
-      creationDate: "10 Sep 2022",
-      modificationDate: "-",
-      satisfactionDate: "15 Mar 2025",
-    },
-     {
-      id: "100592958",
-      lender: "State Bank of India",
-      amount: "5.75",
-      creationDate: "25 Oct 2022",
-      modificationDate: "-",
-      satisfactionDate: "01 Jan 2025",
-    },
-     {
-      id: "100592959",
-      lender: "Kotak Mahindra Bank",
-      amount: "6.00",
-      creationDate: "12 Nov 2022",
-      modificationDate: "-",
-      satisfactionDate: "10 Jul 2024",
-    },
-  ];
+if (error) {
+  return (
+    <div className={styles.container}>
+      <div style={{ color: "red", fontWeight: 500 }}>
+        {error}
+      </div>
+    </div>
+  );
+}
+
+  if (!companyHighlights) {
+    return <div className={styles.container}>No data available</div>;
+  }
+
+   /* ================= SAFE DATA EXTRACTION ================= */
+
+  const shareholding =companyHighlights?.shareholding || {};
+  const charges = companyHighlights?.charges || {};
+  const items = charges?.items || [];
+
+  const openCharges = items?.filter(
+    (item) => item.status === "open"
+  );
+
+  const closedCharges = items?.filter(
+    (item) => item.status === "closed"
+  );
+
+
+  // const chargesData = [
+  //   {
+  //     id: "10036700",
+  //     lender: "Others",
+  //     amount: "15,750.00",
+  //     creationDate: "29 Jan 2007",
+  //     modificationDate: "24 Jul 2020",
+  //   },
+  // ];
+
+  // const closedChargesData = [
+  //   {
+  //     id: "100592955",
+  //     lender: "Yes Bank Limited",
+  //     amount: "5.00",
+  //     creationDate: "20 Jun 2022",
+  //     modificationDate: "-",
+  //     satisfactionDate: "27 Feb 2024",
+  //   },
+  //   {
+  //     id: "100592956",
+  //     lender: "HDFC Bank Limited",
+  //     amount: "6.25",
+  //     creationDate: "15 Aug 2022",
+  //     modificationDate: "-",
+  //     satisfactionDate: "30 Dec 2024",
+  //   },
+  //   {
+  //     id: "100592957",
+  //     lender: "ICICI Bank Limited",
+  //     amount: "4.50",
+  //     creationDate: "10 Sep 2022",
+  //     modificationDate: "-",
+  //     satisfactionDate: "15 Mar 2025",
+  //   },
+  //   {
+  //     id: "100592958",
+  //     lender: "State Bank of India",
+  //     amount: "5.75",
+  //     creationDate: "25 Oct 2022",
+  //     modificationDate: "-",
+  //     satisfactionDate: "01 Jan 2025",
+  //   },
+  //   {
+  //     id: "100592959",
+  //     lender: "Kotak Mahindra Bank",
+  //     amount: "6.00",
+  //     creationDate: "12 Nov 2022",
+  //     modificationDate: "-",
+  //     satisfactionDate: "10 Jul 2024",
+  //   },
+  // ];
+
 
   return (
     <div className={styles.container}>
@@ -65,12 +102,12 @@ const CompanyHighlights = ({companyData}) => {
         <div className={styles.headerInfo}>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Source:</span>
-            <span className={styles.infoValue}>MCA</span>
+            <span className={styles.infoValue}>{companyHighlights?.source}</span>
           </span>
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>30-Dec-2024, 11:45 AM IST</span>
+            <span className={styles.infoValue}>{companyHighlights?.last_updated}</span>
           </span>
         </div>
       </div>
@@ -83,15 +120,15 @@ const CompanyHighlights = ({companyData}) => {
             <div className={styles.statsGrid}>
               <div className={`${styles.statItem} ${styles.statItemFirst}`}>
                 <span className={styles.statLabel}>Total Equity Shares</span>
-                <span className={styles.statValue}>1,777,039,162</span>
+                <span className={styles.statValue}>{shareholding.total_equity_shares || "-"}</span>
               </div>
               <div className={`${styles.statItem} ${styles.statItemMiddle}`}>
                 <span className={styles.statLabel}>Promoter Holding</span>
-                <span className={styles.statValue}>1,178,176,964</span>
+                <span className={styles.statValue}>{shareholding.promoter_holding || "-"}</span>
               </div>
               <div className={`${styles.statItem} ${styles.statItemLast}`}>
                 <span className={styles.statLabel}>Non-Promoter Holding</span>
-                <span className={styles.statValue}>598,862,198</span>
+                <span className={styles.statValue}>{shareholding.non_promoter_holding || "-"}</span>
               </div>
             </div>
             <div className={styles.chartHeader}>
@@ -104,11 +141,11 @@ const CompanyHighlights = ({companyData}) => {
               <div className={styles.progressBar}>
                 <div
                   className={styles.progressPromoter}
-                  style={{ width: "75%" }}
+                  style={{  width: `${shareholding.promoter_percentage || 0}%`}}
                 ></div>
                 <div
                   className={styles.progressNonPromoter}
-                  style={{ width: "25%" }}
+                  style={{  width: `${shareholding.non_promoter_percentage || 0}%` }}
                 ></div>
               </div>
             </div>
@@ -119,14 +156,14 @@ const CompanyHighlights = ({companyData}) => {
               <div className={`${styles.dot} ${styles.dotPromoter}`}></div>
               <div>
                 <p className={styles.legendLabel}>Promoter </p>
-                <p className={styles.legendValue}>66.3%</p>
+                <p className={styles.legendValue}>{shareholding.promoter_percentage}%</p>
               </div>
             </div>
             <div className={styles.legendItem}>
               <div className={`${styles.dot} ${styles.dotNonPromoter}`}></div>
               <div>
                 <p className={styles.legendLabel}>Non Promoter</p>
-                <p className={styles.legendValue}>33.7%</p>
+                <p className={styles.legendValue}>{shareholding.non_promoter_percentage}%</p>
               </div>
             </div>
           </div>
@@ -139,22 +176,25 @@ const CompanyHighlights = ({companyData}) => {
           <h2 className={styles.sectionTitle}>Charges</h2>
           <div className={styles.toggleContainer}>
             <div
-              className={`${styles.toggleSlider} ${
-                activeTab === "open" ? styles.sliderOpen : styles.sliderClosed
-              }`}
+              className={`${styles.toggleSlider}
+               ${activeTab === "open" 
+                ? styles.sliderOpen 
+                : styles.sliderClosed
+                }`}
             ></div>
             <button
-              className={`${styles.toggleButton} ${
-                activeTab === "open" ? styles.activeToggle : ""
-              }`}
+              className={`${styles.toggleButton} 
+              ${activeTab === "open" 
+                ? styles.activeToggle 
+                : ""
+                }`}
               onClick={() => setActiveTab("open")}
             >
               Open Charges
             </button>
             <button
-              className={`${styles.toggleButton} ${
-                activeTab === "closed" ? styles.activeToggle : ""
-              }`}
+              className={`${styles.toggleButton} ${activeTab === "closed" ? styles.activeToggle : ""
+                }`}
               onClick={() => setActiveTab("closed")}
             >
               Closed Charges
@@ -175,15 +215,21 @@ const CompanyHighlights = ({companyData}) => {
                 </tr>
               </thead>
               <tbody>
-                {chargesData.map((charge) => (
-                  <tr key={charge.id}>
-                    <td>{charge.id}</td>
+                {openCharges.length > 0 ? (openCharges.map((charge) => (
+                  <tr key={charge.charge_id}>
+                    <td>{charge.charge_id}</td>
                     <td>{charge.lender}</td>
-                    <td>{charge.amount}</td>
-                    <td>{charge.creationDate}</td>
-                    <td>{charge.modificationDate}</td>
+                    <td>{charge.amount_lakh || "-"}</td>
+                    <td>{charge.creation_date || "-"}</td>
+                    <td>{charge.modification_date || "-"}</td>
                   </tr>
-                ))}
+                ))) : (
+                  <tr>
+                    <td colSpan="5" className={styles.noData}>
+                      No open charges found
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -202,14 +248,14 @@ const CompanyHighlights = ({companyData}) => {
                 </tr>
               </thead>
               <tbody>
-                {closedChargesData.map((charge) => (
-                  <tr key={charge.id}>
-                    <td>{charge.id}</td>
+                {closedCharges.map((charge) => (
+                  <tr key={charge.charge_id}>
+                    <td>{charge.charge_id}</td>
                     <td>{charge.lender}</td>
-                    <td>{charge.amount}</td>
-                    <td>{charge.creationDate}</td>
-                    <td>{charge.modificationDate}</td>
-                    <td>{charge.satisfactionDate}</td>
+                    <td>{charge.amount_lakh || "-"}</td>
+                    <td>{charge.creation_date || "-"}</td>
+                    <td>{charge.modification_date || "-"}</td>
+                    <td>{charge.satisfaction_date || "-"}</td>
                     <td>
                       <button className={styles.actionButton}>
                         <svg
@@ -230,24 +276,40 @@ const CompanyHighlights = ({companyData}) => {
                 ))}
               </tbody>
             </table>
-             {/* Pagination */}
-             <div className={styles.paginationContainer}>
-              <span>Showing 1-10 of 20</span>
+            {/* Pagination */}
+            <div className={styles.paginationContainer}>
+              <span>
+                Showing {(page - 1) * limit + 1}-
+                {Math.min(page * limit, companyHighlights.charges.total)} of
+                {companyHighlights.charges.total}
+              </span>
               <div className={styles.paginationRight}>
                 <div className={styles.rowsPerPage}>
                   <span>Rows per page</span>
-                  <select className={styles.rowsSelect}>
-                    <option>10</option>
-                    <option>20</option>
-                    <option>50</option>
+                  <select
+                    className={styles.rowsSelect}
+                    value={limit}
+                    onChange={(e) => {
+                      setLimit(Number(e.target.value));
+                      setPage(1);
+                    }}
+                  >
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={50}>50</option>
                   </select>
                 </div>
-                <div className={styles.pageInfo}>Page 1 of 10</div>
+                <div className={styles.pageInfo}> Page {companyHighlights.charges.page} of {companyHighlights.charges.pages}</div>
                 <div className={styles.paginationControls}>
-                  <button className={styles.paginationButton} disabled>
+                  <button className={styles.paginationButton} disabled={page === 1}  onClick={() =>
+                      setPage((prev) => Math.max(prev - 1, 1))
+                    }>
                     &lt;
                   </button>
-                  <button className={styles.paginationButton}>&gt;</button>
+                  <button className={styles.paginationButton} disabled={page === companyHighlights.charges.pages}
+                   onClick={() =>     
+                      setPage((prev) => Math.min(prev + 1, companyHighlights.charges.pages))
+                    }>&gt;</button>
                 </div>
               </div>
             </div>

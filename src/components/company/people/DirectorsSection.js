@@ -2,20 +2,80 @@ import React from 'react';
 import styles from './DirectorsSection.module.css';
 import DirectorProfile from './DirectorProfile';
 
-const DirectorsSection = () => {
-  const stats = [
-    { label: 'Current Directors', value: '12', colorClass: styles.blueStat },
-    { label: 'Past Directors', value: '30', colorClass: styles.redStat },
-    { label: 'Current KMP(s)', value: '3', colorClass: styles.purpleStat },
-    { label: 'Past KMP(s)', value: '42', colorClass: styles.greenStat },
+const DirectorsSection = ({ directorsData, directorsLoading, directorsError }) => {
+ if (directorsLoading) {
+    return <div className={styles.container}>Loading highlights...</div>;
+  }
+
+  if (directorsError) {
+    return (
+      <div className={styles.container}>
+        <div style={{ color: "red", fontWeight: 500 }}>
+          {directorsError}
+        </div>
+      </div>
+    );
+  }
+
+  if (!directorsData) {
+    return (
+      <div className={styles.container}>
+        <p>Loading related corporates...</p>
+      </div>
+    );
+  }
+  const stats = directorsData?.summary
+  ? [
+      {
+        label: "Current Directors",
+        value: directorsData?.summary.current_directors ||  "0",
+        colorClass: styles.blueStat,
+      },
+      {
+        label: "Past Directors",
+        value: directorsData?.summary.past_directors || "0",
+        colorClass: styles.redStat,
+      },
+      {
+        label: "Current KMP(s)",
+        value: directorsData?.summary.current_kmp || "0",
+        colorClass: styles.purpleStat,
+      },
+      {
+        label: "Past KMP(s)",
+        value: directorsData?.summary.past_kmp || "0",
+        colorClass: styles.greenStat,
+      },
+    ]
+  : [
+    {
+        label: "Current Directors",
+        value: "N/A",
+        colorClass: styles.blueStat,
+      },
+      {
+        label: "Past Directors",
+        value: "N/A",
+        colorClass: styles.redStat,
+      },
+      {
+        label: "Current KMP(s)",
+        value: "N/A",
+        colorClass: styles.purpleStat,
+      },
+      {
+        label: "Past KMP(s)",
+        value: "N/A",
+        colorClass: styles.greenStat,
+      },
   ];
 
-  const directors = [
-    { name: 'Amit Burman', role: 'Owner', image: '/images/owner.svg' },
-    { name: 'Pradip Burman', role: 'Chairman', image: '/images/chairman.svg' },
-    { name: 'Mohit Malhotra', role: 'CEO', image: '/images/ceo.svg' },
-    { name: 'Kapil Ohri', role: 'Head of Digital Marketing', image: '/images/head.svg' },
-  ];
+  // const directors = [
+  //   { name: 'Amit Burman', role: 'Owner', image: '/images/owner.svg' },
+  //   { name: 'Pradip Burman', role: 'Chairman', image: '/images/chairman.svg' },
+  //   { name: 'Mohit Malhotra', role: 'CEO', image: '/images/ceo.svg' },
+  //   { name: 'Kapil Ohri', role: 'Head of Digital Marketing', image: '/images/head.svg' },
+  // ];
 
   return (
     <div className={styles.container}>
@@ -24,12 +84,12 @@ const DirectorsSection = () => {
         <div className={styles.headerInfo}>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Source:</span>
-            <span className={styles.infoValue}>MCA</span>
+            <span className={styles.infoValue}>{directorsData?.source || "N/A"}</span>
           </span>
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>30-Dec-2024, 11:45 AM IST</span>
+            <span className={styles.infoValue}>{directorsData?.summary?.last_updated || "N/A"}</span>
           </span>
         </div>
       </div>
@@ -42,7 +102,7 @@ const DirectorsSection = () => {
           </div>
         ))}
       </div>
-      <DirectorProfile />
+      <DirectorProfile directors={directorsData?.directors} />
     </div>
   );
 };

@@ -1,7 +1,22 @@
 import React from 'react';
 import styles from './NameHistory.module.css';
 
-const NameHistory = (companyData) => {
+const NameHistory = (companyData, loading, error) => {
+
+  if (loading) {
+    return <div className={styles.container}>Loading highlights...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className={styles.container}>
+        <div style={{ color: "red", fontWeight: 500 }}>
+          {error}
+        </div>
+      </div>
+    );
+  }
+
 
   const historyData = companyData?.name_history || [];
 
