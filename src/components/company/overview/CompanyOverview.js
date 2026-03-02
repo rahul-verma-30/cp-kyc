@@ -2,7 +2,20 @@ import React from 'react';
 import styles from './CompanyOverview.module.css';
 
 
-const CompanyOverview = ({companyData}) => {
+const CompanyOverview = ({companyData,loading,error}) => {
+ if (loading) {
+  return <div className={styles.container}>Loading highlights...</div>;
+}
+
+if (error) {
+  return (
+    <div className={styles.container}>
+      <div style={{ color: "red", fontWeight: 500 }}>
+        {error}
+      </div>
+    </div>
+  );
+}
 
   if (!companyData) {
     return (

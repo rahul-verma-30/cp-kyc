@@ -12,7 +12,10 @@ import { useEffect, useRef } from "react";
 
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
-const OwnershipSection = () => {
+const OwnershipSection = ({companyHighlights}) => {
+
+  const shareholding=companyHighlights?.shareholding;
+
   const { activeSubSection } = useCompanySection();
   const mainWrapperRef = useRef(null); // Shareholding
   const securitiesRef = useRef(null); // Securities Allotment
@@ -104,15 +107,15 @@ const OwnershipSection = () => {
             <div className={styles.statsGrid}>
               <div className={`${styles.statItem} ${styles.statItemFirst}`}>
                 <span className={styles.statLabel}>Total Equity Shares</span>
-                <span className={styles.statValue}>1,777,039,162</span>
+                <span className={styles.statValue}>{shareholding?.total_equity_shares}</span>
               </div>
               <div className={`${styles.statItem} ${styles.statItemMiddle}`}>
                 <span className={styles.statLabel}>Promoter Holding</span>
-                <span className={styles.statValue}>1,178,176,964</span>
+                <span className={styles.statValue}>{shareholding?.promoter_holding}</span>
               </div>
               <div className={`${styles.statItem} ${styles.statItemLast}`}>
                 <span className={styles.statLabel}>Non-Promoter Holding</span>
-                <span className={styles.statValue}>598,862,198</span>
+                <span className={styles.statValue}>{shareholding?.non_promoter_holding}</span>
               </div>
             </div>
             <div className={styles.chartHeader}>
@@ -125,11 +128,11 @@ const OwnershipSection = () => {
               <div className={styles.progressBar}>
                 <div
                   className={styles.progressPromoter}
-                  style={{ width: "75%" }}
+                  style={{  width: `${shareholding.promoter_percentage || 0}%`}}
                 ></div>
                 <div
                   className={styles.progressNonPromoter}
-                  style={{ width: "25%" }}
+                  style={{ width: `${shareholding.non_promoter_percentage || 0}%` }}
                 ></div>
               </div>
             </div>
@@ -140,14 +143,14 @@ const OwnershipSection = () => {
               <div className={`${styles.dot} ${styles.dotPromoter}`}></div>
               <div>
                 <p className={styles.legendLabel}>Promoter </p>
-                <p className={styles.legendValue}>66.3%</p>
+                <p className={styles.legendValue}>{shareholding.promoter_percentage}%</p>
               </div>
             </div>
             <div className={styles.legendItem}>
               <div className={`${styles.dot} ${styles.dotNonPromoter}`}></div>
               <div>
                 <p className={styles.legendLabel}>Non Promoter</p>
-                <p className={styles.legendValue}>33.7%</p>
+                <p className={styles.legendValue}>{shareholding.non_promoter_percentage}%</p>
               </div>
             </div>
           </div>

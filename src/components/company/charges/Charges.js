@@ -5,7 +5,24 @@ import { useState } from "react";
 import { useEffect, useRef } from "react";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 
-export default function ChargesPage() {
+export default function ChargesPage({ charges, loading, error, openPage, closedPage, limit, setOpenPage, setClosedPage, setLimit }) {
+
+  if (loading) {
+    return <div className={styles.container}>Loading charges...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className={styles.container}>
+        <div style={{ color: "red" }}>{error}</div>
+      </div>
+    );
+  }
+
+  if (!charges) {
+    return <div className={styles.container}>No data available</div>;
+  }
+
   const { activeSubSection } = useCompanySection();
 
   const containerRef = useRef(null);
@@ -35,96 +52,113 @@ export default function ChargesPage() {
     }
   }, [activeSubSection]);
 
-  const closedCharges = [
-    {
-      id: "100592955",
-      lender: "Yes Bank Limited",
-      amount: "5.00",
-      created: "20 Jun 2022",
-      modified: "-",
-      satisfied: "27 Feb 2024",
-    },
-    {
-      id: "100592956",
-      lender: "HDFC Bank Limited",
-      amount: "6.25",
-      created: "15 Aug 2022",
-      modified: "-",
-      satisfied: "30 Dec 2024",
-    },
-    {
-      id: "100592957",
-      lender: "ICICI Bank Limited",
-      amount: "4.50",
-      created: "10 Sep 2022",
-      modified: "-",
-      satisfied: "15 Mar 2025",
-    },
-    {
-      id: "100592958",
-      lender: "State Bank of India",
-      amount: "5.75",
-      created: "25 Oct 2022",
-      modified: "-",
-      satisfied: "01 Jan 2025",
-    },
-    {
-      id: "100592959",
-      lender: "Kotak Mahindra Bank",
-      amount: "6.00",
-      created: "12 Nov 2022",
-      modified: "-",
-      satisfied: "10 Jul 2024",
-    },
-    {
-      id: "100592960",
-      lender: "Axis Bank Limited",
-      amount: "5.50",
-      created: "18 Dec 2022",
-      modified: "-",
-      satisfied: "22 Aug 2024",
-    },
-    {
-      id: "100592961",
-      lender: "Punjab National Bank",
-      amount: "4.75",
-      created: "30 Jan 2023",
-      modified: "-",
-      satisfied: "05 Sep 2024",
-    },
-    {
-      id: "100592962",
-      lender: "Bank of Baroda",
-      amount: "5.10",
-      created: "14 Feb 2023",
-      modified: "-",
-      satisfied: "13 Oct 2025",
-    },
-    {
-      id: "100592963",
-      lender: "Union Bank of India",
-      amount: "5.30",
-      created: "20 Mar 2023",
-      modified: "-",
-      satisfied: "28 Nov 2024",
-    },
-    {
-      id: "100592964",
-      lender: "Canara Bank",
-      amount: "6.00",
-      created: "05 Apr 2023",
-      modified: "-",
-      satisfied: "19 Jun 2025",
-    },
-  ];
-  const openChargesData = [
-    { name: "Others", value: 158 },
-    { name: "Remaining", value: 165 - 158 },
-  ];
+  // const closedCharges = [
+  //   {
+  //     id: "100592955",
+  //     lender: "Yes Bank Limited",
+  //     amount: "5.00",
+  //     created: "20 Jun 2022",
+  //     modified: "-",
+  //     satisfied: "27 Feb 2024",
+  //   },
+  //   {
+  //     id: "100592956",
+  //     lender: "HDFC Bank Limited",
+  //     amount: "6.25",
+  //     created: "15 Aug 2022",
+  //     modified: "-",
+  //     satisfied: "30 Dec 2024",
+  //   },
+  //   {
+  //     id: "100592957",
+  //     lender: "ICICI Bank Limited",
+  //     amount: "4.50",
+  //     created: "10 Sep 2022",
+  //     modified: "-",
+  //     satisfied: "15 Mar 2025",
+  //   },
+  //   {
+  //     id: "100592958",
+  //     lender: "State Bank of India",
+  //     amount: "5.75",
+  //     created: "25 Oct 2022",
+  //     modified: "-",
+  //     satisfied: "01 Jan 2025",
+  //   },
+  //   {
+  //     id: "100592959",
+  //     lender: "Kotak Mahindra Bank",
+  //     amount: "6.00",
+  //     created: "12 Nov 2022",
+  //     modified: "-",
+  //     satisfied: "10 Jul 2024",
+  //   },
+  //   {
+  //     id: "100592960",
+  //     lender: "Axis Bank Limited",
+  //     amount: "5.50",
+  //     created: "18 Dec 2022",
+  //     modified: "-",
+  //     satisfied: "22 Aug 2024",
+  //   },
+  //   {
+  //     id: "100592961",
+  //     lender: "Punjab National Bank",
+  //     amount: "4.75",
+  //     created: "30 Jan 2023",
+  //     modified: "-",
+  //     satisfied: "05 Sep 2024",
+  //   },
+  //   {
+  //     id: "100592962",
+  //     lender: "Bank of Baroda",
+  //     amount: "5.10",
+  //     created: "14 Feb 2023",
+  //     modified: "-",
+  //     satisfied: "13 Oct 2025",
+  //   },
+  //   {
+  //     id: "100592963",
+  //     lender: "Union Bank of India",
+  //     amount: "5.30",
+  //     created: "20 Mar 2023",
+  //     modified: "-",
+  //     satisfied: "28 Nov 2024",
+  //   },
+  //   {
+  //     id: "100592964",
+  //     lender: "Canara Bank",
+  //     amount: "6.00",
+  //     created: "05 Apr 2023",
+  //     modified: "-",
+  //     satisfied: "19 Jun 2025",
+  //   },
+  // ];
+  // const openChargesData = [
+  //   { name: "Others", value: 158 },
+  //   { name: "Remaining", value: 165 - 158 },
+  // ];
+
+  const openItems = charges?.open_charges?.items || [];
+  const closedItems = charges?.closed_charges?.items || [];
+
+
 
   const COLORS = ["#0EA5E9", "rgba(244, 244, 245, 1)"];
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const openChartData = [
+    {
+      name: "Open",
+      value: charges?.summary?.open_count || 0,
+    },
+    {
+      name: "Closed",
+      value: charges?.summary?.closed_count || 0,
+    },
+  ];
+
 
   return (
     <div ref={containerRef} className={styles.container}>
@@ -133,12 +167,12 @@ export default function ChargesPage() {
         <div className={styles.headerInfo}>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Source:</span>
-            <span className={styles.infoValue}>MCA</span>
+            <span className={styles.infoValue}>{charges?.source || "N/A"}</span>
           </span>
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>30-Dec-2024, 11:45 AM IST</span>
+            <span className={styles.infoValue}>{charges?.last_updated || "N/A"}</span>
           </span>
         </div>
       </div>
@@ -146,19 +180,19 @@ export default function ChargesPage() {
       <section className={styles.statsGrid}>
         <div className={`${styles.statCard} ${styles.blue}`}>
           <div className={styles.statLabel}>Open Charges</div>
-          <div className={styles.statValue}>12</div>
+          <div className={styles.statValue}>{charges?.summary?.open_count || 0}</div>
         </div>
         <div className={`${styles.statCard} ${styles.red}`}>
           <div className={styles.statLabel}>Open Charges Amount</div>
-          <div className={styles.statValue}>15,750.00 Lakh</div>
+          <div className={styles.statValue}>{charges?.summary?.open_amount || "-"}</div>
         </div>
         <div className={`${styles.statCard} ${styles.purple}`}>
           <div className={styles.statLabel}>Closed Charges</div>
-          <div className={styles.statValue}>93</div>
+          <div className={styles.statValue}>{charges?.summary?.closed_count || 0}</div>
         </div>
         <div className={`${styles.statCard} ${styles.green}`}>
           <div className={styles.statLabel}>Closed Charges Amount</div>
-          <div className={styles.statValue}>86,031.54 Lakh</div>
+          <div className={styles.statValue}>{charges?.summary?.closed_amount || "-"}</div>
         </div>
       </section>
 
@@ -167,10 +201,11 @@ export default function ChargesPage() {
           <h2 className={styles.cardTitle}>Open charges</h2>
           <div className={styles.chartWrapper}>
             <div className={styles.chartWrapper}>
+
               <ResponsiveContainer width={200} height={200}>
                 <PieChart>
                   <Pie
-                    data={openChargesData}
+                    data={openChartData}
                     dataKey="value"
                     innerRadius={60}
                     outerRadius={100}
@@ -178,7 +213,7 @@ export default function ChargesPage() {
                     startAngle={90}
                     endAngle={-270}
                   >
-                    {openChargesData.map((_, index) => (
+                    {openChartData.map((_, index) => (
                       <Cell key={index} fill={COLORS[index]} />
                     ))}
                   </Pie>
@@ -191,7 +226,7 @@ export default function ChargesPage() {
                   <span className={styles.legendText}>Others Charges:</span>
                 </div>
 
-                <span className={styles.legendValue}>158 Crores</span>
+                <span className={styles.legendValue}>N/A</span>
               </div>
             </div>
           </div>
@@ -199,31 +234,31 @@ export default function ChargesPage() {
         <div className={`${styles.summaryCard} ${styles.summaryCardAlt}`}>
           <div className={styles.summaryRow}>
             <span>Total Open Charges</span>
-            <p className={styles.strong}>₹1,575.00 M</p>
+            <p className={styles.strong}>{charges?.statistics?.total_open_amount || "-"}</p>
           </div>
           <div className={styles.summaryRow}>
             <span>Total Satised Charges</span>
-            <p className={styles.strong}>₹8,603.15 M</p>
+            <p className={styles.strong}>{charges?.statistics?.total_satisfied_amount || "-"}</p>
           </div>
           <div className={styles.summaryRow}>
             <span>Total No. of Lender(s)</span>
-            <p className={styles.strong}>37</p>
+            <p className={styles.strong}>{charges?.statistics?.total_lenders || 0}</p>
           </div>
           <div className={styles.summaryRow}>
             <span>Top Lender</span>
-            <p className={styles.strong}>Others</p>
+            <p className={styles.strong}>{charges?.statistics?.top_lender || "Others"}</p>
           </div>
           <div className={styles.summaryRow}>
             <span>Last Charge Activity</span>
-            <p className={styles.strong}>Satisfaction</p>
+            <p className={styles.strong}>{charges?.statistics?.last_charge_activity || "Satisfaction"}</p>
           </div>
           <div className={styles.summaryRow}>
             <span>Last Charge Date</span>
-            <p className={styles.strong}>20 Mar 2024</p>
+            <p className={styles.strong}>{charges?.statistics?.last_charge_date || "20 Mar 2024"}</p>
           </div>
           <div className={styles.summaryRow}>
             <span>Last Charge Amount</span>
-            <p className={styles.strong}>₹ 50.33 M</p>
+            <p className={styles.strong}>{charges?.statistics?.last_charge_amount || "-"}</p>
           </div>
         </div>
       </section>
@@ -244,13 +279,21 @@ export default function ChargesPage() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>10036700</td>
-                <td>Others</td>
-                <td>15,750.00</td>
-                <td>29 Jan 2007</td>
-                <td>24 Jul 2020</td>
-              </tr>
+              {openItems.length > 0 ? (
+                openItems.map((item) => (
+                  <tr key={item.charge_id}>
+                    <td>{item.charge_id}</td>
+                    <td>{item.lender}</td>
+                    <td>{item.amount_lakh}</td>
+                    <td>{item.creation_date}</td>
+                    <td>{item.modification_date}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5">No open charges found</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -273,14 +316,14 @@ export default function ChargesPage() {
               </tr>
             </thead>
             <tbody>
-              {closedCharges.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.id}</td>
+              {closedItems.map((item) => (
+                <tr key={item.charge_id}>
+                  <td>{item.charge_id}</td>
                   <td>{item.lender}</td>
-                  <td>{item.amount}</td>
-                  <td>{item.created}</td>
-                  <td>{item.modified}</td>
-                  <td>{item.satisfied}</td>
+                  <td>{item.amount_lakh}</td>
+                  <td>{item.creation_date}</td>
+                  <td>{item.modification_date}</td>
+                  <td>{item.satisfaction_date}</td>
                   <td className={styles.actionCell}>
                     <div className={styles.actionIcon}>
                       <img
@@ -297,15 +340,28 @@ export default function ChargesPage() {
           </table>
         </div>
         <div className={styles.paginationRow}>
-          <span className={styles.showingText}>Showing 1-10 of 20</span>
+          <span className={styles.showingText}>
+            Showing {(closedPage - 1) * limit + 1}-
+            {Math.min(closedPage * limit, charges?.closed_charges?.total || 0)} of{" "}
+            {charges?.closed_charges?.total || 0}
+          </span>
           <div className={styles.paginationControls}>
             <div className={styles.paginationInfo}>
               <span className={styles.rowsLabel}>Rows per page</span>
-              <RowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
+              <RowsPerPage value={limit}
+                onChange={(value) => {
+                  setLimit(value);
+                  setClosedPage(1);
+                  setOpenPage(1);
+                }} />
             </div>
-            <span className={styles.pageLabel}>Page 1 of 10</span>
+            <span className={styles.pageLabel}>
+              Page {charges?.closed_charges?.page || 1} of{" "}
+              {charges?.closed_charges?.pages || 1}
+            </span>
             <div className={styles.navButtons}>
-              <button className={styles.navBtnDisabled}>
+              <button disabled={closedPage === 1}
+                onClick={() => setClosedPage(1)}>
                 <img
                   src="/icons/chevrons-left.svg"
                   alt="First page"
@@ -313,23 +369,26 @@ export default function ChargesPage() {
                 />
               </button>
 
-              <button className={styles.navBtnDisabled}>
+              <button disabled={closedPage === 1}
+                onClick={() => setClosedPage(prev => prev - 1)}>
                 <img
                   src="/icons/chevron-left.svg"
                   alt="First page"
                   className={styles.navIcon}
                 />
               </button>
-              <button className={styles.navBtn}>
-                {" "}
+              <button disabled={closedPage === charges?.closed_charges?.pages}
+                onClick={() => setClosedPage((prev) => prev + 1)}>
                 <img
                   src="/icons/chevron-right-black.svg"
                   alt="First page"
                   className={styles.navIcon}
                 />
               </button>
-              <button className={styles.navBtn}>
-                {" "}
+              <button disabled={closedPage === charges?.closed_charges?.pages}
+                onClick={() =>
+                  setClosedPage(charges?.closed_charges?.pages || 1)
+                }>
                 <img
                   src="/icons/chevrons-right.svg"
                   alt="First page"
@@ -339,7 +398,7 @@ export default function ChargesPage() {
             </div>
           </div>
         </div>
-      </section>
-    </div>
+      </section >
+    </div >
   );
 }

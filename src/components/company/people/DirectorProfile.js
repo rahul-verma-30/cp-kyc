@@ -1,14 +1,48 @@
 import styles from "./DirectorProfile.module.css";
 import { useState } from "react";
 
-export default function DirectorProfile() {
-  const sidebarItems = Array(9).fill({
-    name: "Saket Burman",
-    role: "Director",
-  });
+export default function DirectorProfile({ directors = [] }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [activeTab, setActiveTab] = useState("current");
   const [directorTab, setDirectorTab] = useState("current");
+
+
+  
+
+  // Filter directors based on tab (current/past) and search
+  const filteredDirectors = directors.filter((director) => {
+    // Based on your API data, all directors have "Inactive" status
+    // So we'll show all directors in both tabs for now
+    const matchesTab = true; // Show all directors regardless of tab
+    
+    const matchesSearch = searchTerm === "" || 
+      director.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      director.designation.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      director.din_pan.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesFilter = activeFilter === "All" || 
+      director.designation.toLowerCase().includes(activeFilter.toLowerCase());
+    
+    return matchesTab && matchesSearch && matchesFilter;
+  });
+
+  const sidebarItems = filteredDirectors.map((director) => ({
+    name: director.name,
+    role: director.designation,
+    din: director.din_pan,
+    status: director.status,
+    category: director.category,
+    appointment_date: director.appointment_date,
+    cessation_date: director.cessation_date,
+    is_kmp: director.is_kmp,
+    details: director.details
+  }));
+
+  // Get current selected director
+  const selectedDirector = sidebarItems[activeIndex] || sidebarItems[0] || {};
 
   // Helper to detect and style status/pills
   const renderCellContent = (value) => {
@@ -119,14 +153,15 @@ export default function DirectorProfile() {
       ],
     },
   ];
-  const [activeIndex, setActiveIndex] = useState(null);
-  const [activeFilter, setActiveFilter] = useState("All");
 
   const filters = [
     "All",
-    "Managing Director",
-    "Full-Time Director",
+    "Director",
+    "Whole-time director",
+    "CFO",
+    "CEO",
     "Company Secretary",
+    "Managing Director"
   ];
 
   return (
@@ -134,18 +169,16 @@ export default function DirectorProfile() {
       <div className={styles.containerHeader}>
         <div className={styles.sidebarTabs}>
           <div
-            className={`${styles.sidebarTab} ${
-              directorTab === "current" ? styles.sidebarTabActive : ""
-            }`}
+            className={`${styles.sidebarTab} ${directorTab === "current" ? styles.sidebarTabActive : ""
+              }`}
             onClick={() => setDirectorTab("current")}
           >
             Current Directors & KMP
           </div>
 
           <div
-            className={`${styles.sidebarTab} ${
-              directorTab === "past" ? styles.sidebarTabActive : ""
-            }`}
+            className={`${styles.sidebarTab} ${directorTab === "past" ? styles.sidebarTabActive : ""
+              }`}
             onClick={() => setDirectorTab("past")}
           >
             Past Directors & KMP
@@ -166,6 +199,8 @@ export default function DirectorProfile() {
               type="text"
               placeholder="Search by name, role, or DIN"
               className={styles.searchInput}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
 
@@ -174,9 +209,8 @@ export default function DirectorProfile() {
             {filters.map((filter) => (
               <div
                 key={filter}
-                className={`${styles.filterTag} ${
-                  activeFilter === filter ? styles.activeFilter : ""
-                }`}
+                className={`${styles.filterTag} ${activeFilter === filter ? styles.activeFilter : ""
+                  }`}
                 onClick={() => setActiveFilter(filter)}
               >
                 {filter}
@@ -185,27 +219,28 @@ export default function DirectorProfile() {
           </div>
 
           <div className={styles.sidebarList}>
-      {sidebarItems.map((item, idx) => (
-        <div
-          key={idx}
-          className={`${styles.sidebarItem} ${
-            activeIndex === idx ? styles.active : ""
-          }`}
-          onClick={() => setActiveIndex(idx)}
-        >
-          <img
-            src="/images/owner.svg"
-            alt="thumb"
-            className={styles.sidebarImg}
-          />
+            {sidebarItems.map((item, idx) => (
+              <div
+                key={idx}
+                className={`${styles.sidebarItem} ${activeIndex === idx ? styles.active : ""
+                  }`}
+                onClick={() => setActiveIndex(idx)}
+              >
 
-          <div className={styles.sidebarInfo}>
-            <span className={styles.sidebarName}>{item.name}</span>
-            <span className={styles.sidebarRole}>{item.role}</span>
+                {/* IMAGES FOR THE SIDEBAR */}
+                <img
+                  src=" "
+                  alt="thumb"
+                  className={styles.sidebarImg}
+                />
+
+                <div className={styles.sidebarInfo}>
+                  <span className={styles.sidebarName}>{item.name}</span>
+                  <span className={styles.sidebarRole}>{item.role}</span>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      ))}
-    </div>
         </aside>
 
         {/* MAIN CONTENT */}
@@ -214,48 +249,56 @@ export default function DirectorProfile() {
           <section className={styles.headerCard}>
             <div className={styles.headerLeft}>
               <img
-                src="/images/owner.svg"
-                alt="Saket Burman"
+                src={selectedDirector.details.profile_image}
+                alt="profile"
                 className={styles.profilePic}
               />
               <div className={styles.profileTitle}>
                 <div className={styles.profileTitleWrapper}>
-                  <h1>Saket Burman</h1>
+                  <h1>{selectedDirector.name || 'Select a Director'}</h1>
                   <img src="/images/linkedln.svg" alt="linkedln" />
+
+                  {/* PROFILE IMAGE FOR MAIN SECTIION */}
+                  {selectedDirector.details?.profile_image && (
+                    <img src={selectedDirector.details.profile_image} alt="profile" />
+                  )}
                 </div>
                 <div className={styles.profileSubtitle}>
-                  <span>DIN: 05208674</span>
+                  <span>DIN: {selectedDirector.din || 'N/A'}</span>
                   <span className={styles.grayDot}></span>
-                  <span>Managing Director</span>
+                  <span>{selectedDirector.role || 'N/A'}</span>
                 </div>
               </div>
             </div>
             <div className={styles.dinStatus}>
-              DIN Status : <span className={styles.activeTag}>Active</span>
+              DIN Status : <span className={`${styles.statusTag} ${selectedDirector.details?.din_status === "Active" ? styles.activeTag : styles.inactiveTag}`}>
+                {selectedDirector.details?.din_status || 'N/A'}
+              </span>
             </div>
           </section>
 
           {/* PERSONAL INFO GRID */}
           <div className={styles.detailsGrid}>
-            <InfoBlock label="DIN" value="05208674" />
-            <InfoBlock label="PAN" value="AABPB1234F" />
-            <InfoBlock label="Nationality" value="British" />
-            <InfoBlock label="Date of Birth" value="15-Jun-1967 (58 years)" />
-            <InfoBlock label="Gender" value="Male" />
-            <InfoBlock label="Residential Status" value="Resident" />
-            <InfoBlock label="Email ID" value="mohit.burman@dabur.com" />
-            <InfoBlock label="Mobile Number" value="+91-11-23456789" />
-            <InfoBlock label="Type" value="Executive" />
+            <InfoBlock label="DIN" value={selectedDirector.din || 'N/A'} />
+            <InfoBlock label="PAN" value={selectedDirector?.details?.pan || 'N/A'} />
+            <InfoBlock label="Nationality" value={selectedDirector.details?.nationality || 'N/A'} />
+            <InfoBlock label="Date of Birth" value={selectedDirector.details?.dob_age || 'N/A'} />
+            <InfoBlock label="Gender" value={selectedDirector.details?.gender || 'N/A'} />
+            <InfoBlock label="Residential Status" value={selectedDirector.details?.residential_status || 'N/A'} />
+            <InfoBlock label="Email ID" value={selectedDirector.details?.email || 'N/A'} />
+            <InfoBlock label="Mobile Number" value={selectedDirector.details?.mobile || 'N/A'} />
+            <InfoBlock label="Type" value={selectedDirector?.category || 'N/A'} />
+   
           </div>
 
           <div className={styles.addressGrid}>
             <InfoBlock
               label="Current Residential Address"
-              value="8/3, Asaf Ali Road, New Delhi - 110002, India"
+              value={selectedDirector.details?.current_residential_address || 'N/A'}
             />
             <InfoBlock
               label="Permanent Address"
-              value="8/3, Asaf Ali Road, New Delhi - 110002, India"
+              value={selectedDirector.details?.permanent_address || 'N/A'}
             />
           </div>
 
@@ -305,27 +348,24 @@ export default function DirectorProfile() {
               <h2 className={styles.sectionHeading}>Other Associations</h2>
               <div className={styles.subTabs}>
                 <div
-                  className={`${styles.subTab} ${
-                    activeTab === "current" ? styles.subTabActive : ""
-                  }`}
+                  className={`${styles.subTab} ${activeTab === "current" ? styles.subTabActive : ""
+                    }`}
                   onClick={() => setActiveTab("current")}
                 >
                   Current Companies
                 </div>
 
                 <div
-                  className={`${styles.subTab} ${
-                    activeTab === "previous" ? styles.subTabActive : ""
-                  }`}
+                  className={`${styles.subTab} ${activeTab === "previous" ? styles.subTabActive : ""
+                    }`}
                   onClick={() => setActiveTab("previous")}
                 >
                   Previous Companies
                 </div>
 
                 <div
-                  className={`${styles.subTab} ${
-                    activeTab === "shareholding" ? styles.subTabActive : ""
-                  }`}
+                  className={`${styles.subTab} ${activeTab === "shareholding" ? styles.subTabActive : ""
+                    }`}
                   onClick={() => setActiveTab("shareholding")}
                 >
                   Shareholding
@@ -346,27 +386,23 @@ export default function DirectorProfile() {
                     </tr>
                   </thead>
                   <tbody>
-                    <AssociationRow
-                      name="Dabur India Limited"
-                      role="Managing Director"
-                      type="Executive"
-                      period="2015 - Present"
-                      date="01-Apr-2015"
-                    />
-                    <AssociationRow
-                      name="Dabur Nepal Pvt. Ltd."
-                      role="Director"
-                      type="Non-Executive"
-                      period="2015 - Present"
-                      date="15-Jun-2018"
-                    />
-                    <AssociationRow
-                      name="Aviva Life Insurance Company India Ltd."
-                      role="Independent Director"
-                      type="Executive"
-                      period="2015 - Present"
-                      date="15-Jun-2018"
-                    />
+                    {selectedDirector.details?.current_positions?.map((position, idx) => (
+                      <AssociationRow
+                        key={idx}
+                        name={position.company_name || "N/A"}
+                        role={position.designation || "N/A"}
+                        type={position.category || "N/A"}
+                        period={`${position.appointment_date} - Present`}
+                        date={position.appointment_date || "N/A"}
+                      />
+                    ))}
+                    {(!selectedDirector.details?.current_positions || selectedDirector.details.current_positions.length === 0) && (
+                      <tr>
+                        <td colSpan="5" style={{ textAlign: 'center', padding: '20px' }}>
+                          No current positions found
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -382,16 +418,21 @@ export default function DirectorProfile() {
                     </tr>
                   </thead>
                   <tbody>
-                    <AssociationRow
-                      name="H&R Johnson (India) Ltd."
-                      role="Non-Executive Director"
-                      date="2010 - 2015"
-                    />
-                    <AssociationRow
-                      name="Fresenius Kabi Oncology Limited"
-                      role="Independent Director"
-                      date="2012 - 2019"
-                    />
+                    {selectedDirector.details?.past_positions?.map((position, idx) => (
+                      <AssociationRow
+                        key={idx}
+                        name={position.company_name || "N/A"}
+                        role={position.designation}
+                        date={`${position.appointment_date} - ${position.cessation_date === "-" ? 'N/A' : position.cessation_date}`}
+                      />
+                    ))}
+                    {(!selectedDirector.details?.past_positions || selectedDirector.details.past_positions.length === 0) && (
+                      <tr>
+                        <td colSpan="3" style={{ textAlign: 'center', padding: '20px' }}>
+                          No past positions found
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -417,12 +458,16 @@ export default function DirectorProfile() {
                               alt=""
                             />
                           </div>
-                          Dabur India Limited
+                          {/* Dabur India Limited */}
+                          N/A
                         </div>
                       </td>
-                      <td>2.34%</td>
+                      <td>N/A</td>
                       <td>
-                        <span className={styles.promoterTag}>Promoter</span>
+                        <span className={styles.promoterTag}>
+                          {/* Promoter */}
+                          N/A
+                        </span>
                       </td>
                     </tr>
 
@@ -436,13 +481,15 @@ export default function DirectorProfile() {
                               alt=""
                             />
                           </div>
-                          Dabur Nepal Pvt. Ltd.
+                          {/* Dabur Nepal Pvt. Ltd. */}
+                          N/A
                         </div>
                       </td>
-                      <td>0.85%</td>
+                      <td>N/A</td>
                       <td>
                         <span className={styles.nonPromoterTag}>
-                          Non-Promoter
+                          {/* Non-Promoter */}
+                          N/A
                         </span>
                       </td>
                     </tr>
@@ -493,9 +540,8 @@ export default function DirectorProfile() {
               <div className={styles.checkTitle}>{section.title}</div>
               <div className={styles.cardFrame}>
                 <table
-                  className={`${styles.dataTable} ${
-                    styles[section.tableKey] || ""
-                  }`}
+                  className={`${styles.dataTable} ${styles[section.tableKey] || ""
+                    }`}
                 >
                   <thead>
                     <tr>
@@ -584,7 +630,7 @@ export default function DirectorProfile() {
                 spec="Science Stream (PCM)"
                 year="1985"
               />
-              <QualificationItem  
+              <QualificationItem
                 icon="/images/placeholder.svg"
                 title="Secondary School Certificate (Class X)"
                 inst="Delhi Public School, R.K. Puram, New Delhi"
@@ -600,10 +646,10 @@ export default function DirectorProfile() {
 }
 
 /* Helper Components to keep JSX clean */
-function QualificationItem({ icon,title, inst, spec, year }) {
+function QualificationItem({ icon, title, inst, spec, year }) {
   return (
     <div className={styles.qualItem}>
-      <div className={styles.qualIconWrapper}> 
+      <div className={styles.qualIconWrapper}>
         <img src={icon} alt="" />
       </div>
       <div className={styles.qualContent}>
@@ -617,7 +663,7 @@ function QualificationItem({ icon,title, inst, spec, year }) {
                 <span className={styles.specTag}>{spec}</span>
               </>
             )}
-            
+
           </div>
         )}
         {year && <span className={styles.qualYear}>{year}</span>}
@@ -685,11 +731,11 @@ function TimelineItem({ date, name, role, active }) {
         </div>
       </div>
       {active && (
-  <div className={`${styles.activeTag} ${styles.statusBadge}`}>
-    Active
-  </div>
-  
-)}
+        <div className={`${styles.activeTag} ${styles.statusBadge}`}>
+          Active
+        </div>
+
+      )}
 
     </div>
   );

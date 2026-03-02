@@ -14,116 +14,157 @@ import {
 import styles from "./FinancialHighlightsDetails.module.css";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 
-const FinancialHighlightsDetails = () => {
+const FinancialHighlightsDetails = ({ financialHighlights, revenueProfitTrend ,financialLoading,financialError , revenueLoading, revenueError }) => {
+
+  if (financialLoading || revenueLoading) {
+    return <div className={styles.container}>Loading...</div>;
+  }
+
+  if (financialError || revenueError) {
+    return (
+      <div className={styles.container}>
+        <div style={{ color: "red", fontWeight: 500 }}>
+          {financialError || revenueError}
+        </div>
+      </div>
+    );
+  }
+
+  if (!financialHighlights) {
+    return <div className={styles.container}>Loading...</div>;
+  }
+
+  const financialHighlightsData = financialHighlights.data;
+
+  if (!revenueProfitTrend) {
+    return <div className={styles.container}>Loading...</div>;
+  }
+
+  const parseChange = (value) => {
+    if (!value) return false;
+    const number = parseFloat(value.replace("%", ""));
+    return number < 0;
+  };
+
   const topCards = [
     {
       label: "Revenue",
-      value: "₹ 9,522.65 Cr",
-      change: "-0.32 %",
-      isNegative: true,
+      value: financialHighlightsData?.revenue?.value,
+      change: financialHighlightsData?.revenue?.change_percentage,
+      isNegative: parseChange(
+        financialHighlightsData?.revenue?.change_percentage
+      ),
     },
     {
       label: "Profit",
-      value: "₹ 1,403.22 Cr",
-      change: "-7.02 %",
-      isNegative: true,
+      value: financialHighlightsData?.profit?.value,
+      change: financialHighlightsData?.profit?.change_percentage,
+      isNegative: parseChange(financialHighlightsData.profit?.change_percentage),
     },
     {
       label: "Cash & Bank Balance",
-      value: "₹ 24.16 Cr",
-      change: "+124.33 %",
-      isNegative: false,
+      value: financialHighlightsData?.cash_and_bank_balance?.value,
+      change: financialHighlightsData?.cash_and_bank_balance?.change_percentage,
+      isNegative: parseChange(financialHighlightsData?.cash_and_bank_balance?.change_percentage),
     },
     {
       label: "Net Worth",
-      value: "₹ 7,423.29 Cr",
-      change: "+124.33 %",
-      isNegative: false,
+      value: financialHighlightsData?.net_worth?.value,
+      change: financialHighlightsData?.net_worth?.change_percentage,
+      isNegative: parseChange(financialHighlightsData?.net_worth?.change_percentage),
     },
     {
       label: "Assets",
-      value: "₹ 11,005.47 Cr",
-      change: "+124.33 %",
+      value: financialHighlightsData?.assets?.value,
+      change: financialHighlightsData?.assets?.change_percentage,
+      isNegative: parseChange(financialHighlightsData?.assets?.change_percentage),
       isNegative: false,
     },
     {
       label: "Outsiders' Liabilities",
-      value: "₹ 3,582.18 Cr",
-      change: "+124.33 %",
-      isNegative: false,
+      value: financialHighlightsData?.outsiders_liabilities?.value,
+      change: financialHighlightsData?.outsiders_liabilities?.change_percentage,
+      isNegative: parseChange(financialHighlightsData?.outsiders_liabilities?.change_percentage),
     },
   ];
 
   const ratioData = [
     {
       label: "EBITDA",
-      value: "₹ 1,706.91 Cr",
-      change: "-7.19%",
-      isNegative: true,
+      value: financialHighlightsData?.ebitda?.value || "N/A",
+      change: financialHighlightsData?.ebitda?.change_percentage || "N/A",
+      isNegative: parseChange(financialHighlightsData?.ebitda?.change_percentage),
     },
     {
       label: "Net Prot Margin",
-      value: "15.47%",
-      change: "-1.05%",
-      isNegative: true,
+      value: financialHighlightsData?.net_profit_margin?.value || "N/A",
+      change: financialHighlightsData?.net_profit_margin?.change_percentage || "N/A",
+      isNegative: parseChange(financialHighlightsData?.net_profit_margin?.change_percentage),
     },
     {
       label: "Sales to Fixed Asset",
-      value: "4.46",
-      change: "-8.23%",
-      isNegative: true,
+      value: financialHighlightsData?.sales_to_fixed_asset?.value || "N/A",
+      change: financialHighlightsData?.sales_to_fixed_asset?.change_percentage || "N/A",
+      isNegative: parseChange(financialHighlightsData?.sales_to_fixed_asset?.change_percentage),
     },
     {
       label: "Debt to EBITDA",
-      value: "0.17",
-      change: "-55.26%",
-      isNegative: true,
+      value: financialHighlightsData?.debt_to_ebitda?.value || "N/A",
+      change: financialHighlightsData?.debt_to_ebitda?.change_percentage || "N/A",
+      isNegative: parseChange(financialHighlightsData?.debt_to_ebitda?.change_percentage),
     },
     {
       label: "Interest Coverage Ratio",
-      value: "17.14",
-      change: "-24.39%",
-      isNegative: true,
+      value: financialHighlightsData?.interest_coverage_ratio?.value || "N/A",
+      change: financialHighlightsData?.interest_coverage_ratio?.change_percentage || "N/A",
+      isNegative: parseChange(financialHighlightsData?.interest_coverage_ratio?.change_percentage),
     },
     {
       label: "Net Worth Margin",
-      value: "0.19%",
-      change: "-0.03%",
-      isNegative: true,
+      value: financialHighlightsData?.interest_coverage_ratio?.value || "N/A",
+      change: financialHighlightsData?.interest_coverage_ratio?.change_percentage || "N/A",
+      isNegative: parseChange(financialHighlightsData?.interest_coverage_ratio?.change_percentage),
     },
     {
       label: "Debt to Equity",
-      value: "0.04",
-      change: "-60.00%",
-      isNegative: true,
+      value: financialHighlightsData?.debt_to_equity?.value || "N/A",
+      change: financialHighlightsData?.debt_to_equity?.change_percentage || "N/A",
+      isNegative: parseChange(financialHighlightsData?.debt_to_equity?.change_percentage),
     },
     {
       label: "Return on Equity",
-      value: "18.9%",
-      change: "-2.92%",
-      isNegative: true,
+      value: financialHighlightsData?.return_on_equity?.value || "N/A",
+      change: financialHighlightsData?.return_on_equity?.change_percentage || "N/A",
+      isNegative: parseChange(financialHighlightsData?.return_on_equity?.change_percentage),
     },
     {
       label: "Equity Multiplier",
-      value: "1.48",
-      change: "-2.63%",
-      isNegative: true,
+      value: financialHighlightsData?.equity_multiplier?.value || "N/A",
+      change: financialHighlightsData?.equity_multiplier?.change_percentage || "N/A",
+      isNegative: parseChange(financialHighlightsData?.equity_multiplier?.change_percentage),
     },
   ];
 
-  const chartData = [
-    { year: "2015", revenue: 7800, profit: 3200 },
-    { year: "2016", revenue: 7800, profit: 3200 },
-    { year: "2017", revenue: 7800, profit: 3200 },
-    { year: "2018", revenue: 7800, profit: 3200 },
-    { year: "2019", revenue: 7800, profit: 3200 },
-    { year: "2020", revenue: 7800, profit: 3200 },
-    { year: "2021", revenue: 7800, profit: 3200 },
-    { year: "2022", revenue: 7800, profit: 3200 },
-    { year: "2023", revenue: 7800, profit: 3200 },
-    { year: "2024", revenue: 7800, profit: 3200 },
-    { year: "2025", revenue: 7800, profit: 3200 },
-  ];
+  // const chartData = [
+  //   { year: "2015", revenue: 7800, profit: 3200 },
+  //   { year: "2016", revenue: 7800, profit: 3200 },
+  //   { year: "2017", revenue: 7800, profit: 3200 },
+  //   { year: "2018", revenue: 7800, profit: 3200 },
+  //   { year: "2019", revenue: 7800, profit: 3200 },
+  //   { year: "2020", revenue: 7800, profit: 3200 },
+  //   { year: "2021", revenue: 7800, profit: 3200 },
+  //   { year: "2022", revenue: 7800, profit: 3200 },
+  //   { year: "2023", revenue: 7800, profit: 3200 },
+  //   { year: "2024", revenue: 7800, profit: 3200 },
+  //   { year: "2025", revenue: 7800, profit: 3200 },
+  // ];
+
+   const chartData = revenueProfitTrend.trend.map((item) => ({
+    year: item.year,
+    revenue: item.revenue_cr,
+    profit: item.profit_cr,
+  }));
+
   const { setActiveSection } = useCompanySection();
 
   return (
