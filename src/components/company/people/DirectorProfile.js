@@ -249,7 +249,7 @@ export default function DirectorProfile({ directors = [] }) {
           <section className={styles.headerCard}>
             <div className={styles.headerLeft}>
               <img
-                src={selectedDirector.details.profile_image}
+                src={selectedDirector.details?.profile_image || "images/placeholder.png"}
                 alt="profile"
                 className={styles.profilePic}
               />
@@ -260,7 +260,7 @@ export default function DirectorProfile({ directors = [] }) {
 
                   {/* PROFILE IMAGE FOR MAIN SECTIION */}
                   {selectedDirector.details?.profile_image && (
-                    <img src={selectedDirector.details.profile_image} alt="profile" />
+                    <img src={selectedDirector.details?.profile_image || 'images/placeholder.png'} alt="profile" />
                   )}
                 </div>
                 <div className={styles.profileSubtitle}>
@@ -282,7 +282,7 @@ export default function DirectorProfile({ directors = [] }) {
             <InfoBlock label="DIN" value={selectedDirector.din || 'N/A'} />
             <InfoBlock label="PAN" value={selectedDirector?.details?.pan || 'N/A'} />
             <InfoBlock label="Nationality" value={selectedDirector.details?.nationality || 'N/A'} />
-            <InfoBlock label="Date of Birth" value={selectedDirector.details?.dob_age || 'N/A'} />
+            <InfoBlock label="Date of Birth" value={selectedDirector.details?.dob || 'N/A'} />
             <InfoBlock label="Gender" value={selectedDirector.details?.gender || 'N/A'} />
             <InfoBlock label="Residential Status" value={selectedDirector.details?.residential_status || 'N/A'} />
             <InfoBlock label="Email ID" value={selectedDirector.details?.email || 'N/A'} />

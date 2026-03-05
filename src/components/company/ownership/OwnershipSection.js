@@ -128,11 +128,11 @@ const OwnershipSection = ({companyHighlights}) => {
               <div className={styles.progressBar}>
                 <div
                   className={styles.progressPromoter}
-                  style={{  width: `${shareholding.promoter_percentage || 0}%`}}
+                  style={{  width: `${shareholding?.promoter_percentage || 0}%`}}
                 ></div>
                 <div
                   className={styles.progressNonPromoter}
-                  style={{ width: `${shareholding.non_promoter_percentage || 0}%` }}
+                  style={{ width: `${shareholding?.non_promoter_percentage || 0}%` }}
                 ></div>
               </div>
             </div>
@@ -143,14 +143,14 @@ const OwnershipSection = ({companyHighlights}) => {
               <div className={`${styles.dot} ${styles.dotPromoter}`}></div>
               <div>
                 <p className={styles.legendLabel}>Promoter </p>
-                <p className={styles.legendValue}>{shareholding.promoter_percentage}%</p>
+                <p className={styles.legendValue}>{shareholding?.promoter_percentage}%</p>
               </div>
             </div>
             <div className={styles.legendItem}>
               <div className={`${styles.dot} ${styles.dotNonPromoter}`}></div>
               <div>
                 <p className={styles.legendLabel}>Non Promoter</p>
-                <p className={styles.legendValue}>{shareholding.non_promoter_percentage}%</p>
+                <p className={styles.legendValue}>{shareholding?.non_promoter_percentage}%</p>
               </div>
             </div>
           </div>
