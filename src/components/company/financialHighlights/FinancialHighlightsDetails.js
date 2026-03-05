@@ -207,18 +207,30 @@ const FinancialHighlightsDetails = ({ financialHighlights, revenueProfitTrend ,f
               <span className={styles.rowLabel}>{item.label}</span>
               <span className={styles.rowValue}>{item.value}</span>
               <span
-                className={`${styles.rowBadge} ${item.isNegative ? styles.rowNegative : styles.rowPositive}`}
+                className={`${styles.rowBadge} ${
+                  item.change === 'N/A' || item.change === null || item.change === undefined
+                    ? styles.rowNegative 
+                    : item.isNegative 
+                      ? styles.rowNegative 
+                      : styles.rowPositive
+                }`}
               >
-                <img
-                  src={
-                    item.isNegative
-                      ? "/icons/arrow-down.svg"
-                      : "/icons/arrow-up-green.svg"
-                  }
-                  alt=""
-                  className={styles.arrowIcon}
-                />
-                {item.change}
+                {item.change === 'N/A' || item.change === null || item.change === undefined ? (
+                  'N/A'
+                ) : (
+                  <>
+                    <img
+                      src={
+                        item.isNegative
+                          ? "/icons/arrow-down.svg"
+                          : "/icons/arrow-up-green.svg"
+                      }
+                      alt=""
+                      className={styles.arrowIcon}
+                    />
+                    {item.change}
+                  </>
+                )}
               </span>
             </div>
           ))}
