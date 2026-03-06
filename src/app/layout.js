@@ -7,6 +7,7 @@ import { CompanySectionProvider } from "@/components/company/context/CompanySect
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { useRef } from "react";
+import Link from "next/link";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -63,11 +64,19 @@ export default function RootLayout({ children }) {
               {/* ===== TOP HEADER ===== */}
               <header className={styles.header}>
                 <div className={styles.headerLeft}>
-                  <img
+                  <Link href="/">
+                    <img
+                      src="/icons/logo2.svg"
+                      alt="Corporate Professionals"
+                      className={styles.logo}
+                    />
+                  </Link>
+
+                  {/* <img
                     src="/icons/logo2.svg"
                     alt="Corporate Professionals"
                     className={styles.logo}
-                  />
+                  /> */}
 
                   <div className={styles.divider} />
 
@@ -103,9 +112,8 @@ export default function RootLayout({ children }) {
                     {/* 🏠 Home */}
                     <button
                       type="button"
-                      className={`${styles.iconTab} ${
-                        activeTab === "home" ? styles.activeTab : ""
-                      }`}
+                      className={`${styles.iconTab} ${activeTab === "home" ? styles.activeTab : ""
+                        }`}
                       onClick={() => handleNav("home", "/")}
                     >
                       <img src="/icons/home-icon.svg" alt="Home" />
@@ -114,9 +122,8 @@ export default function RootLayout({ children }) {
                     {/* 🏢 Company Database */}
                     <button
                       type="button"
-                      className={`${styles.iconTab} ${
-                        activeTab === "company" ? styles.activeTab : ""
-                      }`}
+                      className={`${styles.iconTab} ${activeTab === "company" ? styles.activeTab : ""
+                        }`}
                       onClick={() => handleNav("company", "/companies")}
                     >
                       <img src="/icons/company-icon.svg" alt="Companies" />
@@ -125,9 +132,8 @@ export default function RootLayout({ children }) {
                     {/* 👤 People Database */}
                     <button
                       type="button"
-                      className={`${styles.iconTab} ${
-                        activeTab === "profile" ? styles.activeTab : ""
-                      }`}
+                      className={`${styles.iconTab} ${activeTab === "profile" ? styles.activeTab : ""
+                        }`}
                       onClick={() => handleNav("profile", "/people")}
                     >
                       <img src="/icons/profile-icon.svg" alt="Profile" />

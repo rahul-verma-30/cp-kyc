@@ -3,6 +3,7 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
+
 .layoutContainer {
   display: flex;
   flex-direction: column;
@@ -23,7 +24,7 @@ body {
   padding: 12px 48px;
   box-sizing: border-box;
   font-family: "Inter", sans-serif;
-    position: fixed;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -37,6 +38,10 @@ body {
   gap: 24px;
   flex: 1;
   min-width: 0;
+}
+
+.headerLeft a {
+  margin-top: 4px;
 }
 
 .logo {
@@ -133,7 +138,7 @@ body {
 
 .sidebar {
   width: 48px;
-  background-color: rgba(250, 250, 250, 1); 
+  background-color: rgba(250, 250, 250, 1);
   border-right: 1px solid rgba(228, 228, 231, 1);
   display: flex;
   flex-direction: column;
@@ -143,7 +148,7 @@ body {
   top: 64px;
   left: 0;
   z-index: 900;
-height: 100vh;
+  height: 100vh;
 }
 
 .sidebarIcons {
@@ -196,6 +201,7 @@ height: 100vh;
   margin-left: 48px;
   /* overflow-y: auto; */
 }
+
 /* Below CompanyNewHeader */
 .companyBody {
   display: flex;
@@ -209,7 +215,8 @@ height: 100vh;
 
 /* Company page left sidebar */
 .companySidebar {
-  width: 280px; /* or whatever your component needs */
+  width: 280px;
+  /* or whatever your component needs */
   border-right: 1px solid rgba(228, 228, 231, 1);
   background: #fafafa;
 }
