@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./CompanyStickyHeader.module.css";
 
-export default function CompanyStickyHeader({ visible }) {
+export default function CompanyStickyHeader({ visible, companyData }) {
   const actionsRef = useRef(null);
 
   const [actionsOpen, setActionsOpen] = useState(false);
@@ -31,11 +31,23 @@ export default function CompanyStickyHeader({ visible }) {
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
+  const getTruncatedText = (text, limit = 30) => {
+    if (!text) return { display: "N/A", full: "N/A" };
+
+    return {
+      display: text.length > limit ? text.slice(0, limit) + "..." : text,
+      full: text
+    };
+  };
+
+  const companyName = getTruncatedText(companyData?.company_information?.legal_name, 5);
+  const companyAddress = getTruncatedText(companyData?.contact_details?.registered_address, 30);
+
+
   return (
     <header
-      className={`${styles.stickyHeader} ${
-        visible ? styles.visible : styles.hidden
-      }`}
+      className={`${styles.stickyHeader} ${visible ? styles.visible : styles.hidden
+        }`}
     >
       <div className={styles.inner}>
         {/* CENTER */}
@@ -47,18 +59,18 @@ export default function CompanyStickyHeader({ visible }) {
                 <img src="/icons/dabur-logo.svg" alt="Dabur" />
               </div>
             </div>
-            <h1 className={styles.companyName}>Dabur India</h1>
+            <h1 className={styles.companyName} title={companyName?.full}>{companyName?.display}</h1>
 
             <div className={styles.statsContainer}>
 
-               <div className={styles.statItem}>
-                <span className={styles.cinBadge}>FMCG</span>
+              <div className={styles.statItem}>
+                <span className={styles.cinBadge}>{companyData?.company_information?.industry || "N/A"}</span>
               </div>
 
               <div className={styles.divider}></div>
               <div className={styles.statItem}>
-               <span className={styles.scoreBadgeGreen}>
-                     <img
+                <span className={styles.scoreBadgeGreen}>
+                  <img
                     src="/icons/greencheck.svg"
                     alt="arrow down"
                     className={styles.arrowDownGreen}
@@ -68,19 +80,19 @@ export default function CompanyStickyHeader({ visible }) {
 
               <div className={styles.divider}></div>
               <div className={styles.infoMetaItem}>
-                <span>Funded 1884</span>
+                <span>Founded {companyData?.company_information?.incorporation_date.split("/")[2] || "N/A"}</span>
               </div>
 
               <div className={styles.divider}></div>
               <div className={styles.infoMetaItem}>
-                <span>Public</span>
+                <span>{companyData?.company_information?.classification || "N/A"}</span>
               </div>
 
               <div className={styles.divider}></div>
               <div className={styles.infoMetaItem}>
-                <span>Ghaziabad, Uttar Pradesh, India</span>
+                <span title={companyAddress?.full}>{companyAddress?.display || "N/A"}</span>
               </div>
-  
+
             </div>
           </div>
         </div>
@@ -112,19 +124,17 @@ export default function CompanyStickyHeader({ visible }) {
                 <img
                   src="/icons/chevron-down.svg"
                   alt=""
-                  className={`${styles.chevronDown} ${
-                    actionsOpen ? styles.rotated : ""
-                  }`}
+                  className={`${styles.chevronDown} ${actionsOpen ? styles.rotated : ""
+                    }`}
                 />
               </button>
 
               {actionsOpen && (
                 <div
-                  className={`${styles.actionsDropdown} ${
-                    actionsDirection === "up"
-                      ? styles.dropdownUp
-                      : styles.dropdownDown
-                  }`}
+                  className={`${styles.actionsDropdown} ${actionsDirection === "up"
+                    ? styles.dropdownUp
+                    : styles.dropdownDown
+                    }`}
                 >
                   <button className={styles.dropdownItem}>View Company</button>
                   <button className={styles.dropdownItem}>

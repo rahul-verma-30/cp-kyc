@@ -244,46 +244,46 @@
 /* ===== ACTIONS DROPDOWN ===== */
 
 .actionsWrapper {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .actionsDropdown {
-  position: absolute;
-  min-width: 180px;
-  background: #ffffff;
-  border: 1px solid rgba(228, 228, 231, 1);
-  border-radius: 8px;
-  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.08);
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  padding: 6px 0;
+    position: absolute;
+    min-width: 180px;
+    background: #ffffff;
+    border: 1px solid rgba(228, 228, 231, 1);
+    border-radius: 8px;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.08);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    padding: 6px 0;
 }
 
 .dropdownDown {
-  top: calc(100% + 6px);
-  right: 0;
+    top: calc(100% + 6px);
+    right: 0;
 }
 
 .dropdownUp {
-  bottom: calc(100% + 6px);
-  right: 0;
+    bottom: calc(100% + 6px);
+    right: 0;
 }
 
 .dropdownItem {
-  background: none;
-  border: none;
-  padding: 10px 14px;
-  text-align: left;
-  font-size: 14px;
-  cursor: pointer;
+    background: none;
+    border: none;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer;
 }
 
 .dropdownItem:hover {
-  background-color: rgba(244, 244, 245, 1);
+    background-color: rgba(244, 244, 245, 1);
 }
 
 
@@ -503,18 +503,18 @@
 }
 
 .riskIconBox {
-  background: rgba(249, 115, 22, 1);
-  border-radius: 100px;
-  height: 50px;
-  width: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    background: rgba(249, 115, 22, 1);
+    border-radius: 100px;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .riskIconBox img {
-  height: 26px;
-  width: 26px;
+    height: 26px;
+    width: 26px;
 }
 
 
@@ -565,39 +565,40 @@
     position: relative;
 }
 
-.cardMedium:hover , .cardHigh:hover {
-  box-shadow: 0px 4px 20px -4px rgba(0, 0, 0, 0.08);
+.cardMedium:hover,
+.cardHigh:hover {
+    box-shadow: 0px 4px 20px -4px rgba(0, 0, 0, 0.08);
 }
 
 .viewDetails {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 
-  position: absolute;
-  bottom: 24px;
-  right: 24px;
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
 
-  font-size: 14px;
-  font-weight: 500;
-  color: rgba(4, 30, 66, 1);
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(4, 30, 66, 1);
 
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(4px);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(4px);
 
-  text-decoration: underline;
+    text-decoration: underline;
 
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease,
-    visibility 0.2s ease;
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        visibility 0.2s ease;
 }
 
 .riskCard:hover .viewDetails {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
 
@@ -682,7 +683,7 @@
     padding-bottom: 8px;
 }
 
-.cardFooter{
+.cardFooter {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -714,28 +715,32 @@
     transform: rotate(180deg);
 }
 
+.addressLine {
+    cursor: pointer;
+}
+
 @media (max-width: 1600px) {
-  .logoCircle {
-    width: 140px;
-    height: 140px;
-  }
+    .logoCircle {
+        width: 140px;
+        height: 140px;
+    }
 
-  .logoImage {
-    width: 96px;
-  }
+    .logoImage {
+        width: 96px;
+    }
 
-  .companyName {
-    font-size: 22px;
-    line-height: 30px;
-  }
+    .companyName {
+        font-size: 22px;
+        line-height: 30px;
+    }
 
-  .statsContainer {
-    gap: 20px;
-  }
+    .statsContainer {
+        gap: 20px;
+    }
 
-  .riskGrid {
-    gap: 20px;
-  }
+    .riskGrid {
+        gap: 20px;
+    }
 }
 
 

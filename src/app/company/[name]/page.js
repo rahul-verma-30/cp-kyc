@@ -64,18 +64,18 @@ export default function CompanyPage() {
   const [highlightsLimit, setLimit] = useState(10);
 
   // Charges
-const [chargesData, setChargesData] = useState(null);
-const [chargesLoading, setChargesLoading] = useState(false);
-const [chargesError, setChargesError] = useState(null);
-const [openPage, setOpenPage] = useState(1);
-const [closedPage, setClosedPage] = useState(1);
-const [chargesLimit, setChargesLimit] = useState(10);
+  const [chargesData, setChargesData] = useState(null);
+  const [chargesLoading, setChargesLoading] = useState(false);
+  const [chargesError, setChargesError] = useState(null);
+  const [openPage, setOpenPage] = useState(1);
+  const [closedPage, setClosedPage] = useState(1);
+  const [chargesLimit, setChargesLimit] = useState(10);
 
-// Directors & KMPS
+  // Directors & KMPS
 
-const [directorsData, setDirectorsData] = useState(null);
-const [directorsLoading, setDirectorsLoading] = useState(false);
-const [directorsError, setDirectorsError] = useState(null);
+  const [directorsData, setDirectorsData] = useState(null);
+  const [directorsLoading, setDirectorsLoading] = useState(false);
+  const [directorsError, setDirectorsError] = useState(null);
 
 
   const overviewRef = useRef(null);
@@ -302,50 +302,50 @@ const [directorsError, setDirectorsError] = useState(null);
 
 
   /* ================= COMPANY CHARGES (PAGINATED) ================= */
-useEffect(() => {
-  if (!companyName) return;
+  useEffect(() => {
+    if (!companyName) return;
 
-  const fetchCharges = async () => {
-    try {
-      setChargesLoading(true);
-      setChargesError(null);
-
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(
-          companyName
-        )}/charges?open_page=${openPage}&closed_page=${closedPage}&limit=${chargesLimit}`
-      );
-
-      let data;
+    const fetchCharges = async () => {
       try {
-        data = await response.json();
-      } catch {
-        throw new Error("Invalid server response");
-      }
+        setChargesLoading(true);
+        setChargesError(null);
 
-      if (!response.ok) {
-        throw new Error(
-          data?.detail ||
-          data?.message ||
-          `Charges Error ${response.status}: ${response.statusText}`
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(
+            companyName
+          )}/charges?open_page=${openPage}&closed_page=${closedPage}&limit=${chargesLimit}`
         );
+
+        let data;
+        try {
+          data = await response.json();
+        } catch {
+          throw new Error("Invalid server response");
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            data?.detail ||
+            data?.message ||
+            `Charges Error ${response.status}: ${response.statusText}`
+          );
+        }
+
+        setChargesData(data);
+
+      } catch (err) {
+        console.error("Charges API Error:", err);
+        setChargesError(err.message);
+      } finally {
+        setChargesLoading(false);
       }
+    };
 
-      setChargesData(data);
-
-    } catch (err) {
-      console.error("Charges API Error:", err);
-      setChargesError(err.message);
-    } finally {
-      setChargesLoading(false);
-    }
-  };
-
-  fetchCharges();
-}, [companyName, openPage, closedPage, chargesLimit]);
+    fetchCharges();
+  }, [companyName, openPage, closedPage, chargesLimit]);
 
 
- /* ================= DIRECTORS & KMPS ================= */
+  /* ================= DIRECTORS & KMPS ================= */
 
 
   useEffect(() => {
@@ -373,8 +373,8 @@ useEffect(() => {
         if (!response.ok) {
           throw new Error(
             data?.detail ||
-              data?.message ||
-              `Directors Error ${response.status}: ${response.statusText}`
+            data?.message ||
+            `Directors Error ${response.status}: ${response.statusText}`
           );
         }
 
@@ -460,12 +460,12 @@ useEffect(() => {
         revenueError={trendError} />}
 
       {/* Directors & KMP */}
-      {activeSection === "directorsKmp" && <DirectorsSection directorsData={directorsData} directorsLoading={directorsLoading} directorsError={directorsError}/>}
+      {activeSection === "directorsKmp" && <DirectorsSection directorsData={directorsData} directorsLoading={directorsLoading} directorsError={directorsError} />}
 
       {/* Control & Ownership */}
 
       {activeSection === "controlOwnership" && (
-        <OwnershipSection  companyHighlights={companyHighlights} highlightsLoading={highlightsLoading} highlightsError={highlightsError}/>
+        <OwnershipSection companyHighlights={companyHighlights} highlightsLoading={highlightsLoading} highlightsError={highlightsError} />
       )}
 
       {/* Charges */}

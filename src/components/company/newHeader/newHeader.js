@@ -123,7 +123,7 @@ const RISK_DATA = [
   },
 ];
 
-const CompanyNewHeader = () => {
+const CompanyNewHeader = ({ companyData }) => {
   const [isExpanded, setIsExpanded] = useState(false); // State to track expansion
 
   const toggleExpand = () => setIsExpanded(!isExpanded);
@@ -166,26 +166,26 @@ const CompanyNewHeader = () => {
 
           <div className={styles.contentSection}>
             <div className={styles.titleRow}>
-              <h1 className={styles.companyName}>Dabur India</h1>
+              <h1 className={styles.companyName}>{companyData?.company_information?.legal_name || "N/A"}</h1>
             </div>
 
             <div className={styles.statsContainer}>
               <div className={styles.statItem}>
-                  <span className={styles.statLabel}>Industry :</span>
-                  <span className={styles.cinBadge}>FMCG</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statLabel}>Limiting Status :</span>
-                  <span className={styles.scoreBadgeGreen}>
-                     <img
+                <span className={styles.statLabel}>Industry :</span>
+                <span className={styles.cinBadge}>{companyData?.company_information?.industry || "N/A"}</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statLabel}>Limiting Status :</span>
+                <span className={styles.scoreBadgeGreen}>
+                  <img
                     src="/icons/greencheck.svg"
                     alt="arrow down"
                     className={styles.checkGreen}
                   />
                   NSE & BSE</span>
-                 
-                </div>
+
               </div>
+            </div>
 
             {/* <p className={styles.description}>
               Dabur is an India's leading FMCG Companies with Revenues of over
@@ -195,15 +195,25 @@ const CompanyNewHeader = () => {
             <div className={styles.infoMetaRow}>
               <div className={styles.metaItem}>
                 <img src="/icons/calendar.svg" className={styles.icon} />
-                <span>Funded 1884</span>
+                <span>Founded {companyData?.company_information?.incorporation_date.split("/")[2] || "N/A"}</span>
               </div>
               <div className={styles.metaItem}>
                 <img src="/icons/flag.svg" className={styles.icon} />
-                <span>Public</span>
+                <span>{companyData?.company_information?.classification || "N/A"}</span>
               </div>
               <div className={styles.metaItem}>
                 <img src="/icons/location.svg" className={styles.icon} />
-                <span>Ghaziabad, Uttar Pradesh, India</span>
+
+                <span
+                  className={styles.addressLine}
+                  title={companyData?.contact_details?.registered_address || "N/A"}
+                >
+                  {companyData?.contact_details?.registered_address
+                    ? companyData.contact_details.registered_address.length > 30
+                      ? companyData.contact_details.registered_address.slice(0, 30) + "..."
+                      : companyData.contact_details.registered_address
+                    : "N/A"}
+                </span>
               </div>
               <div className={styles.metaItem}>
                 <img src="/icons/profile-2user.svg" className={styles.icon} />
@@ -211,8 +221,8 @@ const CompanyNewHeader = () => {
               </div>
               <div className={styles.metaItem}>
                 <img src="/icons/global.svg" className={styles.icon} />
-                <a href="https://www.dabur.com/" className={styles.link}>
-                  www.dabur.com/
+                <a href={companyData?.contact_details?.website} className={styles.link}>
+                  {companyData?.contact_details?.website || "N/A"}
                 </a>
               </div>
               <div className={styles.socialIcons}>
@@ -278,19 +288,17 @@ const CompanyNewHeader = () => {
                   <img
                     src="/icons/chevron-down.svg"
                     alt=""
-                    className={`${styles.chevronDown} ${
-                      actionsOpen ? styles.rotated : ""
-                    }`}
+                    className={`${styles.chevronDown} ${actionsOpen ? styles.rotated : ""
+                      }`}
                   />
                 </button>
 
                 {actionsOpen && (
                   <div
-                    className={`${styles.actionsDropdown} ${
-                      actionsDirection === "up"
-                        ? styles.dropdownUp
-                        : styles.dropdownDown
-                    }`}
+                    className={`${styles.actionsDropdown} ${actionsDirection === "up"
+                      ? styles.dropdownUp
+                      : styles.dropdownDown
+                      }`}
                   >
                     <button className={styles.dropdownItem}>
                       View Company
@@ -305,7 +313,7 @@ const CompanyNewHeader = () => {
             </div>
             <div className={styles.lastUpdated}>
               <span>Last Updated:</span>{" "}
-              <strong>30-Dec-2024, 11:45 AM IST</strong>
+              <strong>{companyData?.header?.last_updated || "N/A"}</strong>
             </div>
           </div>
         </div>
@@ -335,9 +343,8 @@ const CompanyNewHeader = () => {
           <img
             src="/icons/chevron-down-dark.svg"
             alt="expand"
-            className={`${styles.obsChevron} ${
-              isExpanded ? styles.rotated : ""
-            }`}
+            className={`${styles.obsChevron} ${isExpanded ? styles.rotated : ""
+              }`}
             onClick={() => setIsExpanded(!isExpanded)}
           />
         </div>
@@ -346,9 +353,8 @@ const CompanyNewHeader = () => {
       {/* ================= EXPANDED SECTION (BELOW BAR) ================= */}
       {isExpanded && (
         <div
-          className={`${styles.expandedWrapper} ${
-            isExpanded ? styles.expandedOpen : styles.expandedClosed
-          }`}
+          className={`${styles.expandedWrapper} ${isExpanded ? styles.expandedOpen : styles.expandedClosed
+            }`}
         >
           <div className={styles.expandedInner}>
             <div className={styles.riskSummaryHeader}>
