@@ -24,9 +24,9 @@ export default function RootLayout({ children }) {
   useEffect(() => {
     if (pathname === "/") {
       setActiveTab("home");
-    } else if (pathname.startsWith("/CompanyDatabase")) {
+    } else if (pathname.startsWith("/companies")) {
       setActiveTab("company");
-    } else if (pathname.startsWith("/PeopleDatabase")) {
+    } else if (pathname.startsWith("/people")) {
       setActiveTab("profile");
     }
   }, [pathname]);
@@ -117,7 +117,7 @@ export default function RootLayout({ children }) {
                       className={`${styles.iconTab} ${
                         activeTab === "company" ? styles.activeTab : ""
                       }`}
-                      onClick={() => handleNav("company", "/CompanyDatabase")}
+                      onClick={() => handleNav("company", "/companies")}
                     >
                       <img src="/icons/company-icon.svg" alt="Companies" />
                     </button>
@@ -128,7 +128,7 @@ export default function RootLayout({ children }) {
                       className={`${styles.iconTab} ${
                         activeTab === "profile" ? styles.activeTab : ""
                       }`}
-                      onClick={() => handleNav("profile", "/PeopleDatabase")}
+                      onClick={() => handleNav("profile", "/people")}
                     >
                       <img src="/icons/profile-icon.svg" alt="Profile" />
                     </button>
