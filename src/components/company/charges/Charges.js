@@ -141,6 +141,7 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
 
   const openItems = charges?.open_charges?.items || [];
   const closedItems = charges?.closed_charges?.items || [];
+  
 
 
 
@@ -261,6 +262,7 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
             <p className={styles.strong}>{charges?.statistics?.last_charge_amount || "-"}</p>
           </div>
         </div>
+
       </section>
 
       <section
@@ -296,6 +298,65 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
               )}
             </tbody>
           </table>
+        </div>
+        <div className={styles.paginationRow}>
+          <span className={styles.showingText}>
+            Showing {(openPage - 1) * limit + 1}-
+            {Math.min(openPage * limit, charges?.open_charges?.total || 0)} of{" "}
+            {charges?.open_charges?.total || 0}
+          </span>
+          <div className={styles.paginationControls}>
+            <div className={styles.paginationInfo}>
+              <span className={styles.rowsLabel}>Rows per page</span>
+              <RowsPerPage value={limit}
+                onChange={(value) => {
+                  setLimit(value);
+                  setClosedPage(1);
+                  setOpenPage(1);
+                }} />
+            </div>
+            <span className={styles.pageLabel}>
+              Page {openPage} of{" "}
+              {charges?.open_charges?.pages || 1}
+            </span>
+            <div className={styles.navButtons}>
+              <button disabled={openPage === 1}
+                onClick={() => setOpenPage(1)}>
+                <img
+                  src="/icons/chevrons-left.svg"
+                  alt="First page"
+                  className={styles.navIcon}
+                />
+              </button>
+
+              <button disabled={openPage === 1}
+                onClick={() => setOpenPage(prev => prev - 1)}>
+                <img
+                  src="/icons/chevron-left.svg"
+                  alt="First page"
+                  className={styles.navIcon}
+                />
+              </button>
+              <button disabled={openPage >= (charges?.open_charges?.pages || 1)}
+                onClick={() => setOpenPage((prev) => prev + 1)}>
+                <img
+                  src="/icons/chevron-right-black.svg"
+                  alt="First page"
+                  className={styles.navIcon}
+                />
+              </button>
+              <button disabled={openPage >= (charges?.open_charges?.pages || 1)}
+                onClick={() =>
+                  setOpenPage(charges?.open_charges?.pages || 1)
+                }>
+                <img
+                  src="/icons/chevrons-right.svg"
+                  alt="First page"
+                  className={styles.navIcon}
+                />
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -356,7 +417,7 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
                 }} />
             </div>
             <span className={styles.pageLabel}>
-              Page {charges?.closed_charges?.page || 1} of{" "}
+              Page {closedPage} of{" "}
               {charges?.closed_charges?.pages || 1}
             </span>
             <div className={styles.navButtons}>
@@ -377,7 +438,7 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
                   className={styles.navIcon}
                 />
               </button>
-              <button disabled={closedPage === charges?.closed_charges?.pages}
+              <button disabled={closedPage >= (charges?.closed_charges?.pages || 1)}
                 onClick={() => setClosedPage((prev) => prev + 1)}>
                 <img
                   src="/icons/chevron-right-black.svg"
@@ -385,7 +446,7 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
                   className={styles.navIcon}
                 />
               </button>
-              <button disabled={closedPage === charges?.closed_charges?.pages}
+              <button disabled={closedPage >= (charges?.closed_charges?.pages || 1)}
                 onClick={() =>
                   setClosedPage(charges?.closed_charges?.pages || 1)
                 }>

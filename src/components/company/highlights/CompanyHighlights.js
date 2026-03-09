@@ -1,43 +1,43 @@
 import React, { useState, useEffect } from "react";
 import styles from "./CompanyHighlights.module.css";
 
-const CompanyHighlights = ({ companyHighlights ,page,limit,loading,error,setPage,setLimit }) => {
+const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, setPage, setLimit }) => {
 
 
   const [activeTab, setActiveTab] = useState("open");
- 
 
-if (loading) {
-  return <div className={styles.container}>Loading highlights...</div>;
-}
 
-if (error) {
-  return (
-    <div className={styles.container}>
-      <div style={{ color: "red", fontWeight: 500 }}>
-        {error}
+  if (loading) {
+    return <div className={styles.container}>Loading highlights...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className={styles.container}>
+        <div style={{ color: "red", fontWeight: 500 }}>
+          {error}
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   if (!companyHighlights) {
     return <div className={styles.container}>No data available</div>;
   }
 
-   /* ================= SAFE DATA EXTRACTION ================= */
+  /* ================= SAFE DATA EXTRACTION ================= */
 
-  const shareholding =companyHighlights?.shareholding || {};
+  const shareholding = companyHighlights?.shareholding || {};
   const charges = companyHighlights?.charges || {};
   const items = charges?.items || [];
 
   const openCharges = items?.filter(
-    (item) => item.status === "open"
-  );
+  (item) => item?.status?.toLowerCase() === "open"
+);
 
   const closedCharges = items?.filter(
-    (item) => item.status === "closed"
-  );
+  (item) => item?.status?.toLowerCase() === "closed"
+);
 
 
   // const chargesData = [
@@ -141,11 +141,11 @@ if (error) {
               <div className={styles.progressBar}>
                 <div
                   className={styles.progressPromoter}
-                  style={{  width: `${shareholding.promoter_percentage || 0}%`}}
+                  style={{ width: `${shareholding.promoter_percentage || 0}%` }}
                 ></div>
                 <div
                   className={styles.progressNonPromoter}
-                  style={{  width: `${shareholding.non_promoter_percentage || 0}%` }}
+                  style={{ width: `${shareholding.non_promoter_percentage || 0}%` }}
                 ></div>
               </div>
             </div>
@@ -177,25 +177,31 @@ if (error) {
           <div className={styles.toggleContainer}>
             <div
               className={`${styles.toggleSlider}
-               ${activeTab === "open" 
-                ? styles.sliderOpen 
-                : styles.sliderClosed
+               ${activeTab === "open"
+                  ? styles.sliderOpen
+                  : styles.sliderClosed
                 }`}
             ></div>
             <button
               className={`${styles.toggleButton} 
-              ${activeTab === "open" 
-                ? styles.activeToggle 
-                : ""
+              ${activeTab === "open"
+                  ? styles.activeToggle
+                  : ""
                 }`}
-              onClick={() => setActiveTab("open")}
+              onClick={() => {
+                setActiveTab("open");
+                setPage(1);
+              }}
             >
               Open Charges
             </button>
             <button
               className={`${styles.toggleButton} ${activeTab === "closed" ? styles.activeToggle : ""
                 }`}
-              onClick={() => setActiveTab("closed")}
+              onClick={() => {
+                setActiveTab("closed");
+                setPage(1);
+              }}
             >
               Closed Charges
             </button>
@@ -226,12 +232,48 @@ if (error) {
                 ))) : (
                   <tr>
                     <td colSpan="5" className={styles.noData}>
-                      No open charges found
+                      No open charges found on this page
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
+             <div className={styles.paginationContainer}>
+              <span>
+                Showing {(page - 1) * limit + 1}-
+                {Math.min(page * limit, companyHighlights?.charges?.total)} of
+                {companyHighlights?.charges?.total}
+              </span>
+              <div className={styles.paginationRight}>
+                <div className={styles.rowsPerPage}>
+                  <span>Rows per page</span>
+                  <select
+                    className={styles.rowsSelect}
+                    value={limit}
+                    onChange={(e) => {
+                      setLimit(Number(e.target.value));
+                      setPage(1);
+                    }}
+                  >
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={50}>50</option>
+                  </select>
+                </div>
+                <div className={styles.pageInfo}> Page {companyHighlights?.charges?.page} of {companyHighlights?.charges?.pages}</div>
+                <div className={styles.paginationControls}>
+                  <button className={styles.paginationButton} disabled={page === 1} onClick={() =>
+                    setPage((prev) => Math.max(prev - 1, 1))
+                  }>
+                    &lt;
+                  </button>
+                  <button className={styles.paginationButton} disabled={page === companyHighlights?.charges?.pages}
+                    onClick={() =>
+                      setPage((prev) => Math.min(prev + 1, companyHighlights?.charges?.pages))
+                    }>&gt;</button>
+                </div>
+              </div>
+            </div>
           </div>
         ) : activeTab === "closed" ? (
           <div className={styles.chargesTableContainer}>
@@ -280,8 +322,8 @@ if (error) {
             <div className={styles.paginationContainer}>
               <span>
                 Showing {(page - 1) * limit + 1}-
-                {Math.min(page * limit, companyHighlights.charges.total)} of
-                {companyHighlights.charges.total}
+                {Math.min(page * limit, companyHighlights?.charges?.total)} of
+                {companyHighlights?.charges?.total}
               </span>
               <div className={styles.paginationRight}>
                 <div className={styles.rowsPerPage}>
@@ -299,16 +341,16 @@ if (error) {
                     <option value={50}>50</option>
                   </select>
                 </div>
-                <div className={styles.pageInfo}> Page {companyHighlights.charges.page} of {companyHighlights.charges.pages}</div>
+                <div className={styles.pageInfo}> Page {companyHighlights?.charges?.page} of {companyHighlights?.charges?.pages}</div>
                 <div className={styles.paginationControls}>
-                  <button className={styles.paginationButton} disabled={page === 1}  onClick={() =>
-                      setPage((prev) => Math.max(prev - 1, 1))
-                    }>
+                  <button className={styles.paginationButton} disabled={page === 1} onClick={() =>
+                    setPage((prev) => Math.max(prev - 1, 1))
+                  }>
                     &lt;
                   </button>
-                  <button className={styles.paginationButton} disabled={page === companyHighlights.charges.pages}
-                   onClick={() =>     
-                      setPage((prev) => Math.min(prev + 1, companyHighlights.charges.pages))
+                  <button className={styles.paginationButton} disabled={page === companyHighlights?.charges?.pages}
+                    onClick={() =>
+                      setPage((prev) => Math.min(prev + 1, companyHighlights?.charges?.pages))
                     }>&gt;</button>
                 </div>
               </div>
