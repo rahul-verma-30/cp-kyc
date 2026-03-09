@@ -195,7 +195,7 @@ const CompanyNewHeader = ({ companyData }) => {
             <div className={styles.infoMetaRow}>
               <div className={styles.metaItem}>
                 <img src="/icons/calendar.svg" className={styles.icon} />
-                <span>Founded {companyData?.company_information?.incorporation_date.split("/")[2] || "N/A"}</span>
+                <span>Founded {companyData?.company_information?.incorporation_date ? companyData?.company_information?.incorporation_date?.split("/")[2] : "N/A"}</span>
               </div>
               <div className={styles.metaItem}>
                 <img src="/icons/flag.svg" className={styles.icon} />

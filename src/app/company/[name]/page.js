@@ -123,7 +123,7 @@ export default function CompanyPage() {
         setCompanyData(data);
 
       } catch (error) {
-        console.error("Error fetching company details:", error);
+        console.log("Error fetching company details:", error);
         setCompanyError(error.message);
       } finally {
         setCompanyLoading(false);
@@ -165,7 +165,7 @@ export default function CompanyPage() {
         // console.log(data);
 
       } catch (error) {
-        console.error("Error fetching company's financial highlights:", error);
+        console.log("Error fetching company's financial highlights:", error);
         setFinancialError(error.message);
       } finally {
         setFinancialLoading(false);
@@ -205,7 +205,7 @@ export default function CompanyPage() {
         // console.log(data);
 
       } catch (error) {
-        console.error("Error fetching company's Revenue Profit Trend:", error);
+        console.log("Error fetching company's Revenue Profit Trend:", error);
         setTrendError(error.message);
       } finally {
         setTrendLoading(false);
@@ -245,7 +245,7 @@ export default function CompanyPage() {
         // console.log(data);
 
       } catch (error) {
-        console.error("Error fetching company's Common Directorship:", error);
+        console.log("Error fetching company's Common Directorship:", error);
         setDirectorshipError(error.message);
       } finally {
         setDirectorshipLoading(false);
@@ -289,7 +289,7 @@ export default function CompanyPage() {
         setCompanyHighlights(data);
 
       } catch (err) {
-        console.error("Highlights API Error:", err);
+        console.log("Highlights API Error:", err);
         setHighlightsError(err.message);
 
       } finally {
@@ -334,7 +334,7 @@ export default function CompanyPage() {
         setChargesData(data);
 
       } catch (err) {
-        console.error("Charges API Error:", err);
+        console.log("Charges API Error:", err);
         setChargesError(err.message);
       } finally {
         setChargesLoading(false);
@@ -381,7 +381,7 @@ export default function CompanyPage() {
         setDirectorsData(data);
         console.log("Directors API:", data);
       } catch (error) {
-        console.error("Error fetching Directors:", error);
+        console.log("Error fetching Directors:", error);
         setDirectorsError(error.message);
       } finally {
         setDirectorsLoading(false);

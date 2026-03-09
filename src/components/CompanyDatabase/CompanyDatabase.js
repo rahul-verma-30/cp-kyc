@@ -38,7 +38,7 @@ export default function CompanyDatabase() {
           setCompanies([]);
         }
       } catch (error) {
-        console.error("Error fetching companies:", error);
+        console.log("Error fetching companies:", error);
         setCompanies([]);
       } finally {
         setLoading(false);
@@ -190,11 +190,10 @@ export default function CompanyDatabase() {
 
             {bulkOpen && (
               <div
-                className={`${styles.bulkDropdown} ${
-                  bulkDirection === "up"
+                className={`${styles.bulkDropdown} ${bulkDirection === "up"
                     ? styles.dropdownUp
                     : styles.dropdownDown
-                }`}
+                  }`}
               >
                 <button className={styles.dropdownItem}>Export Selected</button>
                 <button className={styles.dropdownItem}>

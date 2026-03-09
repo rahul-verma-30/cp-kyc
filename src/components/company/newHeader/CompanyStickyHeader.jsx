@@ -80,7 +80,7 @@ export default function CompanyStickyHeader({ visible, companyData }) {
 
               <div className={styles.divider}></div>
               <div className={styles.infoMetaItem}>
-                <span>Founded {companyData?.company_information?.incorporation_date.split("/")[2] || "N/A"}</span>
+                <span>Founded {companyData?.company_information?.incorporation_date ? companyData?.company_information?.incorporation_date?.split("/")[2] : "N/A"}</span>
               </div>
 
               <div className={styles.divider}></div>
