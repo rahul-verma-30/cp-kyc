@@ -10,22 +10,22 @@ export default function DirectorProfile({ directors = [] }) {
   const [directorTab, setDirectorTab] = useState("current");
 
 
-  
+
 
   // Filter directors based on tab (current/past) and search
   const filteredDirectors = directors.filter((director) => {
     // Based on your API data, all directors have "Inactive" status
     // So we'll show all directors in both tabs for now
     const matchesTab = true; // Show all directors regardless of tab
-    
-    const matchesSearch = searchTerm === "" || 
+
+    const matchesSearch = searchTerm === "" ||
       director.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       director.designation.toLowerCase().includes(searchTerm.toLowerCase()) ||
       director.din_pan.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesFilter = activeFilter === "All" || 
+
+    const matchesFilter = activeFilter === "All" ||
       director.designation.toLowerCase().includes(activeFilter.toLowerCase());
-    
+
     return matchesTab && matchesSearch && matchesFilter;
   });
 
@@ -288,7 +288,7 @@ export default function DirectorProfile({ directors = [] }) {
             <InfoBlock label="Email ID" value={selectedDirector.details?.email || 'N/A'} />
             <InfoBlock label="Mobile Number" value={selectedDirector.details?.mobile || 'N/A'} />
             <InfoBlock label="Type" value={selectedDirector?.category || 'N/A'} />
-   
+
           </div>
 
           <div className={styles.addressGrid}>

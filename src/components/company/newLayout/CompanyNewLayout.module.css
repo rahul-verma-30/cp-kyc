@@ -226,3 +226,8 @@ body {
   flex: 1;
   padding: 24px;
 }
+
+.headerSearch {
+  flex: 1;
+  min-width: 450px;
+}

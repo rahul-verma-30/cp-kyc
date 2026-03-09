@@ -6,11 +6,18 @@ import { useState } from "react";
 
 export default function HeroSection() {
   const router = useRouter();
-  const [companyName, setCompanyName] = useState(null)
+  const [companyName, setCompanyName] = useState("");
 
   const handleSearch = () => {
-    if (!companyName) return;
-    router.push(`/company/${companyName}`);
+    const query = companyName.trim();
+    if (!query) return;
+
+    router.push(`/company/${encodeURIComponent(query)}`);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleSearch();
   };
 
   return (
@@ -28,7 +35,7 @@ export default function HeroSection() {
         </div>
 
         <div className={styles.searchOuter}>
-          <div className={styles.searchContainer}>
+          <form className={styles.searchContainer} onSubmit={handleSubmit}>
             <div className={styles.searchIcon}>
               <div className={styles.squareIcon}>
                 <img
@@ -43,24 +50,21 @@ export default function HeroSection() {
               type="text"
               placeholder="Search by company name, CIN, LLPIN, or director name"
               className={styles.input}
+              value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
             />
 
-            <button
-              className={styles.searchBtn}
-              onClick={handleSearch}
-            >
+            <button type="submit" className={styles.searchBtn}>
               <span className={styles.arrowUp}>
                 <img
                   src="/icons/arrow-up.svg"
-                  alt="Arrow up"
+                  alt="Search"
                   className={styles.arrowImg}
                 />
               </span>
             </button>
-          </div>
+          </form>
         </div>
-
       </div>
 
       <div className={styles.gridOverlay}></div>

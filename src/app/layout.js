@@ -21,6 +21,20 @@ export default function RootLayout({ children }) {
 
   const [activeTab, setActiveTab] = useState("home");
 
+  const [companyName, setCompanyName] = useState("");
+
+  const handleSearch = () => {
+    const query = companyName.trim();
+    if (!query) return;
+
+    router.push(`/company/${encodeURIComponent(query)}`);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleSearch();
+  };
+
   // Sync activeTab with URL
   useEffect(() => {
     if (pathname === "/") {
@@ -80,20 +94,24 @@ export default function RootLayout({ children }) {
 
                   <div className={styles.divider} />
 
-                  <div className={styles.searchContainer}>
-                    <img
-                      src="/icons/search.svg"
-                      alt=""
-                      className={styles.searchIcon}
-                    />
-                    <input
-                      ref={searchInputRef}
-                      type="text"
-                      placeholder="Search by company name, CIN, LLPIN, or director name"
-                      className={styles.searchInput}
-                    />
+                  <div className={styles.searchContainerr}>
+                    <form className={`${styles.searchContainer} ${styles.headerSearch}`} onSubmit={handleSubmit}>
+                      <img
+                        src="/icons/search.svg"
+                        alt=""
+                        className={styles.searchIcon}
+                      />
+                      <input
+                        ref={searchInputRef}
+                        type="text"
+                        placeholder="Search by company name, CIN, LLPIN, or director name"
+                        className={styles.searchInput}
+                        value={companyName}
+                        onChange={(e) => setCompanyName(e.target.value)}
+                      />
 
-                    <div className={styles.shortcut}>⌘ K</div>
+                      <div className={styles.shortcut}>⌘ K</div>
+                    </form>
                   </div>
                 </div>
 
