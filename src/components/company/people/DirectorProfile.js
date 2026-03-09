@@ -264,41 +264,41 @@ export default function DirectorProfile({ directors = [] }) {
                   )}
                 </div>
                 <div className={styles.profileSubtitle}>
-                  <span>DIN: {selectedDirector.din || 'N/A'}</span>
+                  <span>DIN: {selectedDirector.din || '-'}</span>
                   <span className={styles.grayDot}></span>
-                  <span>{selectedDirector.role || 'N/A'}</span>
+                  <span>{selectedDirector.role || '-'}</span>
                 </div>
               </div>
             </div>
             <div className={styles.dinStatus}>
               DIN Status : <span className={`${styles.statusTag} ${selectedDirector.details?.din_status === "Active" ? styles.activeTag : styles.inactiveTag}`}>
-                {selectedDirector.details?.din_status || 'N/A'}
+                {selectedDirector.details?.din_status || '-'}
               </span>
             </div>
           </section>
 
           {/* PERSONAL INFO GRID */}
           <div className={styles.detailsGrid}>
-            <InfoBlock label="DIN" value={selectedDirector.din || 'N/A'} />
-            <InfoBlock label="PAN" value={selectedDirector?.details?.pan || 'N/A'} />
-            <InfoBlock label="Nationality" value={selectedDirector.details?.nationality || 'N/A'} />
-            <InfoBlock label="Date of Birth" value={selectedDirector.details?.dob || 'N/A'} />
-            <InfoBlock label="Gender" value={selectedDirector.details?.gender || 'N/A'} />
-            <InfoBlock label="Residential Status" value={selectedDirector.details?.residential_status || 'N/A'} />
-            <InfoBlock label="Email ID" value={selectedDirector.details?.email || 'N/A'} />
-            <InfoBlock label="Mobile Number" value={selectedDirector.details?.mobile || 'N/A'} />
-            <InfoBlock label="Type" value={selectedDirector?.category || 'N/A'} />
+            <InfoBlock label="DIN" value={selectedDirector.din || '-'} />
+            <InfoBlock label="PAN" value={selectedDirector?.details?.pan || '-'} />
+            <InfoBlock label="Nationality" value={selectedDirector.details?.nationality || '-'} />
+            <InfoBlock label="Date of Birth" value={selectedDirector.details?.dob || '-'} />
+            <InfoBlock label="Gender" value={selectedDirector.details?.gender || '-'} />
+            <InfoBlock label="Residential Status" value={selectedDirector.details?.residential_status || '-'} />
+            <InfoBlock label="Email ID" value={selectedDirector.details?.email || '-'} />
+            <InfoBlock label="Mobile Number" value={selectedDirector.details?.mobile || '-'} />
+            <InfoBlock label="Type" value={selectedDirector?.category || '-'} />
 
           </div>
 
           <div className={styles.addressGrid}>
             <InfoBlock
               label="Current Residential Address"
-              value={selectedDirector.details?.current_residential_address || 'N/A'}
+              value={selectedDirector.details?.current_residential_address || '-'}
             />
             <InfoBlock
               label="Permanent Address"
-              value={selectedDirector.details?.permanent_address || 'N/A'}
+              value={selectedDirector.details?.permanent_address || '-'}
             />
           </div>
 
@@ -389,11 +389,11 @@ export default function DirectorProfile({ directors = [] }) {
                     {selectedDirector.details?.current_positions?.map((position, idx) => (
                       <AssociationRow
                         key={idx}
-                        name={position.company_name || "N/A"}
-                        role={position.designation || "N/A"}
-                        type={position.category || "N/A"}
+                        name={position.company_name || "-"}
+                        role={position.designation || "-"}
+                        type={position.category || "-"}
                         period={`${position.appointment_date} - Present`}
-                        date={position.appointment_date || "N/A"}
+                        date={position.appointment_date || "-"}
                       />
                     ))}
                     {(!selectedDirector.details?.current_positions || selectedDirector.details.current_positions.length === 0) && (
@@ -421,9 +421,9 @@ export default function DirectorProfile({ directors = [] }) {
                     {selectedDirector.details?.past_positions?.map((position, idx) => (
                       <AssociationRow
                         key={idx}
-                        name={position.company_name || "N/A"}
+                        name={position.company_name || "-"}
                         role={position.designation}
-                        date={`${position.appointment_date} - ${position.cessation_date === "-" ? 'N/A' : position.cessation_date}`}
+                        date={`${position.appointment_date} - ${position.cessation_date === "-" ? '-' : position.cessation_date}`}
                       />
                     ))}
                     {(!selectedDirector.details?.past_positions || selectedDirector.details.past_positions.length === 0) && (
@@ -459,14 +459,14 @@ export default function DirectorProfile({ directors = [] }) {
                             />
                           </div>
                           {/* Dabur India Limited */}
-                          N/A
+                          -
                         </div>
                       </td>
-                      <td>N/A</td>
+                      <td>-</td>
                       <td>
                         <span className={styles.promoterTag}>
                           {/* Promoter */}
-                          N/A
+                          -
                         </span>
                       </td>
                     </tr>
@@ -482,14 +482,14 @@ export default function DirectorProfile({ directors = [] }) {
                             />
                           </div>
                           {/* Dabur Nepal Pvt. Ltd. */}
-                          N/A
+                          -
                         </div>
                       </td>
-                      <td>N/A</td>
+                      <td>-</td>
                       <td>
                         <span className={styles.nonPromoterTag}>
                           {/* Non-Promoter */}
-                          N/A
+                          -
                         </span>
                       </td>
                     </tr>

@@ -50,22 +50,22 @@ const DirectorsSection = ({ directorsData, directorsLoading, directorsError }) =
   : [
     {
         label: "Current Directors",
-        value: "N/A",
+        value: "-",
         colorClass: styles.blueStat,
       },
       {
         label: "Past Directors",
-        value: "N/A",
+        value: "-",
         colorClass: styles.redStat,
       },
       {
         label: "Current KMP(s)",
-        value: "N/A",
+        value: "-",
         colorClass: styles.purpleStat,
       },
       {
         label: "Past KMP(s)",
-        value: "N/A",
+        value: "-",
         colorClass: styles.greenStat,
       },
   ];
@@ -84,12 +84,12 @@ const DirectorsSection = ({ directorsData, directorsLoading, directorsError }) =
         <div className={styles.headerInfo}>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Source:</span>
-            <span className={styles.infoValue}>{directorsData?.source || "N/A"}</span>
+            <span className={styles.infoValue}>{directorsData?.source || "-"}</span>
           </span>
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>{directorsData?.summary?.last_updated || "N/A"}</span>
+            <span className={styles.infoValue}>{directorsData?.summary?.last_updated || "-"}</span>
           </span>
         </div>
       </div>

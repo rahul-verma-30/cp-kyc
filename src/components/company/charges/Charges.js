@@ -167,12 +167,12 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
         <div className={styles.headerInfo}>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Source:</span>
-            <span className={styles.infoValue}>{charges?.source || "N/A"}</span>
+            <span className={styles.infoValue}>{charges?.source || "-"}</span>
           </span>
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>{charges?.last_updated || "N/A"}</span>
+            <span className={styles.infoValue}>{charges?.last_updated || "-"}</span>
           </span>
         </div>
       </div>
@@ -226,7 +226,7 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
                   <span className={styles.legendText}>Others Charges:</span>
                 </div>
 
-                <span className={styles.legendValue}>N/A</span>
+                <span className={styles.legendValue}>-</span>
               </div>
             </div>
           </div>
