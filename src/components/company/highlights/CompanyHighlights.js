@@ -32,12 +32,12 @@ const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, set
   const items = charges?.items || [];
 
   const openCharges = items?.filter(
-  (item) => item?.status?.toLowerCase() === "open"
-);
+    (item) => item?.status?.toLowerCase() === "open"
+  );
 
   const closedCharges = items?.filter(
-  (item) => item?.status?.toLowerCase() === "closed"
-);
+    (item) => item?.status?.toLowerCase() === "closed"
+  );
 
 
   // const chargesData = [
@@ -120,15 +120,17 @@ const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, set
             <div className={styles.statsGrid}>
               <div className={`${styles.statItem} ${styles.statItemFirst}`}>
                 <span className={styles.statLabel}>Total Equity Shares</span>
-                <span className={styles.statValue}>{shareholding.total_equity_shares || "-"}</span>
+                <span className={styles.statValue}>
+                  {shareholding?.total_equity_shares?.toLocaleString() ?? "-"}
+                </span>
               </div>
               <div className={`${styles.statItem} ${styles.statItemMiddle}`}>
                 <span className={styles.statLabel}>Promoter Holding</span>
-                <span className={styles.statValue}>{shareholding.promoter_holding || "-"}</span>
+                <span className={styles.statValue}>{shareholding.promoter_holding?.toLocaleString() ?? "-"}</span>
               </div>
               <div className={`${styles.statItem} ${styles.statItemLast}`}>
                 <span className={styles.statLabel}>Non-Promoter Holding</span>
-                <span className={styles.statValue}>{shareholding.non_promoter_holding || "-"}</span>
+                <span className={styles.statValue}>{shareholding.non_promoter_holding?.toLocaleString() ?? "-"}</span>
               </div>
             </div>
             <div className={styles.chartHeader}>
@@ -156,14 +158,14 @@ const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, set
               <div className={`${styles.dot} ${styles.dotPromoter}`}></div>
               <div>
                 <p className={styles.legendLabel}>Promoter </p>
-                <p className={styles.legendValue}>{shareholding.promoter_percentage}%</p>
+                <p className={styles.legendValue}>{shareholding.promoter_percentage?.toFixed(2) ?? "0"}%</p>
               </div>
             </div>
             <div className={styles.legendItem}>
               <div className={`${styles.dot} ${styles.dotNonPromoter}`}></div>
               <div>
                 <p className={styles.legendLabel}>Non Promoter</p>
-                <p className={styles.legendValue}>{shareholding.non_promoter_percentage}%</p>
+                <p className={styles.legendValue}>{shareholding.non_promoter_percentage?.toFixed(2) ?? "0"}%</p>
               </div>
             </div>
           </div>
@@ -238,7 +240,7 @@ const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, set
                 )}
               </tbody>
             </table>
-             <div className={styles.paginationContainer}>
+            <div className={styles.paginationContainer}>
               <span>
                 Showing {(page - 1) * limit + 1}-
                 {Math.min(page * limit, companyHighlights?.charges?.total)} of
@@ -348,9 +350,9 @@ const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, set
                   }>
                     &lt;
                   </button>
-                  <button className={styles.paginationButton} disabled={page === companyHighlights?.charges?.pages}
+                  <button className={styles.paginationButton} disabled={page === companyHighlights.charges.pages}
                     onClick={() =>
-                      setPage((prev) => Math.min(prev + 1, companyHighlights?.charges?.pages))
+                      setPage((prev) => Math.min(prev + 1, companyHighlights.charges.pages))
                     }>&gt;</button>
                 </div>
               </div>
