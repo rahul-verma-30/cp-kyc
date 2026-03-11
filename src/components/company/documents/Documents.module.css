@@ -510,3 +510,9 @@
 .fileLink:hover {
   text-decoration: underline;
 }
+
+@media(max-width:1350px){
+  .documentsSectionContainer {
+    padding:24px 10px;
+  }
+}
