@@ -73,9 +73,15 @@ export default function CompanyPage() {
 
   // Directors & KMPS
 
-  const [directorsData, setDirectorsData] = useState(null);
-  const [directorsLoading, setDirectorsLoading] = useState(false);
-  const [directorsError, setDirectorsError] = useState(null);
+    const [directorsData, setDirectorsData] = useState(null);
+    const [directorsLoading, setDirectorsLoading] = useState(false);
+    const [directorsError, setDirectorsError] = useState(null);
+
+  //Alerts
+
+  const [alertsData, setAlertsData] = useState(null);
+  const [alertsLoading, setAlertsLoading] = useState(false);
+  const [alertsError, setAlertsError] = useState(null);
 
 
   const overviewRef = useRef(null);
@@ -391,6 +397,52 @@ export default function CompanyPage() {
     getDirectors();
   }, [companyName]);
 
+  //Alerts
+
+  useEffect(() => {
+    if (!companyName) return;
+
+    const getAlerts = async () => {
+      try {
+        setAlertsLoading(true);
+        setAlertsError(null);
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(
+            companyName
+          )}/alerts`
+        );
+
+        let data;
+
+        try {
+          data = await response.json();
+        } catch {
+          throw new Error("Invalid server response");
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            data?.detail ||
+            data?.message ||
+            `Alerts Error ${response.status}: ${response.statusText}`
+          );
+        }
+
+        setAlertsData(data);
+        console.log("Alerts API:", data);
+      } catch (error) {
+        console.log("Error fetching Alerts:", error);
+        setAlertsError(error.message);
+      } finally {
+        setAlertsLoading(false);
+      }
+    };
+
+    getAlerts();
+  }, [companyName]);
+
+
   /* 🔥 Scroll when sidebar sub-item changes */
   useEffect(() => {
     if (activeSection !== "companyDetails") return;
@@ -492,7 +544,7 @@ export default function CompanyPage() {
           error={directorshipError} />
       )}
 
-      {activeSection === "alerts" && <AlertsContainer />}
+      {activeSection === "alerts" && <AlertsContainer alertsData={alertsData} alertsLoading={alertsLoading} alertsError={alertsError} />}
 
       {activeSection === "litigation" && <LigilationDetails />}
       {activeSection === "documents" && <Documents />}

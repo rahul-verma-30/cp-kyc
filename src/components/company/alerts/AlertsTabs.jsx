@@ -2,7 +2,7 @@
 
 import styles from "./AlertsTabs.module.css";
 
-export default function AlertsTabs({ activeTab, setActiveTab }) {
+export default function AlertsTabs({ activeTab, setActiveTab, alertsData  }) {
   const tabs = [
     { key: "overview", label: "Alert Overview" },
     { key: "observation", label: "Observation" },
@@ -18,12 +18,12 @@ export default function AlertsTabs({ activeTab, setActiveTab }) {
         <div className={styles.headerInfo}>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Source:</span>
-            <span className={styles.infoValue}>MCA</span>
+            <span className={styles.infoValue}>{alertsData?.source || "-"}</span>
           </span>
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>30-Dec-2024, 11:45 AM IST</span>
+            <span className={styles.infoValue}>{alertsData?.last_updated || "-"}</span>
           </span>
         </div>
       </div>

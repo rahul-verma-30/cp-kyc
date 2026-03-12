@@ -4,7 +4,52 @@ import { useState } from "react";
 import styles from "./AlertOverview.module.css";
 import RowsPerPage from "@/components/common/RowsPerPage";
 
-export default function AlertsOverview() {
+export default function AlertsOverview({ alertsData, alertsLoading, alertsError }) {
+
+  if (alertsLoading) {
+    return <div className={styles.container}>Loading Alerts...</div>;
+
+  }
+
+  if (alertsError) {
+    return (
+      <div className={styles.container}>
+        <div style={{ color: "red", fontWeight: 500 }}>
+          {error}
+        </div>
+      </div>
+    );
+  }
+
+  if (!alertsData) {
+    return (
+      <div className={styles.container}>
+        <p>Loading Alert details...</p>
+      </div>
+    );
+  }
+
+  const regulatoryAlerts = alertsData?.regulatory_alerts || [];
+  const flaggedAuthorities = alertsData?.flagged_by_authorities || [];
+
+  const regulatorySummary = alertsData?.summary?.regulatory || {
+    high: 0,
+    medium: 0,
+    low: 0,
+    total: 0
+  };
+
+  const regulatoryRows = regulatoryAlerts.map((item) => ({
+    reg: item.regulator || "-",
+    ent: item.entity || "-",
+    chg: item.regulatory_charges || "-",
+    act: item.regulatory_action || "-",
+    dev: item.further_developments || "-",
+    src: item.source || "-",
+    sev: item.severity || "-",
+    action: true
+  }));
+
   const [expandedRow, setExpandedRow] = useState(null);
 
   const toggleRow = (index) => {
@@ -62,11 +107,11 @@ export default function AlertsOverview() {
     {
       id: "regulatory",
       label: "Regulatory Alerts",
-      red: 1,
-      orange: 1,
-      yellow: 1,
+      red: regulatorySummary.high,
+      orange: regulatorySummary.medium,
+      yellow: regulatorySummary.low,
       blue: 0,
-      total: 3,
+      total: regulatorySummary.total,
       type: "table",
       headers: [
         "Regulator",
@@ -76,40 +121,9 @@ export default function AlertsOverview() {
         "Further Developments",
         "Source",
         "Severity",
-        "",
+        ""
       ],
-      rows: [
-        {
-          reg: "SEBI",
-          ent: "Dabur India Limited",
-          chg: "Delayed disclosure of material information to stock exchanges",
-          act: "Show-cause notice issued",
-          dev: "Under investigation",
-          src: "SEBI Order Ref: WTM/AB/IVD/ID1/24/2024",
-          sev: "High",
-          action: true,
-        },
-        {
-          reg: "Delhi Stock Exchange Ltd.",
-          ent: "Dabur India Limited",
-          chg: "Not Available",
-          act: "Company Delisted",
-          dev: "-",
-          src: "DSE Notice dated 23 Jan 2004",
-          sev: "Medium",
-          action: true,
-        },
-        {
-          reg: "SEBI",
-          ent: "Dabur India Limited",
-          chg: "Delayed disclosure of material information to stock exchanges",
-          act: "Show-cause notice issued",
-          dev: "Under investigation",
-          src: "SEBI Order Ref: WTM/AB/IVD/ID1/24/2024",
-          sev: "Low",
-          action: true,
-        },
-      ],
+      rows: regulatoryRows
     },
     {
       id: "bureau",
@@ -511,27 +525,20 @@ export default function AlertsOverview() {
             <h4 className={styles.cardTitle}>Flagged by Authorites</h4>
           </div>
           <div className={styles.badgeContainer}>
-            <div className={styles.badge}>
-              <img
-                src="/icons/alert-triangle.svg"
-                alt=""
-                width="16"
-                height="16"
-              />
-              DSE
-            </div>
-            <div className={styles.badge}>
-              <img
-                src="/icons/alert-triangle.svg"
-                alt=""
-                width="16"
-                height="16"
-              />
-              EPFO
-            </div>
+            {flaggedAuthorities.map((auth, index) => (
+              <div key={index} className={styles.badge}>
+                <img
+                  src="/icons/alert-triangle.svg"
+                  alt=""
+                  width="16"
+                  height="16"
+                />
+                {auth}
+              </div>
+            ))}
           </div>
           <span className={styles.cardDescription}>
-            2 regulatory authorities have flagged this company
+            {flaggedAuthorities.length} regulatory authorities have flagged this company
           </span>
         </div>
         <div className={styles.successCard}>
@@ -571,9 +578,8 @@ export default function AlertsOverview() {
                   alt=""
                   width="24"
                   height="24"
-                  className={`${styles.chevron} ${
-                    expandedRow === index ? styles.chevronOpen : ""
-                  }`}
+                  className={`${styles.chevron} ${expandedRow === index ? styles.chevronOpen : ""
+                    }`}
                 />
 
                 <span className={styles.label}>{item.label}</span>
@@ -784,9 +790,8 @@ export default function AlertsOverview() {
                         {item.sidebarItems.map((s, i) => (
                           <div
                             key={i}
-                            className={`${styles.sideItem} ${
-                              activeSidebarIndex === i ? styles.activeItem : ""
-                            }`}
+                            className={`${styles.sideItem} ${activeSidebarIndex === i ? styles.activeItem : ""
+                              }`}
                             onClick={() => setActiveSidebarIndex(i)}
                           >
                             <div className={styles.sideLabelGroup}>
@@ -810,9 +815,8 @@ export default function AlertsOverview() {
                           {item.tabs.map((t, i) => (
                             <span
                               key={i}
-                              className={`${styles.tabItem} ${
-                                activeTabIndex === i ? styles.activeTab : ""
-                              }`}
+                              className={`${styles.tabItem} ${activeTabIndex === i ? styles.activeTab : ""
+                                }`}
                               onClick={() => setActiveTabIndex(i)}
                             >
                               {t.label}
