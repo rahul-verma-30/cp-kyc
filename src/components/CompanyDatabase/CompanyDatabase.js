@@ -211,16 +211,18 @@ export default function CompanyDatabase() {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th className={styles.checkboxCell}>
-                <label className={styles.checkboxWrapper}>
-                  <input
-                    ref={headerCheckboxRef}
-                    type="checkbox"
-                    checked={allChecked}
-                    onChange={handleSelectAll}
-                  />
-                  <span className={styles.customCheckbox}></span>
-                </label>
+              <th className={styles.checkboxCol}>
+                <div className={styles.checkboxOuter}>
+                  <label className={styles.checkboxWrapper}>
+                    <input
+                      ref={headerCheckboxRef}
+                      type="checkbox"
+                      checked={allChecked}
+                      onChange={handleSelectAll}
+                    />
+                    <span className={styles.customCheckbox}></span>
+                  </label>
+                </div>
               </th>
 
               <th>Company Name</th>
@@ -249,12 +251,17 @@ export default function CompanyDatabase() {
             ) : (
               visibleData.map((company, index) => (
                 <tr key={index}>
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={selectedRows.includes(index)}
-                      onChange={() => handleRowSelect(index)}
-                    />
+                  <td className={styles.checkboxCol}>
+                    <div className={styles.checkboxOuter}>
+                      <label className={styles.checkboxWrapper}>
+                        <input
+                          type="checkbox"
+                          checked={selectedRows.includes(index)}
+                          onChange={() => handleRowSelect(index)}
+                        />
+                        <span className={styles.customCheckbox}></span>
+                      </label>
+                    </div>
                   </td>
 
                   <td className={styles.companyCell}>

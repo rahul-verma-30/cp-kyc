@@ -10,18 +10,18 @@ import DefaultsViolations from "./defaults-violations/page";
 import FormerDirectors from "./former-directors/page";
 import AlertsNews from "./news/page";
 
-export default function AlertsContainer() {
+export default function AlertsContainer({ alertsData, alertsLoading, alertsError }) {
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
     <>
-      <AlertsTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+      <AlertsTabs activeTab={activeTab} setActiveTab={setActiveTab} alertsData={alertsData} />
 
-      {activeTab === "overview" && <AlertsOverview />}
-      {activeTab === "observation" && <Observation />}
-      {activeTab === "defaults" && <DefaultsViolations />}
-      {activeTab === "formerDirectors" && <FormerDirectors />}
-      {activeTab === "news" && <AlertsNews />}
+      {activeTab === "overview" && <AlertsOverview alertsData={alertsData} alertsLoading={alertsLoading} alertsError={alertsError} />}
+      {activeTab === "observation" && <Observation alertsData={alertsData} alertsLoading={alertsLoading} alertsError={alertsError} />}
+      {activeTab === "defaults" && <DefaultsViolations alertsData={alertsData} alertsLoading={alertsLoading} alertsError={alertsError} />}
+      {activeTab === "formerDirectors" && <FormerDirectors alertsData={alertsData} alertsLoading={alertsLoading} alertsError={alertsError} />}
+      {activeTab === "news" && <AlertsNews alertsData={alertsData} alertsLoading={alertsLoading} alertsError={alertsError} />}
     </>
   );
 }
