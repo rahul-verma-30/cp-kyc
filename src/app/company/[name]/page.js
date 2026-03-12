@@ -31,7 +31,7 @@ import { useParams } from "next/navigation";
 export default function CompanyPage() {
   const { activeSection, activeSubSection } = useCompanySection();
   const params = useParams();
-  const rawCompanyName = params.name; // from /company/dabur because route is [name]
+  const rawCompanyName = (params.name.replaceAll("-", " ")).toUpperCase(); // from /company/dabur because route is [name]
 
 
   const [companyName, setCompanyName] = useState("");
@@ -73,9 +73,9 @@ export default function CompanyPage() {
 
   // Directors & KMPS
 
-    const [directorsData, setDirectorsData] = useState(null);
-    const [directorsLoading, setDirectorsLoading] = useState(false);
-    const [directorsError, setDirectorsError] = useState(null);
+  const [directorsData, setDirectorsData] = useState(null);
+  const [directorsLoading, setDirectorsLoading] = useState(false);
+  const [directorsError, setDirectorsError] = useState(null);
 
   //Alerts
 

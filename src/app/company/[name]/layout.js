@@ -12,7 +12,7 @@ export default function CompanyLayout({ children }) {
   const [showStickyHeader, setShowStickyHeader] = useState(false);
 
   const params = useParams();
-  const rawCompanyName = params.name; // from /company/dabur because route is [name]
+  const rawCompanyName = (params.name.replaceAll("-", " ")).toUpperCase(); // from /company/dabur because route is [name]
   const [companyName, setCompanyName] = useState("");
   // Company Details
   const [companyData, setCompanyData] = useState(null);

@@ -2,6 +2,8 @@
 import styles from "./CompanyDatabase.module.css";
 import { useState, useRef, useEffect } from "react";
 import RowsPerPage from "@/components/common/RowsPerPage";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function CompanyDatabase() {
   const bulkRef = useRef(null);
@@ -191,8 +193,8 @@ export default function CompanyDatabase() {
             {bulkOpen && (
               <div
                 className={`${styles.bulkDropdown} ${bulkDirection === "up"
-                    ? styles.dropdownUp
-                    : styles.dropdownDown
+                  ? styles.dropdownUp
+                  : styles.dropdownDown
                   }`}
               >
                 <button className={styles.dropdownItem}>Export Selected</button>
@@ -270,7 +272,7 @@ export default function CompanyDatabase() {
                       alt=""
                       className={styles.companyIcon}
                     />
-                    {company.company_name || "-"}
+                    <Link href={`/company/${(company.company_name || "").toLowerCase().replace(/\s+/g, "-")}`} className={styles.companyLink}>{company.company_name || "-"}</Link>
                   </td>
 
                   <td>{company.puc || 0}</td>

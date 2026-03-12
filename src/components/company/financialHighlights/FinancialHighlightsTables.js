@@ -658,7 +658,7 @@ const FinancialHighlightsTables = () => {
   /* ================= Auditor's data ================= */
 
   const params = useParams();
-  const companyName = params?.name;
+  const companyName = (params.name.replaceAll("-", " ")).toUpperCase();
 
   const [auditorsData, setAuditorsDatas] = useState([]);
   const [audType, setAudType] = useState("Standalone")
