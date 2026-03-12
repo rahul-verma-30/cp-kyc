@@ -260,3 +260,7 @@ body {
 .suggestionItem:hover {
   background: #f5f5f5;
 }
+
+.activeSuggestion {
+  background: #f3f4f6;
+}

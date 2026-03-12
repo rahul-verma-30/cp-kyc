@@ -27,6 +27,7 @@ export default function RootLayout({ children }) {
 
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
 
 
   // Fetch Companies
@@ -53,8 +54,32 @@ export default function RootLayout({ children }) {
     fetchCompanies();
   }, []);
 
+  const handleKeyDown = (e) => {
+    if (!showSuggestions) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((prev) =>
+        prev < suggestions.length - 1 ? prev + 1 : prev
+      );
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((prev) => (prev > 0 ? prev - 1 : 0));
+    }
+
+    if (e.key === "Enter") {
+      if (activeIndex >= 0 && suggestions[activeIndex]) {
+        e.preventDefault();
+        handleSuggestionClick(suggestions[activeIndex].company_name);
+      }
+    }
+  };
+
   const handleInputChange = (value) => {
     setCompanyName(value);
+    setActiveIndex(-1);
 
     if (!value.trim()) {
       setSuggestions([]);
@@ -66,7 +91,7 @@ export default function RootLayout({ children }) {
       .filter((company) =>
         company.company_name.toLowerCase().includes(value.toLowerCase())
       )
-      .slice(0, 20); // limit results
+      .slice(0, 20);
 
     setSuggestions(filtered);
     setShowSuggestions(true);
@@ -177,6 +202,7 @@ export default function RootLayout({ children }) {
                         className={styles.searchInput}
                         value={companyName}
                         onChange={(e) => handleInputChange(e.target.value)}
+                        onKeyDown={handleKeyDown}
                       />
 
                       <div className={styles.shortcut}>⌘ K</div>
@@ -186,7 +212,8 @@ export default function RootLayout({ children }) {
                         {suggestions.map((item, index) => (
                           <div
                             key={index}
-                            className={styles.suggestionItem}
+                            className={`${styles.suggestionItem} ${index === activeIndex ? styles.activeSuggestion : ""
+                              }`}
                             onClick={() => handleSuggestionClick(item.company_name)}
                           >
                             {item.company_name}
