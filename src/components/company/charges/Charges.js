@@ -143,8 +143,6 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
   const closedItems = charges?.closed_charges?.items || [];
   
 
-
-
   const COLORS = ["#0EA5E9", "rgba(244, 244, 245, 1)"];
 
   const [rowsPerPage, setRowsPerPage] = useState(10);

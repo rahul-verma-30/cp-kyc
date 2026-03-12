@@ -3,6 +3,8 @@
 import React, { useEffect, useRef } from "react";
 import styles from "./FinancialHighlightsTables.module.css";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
+import { useParams } from "next/navigation";
+import { useState } from "react";
 
 const FinancialHighlightsTables = () => {
   const tableData = [
@@ -644,48 +646,7 @@ const FinancialHighlightsTables = () => {
     },
   ];
 
-  const auditorsData = [
-    {
-      particulars: "Lahiri Subroto",
-      membership: "051717",
-      firmReg: "301174E",
-      firmName: "G. Basu & Co.",
-      pan: "AACFG9413D",
-      period: "2024-2025",
-    },
-    {
-      particulars: "Subroto Lahiri",
-      membership: "051717",
-      firmReg: "301174E",
-      firmName: "G Basu & Co",
-      pan: "AACFG9413D",
-      period: "2023-2024",
-    },
-    {
-      particulars: "Subroto Lahiri",
-      membership: "051717",
-      firmReg: "301174E",
-      firmName: "G Basu & Co",
-      pan: "AACFG9413D",
-      period: "2022-2023",
-    },
-    {
-      particulars: "Neeraj Goel",
-      membership: "099514",
-      firmReg: "001076N/N500013",
-      firmName: "Walker Chandiok & Co Llp",
-      pan: "AAAFW4298E",
-      period: "2021-2022",
-    },
-    {
-      particulars: "Neeraj Goel",
-      membership: "099514",
-      firmReg: "001076N/N500013",
-      firmName: "Walker Chandiok & Co Llp",
-      pan: "AAAFW4298E",
-      period: "2020-2021",
-    },
-  ];
+
   const { activeSubSection } = useCompanySection();
 
   const balanceSheetRef = useRef(null);
@@ -693,6 +654,41 @@ const FinancialHighlightsTables = () => {
   const cashFlowRef = useRef(null);
   const ratioRef = useRef(null);
   const auditorsRef = useRef(null);
+
+  /* ================= Auditor's data ================= */
+
+  const params = useParams();
+  const companyName = params?.name;
+
+  const [auditorsData, setAuditorsDatas] = useState([]);
+  const [audType, setAudType] = useState("Standalone")
+
+  useEffect(() => {
+    console.log("Fetching auditors for:", companyName);
+
+    if (!companyName && !audType) return;
+
+    const getAuditorsData = async () => {
+      try {
+        console.log("Fetching auditors for:", companyName);
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/financials/${companyName}/auditors?type=${audType}`
+        );
+
+        const data = await response.json();
+        setAuditorsDatas(data?.auditors || []);
+
+      } catch (error) {
+        console.log("Error in auditors fetch:", error);
+      }
+    };
+
+    getAuditorsData();
+  }, [companyName, audType]);
+  // =========================================
+
+
   useEffect(() => {
     if (!activeSubSection) return;
 
@@ -772,9 +768,9 @@ const FinancialHighlightsTables = () => {
 
   return (
     <div className={styles.container}>
-      <div 
-        ref={balanceSheetRef} 
-        style={{ marginTop: "20px" }} 
+      <div
+        ref={balanceSheetRef}
+        style={{ marginTop: "20px" }}
         className={styles.headerContainer}
       >
         <div className={styles.headerTitle}>Balance Sheet</div>
@@ -782,17 +778,16 @@ const FinancialHighlightsTables = () => {
           <span className={styles.currencyText}>Values in Cr.</span>
           <div className={styles.toggleContainer}>
             <div
-              className={`${styles.toggleSlider} ${
-                viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
-              }`}
+              className={`${styles.toggleSlider} ${viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
+                }`}
             ></div>
-            <button 
+            <button
               className={`${styles.toggleBtn} ${viewType === "Standalone" ? styles.activeToggle : ""}`}
               onClick={() => setViewType("Standalone")}
             >
               Standalone
             </button>
-            <button 
+            <button
               className={`${styles.toggleBtn} ${viewType === "Consolidated" ? styles.activeToggle : ""}`}
               onClick={() => setViewType("Consolidated")}
             >
@@ -801,7 +796,7 @@ const FinancialHighlightsTables = () => {
           </div>
         </div>
       </div>
-      
+
 
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
@@ -829,17 +824,16 @@ const FinancialHighlightsTables = () => {
           <span className={styles.currencyText}>Values in Cr.</span>
           <div className={styles.toggleContainer}>
             <div
-              className={`${styles.toggleSlider} ${
-                viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
-              }`}
+              className={`${styles.toggleSlider} ${viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
+                }`}
             ></div>
-            <button 
+            <button
               className={`${styles.toggleBtn} ${viewType === "Standalone" ? styles.activeToggle : ""}`}
               onClick={() => setViewType("Standalone")}
             >
               Standalone
             </button>
-            <button 
+            <button
               className={`${styles.toggleBtn} ${viewType === "Consolidated" ? styles.activeToggle : ""}`}
               onClick={() => setViewType("Consolidated")}
             >
@@ -870,22 +864,21 @@ const FinancialHighlightsTables = () => {
         style={{ marginTop: "32px" }}
         className={styles.headerContainer}
       >
-        <div className={styles.headerTitle}>Cash Flow Standalone </div>
+        <div className={styles.headerTitle}>Cash Flow</div>
         <div className={styles.headerControls}>
           <span className={styles.currencyText}>Values in Cr.</span>
           <div className={styles.toggleContainer}>
             <div
-              className={`${styles.toggleSlider} ${
-                viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
-              }`}
+              className={`${styles.toggleSlider} ${viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
+                }`}
             ></div>
-            <button 
+            <button
               className={`${styles.toggleBtn} ${viewType === "Standalone" ? styles.activeToggle : ""}`}
               onClick={() => setViewType("Standalone")}
             >
               Standalone
             </button>
-            <button 
+            <button
               className={`${styles.toggleBtn} ${viewType === "Consolidated" ? styles.activeToggle : ""}`}
               onClick={() => setViewType("Consolidated")}
             >
@@ -912,26 +905,25 @@ const FinancialHighlightsTables = () => {
       </div>
 
       <div
-        ref={cashFlowRef}
+        ref={ratioRef}
         style={{ marginTop: "32px" }}
         className={styles.headerContainer}
       >
-        <div className={styles.headerTitle}>Ratio Standalone </div>
+        <div className={styles.headerTitle}>Ratio </div>
         <div className={styles.headerControls}>
           <span className={styles.currencyText}>Values in Cr.</span>
           <div className={styles.toggleContainer}>
             <div
-              className={`${styles.toggleSlider} ${
-                viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
-              }`}
+              className={`${styles.toggleSlider} ${viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
+                }`}
             ></div>
-            <button 
+            <button
               className={`${styles.toggleBtn} ${viewType === "Standalone" ? styles.activeToggle : ""}`}
               onClick={() => setViewType("Standalone")}
             >
               Standalone
             </button>
-            <button 
+            <button
               className={`${styles.toggleBtn} ${viewType === "Consolidated" ? styles.activeToggle : ""}`}
               onClick={() => setViewType("Consolidated")}
             >
@@ -956,30 +948,29 @@ const FinancialHighlightsTables = () => {
           {renderTableBody(ratioData)}
         </table>
       </div>
-     
+
       <div
-        ref={cashFlowRef}
+        ref={auditorsRef}
         style={{ marginTop: "32px" }}
         className={styles.headerContainer}
       >
-        <div className={styles.headerTitle}>Auditor&apos;s Detail </div>
+        <div className={styles.headerTitle}>Auditor's Detail </div>
         <div className={styles.headerControls}>
           <span className={styles.currencyText}>Values in Cr.</span>
           <div className={styles.toggleContainer}>
             <div
-              className={`${styles.toggleSlider} ${
-                viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
-              }`}
+              className={`${styles.toggleSlider} ${audType == "standalone" ? styles.sliderStandalone : styles.sliderConsolidated
+                }`}
             ></div>
-            <button 
-              className={`${styles.toggleBtn} ${viewType === "Standalone" ? styles.activeToggle : ""}`}
-              onClick={() => setViewType("Standalone")}
+            <button
+              className={`${styles.toggleBtn} ${audType == "standalone" ? styles.activeToggle : ""}`}
+              onClick={() => setAudType("standalone")}
             >
               Standalone
             </button>
-            <button 
-              className={`${styles.toggleBtn} ${viewType === "Consolidated" ? styles.activeToggle : ""}`}
-              onClick={() => setViewType("Consolidated")}
+            <button
+              className={`${styles.toggleBtn} ${audType == "consolidated" ? styles.activeToggle : ""}`}
+              onClick={() => setAudType("consolidated")}
             >
               Consolidated
             </button>
@@ -987,11 +978,11 @@ const FinancialHighlightsTables = () => {
         </div>
       </div>
 
-      <div className={`${styles.tableWrapper} ${styles.auditorTable}`}>
+      {auditorsData.length > 0 ? <div className={`${styles.tableWrapper} ${styles.auditorTable}`}>
         <table className={styles.table}>
           <thead>
             <tr className={styles.headerRow}>
-              <th className={styles.particularsCell}>Particulars</th>
+              <th className={styles.dateCell}>Particulars</th>
               <th className={styles.dateCell}>Membership Number</th>
               <th className={styles.dateCell}>Firm Registration number</th>
               <th className={styles.dateCell}>Name of auditor firm</th>
@@ -1000,19 +991,19 @@ const FinancialHighlightsTables = () => {
             </tr>
           </thead>
           <tbody>
-            {auditorsData.map((row, index) => (
+            {auditorsData?.map((row, index) => (
               <tr key={index}>
-                <td className={styles.labelCell}>{row.particulars}</td>
-                <td className={styles.valueCell}>{row.membership}</td>
-                <td className={styles.valueCell}>{row.firmReg}</td>
-                <td className={styles.valueCell}>{row.firmName}</td>
-                <td className={styles.valueCell}>{row.pan}</td>
-                <td className={styles.valueCell}>{row.period}</td>
+                <td className={styles.labelCell}>{row?.auditor_type || "-"}</td>
+                <td className={styles.valueCell}>{row?.membership || "-"}</td>
+                <td className={styles.valueCell}>{row?.registration_no || "-"}</td>
+                <td className={styles.valueCell}>{row?.firm_name || "-"}</td>
+                <td className={styles.valueCell}>{row?.pan || "-"}</td>
+                <td className={styles.valueCell}>{row?.period || "-"}</td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
+      </div> : <div>No Data Available to show</div>}
     </div>
   );
 };
