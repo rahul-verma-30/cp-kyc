@@ -33,6 +33,7 @@ export default function DirectorProfile({ directors = [] }) {
     name: director.name,
     role: director.designation,
     din: director.din_pan,
+    image: director.details.profile_image,
     status: director.status,
     category: director.category,
     appointment_date: director.appointment_date,
@@ -229,8 +230,8 @@ export default function DirectorProfile({ directors = [] }) {
 
                 {/* IMAGES FOR THE SIDEBAR */}
                 <img
-                  src=" "
-                  alt="thumb"
+                  src={(item.image && item.image !== "N/A") ? item.image : "/icons/profile-icon.svg"}
+                  alt="profile"
                   className={styles.sidebarImg}
                 />
 
@@ -248,8 +249,14 @@ export default function DirectorProfile({ directors = [] }) {
           {/* PROFILE HEADER */}
           <section className={styles.headerCard}>
             <div className={styles.headerLeft}>
+
               <img
-                src={selectedDirector.details?.profile_image || "images/placeholder.png"}
+                src={
+                  selectedDirector.details?.profile_image &&
+                    selectedDirector.details.profile_image !== "N/A"
+                    ? selectedDirector.details.profile_image
+                    : "/icons/profile-icon.svg"
+                }
                 alt="profile"
                 className={styles.profilePic}
               />
@@ -258,10 +265,10 @@ export default function DirectorProfile({ directors = [] }) {
                   <h1>{selectedDirector.name || 'Select a Director'}</h1>
                   <img src="/images/linkedln.svg" alt="linkedln" />
 
-                  {/* PROFILE IMAGE FOR MAIN SECTIION */}
+                  {/* PROFILE IMAGE FOR MAIN SECTIION
                   {selectedDirector.details?.profile_image && (
-                    <img src={selectedDirector.details?.profile_image || 'images/placeholder.png'} alt="profile" />
-                  )}
+                    <img src={selectedDirector.details?.profile_image || "/icons/dabur-logo.svg"} alt="profile" />
+                  )} */}
                 </div>
                 <div className={styles.profileSubtitle}>
                   <span>DIN: {selectedDirector.din || '-'}</span>
@@ -389,10 +396,11 @@ export default function DirectorProfile({ directors = [] }) {
                     {selectedDirector.details?.current_positions?.map((position, idx) => (
                       <AssociationRow
                         key={idx}
+                        image={position.company_log}
                         name={position.company_name || "-"}
                         role={position.designation || "-"}
                         type={position.category || "-"}
-                        period={`${position.appointment_date} - Present`}
+                        period={position.tenure_years || "-"}
                         date={position.appointment_date || "-"}
                       />
                     ))}
@@ -421,9 +429,10 @@ export default function DirectorProfile({ directors = [] }) {
                     {selectedDirector.details?.past_positions?.map((position, idx) => (
                       <AssociationRow
                         key={idx}
+                        image={position.company_log}
                         name={position.company_name || "-"}
                         role={position.designation}
-                        date={`${position.appointment_date} - ${position.cessation_date === "-" ? '-' : position.cessation_date}`}
+                        date={position?.tenure_years||"-"}
                       />
                     ))}
                     {(!selectedDirector.details?.past_positions || selectedDirector.details.past_positions.length === 0) && (
@@ -453,7 +462,7 @@ export default function DirectorProfile({ directors = [] }) {
                         <div className={styles.companyRow}>
                           <div className={styles.companyIconWrapper}>
                             <img
-                              src="/icons/dabur-logo.svg"
+                              src="/icons/company-icon.svg"
                               className={styles.companyIcon}
                               alt=""
                             />
@@ -476,13 +485,13 @@ export default function DirectorProfile({ directors = [] }) {
                         <div className={styles.companyRow}>
                           <div className={styles.companyIconWrapper}>
                             <img
-                              src="/icons/dabur-logo.svg"
+                              src="/icons/company-icon.svg"
                               className={styles.companyIcon}
                               alt=""
                             />
                           </div>
                           {/* Dabur Nepal Pvt. Ltd. */}
-                          -
+                         -
                         </div>
                       </td>
                       <td>-</td>
@@ -681,14 +690,14 @@ function InfoBlock({ label, value }) {
   );
 }
 
-function AssociationRow({ name, role, type, period, date }) {
+function AssociationRow({ name, role, type, period, date,image }) {
   return (
     <tr>
       <td>
         <div className={styles.companyRow}>
           <div className={styles.companyIconWrapper}>
             <img
-              src="/icons/dabur-logo.svg"
+              src={image || "/icons/company-icon.svg"}
               className={styles.companyIcon}
               alt=""
             />
