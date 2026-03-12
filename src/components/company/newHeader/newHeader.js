@@ -263,7 +263,7 @@ const CompanyNewHeader = ({ companyData }) => {
 
           <div className={styles.actionSection}>
             <div className={styles.buttonGroup}>
-              <button className={styles.saveButton}>
+              <button className={styles.saveButton} onClick={() => { window.location.reload(); }}>
                 <img
                   src="/icons/refresh.svg"
                   alt=""
