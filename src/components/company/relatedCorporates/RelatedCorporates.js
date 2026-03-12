@@ -112,12 +112,12 @@ export default function RelatedCorporates({ commonDirectorship, loading, error }
         <div className={styles.headerInfo}>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Source:</span>
-            <span className={styles.infoValue}>{commonDirectorship?.source || 'N/A'}</span>
+            <span className={styles.infoValue}>{commonDirectorship?.source || '-'}</span>
           </span>
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>{commonDirectorship?.last_updated || 'N/A'}</span>
+            <span className={styles.infoValue}>{commonDirectorship?.last_updated || '-'}</span>
           </span>
         </div>
       </div>

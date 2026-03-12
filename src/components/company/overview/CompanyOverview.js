@@ -33,12 +33,12 @@ if (error) {
         <div className={styles.metaInfo}>
           <div className={styles.metaItem}>
             <span className={styles.metaLabel}>Source:</span>
-            <span className={styles.metaValue}>{companyData?.header?.source || "N/A"}</span>
+            <span className={styles.metaValue}>{companyData?.header?.source || "-"}</span>
           </div>
           <div className={styles.divider}></div>
           <div className={styles.metaItem}>
             <span className={styles.metaLabel}>Last Updated:</span>
-            <span className={styles.metaValueText}>{companyData?.header?.last_updated || "N/A"}</span>
+            <span className={styles.metaValueText}>{companyData?.header?.last_updated || "-"}</span>
           </div>
         </div>
       </div>
@@ -48,7 +48,7 @@ if (error) {
 
   <div className={styles.contentBox}>
     <p className={styles.description}>
-      {companyData?.about?.description || "N/A"}
+      {companyData?.about?.description || "-"}
       {/* Dabur India Limited is a FMCG company that is known for its wide range of personal-care,
       healthcare, and food products. According to its credit rating report, the company is
       involved in the manufacturing of these products. With over 18 brands under its name,

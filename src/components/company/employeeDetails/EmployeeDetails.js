@@ -181,33 +181,33 @@ const EmployeeDetails = () => {
           <div className={styles.gridInfo}>
             <div className={styles.infoBox}>
               <span className={styles.label}>DIN</span>
-              <span className={styles.value}>{director.din || "N/A"}</span>
+              <span className={styles.value}>{director.din || "-"}</span>
             </div>
             <div className={styles.infoBox}>
               <span className={styles.label}>DIN Status</span>
               <span className={`${styles.value} ${styles.statusGreen}`}>
-                {director.status || "N/A"}
+                {director.status || "-"}
               </span>
             </div>
             <div className={styles.infoBox}>
               <span className={styles.label}>Total Directorship</span>
               <span className={styles.value}>
-                {director.totalDirectorship || "N/A"}
+                {director.totalDirectorship || "-"}
               </span>
             </div>
             <div className={styles.infoBox}>
               <span className={styles.label}>Nationality</span>
               <span className={styles.value}>
-                {director.nationality || "N/A"}
+                {director.nationality || "-"}
               </span>
             </div>
             <div className={styles.infoBox}>
               <span className={styles.label}>Gender</span>
-              <span className={styles.value}>{director.gender || "N/A"}</span>
+              <span className={styles.value}>{director.gender || "-"}</span>
             </div>
             <div className={styles.infoBox}>
               <span className={styles.label}>Address</span>
-              <span className={styles.value}>{director.address || "N/A"}</span>
+              <span className={styles.value}>{director.address || "-"}</span>
             </div>
           </div>
 

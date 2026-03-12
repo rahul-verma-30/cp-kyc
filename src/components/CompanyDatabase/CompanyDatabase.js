@@ -38,7 +38,7 @@ export default function CompanyDatabase() {
           setCompanies([]);
         }
       } catch (error) {
-        console.error("Error fetching companies:", error);
+        console.log("Error fetching companies:", error);
         setCompanies([]);
       } finally {
         setLoading(false);
@@ -190,11 +190,10 @@ export default function CompanyDatabase() {
 
             {bulkOpen && (
               <div
-                className={`${styles.bulkDropdown} ${
-                  bulkDirection === "up"
+                className={`${styles.bulkDropdown} ${bulkDirection === "up"
                     ? styles.dropdownUp
                     : styles.dropdownDown
-                }`}
+                  }`}
               >
                 <button className={styles.dropdownItem}>Export Selected</button>
                 <button className={styles.dropdownItem}>
@@ -264,17 +263,17 @@ export default function CompanyDatabase() {
                       alt=""
                       className={styles.companyIcon}
                     />
-                    {company.company_name || "N/A"}
+                    {company.company_name || "-"}
                   </td>
 
                   <td>{company.puc || 0}</td>
                   <td>{company.soc || 0}</td>
-                  <td>{company.doi || "N/A"}</td>
-                  <td>{company.location || "N/A"}</td>
-                  <td>{company.industry || "N/A"}</td>
+                  <td>{company.doi || "-"}</td>
+                  <td>{company.location || "-"}</td>
+                  <td>{company.industry || "-"}</td>
                   <td>
                     <span className={styles.statusBadge}>
-                      {company.status || "N/A"}
+                      {company.status || "-"}
                     </span>
                   </td>
                 </tr>

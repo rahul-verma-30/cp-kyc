@@ -26,15 +26,15 @@ const ContactAddressSection = ({ companyData, loading, error }) => {
   const contactItems = [
     {
       label: "Registered Address",
-      value: contact?.registered_address || "N/A",
+      value: contact?.registered_address || "-",
     },
     {
       label: "Country",
-      value: contact?.country || "N/A",
+      value: contact?.country || "-",
     },
     {
       label: "Telephone",
-      value: contact?.telephone || "N/A",
+      value: contact?.telephone || "-",
     },
     {
       label: "Email Address",
@@ -50,7 +50,7 @@ const ContactAddressSection = ({ companyData, loading, error }) => {
             .replace("[dot]", ".")}
         </a>
       ) : (
-        "N/A"
+        "-"
       ),
     },
     {
@@ -69,7 +69,7 @@ const ContactAddressSection = ({ companyData, loading, error }) => {
           {contact.website}
         </a>
       ) : (
-        "N/A"
+        "-"
       ),
     },
   ];
@@ -126,7 +126,7 @@ const ContactAddressSection = ({ companyData, loading, error }) => {
                 </a>
               ))
             ) : (
-              <span>N/A</span>
+              <span>-</span>
             )}
           </div>
         </div>

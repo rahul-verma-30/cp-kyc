@@ -30,11 +30,11 @@ export default function SubsidiaryAccordion() {
         <div className={styles.parentHeader} onClick={toggleAccordion}>
           <div className={styles.parentInfo}>
             <div className={styles.parentLogo}>
-            <img 
-              src="/icons/dabur-logo.svg" 
-              alt="Dabur Logo" 
-              className={styles.parentLogoImg} 
-            />
+              <img
+                src="/icons/dabur-logo.svg"
+                alt="Dabur Logo"
+                className={styles.parentLogoImg}
+              />
             </div>
             <div className={styles.parentText}>
               <h2 className={styles.parentTitle}>Dabur India Limited</h2>
@@ -43,10 +43,10 @@ export default function SubsidiaryAccordion() {
           </div>
           <div className={styles.parentControls}>
             <span className={styles.subsidiaryCount}>10 Subsidiaries</span>
-            <img 
-              src="/icons/chevron-down-dark.svg" 
-              alt="Toggle" 
-              className={`${styles.chevron} ${isExpanded ? styles.chevronExpanded : ''}`} 
+            <img
+              src="/icons/chevron-down-dark.svg"
+              alt="Toggle"
+              className={`${styles.chevron} ${isExpanded ? styles.chevronExpanded : ''}`}
             />
           </div>
         </div>

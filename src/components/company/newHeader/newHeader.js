@@ -166,13 +166,13 @@ const CompanyNewHeader = ({ companyData }) => {
 
           <div className={styles.contentSection}>
             <div className={styles.titleRow}>
-              <h1 className={styles.companyName}>{companyData?.company_information?.legal_name || "N/A"}</h1>
+              <h1 className={styles.companyName}>{companyData?.company_information?.legal_name || "-"}</h1>
             </div>
 
             <div className={styles.statsContainer}>
               <div className={styles.statItem}>
                 <span className={styles.statLabel}>Industry :</span>
-                <span className={styles.cinBadge}>{companyData?.company_information?.industry || "N/A"}</span>
+                <span className={styles.cinBadge}>{companyData?.company_information?.industry || "-"}</span>
               </div>
               <div className={styles.statItem}>
                 <span className={styles.statLabel}>Limiting Status :</span>
@@ -195,24 +195,24 @@ const CompanyNewHeader = ({ companyData }) => {
             <div className={styles.infoMetaRow}>
               <div className={styles.metaItem}>
                 <img src="/icons/calendar.svg" className={styles.icon} />
-                <span>Founded {companyData?.company_information?.incorporation_date.split("/")[2] || "N/A"}</span>
+                <span>Founded {companyData?.company_information?.incorporation_date ? companyData?.company_information?.incorporation_date?.split("/")[2] : "-"}</span>
               </div>
               <div className={styles.metaItem}>
                 <img src="/icons/flag.svg" className={styles.icon} />
-                <span>{companyData?.company_information?.classification || "N/A"}</span>
+                <span>{companyData?.company_information?.classification || "-"}</span>
               </div>
               <div className={styles.metaItem}>
                 <img src="/icons/location.svg" className={styles.icon} />
 
                 <span
                   className={styles.addressLine}
-                  title={companyData?.contact_details?.registered_address || "N/A"}
+                  title={companyData?.contact_details?.registered_address || "-"}
                 >
                   {companyData?.contact_details?.registered_address
                     ? companyData.contact_details.registered_address.length > 30
                       ? companyData.contact_details.registered_address.slice(0, 30) + "..."
                       : companyData.contact_details.registered_address
-                    : "N/A"}
+                    : "-"}
                 </span>
               </div>
               <div className={styles.metaItem}>
@@ -222,7 +222,7 @@ const CompanyNewHeader = ({ companyData }) => {
               <div className={styles.metaItem}>
                 <img src="/icons/global.svg" className={styles.icon} />
                 <a href={companyData?.contact_details?.website} className={styles.link}>
-                  {companyData?.contact_details?.website || "N/A"}
+                  {companyData?.contact_details?.website || "-"}
                 </a>
               </div>
               <div className={styles.socialIcons}>
@@ -313,7 +313,7 @@ const CompanyNewHeader = ({ companyData }) => {
             </div>
             <div className={styles.lastUpdated}>
               <span>Last Updated:</span>{" "}
-              <strong>{companyData?.header?.last_updated || "N/A"}</strong>
+              <strong>{companyData?.header?.last_updated || "-"}</strong>
             </div>
           </div>
         </div>

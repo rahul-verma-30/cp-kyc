@@ -142,56 +142,56 @@ const FinancialHighlights = ({ financialHighlights, revenueProfitTrend, financia
   const ratioData = [
     {
       label: "EBITDA",
-      value: financialHighlightsData?.ebitda?.value || "N/A",
-      change: financialHighlightsData?.ebitda?.change_percentage || "N/A",
+      value: financialHighlightsData?.ebitda?.value || "-",
+      change: financialHighlightsData?.ebitda?.change_percentage || "-",
       isNegative: parseChange(financialHighlightsData?.ebitda?.change_percentage),
     },
     {
       label: "Net Prot Margin",
-      value: financialHighlightsData?.net_profit_margin?.value || "N/A",
-      change: financialHighlightsData?.net_profit_margin?.change_percentage || "N/A",
+      value: financialHighlightsData?.net_profit_margin?.value || "-",
+      change: financialHighlightsData?.net_profit_margin?.change_percentage || "-",
       isNegative: parseChange(financialHighlightsData?.net_profit_margin?.change_percentage),
     },
     {
       label: "Sales to Fixed Asset",
-      value: financialHighlightsData?.sales_to_fixed_asset?.value || "N/A",
-      change: financialHighlightsData?.sales_to_fixed_asset?.change_percentage || "N/A",
+      value: financialHighlightsData?.sales_to_fixed_asset?.value || "-",
+      change: financialHighlightsData?.sales_to_fixed_asset?.change_percentage || "-",
       isNegative: parseChange(financialHighlightsData?.sales_to_fixed_asset?.change_percentage),
     },
     {
       label: "Debt to EBITDA",
-      value: financialHighlightsData?.debt_to_ebitda?.value || "N/A",
-      change: financialHighlightsData?.debt_to_ebitda?.change_percentage || "N/A",
+      value: financialHighlightsData?.debt_to_ebitda?.value || "-",
+      change: financialHighlightsData?.debt_to_ebitda?.change_percentage || "-",
       isNegative: parseChange(financialHighlightsData?.debt_to_ebitda?.change_percentage),
     },
     {
       label: "Interest Coverage Ratio",
-      value: financialHighlightsData?.interest_coverage_ratio?.value || "N/A",
-      change: financialHighlightsData?.interest_coverage_ratio?.change_percentage || "N/A",
+      value: financialHighlightsData?.interest_coverage_ratio?.value || "-",
+      change: financialHighlightsData?.interest_coverage_ratio?.change_percentage || "-",
       isNegative: parseChange(financialHighlightsData?.interest_coverage_ratio?.change_percentage),
     },
     {
       label: "Net Worth Margin",
-      value: financialHighlightsData?.net_worth_margin?.value || "N/A",
-      change: financialHighlightsData?.net_worth_margin?.change_percentage || "N/A",
+      value: financialHighlightsData?.net_worth_margin?.value || "-",
+      change: financialHighlightsData?.net_worth_margin?.change_percentage || "-",
       isNegative: parseChange(financialHighlightsData?.net_worth_margin?.change_percentage),
     },
     {
       label: "Debt to Equity",
-      value: financialHighlightsData?.debt_to_equity?.value || "N/A",
-      change: financialHighlightsData?.debt_to_equity?.change_percentage || "N/A",
+      value: financialHighlightsData?.debt_to_equity?.value || "-",
+      change: financialHighlightsData?.debt_to_equity?.change_percentage || "-",
       isNegative: parseChange(financialHighlightsData?.debt_to_equity?.change_percentage),
     },
     {
       label: "Return on Equity",
-      value: financialHighlightsData?.return_on_equity?.value || "N/A",
-      change: financialHighlightsData?.return_on_equity?.change_percentage || "N/A",
+      value: financialHighlightsData?.return_on_equity?.value || "-",
+      change: financialHighlightsData?.return_on_equity?.change_percentage || "-",
       isNegative: parseChange(financialHighlightsData?.return_on_equity?.change_percentage),
     },
     {
       label: "Equity Multiplier",
-      value: financialHighlightsData?.equity_multiplier?.value || "N/A",
-      change: financialHighlightsData?.equity_multiplier?.change_percentage || "N/A",
+      value: financialHighlightsData?.equity_multiplier?.value || "-",
+      change: financialHighlightsData?.equity_multiplier?.change_percentage || "-",
       isNegative: parseChange(financialHighlightsData?.equity_multiplier?.change_percentage),
     },
   ];
@@ -223,12 +223,12 @@ const FinancialHighlights = ({ financialHighlights, revenueProfitTrend, financia
         <div className={styles.headerInfo}>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Source:</span>
-            <span className={styles.infoValue}>{financialHighlights.source || "N/A"}</span>
+            <span className={styles.infoValue}>{financialHighlights.source || "-"}</span>
           </span>
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>{financialHighlights.last_updated || "N/A"}</span>
+            <span className={styles.infoValue}>{financialHighlights.last_updated || "-"}</span>
           </span>
         </div>
       </div>
@@ -269,15 +269,15 @@ const FinancialHighlights = ({ financialHighlights, revenueProfitTrend, financia
             <span className={styles.rowValue}>{item.value}</span>
             <span
               className={`${styles.rowBadge} ${
-                item.change === 'N/A' || item.change === null || item.change === undefined
+                item.change === '-' || item.change === null || item.change === undefined
                   ? styles.rowNegative 
                   : item.isNegative 
                     ? styles.rowNegative 
                     : styles.rowPositive
               }`}
             >
-              {item.change === 'N/A' || item.change === null || item.change === undefined ? (
-                'N/A'
+              {item.change === '-' || item.change === null || item.change === undefined ? (
+                '-'
               ) : (
                 <>
                   <img

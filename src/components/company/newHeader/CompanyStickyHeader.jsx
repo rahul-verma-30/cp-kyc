@@ -32,7 +32,7 @@ export default function CompanyStickyHeader({ visible, companyData }) {
   }, []);
 
   const getTruncatedText = (text, limit = 30) => {
-    if (!text) return { display: "N/A", full: "N/A" };
+    if (!text) return { display: "-", full: "-" };
 
     return {
       display: text.length > limit ? text.slice(0, limit) + "..." : text,
@@ -64,7 +64,7 @@ export default function CompanyStickyHeader({ visible, companyData }) {
             <div className={styles.statsContainer}>
 
               <div className={styles.statItem}>
-                <span className={styles.cinBadge}>{companyData?.company_information?.industry || "N/A"}</span>
+                <span className={styles.cinBadge}>{companyData?.company_information?.industry || "-"}</span>
               </div>
 
               <div className={styles.divider}></div>
@@ -80,17 +80,17 @@ export default function CompanyStickyHeader({ visible, companyData }) {
 
               <div className={styles.divider}></div>
               <div className={styles.infoMetaItem}>
-                <span>Founded {companyData?.company_information?.incorporation_date.split("/")[2] || "N/A"}</span>
+                <span>Founded {companyData?.company_information?.incorporation_date ? companyData?.company_information?.incorporation_date?.split("/")[2] : "-"}</span>
               </div>
 
               <div className={styles.divider}></div>
               <div className={styles.infoMetaItem}>
-                <span>{companyData?.company_information?.classification || "N/A"}</span>
+                <span>{companyData?.company_information?.classification || "-"}</span>
               </div>
 
               <div className={styles.divider}></div>
               <div className={styles.infoMetaItem}>
-                <span title={companyAddress?.full}>{companyAddress?.display || "N/A"}</span>
+                <span title={companyAddress?.full}>{companyAddress?.display || "-"}</span>
               </div>
 
             </div>
