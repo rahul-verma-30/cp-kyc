@@ -23,16 +23,73 @@ export default function RootLayout({ children }) {
 
   const [companyName, setCompanyName] = useState("");
 
-  const handleSearch = () => {
-    const query = companyName.trim();
-    if (!query) return;
+  const [allCompanies, setAllCompanies] = useState([])
 
-    router.push(`/company/${encodeURIComponent(query)}`);
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+
+  // Fetch Companies
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/companies`
+        );
+
+        const result = await res.json();
+
+        if (Array.isArray(result)) {
+          setAllCompanies(result);
+        } else {
+          setAllCompanies([]);
+        }
+      } catch (error) {
+        console.log("Error fetching companies:", error);
+        setAllCompanies([]);
+      }
+    };
+
+    fetchCompanies();
+  }, []);
+
+  const handleInputChange = (value) => {
+    setCompanyName(value);
+
+    if (!value.trim()) {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    const filtered = allCompanies
+      .filter((company) =>
+        company.company_name.toLowerCase().includes(value.toLowerCase())
+      )
+      .slice(0, 20); // limit results
+
+    setSuggestions(filtered);
+    setShowSuggestions(true);
+  };
+
+  const handleSuggestionClick = (name) => {
+    setCompanyName(name);
+    setShowSuggestions(false);
+
+    router.push(`/company/${name.replaceAll(" ", "-").toLowerCase()}`);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleSearch();
+
+    const formData = new FormData(e.currentTarget);
+    const query = formData.get("companySearch")?.toString().trim();
+
+    if (!query) return;
+
+    setShowSuggestions(false);
+
+    router.push(`/company/${query.replaceAll(" ", "-").toLowerCase()}`);
   };
 
   // Sync activeTab with URL
@@ -69,6 +126,17 @@ export default function RootLayout({ children }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest(`.${styles.searchContainerr}`)) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
   return (
     <Suspense fallback={null}>
       <CompanySectionProvider>
@@ -102,16 +170,30 @@ export default function RootLayout({ children }) {
                         className={styles.searchIcon}
                       />
                       <input
+                        name="companySearch"
                         ref={searchInputRef}
                         type="text"
                         placeholder="Search by company name, CIN, LLPIN, or director name"
                         className={styles.searchInput}
                         value={companyName}
-                        onChange={(e) => setCompanyName(e.target.value)}
+                        onChange={(e) => handleInputChange(e.target.value)}
                       />
 
                       <div className={styles.shortcut}>⌘ K</div>
                     </form>
+                    {showSuggestions && suggestions.length > 0 && (
+                      <div className={styles.suggestionBox}>
+                        {suggestions.map((item, index) => (
+                          <div
+                            key={index}
+                            className={styles.suggestionItem}
+                            onClick={() => handleSuggestionClick(item.company_name)}
+                          >
+                            {item.company_name}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 
