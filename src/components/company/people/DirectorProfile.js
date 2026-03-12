@@ -10,22 +10,22 @@ export default function DirectorProfile({ directors = [] }) {
   const [directorTab, setDirectorTab] = useState("current");
 
 
-  
+
 
   // Filter directors based on tab (current/past) and search
   const filteredDirectors = directors.filter((director) => {
     // Based on your API data, all directors have "Inactive" status
     // So we'll show all directors in both tabs for now
     const matchesTab = true; // Show all directors regardless of tab
-    
-    const matchesSearch = searchTerm === "" || 
+
+    const matchesSearch = searchTerm === "" ||
       director.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       director.designation.toLowerCase().includes(searchTerm.toLowerCase()) ||
       director.din_pan.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesFilter = activeFilter === "All" || 
+
+    const matchesFilter = activeFilter === "All" ||
       director.designation.toLowerCase().includes(activeFilter.toLowerCase());
-    
+
     return matchesTab && matchesSearch && matchesFilter;
   });
 
@@ -33,6 +33,7 @@ export default function DirectorProfile({ directors = [] }) {
     name: director.name,
     role: director.designation,
     din: director.din_pan,
+    image: director.details.profile_image,
     status: director.status,
     category: director.category,
     appointment_date: director.appointment_date,
@@ -229,8 +230,8 @@ export default function DirectorProfile({ directors = [] }) {
 
                 {/* IMAGES FOR THE SIDEBAR */}
                 <img
-                  src=" "
-                  alt="thumb"
+                  src={(item.image && item.image !== "N/A") ? item.image : "/icons/profile-icon.svg"}
+                  alt="profile"
                   className={styles.sidebarImg}
                 />
 
@@ -248,8 +249,14 @@ export default function DirectorProfile({ directors = [] }) {
           {/* PROFILE HEADER */}
           <section className={styles.headerCard}>
             <div className={styles.headerLeft}>
+
               <img
-                src={selectedDirector.details?.profile_image || "images/placeholder.png"}
+                src={
+                  selectedDirector.details?.profile_image &&
+                    selectedDirector.details.profile_image !== "N/A"
+                    ? selectedDirector.details.profile_image
+                    : "/icons/profile-icon.svg"
+                }
                 alt="profile"
                 className={styles.profilePic}
               />
@@ -258,47 +265,47 @@ export default function DirectorProfile({ directors = [] }) {
                   <h1>{selectedDirector.name || 'Select a Director'}</h1>
                   <img src="/images/linkedln.svg" alt="linkedln" />
 
-                  {/* PROFILE IMAGE FOR MAIN SECTIION */}
+                  {/* PROFILE IMAGE FOR MAIN SECTIION
                   {selectedDirector.details?.profile_image && (
-                    <img src={selectedDirector.details?.profile_image || 'images/placeholder.png'} alt="profile" />
-                  )}
+                    <img src={selectedDirector.details?.profile_image || "/icons/dabur-logo.svg"} alt="profile" />
+                  )} */}
                 </div>
                 <div className={styles.profileSubtitle}>
-                  <span>DIN: {selectedDirector.din || 'N/A'}</span>
+                  <span>DIN: {selectedDirector.din || '-'}</span>
                   <span className={styles.grayDot}></span>
-                  <span>{selectedDirector.role || 'N/A'}</span>
+                  <span>{selectedDirector.role || '-'}</span>
                 </div>
               </div>
             </div>
             <div className={styles.dinStatus}>
               DIN Status : <span className={`${styles.statusTag} ${selectedDirector.details?.din_status === "Active" ? styles.activeTag : styles.inactiveTag}`}>
-                {selectedDirector.details?.din_status || 'N/A'}
+                {selectedDirector.details?.din_status || '-'}
               </span>
             </div>
           </section>
 
           {/* PERSONAL INFO GRID */}
           <div className={styles.detailsGrid}>
-            <InfoBlock label="DIN" value={selectedDirector.din || 'N/A'} />
-            <InfoBlock label="PAN" value={selectedDirector?.details?.pan || 'N/A'} />
-            <InfoBlock label="Nationality" value={selectedDirector.details?.nationality || 'N/A'} />
-            <InfoBlock label="Date of Birth" value={selectedDirector.details?.dob || 'N/A'} />
-            <InfoBlock label="Gender" value={selectedDirector.details?.gender || 'N/A'} />
-            <InfoBlock label="Residential Status" value={selectedDirector.details?.residential_status || 'N/A'} />
-            <InfoBlock label="Email ID" value={selectedDirector.details?.email || 'N/A'} />
-            <InfoBlock label="Mobile Number" value={selectedDirector.details?.mobile || 'N/A'} />
-            <InfoBlock label="Type" value={selectedDirector?.category || 'N/A'} />
-   
+            <InfoBlock label="DIN" value={selectedDirector.din || '-'} />
+            <InfoBlock label="PAN" value={selectedDirector?.details?.pan || '-'} />
+            <InfoBlock label="Nationality" value={selectedDirector.details?.nationality || '-'} />
+            <InfoBlock label="Date of Birth" value={selectedDirector.details?.dob || '-'} />
+            <InfoBlock label="Gender" value={selectedDirector.details?.gender || '-'} />
+            <InfoBlock label="Residential Status" value={selectedDirector.details?.residential_status || '-'} />
+            <InfoBlock label="Email ID" value={selectedDirector.details?.email || '-'} />
+            <InfoBlock label="Mobile Number" value={selectedDirector.details?.mobile || '-'} />
+            <InfoBlock label="Type" value={selectedDirector?.category || '-'} />
+
           </div>
 
           <div className={styles.addressGrid}>
             <InfoBlock
               label="Current Residential Address"
-              value={selectedDirector.details?.current_residential_address || 'N/A'}
+              value={selectedDirector.details?.current_residential_address || '-'}
             />
             <InfoBlock
               label="Permanent Address"
-              value={selectedDirector.details?.permanent_address || 'N/A'}
+              value={selectedDirector.details?.permanent_address || '-'}
             />
           </div>
 
@@ -389,11 +396,12 @@ export default function DirectorProfile({ directors = [] }) {
                     {selectedDirector.details?.current_positions?.map((position, idx) => (
                       <AssociationRow
                         key={idx}
-                        name={position.company_name || "N/A"}
-                        role={position.designation || "N/A"}
-                        type={position.category || "N/A"}
-                        period={`${position.appointment_date} - Present`}
-                        date={position.appointment_date || "N/A"}
+                        image={position.company_log}
+                        name={position.company_name || "-"}
+                        role={position.designation || "-"}
+                        type={position.category || "-"}
+                        period={position.tenure_years || "-"}
+                        date={position.appointment_date || "-"}
                       />
                     ))}
                     {(!selectedDirector.details?.current_positions || selectedDirector.details.current_positions.length === 0) && (
@@ -421,9 +429,10 @@ export default function DirectorProfile({ directors = [] }) {
                     {selectedDirector.details?.past_positions?.map((position, idx) => (
                       <AssociationRow
                         key={idx}
-                        name={position.company_name || "N/A"}
+                        image={position.company_log}
+                        name={position.company_name || "-"}
                         role={position.designation}
-                        date={`${position.appointment_date} - ${position.cessation_date === "-" ? 'N/A' : position.cessation_date}`}
+                        date={position?.tenure_years||"-"}
                       />
                     ))}
                     {(!selectedDirector.details?.past_positions || selectedDirector.details.past_positions.length === 0) && (
@@ -453,20 +462,20 @@ export default function DirectorProfile({ directors = [] }) {
                         <div className={styles.companyRow}>
                           <div className={styles.companyIconWrapper}>
                             <img
-                              src="/icons/dabur-logo.svg"
+                              src="/icons/company-icon.svg"
                               className={styles.companyIcon}
                               alt=""
                             />
                           </div>
                           {/* Dabur India Limited */}
-                          N/A
+                          -
                         </div>
                       </td>
-                      <td>N/A</td>
+                      <td>-</td>
                       <td>
                         <span className={styles.promoterTag}>
                           {/* Promoter */}
-                          N/A
+                          -
                         </span>
                       </td>
                     </tr>
@@ -476,20 +485,20 @@ export default function DirectorProfile({ directors = [] }) {
                         <div className={styles.companyRow}>
                           <div className={styles.companyIconWrapper}>
                             <img
-                              src="/icons/dabur-logo.svg"
+                              src="/icons/company-icon.svg"
                               className={styles.companyIcon}
                               alt=""
                             />
                           </div>
                           {/* Dabur Nepal Pvt. Ltd. */}
-                          N/A
+                         -
                         </div>
                       </td>
-                      <td>N/A</td>
+                      <td>-</td>
                       <td>
                         <span className={styles.nonPromoterTag}>
                           {/* Non-Promoter */}
-                          N/A
+                          -
                         </span>
                       </td>
                     </tr>
@@ -681,14 +690,14 @@ function InfoBlock({ label, value }) {
   );
 }
 
-function AssociationRow({ name, role, type, period, date }) {
+function AssociationRow({ name, role, type, period, date,image }) {
   return (
     <tr>
       <td>
         <div className={styles.companyRow}>
           <div className={styles.companyIconWrapper}>
             <img
-              src="/icons/dabur-logo.svg"
+              src={image || "/icons/company-icon.svg"}
               className={styles.companyIcon}
               alt=""
             />
