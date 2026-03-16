@@ -244,11 +244,12 @@ body {
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  max-height: 300px;
-  overflow-y: auto;
   z-index: 1000;
   margin-top: 6px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  max-height: 320px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
 .suggestionItem {

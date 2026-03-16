@@ -9,19 +9,19 @@ export default function HeroSection() {
   const [companyName, setCompanyName] = useState("");
   const searchInputRef = useRef(null);
 
+  const suggestionRefs = useRef([]);
+
+  const [allCompanies, setAllCompanies] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
+
   const handleSearch = () => {
     const query = companyName.trim();
     if (!query) return;
 
     router.push(`/company/${encodeURIComponent(query)}`);
   };
-
-  const [allCompanies, setAllCompanies] = useState([])
-
-  const [suggestions, setSuggestions] = useState([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(-1);
-
 
   // Fetch Companies
   useEffect(() => {
@@ -80,10 +80,9 @@ export default function HeroSection() {
       return;
     }
 
-    const filtered = allCompanies
-      .filter((company) =>
-        company.company_name.toLowerCase().includes(value.toLowerCase())
-      )
+    const filtered = allCompanies.filter((company) =>
+      company.company_name.toLowerCase().includes(value.toLowerCase())
+    );
 
     setSuggestions(filtered);
     setShowSuggestions(true);
@@ -120,11 +119,15 @@ export default function HeroSection() {
     router.push(`/company/${query.replaceAll(" ", "-").toLowerCase()}`);
   };
 
+  // ⭐ AUTO SCROLL TO ACTIVE ITEM
   useEffect(() => {
-    console.log("suggestions ", suggestions)
-  }, [suggestions])
-
-
+    if (activeIndex >= 0 && suggestionRefs.current[activeIndex]) {
+      suggestionRefs.current[activeIndex].scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [activeIndex]);
 
   return (
     <section className={styles.hero}>
@@ -140,8 +143,7 @@ export default function HeroSection() {
           </p>
         </div>
 
-
-        <div className={styles.searchOuter} >
+        <div className={styles.searchOuter}>
           <form className={styles.searchContainer} onSubmit={handleSubmit}>
             <div className={styles.searchIcon}>
               <div className={styles.squareIcon}>
@@ -164,7 +166,6 @@ export default function HeroSection() {
               onKeyDown={handleKeyDown}
             />
 
-
             <button type="submit" className={styles.searchBtn}>
               <span className={styles.arrowUp}>
                 <img
@@ -181,6 +182,7 @@ export default function HeroSection() {
               {suggestions.map((item, index) => (
                 <div
                   key={index}
+                  ref={(el) => (suggestionRefs.current[index] = el)}
                   className={`${styles.suggestionItem} ${index === activeIndex ? styles.activeSuggestion : ""
                     }`}
                   onClick={() => handleSuggestionClick(item.company_name)}

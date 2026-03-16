@@ -1,12 +1,11 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import styles from "../components/company/newLayout/CompanyNewLayout.module.css";
 import { CompanySectionProvider } from "@/components/company/context/CompanySectionContext";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import { useRef } from "react";
 import Link from "next/link";
 
 const inter = Inter({
@@ -21,15 +20,15 @@ export default function RootLayout({ children }) {
   const isAuthPage = ["/login", "/signup", "/forgot-password"].includes(pathname);
 
   const [activeTab, setActiveTab] = useState("home");
-
   const [companyName, setCompanyName] = useState("");
-
-  const [allCompanies, setAllCompanies] = useState([])
-
+  const [allCompanies, setAllCompanies] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
 
+  const searchInputRef = useRef(null);
+  const suggestionBoxRef = useRef(null);
+  const suggestionRefs = useRef([]);
 
   // Fetch Companies
   useEffect(() => {
@@ -54,6 +53,34 @@ export default function RootLayout({ children }) {
 
     fetchCompanies();
   }, []);
+
+  // Smooth scroll active suggestion into view
+  useEffect(() => {
+    const container = suggestionBoxRef.current;
+    const activeItem = suggestionRefs.current[activeIndex];
+
+    if (!container || !activeItem) return;
+
+    const containerTop = container.scrollTop;
+    const containerBottom = containerTop + container.clientHeight;
+
+    const itemTop = activeItem.offsetTop;
+    const itemBottom = itemTop + activeItem.offsetHeight;
+
+    if (itemBottom > containerBottom) {
+      container.scrollTo({
+        top: itemBottom - container.clientHeight,
+        behavior: "smooth",
+      });
+    }
+
+    if (itemTop < containerTop) {
+      container.scrollTo({
+        top: itemTop,
+        behavior: "smooth",
+      });
+    }
+  }, [activeIndex]);
 
   const handleKeyDown = (e) => {
     if (!showSuggestions) return;
@@ -117,7 +144,7 @@ export default function RootLayout({ children }) {
     router.push(`/company/${query.replaceAll(" ", "-").toLowerCase()}`);
   };
 
-  // Sync activeTab with URL
+  // Sync sidebar tab
   useEffect(() => {
     if (pathname === "/") {
       setActiveTab("home");
@@ -133,7 +160,7 @@ export default function RootLayout({ children }) {
     router.push(path);
   };
 
-  const searchInputRef = useRef(null);
+  // CMD/CTRL + K focus search
   useEffect(() => {
     const handleKeyDown = (e) => {
       const isMac = navigator.platform.toUpperCase().includes("MAC");
@@ -142,7 +169,7 @@ export default function RootLayout({ children }) {
         (isMac && e.metaKey && e.key.toLowerCase() === "k") ||
         (!isMac && e.ctrlKey && e.key.toLowerCase() === "k")
       ) {
-        e.preventDefault(); // stop browser search
+        e.preventDefault();
         searchInputRef.current?.focus();
       }
     };
@@ -151,9 +178,10 @@ export default function RootLayout({ children }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  // Close suggestion on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (!e.target.closest(`.${styles.searchContainerr}`)) {
+      if (!e.target.closest(`.${styles.searchContainerr} `)) {
         setShowSuggestions(false);
       }
     };
@@ -166,9 +194,9 @@ export default function RootLayout({ children }) {
     <Suspense fallback={null}>
       <CompanySectionProvider>
         <html lang="en">
-          <body className={`${inter.className} ${inter.variable}`}>
+          <body className={`${inter.className} ${inter.variable} `}>
             <div className={styles.layoutContainer}>
-              {/* ===== TOP HEADER ===== */}
+
               {!isAuthPage && (
                 <header className={styles.header}>
                   <div className={styles.headerLeft}>
@@ -180,21 +208,15 @@ export default function RootLayout({ children }) {
                       />
                     </Link>
 
-                    {/* <img
-                      src="/icons/logo2.svg"
-                      alt="Corporate Professionals"
-                      className={styles.logo}
-                    /> */}
-
                     <div className={styles.divider} />
 
                     <div className={styles.searchContainerr}>
-                      <form className={`${styles.searchContainer} ${styles.headerSearch}`} onSubmit={handleSubmit}>
-                        <img
-                          src="/icons/search.svg"
-                          alt=""
-                          className={styles.searchIcon}
-                        />
+                      <form
+                        className={`${styles.searchContainer} ${styles.headerSearch} `}
+                        onSubmit={handleSubmit}
+                      >
+                        <img src="/icons/search.svg" alt="" className={styles.searchIcon} />
+
                         <input
                           name="companySearch"
                           ref={searchInputRef}
@@ -208,14 +230,18 @@ export default function RootLayout({ children }) {
 
                         <div className={styles.shortcut}>⌘ K</div>
                       </form>
+
                       {showSuggestions && suggestions.length > 0 && (
-                        <div className={styles.suggestionBox}>
+                        <div ref={suggestionBoxRef} className={styles.suggestionBox}>
                           {suggestions.map((item, index) => (
                             <div
                               key={index}
+                              ref={(el) => (suggestionRefs.current[index] = el)}
                               className={`${styles.suggestionItem} ${index === activeIndex ? styles.activeSuggestion : ""
-                                }`}
-                              onClick={() => handleSuggestionClick(item.company_name)}
+                                } `}
+                              onClick={() =>
+                                handleSuggestionClick(item.company_name)
+                              }
                             >
                               {item.company_name}
                             </div>
@@ -233,39 +259,34 @@ export default function RootLayout({ children }) {
                 </header>
               )}
 
-              {/* ===== MAIN WRAPPER (SIDEBAR + CONTENT) ===== */}
               {isAuthPage ? (
                 <main>{children}</main>
               ) : (
                 <div className={styles.mainWrapper}>
-                  {/* ===== LEFT SIDEBAR ===== */}
                   <aside className={styles.sidebar}>
                     <div className={styles.sidebarIcons}>
-                      {/* 🏠 Home */}
                       <button
                         type="button"
                         className={`${styles.iconTab} ${activeTab === "home" ? styles.activeTab : ""
-                          }`}
+                          } `}
                         onClick={() => handleNav("home", "/")}
                       >
                         <img src="/icons/home-icon.svg" alt="Home" />
                       </button>
 
-                      {/* 🏢 Company Database */}
                       <button
                         type="button"
                         className={`${styles.iconTab} ${activeTab === "company" ? styles.activeTab : ""
-                          }`}
+                          } `}
                         onClick={() => handleNav("company", "/companies")}
                       >
                         <img src="/icons/company-icon.svg" alt="Companies" />
                       </button>
 
-                      {/* 👤 People Database */}
                       <button
                         type="button"
                         className={`${styles.iconTab} ${activeTab === "profile" ? styles.activeTab : ""
-                          }`}
+                          } `}
                         onClick={() => handleNav("profile", "/people")}
                       >
                         <img src="/icons/profile-icon.svg" alt="Profile" />
@@ -273,7 +294,6 @@ export default function RootLayout({ children }) {
                     </div>
                   </aside>
 
-                  {/* ===== PAGE CONTENT ===== */}
                   <main className={styles.contentArea}>{children}</main>
                 </div>
               )}
