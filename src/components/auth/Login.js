@@ -7,11 +7,41 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login with:", email, password);
-    // Logic for login
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Login failed. Please check your credentials.");
+      }
+
+      // Store token and user data
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
+
+      console.log("Login success:", data);
+      // Redirect to home page
+      window.location.href = "/";
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -57,8 +87,10 @@ export default function Login() {
           </div>
         </div>
 
-        <button type="submit" className={styles.submitBtn}>
-          Login
+        {error && <p className={styles.error}>{error}</p>}
+
+        <button type="submit" className={styles.submitBtn} disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
 

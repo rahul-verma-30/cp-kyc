@@ -12,6 +12,7 @@ export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [countdown, setCountdown] = useState(30);
   const [canResend, setCanResend] = useState(false);
@@ -28,24 +29,72 @@ export default function Signup() {
     return () => clearInterval(timer);
   }, [step, countdown]);
 
-  const handleResendOTP = () => {
+  const handleResendOTP = async () => {
     if (canResend) {
-      setCountdown(30);
-      setCanResend(false);
-      console.log("Resending OTP...");
+      setLoading(true);
+      setError("");
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/signup/resend-otp`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, flow_type: "signup" }),
+        });
+        if (!res.ok) throw new Error("Failed to resend OTP");
+        
+        setCountdown(30);
+        setCanResend(false);
+        console.log("Resending OTP...");
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
-  const handleNext = (e) => {
+  const handleInitiate = async (e) => {
     e.preventDefault();
-    setStep(step + 1);
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/signup/initiate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, flow_type: "signup" }),
+      });
+      if (!res.ok) throw new Error("Failed to initiate signup");
+      setStep(2);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOTP = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/signup/verify-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp }),
+      });
+      if (!res.ok) throw new Error("Invalid OTP");
+      setStep(3);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleBack = () => {
-    setStep(step - 1);
+    setStep((prev) => prev - 1);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -54,8 +103,31 @@ export default function Signup() {
       return;
     }
 
-    console.log("Signup with:", email, otp, password);
-    // Logic for final signup
+    setLoading(true);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/signup/generate-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, confirm_password: confirmPassword }),
+      });
+      
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Signup failed");
+
+      // Store token
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
+
+      console.log("Signup success:", data);
+      // Redirect or show success
+      window.location.href = "/";
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -64,7 +136,7 @@ export default function Signup() {
         <>
           <h1 className={styles.title}>Sign Up</h1>
           <p className={styles.subtitle}>Enter your email below to create your account</p>
-          <form onSubmit={handleNext}>
+          <form onSubmit={handleInitiate}>
             <div className={styles.formGroup}>
               <label className={styles.label}>Email</label>
               <input
@@ -76,8 +148,9 @@ export default function Signup() {
                 required
               />
             </div>
-            <button type="submit" className={styles.submitBtn}>
-              Verify Account
+            {error && step === 1 && <p className={styles.error}>{error}</p>}
+            <button type="submit" className={styles.submitBtn} disabled={loading}>
+              {loading ? "Processing..." : "Verify Account"}
             </button>
           </form>
           <p className={styles.footerText}>
@@ -90,7 +163,7 @@ export default function Signup() {
         <>
           <h1 className={styles.title}>Verification</h1>
           <p className={styles.subtitle}>Enter the verification code we sent to {email}</p>
-          <form onSubmit={handleNext}>
+          <form onSubmit={handleVerifyOTP}>
             <div className={styles.formGroup}>
               <div className={styles.otpRow}>
                   <label className={styles.label}>OTP</label>
@@ -112,11 +185,11 @@ export default function Signup() {
                 required
               />
             </div>
-            
-            <button type="submit" className={styles.submitBtn}>
-              Continue
+            {error && step === 2 && <p className={styles.error}>{error}</p>}
+            <button type="submit" className={styles.submitBtn} disabled={loading}>
+              {loading ? "Verifying..." : "Continue"}
             </button>
-             <button type="button" className={styles.linkButton} onClick={handleBack}>
+             <button type="button" className={styles.linkButton} onClick={handleBack} disabled={loading}>
               <img src="/icons/chevron-left.svg" alt="" />
               Back
             </button>
@@ -167,9 +240,9 @@ export default function Signup() {
                 </button>
               </div>
             </div>
-            {error && <p className={styles.error}>{error}</p>}
-            <button type="submit" className={styles.submitBtn}>
-              Sign Up
+            {error && step === 3 && <p className={styles.error}>{error}</p>}
+            <button type="submit" className={styles.submitBtn} disabled={loading}>
+              {loading ? "Signing up..." : "Sign Up"}
             </button>
           </form>
         </>

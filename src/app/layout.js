@@ -25,6 +25,8 @@ export default function RootLayout({ children }) {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [user, setUser] = useState(null);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
 
   const searchInputRef = useRef(null);
   const suggestionBoxRef = useRef(null);
@@ -55,6 +57,7 @@ export default function RootLayout({ children }) {
     fetchCompanies();
   }, []);
 
+<<<<<<< Updated upstream
   /* ROUTE CHANGE LOGIC */
 
   useEffect(() => {
@@ -72,6 +75,36 @@ export default function RootLayout({ children }) {
 
   /* SCROLL ACTIVE SUGGESTION */
 
+=======
+  // Check Auth State
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    if (storedUser && token) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, [pathname]); // Check on route change as well
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    setShowUserDropdown(false);
+    router.push("/login");
+  };
+
+  const getUserInitials = (email) => {
+    if (!email) return "??";
+    const namePart = email.split("@")[0];
+    const lettersOnly = namePart.replace(/[^a-zA-Z]/g, "");
+    if (lettersOnly.length >= 2) {
+      return lettersOnly.substring(0, 2).toUpperCase();
+    }
+    return namePart.substring(0, 2).toUpperCase();
+  };
+
+  // Smooth scroll active suggestion into view
+>>>>>>> Stashed changes
   useEffect(() => {
     const container = suggestionBoxRef.current;
     const activeItem = suggestionRefs.current[activeIndex];
@@ -213,6 +246,9 @@ export default function RootLayout({ children }) {
       if (!e.target.closest(`.${styles.searchContainerr}`)) {
         setShowSuggestions(false);
       }
+      if (!e.target.closest(`.${styles.userSection}`)) {
+        setShowUserDropdown(false);
+      }
     };
 
     document.addEventListener("click", handleClickOutside);
@@ -281,9 +317,24 @@ export default function RootLayout({ children }) {
                   </div>
 
                   <div className={styles.headerRight}>
-                    <div className={styles.avatarWrapper}>
-                      <div className={styles.avatarText}>DS</div>
-                    </div>
+                    {user ? (
+                      <div className={styles.userSection} onClick={() => setShowUserDropdown(!showUserDropdown)}>
+                        <div className={styles.avatarWrapper}>
+                          <div className={styles.avatarText}>{getUserInitials(user.email)}</div>
+                        </div>
+                        {showUserDropdown && (
+                          <div className={styles.userDropdown}>
+                            <button onClick={handleLogout} className={styles.logoutBtn}>
+                              Logout
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <Link href="/login" className={styles.loginBtn}>
+                        Login
+                      </Link>
+                    )}
                   </div>
                 </header>
               )}

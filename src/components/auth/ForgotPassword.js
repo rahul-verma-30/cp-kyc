@@ -12,6 +12,7 @@ export default function ForgotPassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [countdown, setCountdown] = useState(30);
   const [canResend, setCanResend] = useState(false);
@@ -28,20 +29,68 @@ export default function ForgotPassword() {
     return () => clearInterval(timer);
   }, [step, countdown]);
 
-  const handleResendOTP = () => {
+  const handleResendOTP = async () => {
     if (canResend) {
-      setCountdown(30);
-      setCanResend(false);
-      console.log("Resending OTP for:", email);
+      setLoading(true);
+      setError("");
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/signup/resend-otp`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, flow_type: "forgot" }),
+        });
+        if (!res.ok) throw new Error("Failed to resend OTP");
+        
+        setCountdown(30);
+        setCanResend(false);
+        console.log("Resending OTP...");
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
-  const handleNext = (e) => {
+  const handleInitiate = async (e) => {
     e.preventDefault();
-    setStep(step + 1);
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/signup/initiate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, flow_type: "forgot" }),
+      });
+      if (!res.ok) throw new Error("Failed to initiate password reset");
+      setStep(2);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleVerifyOTP = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/signup/verify-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp }),
+      });
+      if (!res.ok) throw new Error("Invalid OTP");
+      setStep(3);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -50,8 +99,30 @@ export default function ForgotPassword() {
       return;
     }
 
-    console.log("Reset password for:", email);
-    // Final reset logic
+    setLoading(true);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/signup/generate-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password: newPassword, confirm_password: confirmPassword }),
+      });
+      
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to reset password");
+
+      // Store token
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
+
+      console.log("Password reset success:", data);
+      window.location.href = "/";
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -61,7 +132,7 @@ export default function ForgotPassword() {
           <h1 className={styles.title}>Forgot password</h1>
           <p className={styles.subtitle}>Enter your registered email and we will send you a link to reset your password.</p>
           
-          <form onSubmit={handleNext}>
+          <form onSubmit={step === 1 ? handleInitiate : handleVerifyOTP}>
             <div className={styles.formGroup}>
               <label className={styles.label}>Email</label>
               <input
@@ -96,11 +167,14 @@ export default function ForgotPassword() {
                   onChange={(e) => setOtp(e.target.value)}
                   required
                 />
+            {error && step < 3 && <p className={styles.error}>{error}</p>}
+
               </div>
+              
             )}
 
-            <button type="submit" className={styles.submitBtn}>
-              Continue
+            <button type="submit" className={styles.submitBtn} disabled={loading}>
+              {loading ? "Processing..." : "Continue"}
             </button>
           </form>
         </>
@@ -152,10 +226,10 @@ export default function ForgotPassword() {
               </div>
             </div>
 
-            {error && <p className={styles.error}>{error}</p>}
+            {error && step === 3 && <p className={styles.error}>{error}</p>}
 
-            <button type="submit" className={styles.submitBtn}>
-              Continue
+            <button type="submit" className={styles.submitBtn} disabled={loading}>
+              {loading ? "Updating..." : "Continue"}
             </button>
           </form>
         </>
