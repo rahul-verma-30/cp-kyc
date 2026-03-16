@@ -77,7 +77,7 @@ const peopleData = [
   },
 ];
 
-export default function PeopleDatabase() {
+export default function PeopleDatabase({ onRowClick }) {
   const headerCheckboxRef = useRef(null);
   const [selectedRows, setSelectedRows] = useState([]);
   const allChecked = selectedRows.length === peopleData.length;
@@ -94,7 +94,8 @@ export default function PeopleDatabase() {
       setSelectedRows(peopleData.map((_, i) => i));
     }
   };
-  const handleRowSelect = (index) => {
+  const handleRowSelect = (e, index) => {
+    e.stopPropagation();
     setSelectedRows((prev) =>
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
     );
@@ -154,14 +155,18 @@ export default function PeopleDatabase() {
               </thead>
               <tbody>
                 {visiblePeople.map((person, index) => (
-                  <tr key={index}>
+                  <tr 
+                    key={index} 
+                    onClick={() => onRowClick && onRowClick(person)}
+                    className={styles.clickableRow}
+                  >
                     <td className={styles.checkboxCol}>
                       <div className={styles.checkboxOuter}>
                         <label className={styles.checkboxWrapper}>
                           <input
                             type="checkbox"
                             checked={selectedRows.includes(index)}
-                            onChange={() => handleRowSelect(index)}
+                            onChange={(e) => handleRowSelect(e, index)}
                           />
 
                           <span className={styles.customCheckbox}></span>

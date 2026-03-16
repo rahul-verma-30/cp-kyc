@@ -81,6 +81,14 @@
 }
 
 
+.table tr.clickableRow {
+  cursor: pointer;
+}
+
+.table tr.clickableRow:hover {
+  background-color: #f9fafb;
+}
+
 .checkboxCol {
   width: 32px;
   text-align: right;

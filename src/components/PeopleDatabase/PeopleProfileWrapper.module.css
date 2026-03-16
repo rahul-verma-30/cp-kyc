@@ -1,0 +1,28 @@
+.wrapper {
+  padding: 20px;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 20px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.backButton:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.backButton img {
+  width: 20px;
+  height: 20px;
+}

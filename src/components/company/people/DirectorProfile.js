@@ -1,7 +1,7 @@
 import styles from "./DirectorProfile.module.css";
 import { useState } from "react";
 
-export default function DirectorProfile({ directors = [] }) {
+export default function DirectorProfile({ directors = [], hideSidebar = false }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeFilter, setActiveFilter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
@@ -167,85 +167,88 @@ export default function DirectorProfile({ directors = [] }) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.containerHeader}>
-        <div className={styles.sidebarTabs}>
-          <div
-            className={`${styles.sidebarTab} ${directorTab === "current" ? styles.sidebarTabActive : ""
-              }`}
-            onClick={() => setDirectorTab("current")}
-          >
-            Current Directors & KMP
-          </div>
+      {!hideSidebar && (
+        <div className={styles.containerHeader}>
+          <div className={styles.sidebarTabs}>
+            <div
+              className={`${styles.sidebarTab} ${directorTab === "current" ? styles.sidebarTabActive : ""
+                }`}
+              onClick={() => setDirectorTab("current")}
+            >
+              Current Directors & KMP
+            </div>
 
-          <div
-            className={`${styles.sidebarTab} ${directorTab === "past" ? styles.sidebarTabActive : ""
-              }`}
-            onClick={() => setDirectorTab("past")}
-          >
-            Past Directors & KMP
+            <div
+              className={`${styles.sidebarTab} ${directorTab === "past" ? styles.sidebarTabActive : ""
+                }`}
+              onClick={() => setDirectorTab("past")}
+            >
+              Past Directors & KMP
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className={styles.mainContainer}>
-        {/* LEFT SIDEBAR */}
-        <aside className={styles.sidebar}>
-          <div className={styles.searchWrapper}>
-            <img
-              src="/icons/search.svg"
-              alt="thumb"
-              className={styles.searchImg}
-            />
-            <input
-              type="text"
-              placeholder="Search by name, role, or DIN"
-              className={styles.searchInput}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+        {!hideSidebar && (
+          <aside className={styles.sidebar}>
+            <div className={styles.searchWrapper}>
+              <img
+                src="/icons/search.svg"
+                alt="thumb"
+                className={styles.searchImg}
+              />
+              <input
+                type="text"
+                placeholder="Search by name, role, or DIN"
+                className={styles.searchInput}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
 
-          {/* Filter Tags */}
-          <div className={styles.filterContainer}>
-            {filters.map((filter) => (
-              <div
-                key={filter}
-                className={`${styles.filterTag} ${activeFilter === filter ? styles.activeFilter : ""
-                  }`}
-                onClick={() => setActiveFilter(filter)}
-              >
-                {filter}
-              </div>
-            ))}
-          </div>
-
-          <div className={styles.sidebarList}>
-            {sidebarItems.map((item, idx) => (
-              <div
-                key={idx}
-                className={`${styles.sidebarItem} ${activeIndex === idx ? styles.active : ""
-                  }`}
-                onClick={() => setActiveIndex(idx)}
-              >
-
-                {/* IMAGES FOR THE SIDEBAR */}
-                <img
-                  src={(item.image && item.image !== "N/A") ? item.image : "/icons/profile-icon.svg"}
-                  alt="profile"
-                  className={styles.sidebarImg}
-                />
-
-                <div className={styles.sidebarInfo}>
-                  <span className={styles.sidebarName}>{item.name}</span>
-                  <span className={styles.sidebarRole}>{item.role}</span>
+            {/* Filter Tags */}
+            <div className={styles.filterContainer}>
+              {filters.map((filter) => (
+                <div
+                  key={filter}
+                  className={`${styles.filterTag} ${activeFilter === filter ? styles.activeFilter : ""
+                    }`}
+                  onClick={() => setActiveFilter(filter)}
+                >
+                  {filter}
                 </div>
-              </div>
-            ))}
-          </div>
-        </aside>
+              ))}
+            </div>
+
+            <div className={styles.sidebarList}>
+              {sidebarItems.map((item, idx) => (
+                <div
+                  key={idx}
+                  className={`${styles.sidebarItem} ${activeIndex === idx ? styles.active : ""
+                    }`}
+                  onClick={() => setActiveIndex(idx)}
+                >
+
+                  {/* IMAGES FOR THE SIDEBAR */}
+                  <img
+                    src={(item.image && item.image !== "N/A") ? item.image : "/icons/profile-icon.svg"}
+                    alt="profile"
+                    className={styles.sidebarImg}
+                  />
+
+                  <div className={styles.sidebarInfo}>
+                    <span className={styles.sidebarName}>{item.name}</span>
+                    <span className={styles.sidebarRole}>{item.role}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </aside>
+        )}
 
         {/* MAIN CONTENT */}
-        <main className={styles.main}>
+        <main className={`${styles.main} ${hideSidebar ? styles.fullWidth : ""}`}>
           {/* PROFILE HEADER */}
           <section className={styles.headerCard}>
             <div className={styles.headerLeft}>
