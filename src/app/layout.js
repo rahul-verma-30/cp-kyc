@@ -36,7 +36,7 @@ export default function RootLayout({ children }) {
     const fetchCompanies = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/companies?size=1000`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/companies?size=100`
         );
 
         const result = await res.json();
@@ -92,7 +92,6 @@ export default function RootLayout({ children }) {
       .filter((company) =>
         company.company_name.toLowerCase().includes(value.toLowerCase())
       )
-      .slice(0, 20);
 
     setSuggestions(filtered);
     setShowSuggestions(true);

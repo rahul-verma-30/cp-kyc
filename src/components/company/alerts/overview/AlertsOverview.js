@@ -15,7 +15,7 @@ export default function AlertsOverview({ alertsData, alertsLoading, alertsError 
     return (
       <div className={styles.container}>
         <div style={{ color: "red", fontWeight: 500 }}>
-          {error}
+          {alertsError}
         </div>
       </div>
     );
