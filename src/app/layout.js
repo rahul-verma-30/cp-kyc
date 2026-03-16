@@ -36,7 +36,7 @@ export default function RootLayout({ children }) {
     const fetchCompanies = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/companies?size=100`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/companies?per_page=100`
         );
 
         const result = await res.json();

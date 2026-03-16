@@ -1,4 +1,4 @@
-body{
+body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -42,7 +42,7 @@ body{
   z-index: 0;
 }
 
-.pageWrapper > * {
+.pageWrapper>* {
   position: relative;
-  z-index: 1;
+  /* z-index: 1; */
 }
