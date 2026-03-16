@@ -18,6 +18,7 @@ const inter = Inter({
 export default function RootLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
+  const isAuthPage = ["/login", "/signup", "/forgot-password"].includes(pathname);
 
   const [activeTab, setActiveTab] = useState("home");
 
@@ -169,108 +170,114 @@ export default function RootLayout({ children }) {
           <body className={`${inter.className} ${inter.variable}`}>
             <div className={styles.layoutContainer}>
               {/* ===== TOP HEADER ===== */}
-              <header className={styles.header}>
-                <div className={styles.headerLeft}>
-                  <Link href="/">
-                    <img
+              {!isAuthPage && (
+                <header className={styles.header}>
+                  <div className={styles.headerLeft}>
+                    <Link href="/">
+                      <img
+                        src="/icons/logo2.svg"
+                        alt="Corporate Professionals"
+                        className={styles.logo}
+                      />
+                    </Link>
+
+                    {/* <img
                       src="/icons/logo2.svg"
                       alt="Corporate Professionals"
                       className={styles.logo}
-                    />
-                  </Link>
+                    /> */}
 
-                  {/* <img
-                    src="/icons/logo2.svg"
-                    alt="Corporate Professionals"
-                    className={styles.logo}
-                  /> */}
+                    <div className={styles.divider} />
 
-                  <div className={styles.divider} />
+                    <div className={styles.searchContainerr}>
+                      <form className={`${styles.searchContainer} ${styles.headerSearch}`} onSubmit={handleSubmit}>
+                        <img
+                          src="/icons/search.svg"
+                          alt=""
+                          className={styles.searchIcon}
+                        />
+                        <input
+                          name="companySearch"
+                          ref={searchInputRef}
+                          type="text"
+                          placeholder="Search by company name, CIN, LLPIN, or director name"
+                          className={styles.searchInput}
+                          value={companyName}
+                          onChange={(e) => handleInputChange(e.target.value)}
+                          onKeyDown={handleKeyDown}
+                        />
 
-                  <div className={styles.searchContainerr}>
-                    <form className={`${styles.searchContainer} ${styles.headerSearch}`} onSubmit={handleSubmit}>
-                      <img
-                        src="/icons/search.svg"
-                        alt=""
-                        className={styles.searchIcon}
-                      />
-                      <input
-                        name="companySearch"
-                        ref={searchInputRef}
-                        type="text"
-                        placeholder="Search by company name, CIN, LLPIN, or director name"
-                        className={styles.searchInput}
-                        value={companyName}
-                        onChange={(e) => handleInputChange(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                      />
-
-                      <div className={styles.shortcut}>⌘ K</div>
-                    </form>
-                    {showSuggestions && suggestions.length > 0 && (
-                      <div className={styles.suggestionBox}>
-                        {suggestions.map((item, index) => (
-                          <div
-                            key={index}
-                            className={`${styles.suggestionItem} ${index === activeIndex ? styles.activeSuggestion : ""
-                              }`}
-                            onClick={() => handleSuggestionClick(item.company_name)}
-                          >
-                            {item.company_name}
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                        <div className={styles.shortcut}>⌘ K</div>
+                      </form>
+                      {showSuggestions && suggestions.length > 0 && (
+                        <div className={styles.suggestionBox}>
+                          {suggestions.map((item, index) => (
+                            <div
+                              key={index}
+                              className={`${styles.suggestionItem} ${index === activeIndex ? styles.activeSuggestion : ""
+                                }`}
+                              onClick={() => handleSuggestionClick(item.company_name)}
+                            >
+                              {item.company_name}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
 
-                <div className={styles.headerRight}>
-                  <div className={styles.avatarWrapper}>
-                    <div className={styles.avatarText}>DS</div>
+                  <div className={styles.headerRight}>
+                    <div className={styles.avatarWrapper}>
+                      <div className={styles.avatarText}>DS</div>
+                    </div>
                   </div>
-                </div>
-              </header>
+                </header>
+              )}
 
               {/* ===== MAIN WRAPPER (SIDEBAR + CONTENT) ===== */}
-              <div className={styles.mainWrapper}>
-                {/* ===== LEFT SIDEBAR ===== */}
-                <aside className={styles.sidebar}>
-                  <div className={styles.sidebarIcons}>
-                    {/* 🏠 Home */}
-                    <button
-                      type="button"
-                      className={`${styles.iconTab} ${activeTab === "home" ? styles.activeTab : ""
-                        }`}
-                      onClick={() => handleNav("home", "/")}
-                    >
-                      <img src="/icons/home-icon.svg" alt="Home" />
-                    </button>
+              {isAuthPage ? (
+                <main>{children}</main>
+              ) : (
+                <div className={styles.mainWrapper}>
+                  {/* ===== LEFT SIDEBAR ===== */}
+                  <aside className={styles.sidebar}>
+                    <div className={styles.sidebarIcons}>
+                      {/* 🏠 Home */}
+                      <button
+                        type="button"
+                        className={`${styles.iconTab} ${activeTab === "home" ? styles.activeTab : ""
+                          }`}
+                        onClick={() => handleNav("home", "/")}
+                      >
+                        <img src="/icons/home-icon.svg" alt="Home" />
+                      </button>
 
-                    {/* 🏢 Company Database */}
-                    <button
-                      type="button"
-                      className={`${styles.iconTab} ${activeTab === "company" ? styles.activeTab : ""
-                        }`}
-                      onClick={() => handleNav("company", "/companies")}
-                    >
-                      <img src="/icons/company-icon.svg" alt="Companies" />
-                    </button>
+                      {/* 🏢 Company Database */}
+                      <button
+                        type="button"
+                        className={`${styles.iconTab} ${activeTab === "company" ? styles.activeTab : ""
+                          }`}
+                        onClick={() => handleNav("company", "/companies")}
+                      >
+                        <img src="/icons/company-icon.svg" alt="Companies" />
+                      </button>
 
-                    {/* 👤 People Database */}
-                    <button
-                      type="button"
-                      className={`${styles.iconTab} ${activeTab === "profile" ? styles.activeTab : ""
-                        }`}
-                      onClick={() => handleNav("profile", "/people")}
-                    >
-                      <img src="/icons/profile-icon.svg" alt="Profile" />
-                    </button>
-                  </div>
-                </aside>
+                      {/* 👤 People Database */}
+                      <button
+                        type="button"
+                        className={`${styles.iconTab} ${activeTab === "profile" ? styles.activeTab : ""
+                          }`}
+                        onClick={() => handleNav("profile", "/people")}
+                      >
+                        <img src="/icons/profile-icon.svg" alt="Profile" />
+                      </button>
+                    </div>
+                  </aside>
 
-                {/* ===== PAGE CONTENT ===== */}
-                <main className={styles.contentArea}>{children}</main>
-              </div>
+                  {/* ===== PAGE CONTENT ===== */}
+                  <main className={styles.contentArea}>{children}</main>
+                </div>
+              )}
             </div>
           </body>
         </html>

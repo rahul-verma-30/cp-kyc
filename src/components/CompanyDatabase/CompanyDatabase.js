@@ -22,33 +22,46 @@ export default function CompanyDatabase() {
 
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [totalCompanies, setTotalCompanies] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   // Fetch Companies
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
         setLoading(true);
+        // Using both size and limit to be safe, adding search query if possible
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/companies`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/companies?page=${currentPage}&size=${rowsPerPage}&limit=${rowsPerPage}&per_page=${rowsPerPage}&search=${searchQuery}&query=${searchQuery}`
         );
 
         const result = await res.json();
 
-        if (Array.isArray(result)) {
+        if (result && Array.isArray(result.items)) {
+          setCompanies(result.items);
+          setTotalCompanies(result.total || result.items.length);
+          setTotalPages(result.pages || Math.ceil((result.total || result.items.length) / rowsPerPage));
+        } else if (Array.isArray(result)) {
           setCompanies(result);
+          setTotalCompanies(result.length);
+          setTotalPages(Math.ceil(result.length / rowsPerPage));
         } else {
           setCompanies([]);
+          setTotalCompanies(0);
+          setTotalPages(1);
         }
       } catch (error) {
         console.log("Error fetching companies:", error);
         setCompanies([]);
+        setTotalCompanies(0);
+        setTotalPages(1);
       } finally {
         setLoading(false);
       }
     };
 
     fetchCompanies();
-  }, []);
+  }, [rowsPerPage, currentPage, searchQuery]);
 
   const toggleBulk = () => {
     if (!bulkRef.current) return;
@@ -84,13 +97,8 @@ export default function CompanyDatabase() {
     setCurrentPage(1);
   }, [searchQuery, rowsPerPage]);
 
-  // Pagination calculations
-  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-
-  const startIndex = (currentPage - 1) * rowsPerPage;
-  const endIndex = startIndex + rowsPerPage;
-
-  const visibleData = filteredData.slice(startIndex, endIndex);
+  // Basic client-side filtering and slicing as a fallback/secondary filter
+  const visibleData = filteredData;
 
   const allChecked = selectedRows.length === visibleData.length;
   const someChecked = selectedRows.length > 0 && !allChecked;
@@ -228,6 +236,7 @@ export default function CompanyDatabase() {
               </th>
 
               <th>Company Name</th>
+              <th>Authorised Capital (Cr.)</th>
               <th>PUC/OOC (Cr.)</th>
               <th>SOC (Cr.)</th>
               <th>DOI</th>
@@ -274,15 +283,16 @@ export default function CompanyDatabase() {
                     />
                     <Link href={`/company/${(company.company_name || "").toLowerCase().replace(/\s+/g, "-")}`} className={styles.companyLink}>{company.company_name || "-"}</Link>
                   </td>
+             <td>{company.authorised_capital || "-"}</td>
 
-                  <td>{company.puc || 0}</td>
-                  <td>{company.soc || 0}</td>
+                  <td>{company.paid_up_capital || "-"}</td>
+                  <td>{company.soc || "-"}</td>
                   <td>{company.doi || "-"}</td>
-                  <td>{company.location || "-"}</td>
+                  <td>{company.registered_address?.split(',').slice(-4, -1)[0]?.trim() + ", " + company.registered_address?.split(',').slice(-4, -1)[1]?.trim() || company.registered_address?.split(',').slice(-4, -1)[0]?.trim() || "-"}</td>
                   <td>{company.industry || "-"}</td>
                   <td>
                     <span className={styles.statusBadge}>
-                      {company.status || "-"}
+                      {company.company_status || "-"}
                     </span>
                   </td>
                 </tr>
@@ -307,7 +317,7 @@ export default function CompanyDatabase() {
           <span className={styles.mutedText}>
             Found:{" "}
             <span className={styles.boldText}>
-              {filteredData.length} Companies
+              {totalCompanies} Companies
             </span>
           </span>
         </div>
