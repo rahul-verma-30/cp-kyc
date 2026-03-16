@@ -236,7 +236,7 @@ export default function CompanyDatabase() {
               </th>
 
               <th>Company Name</th>
-              <th>Authorised Capital (Cr.)</th>
+              <th>Market Cap. (Cr.)</th>
               <th>PUC/OOC (Cr.)</th>
               <th>SOC (Cr.)</th>
               <th>DOI</th>
@@ -248,11 +248,26 @@ export default function CompanyDatabase() {
 
           <tbody>
             {loading ? (
-              <tr>
-                <td colSpan="8" style={{ textAlign: "center", padding: "20px" }}>
-                  Loading companies...
-                </td>
-              </tr>
+              Array.from({ length: 10 }).map((_, i) => (
+                <tr key={`skeleton-${i}`}>
+                  <td className={styles.checkboxCol}>
+                    <div className={styles.checkboxOuter}>
+                      <div className={`${styles.skeleton} ${styles.skeletonCircle}`} style={{ width: '16px', height: '16px', borderRadius: '4px' }}></div>
+                    </div>
+                  </td>
+                  <td className={styles.companyCell}>
+                    <div className={`${styles.skeleton} ${styles.skeletonCircle}`}></div>
+                    <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: '150px' }}></div>
+                  </td>
+                  <td><div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: '60px' }}></div></td>
+                  <td><div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: '60px' }}></div></td>
+                  <td><div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: '60px' }}></div></td>
+                  <td><div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: '80px' }}></div></td>
+                  <td><div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: '120px' }}></div></td>
+                  <td><div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: '100px' }}></div></td>
+                  <td><div className={`${styles.skeleton} ${styles.skeletonBadge}`}></div></td>
+                </tr>
+              ))
             ) : visibleData.length === 0 ? (
               <tr>
                 <td colSpan="8" style={{ textAlign: "center", padding: "20px" }}>
@@ -283,10 +298,21 @@ export default function CompanyDatabase() {
                     />
                     <Link href={`/company/${(company.company_name || "").toLowerCase().replace(/\s+/g, "-")}`} className={styles.companyLink}>{company.company_name || "-"}</Link>
                   </td>
-             <td>{company.authorised_capital || "-"}</td>
-
-                  <td>{company.paid_up_capital || "-"}</td>
-                  <td>{company.soc || "-"}</td>
+                  <td>
+                    ₹{company.authorised_capital 
+                      ? (Number(company.authorised_capital.replace(/,/g, "")) / 1000).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })
+                      : "-"}
+                  </td>
+                  <td>
+                    ₹{company.paid_up_capital 
+                      ? (Number(company.paid_up_capital.replace(/,/g, "")) / 1000).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })
+                      : "-"}
+                  </td>
+                  <td>
+                    {company.soc 
+                      ? (Number(company.soc.replace(/,/g, "")) / 1000).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                      : "-"}
+                  </td>
                   <td>{company.doi || "-"}</td>
                   <td>{company.registered_address?.split(',').slice(-4, -1)[0]?.trim() + ", " + company.registered_address?.split(',').slice(-4, -1)[1]?.trim() || company.registered_address?.split(',').slice(-4, -1)[0]?.trim() || "-"}</td>
                   <td>{company.industry || "-"}</td>
