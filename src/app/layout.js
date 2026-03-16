@@ -57,7 +57,6 @@ export default function RootLayout({ children }) {
     fetchCompanies();
   }, []);
 
-<<<<<<< Updated upstream
   /* ROUTE CHANGE LOGIC */
 
   useEffect(() => {
@@ -75,7 +74,6 @@ export default function RootLayout({ children }) {
 
   /* SCROLL ACTIVE SUGGESTION */
 
-=======
   // Check Auth State
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -103,8 +101,6 @@ export default function RootLayout({ children }) {
     return namePart.substring(0, 2).toUpperCase();
   };
 
-  // Smooth scroll active suggestion into view
->>>>>>> Stashed changes
   useEffect(() => {
     const container = suggestionBoxRef.current;
     const activeItem = suggestionRefs.current[activeIndex];
