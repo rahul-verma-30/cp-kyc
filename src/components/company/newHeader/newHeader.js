@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "./newHeader.module.css";
+import { useRouter } from "next/navigation";
 
 /* -------------------- REUSABLE RISK CARD -------------------- */
 const RiskCard = ({
@@ -125,6 +126,11 @@ const RISK_DATA = [
 
 const CompanyNewHeader = ({ companyData }) => {
   const [isExpanded, setIsExpanded] = useState(false); // State to track expansion
+  const router = useRouter();
+
+  const slug = companyData?.company_information?.legal_name
+    ?.toLowerCase()
+    .replaceAll(" ", "-")
 
   const toggleExpand = () => setIsExpanded(!isExpanded);
   const [actionsOpen, setActionsOpen] = useState(false);
@@ -255,7 +261,12 @@ const CompanyNewHeader = ({ companyData }) => {
               <div className={`${styles.alertBadge} ${styles.riskAlert}`}>
                 <img src="/icons/activity.svg" alt="" /> Medium-High Risk
               </div>
-              <button className={styles.viewAllBtn}>
+              <button
+                className={styles.viewAllBtn}
+                onClick={() =>
+                  router.push(`/company/${slug}?section=alerts`)
+                }
+              >
                 View All Alert <img src="/icons/arrow-down-dark.svg" alt="" />
               </button>
             </div>
