@@ -30,7 +30,8 @@ export default function RootLayout({ children }) {
   const suggestionBoxRef = useRef(null);
   const suggestionRefs = useRef([]);
 
-  // Fetch Companies
+  /* FETCH COMPANIES */
+
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
@@ -54,7 +55,23 @@ export default function RootLayout({ children }) {
     fetchCompanies();
   }, []);
 
-  // Smooth scroll active suggestion into view
+  /* ROUTE CHANGE LOGIC */
+
+  useEffect(() => {
+    if (!pathname.startsWith("/company/")) {
+      setCompanyName("");
+      setSuggestions([]);
+      setShowSuggestions(false);
+      setActiveIndex(-1);
+      suggestionRefs.current = [];
+    } else {
+      setShowSuggestions(false);
+      setActiveIndex(-1);
+    }
+  }, [pathname]);
+
+  /* SCROLL ACTIVE SUGGESTION */
+
   useEffect(() => {
     const container = suggestionBoxRef.current;
     const activeItem = suggestionRefs.current[activeIndex];
@@ -82,6 +99,8 @@ export default function RootLayout({ children }) {
     }
   }, [activeIndex]);
 
+  /* KEYBOARD NAVIGATION */
+
   const handleKeyDown = (e) => {
     if (!showSuggestions) return;
 
@@ -105,6 +124,8 @@ export default function RootLayout({ children }) {
     }
   };
 
+  /* INPUT CHANGE */
+
   const handleInputChange = (value) => {
     setCompanyName(value);
     setActiveIndex(-1);
@@ -119,10 +140,13 @@ export default function RootLayout({ children }) {
       .filter((company) =>
         company.company_name.toLowerCase().includes(value.toLowerCase())
       )
+      .slice(0, 10);
 
     setSuggestions(filtered);
     setShowSuggestions(true);
   };
+
+  /* CLICK SUGGESTION */
 
   const handleSuggestionClick = (name) => {
     setCompanyName(name);
@@ -130,6 +154,8 @@ export default function RootLayout({ children }) {
 
     router.push(`/company/${name.replaceAll(" ", "-").toLowerCase()}`);
   };
+
+  /* FORM SUBMIT */
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -144,7 +170,8 @@ export default function RootLayout({ children }) {
     router.push(`/company/${query.replaceAll(" ", "-").toLowerCase()}`);
   };
 
-  // Sync sidebar tab
+  /* SIDEBAR ACTIVE TAB */
+
   useEffect(() => {
     if (pathname === "/") {
       setActiveTab("home");
@@ -160,7 +187,8 @@ export default function RootLayout({ children }) {
     router.push(path);
   };
 
-  // CMD/CTRL + K focus search
+  /* CMD / CTRL + K FOCUS SEARCH */
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       const isMac = navigator.platform.toUpperCase().includes("MAC");
@@ -178,10 +206,11 @@ export default function RootLayout({ children }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Close suggestion on outside click
+  /* CLOSE SUGGESTIONS ON OUTSIDE CLICK */
+
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (!e.target.closest(`.${styles.searchContainerr} `)) {
+      if (!e.target.closest(`.${styles.searchContainerr}`)) {
         setShowSuggestions(false);
       }
     };
@@ -194,7 +223,7 @@ export default function RootLayout({ children }) {
     <Suspense fallback={null}>
       <CompanySectionProvider>
         <html lang="en">
-          <body className={`${inter.className} ${inter.variable} `}>
+          <body className={`${inter.className} ${inter.variable}`}>
             <div className={styles.layoutContainer}>
 
               {!isAuthPage && (
@@ -212,7 +241,7 @@ export default function RootLayout({ children }) {
 
                     <div className={styles.searchContainerr}>
                       <form
-                        className={`${styles.searchContainer} ${styles.headerSearch} `}
+                        className={`${styles.searchContainer} ${styles.headerSearch}`}
                         onSubmit={handleSubmit}
                       >
                         <img src="/icons/search.svg" alt="" className={styles.searchIcon} />
@@ -238,7 +267,7 @@ export default function RootLayout({ children }) {
                               key={index}
                               ref={(el) => (suggestionRefs.current[index] = el)}
                               className={`${styles.suggestionItem} ${index === activeIndex ? styles.activeSuggestion : ""
-                                } `}
+                                }`}
                               onClick={() =>
                                 handleSuggestionClick(item.company_name)
                               }
@@ -268,7 +297,7 @@ export default function RootLayout({ children }) {
                       <button
                         type="button"
                         className={`${styles.iconTab} ${activeTab === "home" ? styles.activeTab : ""
-                          } `}
+                          }`}
                         onClick={() => handleNav("home", "/")}
                       >
                         <img src="/icons/home-icon.svg" alt="Home" />
@@ -277,7 +306,7 @@ export default function RootLayout({ children }) {
                       <button
                         type="button"
                         className={`${styles.iconTab} ${activeTab === "company" ? styles.activeTab : ""
-                          } `}
+                          }`}
                         onClick={() => handleNav("company", "/companies")}
                       >
                         <img src="/icons/company-icon.svg" alt="Companies" />
@@ -286,7 +315,7 @@ export default function RootLayout({ children }) {
                       <button
                         type="button"
                         className={`${styles.iconTab} ${activeTab === "profile" ? styles.activeTab : ""
-                          } `}
+                          }`}
                         onClick={() => handleNav("profile", "/people")}
                       >
                         <img src="/icons/profile-icon.svg" alt="Profile" />
