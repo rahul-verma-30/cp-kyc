@@ -35,13 +35,13 @@ export default function RootLayout({ children }) {
     const fetchCompanies = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/companies`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/companies?size=1000`
         );
 
         const result = await res.json();
 
-        if (Array.isArray(result)) {
-          setAllCompanies(result);
+        if (Array.isArray(result?.items)) {
+          setAllCompanies(result.items);
         } else {
           setAllCompanies([]);
         }
