@@ -7,6 +7,7 @@ import { CompanySectionProvider } from "@/components/company/context/CompanySect
 import "./globals.css";
 import { Inter } from "next/font/google";
 import Link from "next/link";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -37,8 +38,14 @@ export default function RootLayout({ children }) {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
+        const token = localStorage.getItem("token");
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/companies?per_page=100`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/companies?per_page=100`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
         );
 
         const result = await res.json();
@@ -86,6 +93,8 @@ export default function RootLayout({ children }) {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    // Clear cookie
+    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
     setUser(null);
     setShowUserDropdown(false);
     router.push("/login");
@@ -264,6 +273,16 @@ export default function RootLayout({ children }) {
       <CompanySectionProvider>
         <html lang="en">
           <body className={`${inter.className} ${inter.variable}`}>
+            <Toaster 
+              position="top-center" 
+              reverseOrder={false} 
+              toastOptions={{
+                style: {
+                  maxWidth: '400px',
+                  fontSize: '14px',
+                },
+              }}
+            />
             <div className={styles.layoutContainer}>
 
               {!isAuthPage && (

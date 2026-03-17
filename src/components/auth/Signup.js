@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import toast from "react-hot-toast";
 import styles from "./Auth.module.css";
 
 export default function Signup() {
@@ -11,7 +12,6 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [countdown, setCountdown] = useState(30);
@@ -32,7 +32,6 @@ export default function Signup() {
   const handleResendOTP = async () => {
     if (canResend) {
       setLoading(true);
-      setError("");
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/signup/resend-otp`, {
           method: "POST",
@@ -43,11 +42,12 @@ export default function Signup() {
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || data.message || "Failed to resend OTP");
         
+        toast.success("OTP sent successfully!");
         setCountdown(30);
         setCanResend(false);
         console.log("Resending OTP...");
       } catch (err) {
-        setError(err.message);
+        toast.error(err.message);
       } finally {
         setLoading(false);
       }
@@ -57,7 +57,6 @@ export default function Signup() {
   const handleInitiate = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/signup/initiate`, {
         method: "POST",
@@ -67,9 +66,10 @@ export default function Signup() {
       
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || data.message || "Failed to initiate signup");
+      toast.success("Verification code sent!");
       setStep(2);
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }
@@ -78,7 +78,6 @@ export default function Signup() {
   const handleVerifyOTP = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/signup/verify-otp`, {
         method: "POST",
@@ -88,9 +87,10 @@ export default function Signup() {
       
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || data.message || "Invalid OTP");
+      toast.success("OTP verified!");
       setStep(3);
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }
@@ -102,15 +102,14 @@ export default function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
     if (password.length < 8 || password.length > 30) {
-      setError("Password must be between 8 and 30 characters long");
+      toast.error("Password must be between 8 and 30 characters long");
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
@@ -129,12 +128,16 @@ export default function Signup() {
       if (data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
+        // Set cookie for middleware
+        document.cookie = `token=${data.token}; path=/; max-age=86400; SameSite=Lax`;
       }
 
       console.log("Signup success:", data);
+      toast.success("Account created successfully!");
       // Redirect or show success
       window.location.href = "/";
     } catch (err) {
+      toast.error(err.message);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -159,7 +162,6 @@ export default function Signup() {
                 required
               />
             </div>
-            {error && step === 1 && <p className={styles.error}>{error}</p>}
             <button type="submit" className={styles.submitBtn} disabled={loading}>
               {loading ? "Processing..." : "Verify Account"}
             </button>
@@ -196,7 +198,6 @@ export default function Signup() {
                 required
               />
             </div>
-            {error && step === 2 && <p className={styles.error}>{error}</p>}
             <button type="submit" className={styles.submitBtn} disabled={loading}>
               {loading ? "Verifying..." : "Continue"}
             </button>
@@ -251,7 +252,6 @@ export default function Signup() {
                 </button>
               </div>
             </div>
-            {error && step === 3 && <p className={styles.error}>{error}</p>}
             <button type="submit" className={styles.submitBtn} disabled={loading}>
               {loading ? "Signing up..." : "Sign Up"}
             </button>
