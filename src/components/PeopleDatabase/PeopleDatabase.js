@@ -82,6 +82,16 @@ export default function PeopleDatabase({ onRowClick }) {
   const [selectedRows, setSelectedRows] = useState([]);
   const allChecked = selectedRows.length === peopleData.length;
   const someChecked = selectedRows.length > 0 && !allChecked;
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading data
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     if (headerCheckboxRef.current) {
       headerCheckboxRef.current.indeterminate = someChecked;
@@ -154,40 +164,58 @@ export default function PeopleDatabase({ onRowClick }) {
                 </tr>
               </thead>
               <tbody>
-                {visiblePeople.map((person, index) => (
-                  <tr 
-                    key={index} 
-                    onClick={() => onRowClick && onRowClick(person)}
-                    className={styles.clickableRow}
-                  >
-                    <td className={styles.checkboxCol}>
-                      <div className={styles.checkboxOuter}>
-                        <label className={styles.checkboxWrapper}>
-                          <input
-                            type="checkbox"
-                            checked={selectedRows.includes(index)}
-                            onChange={(e) => handleRowSelect(e, index)}
-                          />
+                {loading ? (
+                  Array.from({ length: rowsPerPage }).map((_, index) => (
+                    <tr key={`skeleton-${index}`} className={styles.skeletonRow}>
+                      <td className={styles.checkboxCol}>
+                        <div className={`${styles.skeleton} ${styles.skeletonCheckbox}`}></div>
+                      </td>
+                      <td className={styles.nameCell}>
+                        <div className={`${styles.skeleton} ${styles.skeletonAvatar}`}></div>
+                        <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: '120px' }}></div>
+                      </td>
+                      <td><div className={`${styles.skeleton} ${styles.skeletonText}`}></div></td>
+                      <td><div className={`${styles.skeleton} ${styles.skeletonText}`}></div></td>
+                      <td><div className={`${styles.skeleton} ${styles.skeletonText}`}></div></td>
+                      <td><div className={`${styles.skeleton} ${styles.skeletonText}`}></div></td>
+                    </tr>
+                  ))
+                ) : (
+                  visiblePeople.map((person, index) => (
+                    <tr 
+                      key={index} 
+                      onClick={() => onRowClick && onRowClick(person)}
+                      className={styles.clickableRow}
+                    >
+                      <td className={styles.checkboxCol}>
+                        <div className={styles.checkboxOuter}>
+                          <label className={styles.checkboxWrapper}>
+                            <input
+                              type="checkbox"
+                              checked={selectedRows.includes(index)}
+                              onChange={(e) => handleRowSelect(e, index)}
+                            />
 
-                          <span className={styles.customCheckbox}></span>
-                        </label>
-                      </div>
-                    </td>
+                            <span className={styles.customCheckbox}></span>
+                          </label>
+                        </div>
+                      </td>
 
-                    <td className={styles.nameCell}>
-                      <img
-                        src="/images/owner.svg"
-                        alt=""
-                        className={styles.avatar}
-                      />
-                      <span>{person.name}</span>
-                    </td>
-                    <td>{person.location}</td>
-                    <td>{person.current}</td>
-                    <td>{person.previous}</td>
-                    <td>{person.sector}</td>
-                  </tr>
-                ))}
+                      <td className={styles.nameCell}>
+                        <img
+                          src="/images/owner.svg"
+                          alt=""
+                          className={styles.avatar}
+                        />
+                        <span>{person.name}</span>
+                      </td>
+                      <td>{person.location}</td>
+                      <td>{person.current}</td>
+                      <td>{person.previous}</td>
+                      <td>{person.sector}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

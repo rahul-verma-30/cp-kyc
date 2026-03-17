@@ -164,8 +164,8 @@ const CompanyNewHeader = ({ companyData }) => {
             <div className={styles.logoCircle}>
               <img
                 src="/icons/Image.svg"
-                alt="Dabur Logo"
-                className={styles.logoImage}
+                alt={companyData?.company_information?.legal_name + "logo"}
+                className={styles.logoCircle}
               />
             </div>
           </div>

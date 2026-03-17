@@ -299,12 +299,12 @@ export default function CompanyDatabase() {
                     <Link href={`/company/${(company.company_name || "").toLowerCase().replace(/\s+/g, "-")}`} className={styles.companyLink}>{company.company_name || "-"}</Link>
                   </td>
                   <td>
-                    ₹{company.authorised_capital 
+                    {company.authorised_capital 
                       ? (Number(company.authorised_capital.replace(/,/g, "")) / 1000).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })
                       : "-"}
                   </td>
                   <td>
-                    ₹{company.paid_up_capital 
+                    {company.paid_up_capital 
                       ? (Number(company.paid_up_capital.replace(/,/g, "")) / 1000).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })
                       : "-"}
                   </td>
