@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import RowsPerPage from "@/components/common/RowsPerPage";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import CustomCalendar from "@/components/common/CustomCalendar/CustomCalendar";
 
 export default function CompanyDatabase() {
   const bulkRef = useRef(null);
@@ -20,12 +19,28 @@ export default function CompanyDatabase() {
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isStatusOpen, setIsStatusOpen] = useState(false);
 
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [totalCompanies, setTotalCompanies] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+  const [sortConfig, setSortConfig] = useState({ key: "market_cap", direction: "desc" });
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+
+  
+    
 
   // Fetch Companies
   useEffect(() => {
@@ -33,9 +48,28 @@ export default function CompanyDatabase() {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-        // Using both size and limit to be safe, adding search query if possible
+        
+        const formattedDate = formatDate(selectedDate);
+        
+        const params = new URLSearchParams({
+          page: currentPage,
+          per_page: rowsPerPage,
+          company_name: searchQuery,
+          company_status: statusFilter,
+        });
+
+        if (sortConfig.key && sortConfig.direction) {
+          params.append("sort_by", sortConfig.key);
+          params.append("sort_order", sortConfig.direction);
+        }
+
+        if (formattedDate) {
+          params.append("inc_from_date", formattedDate);
+          params.append("inc_to_date", formattedDate); // Assuming single date acts as start/end for now
+        }
+
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/companies?page=${currentPage}&size=${rowsPerPage}&limit=${rowsPerPage}&per_page=${rowsPerPage}&search=${searchQuery}&query=${searchQuery}`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/companies?${params.toString()}`,
           {
             headers: {
               Authorization: token ? `Bearer ${token}` : "",
@@ -69,23 +103,33 @@ export default function CompanyDatabase() {
     };
 
     fetchCompanies();
-  }, [rowsPerPage, currentPage, searchQuery]);
+  }, [rowsPerPage, currentPage, searchQuery, sortConfig, statusFilter, selectedDate]);
 
-  const toggleBulk = () => {
-    if (!bulkRef.current) return;
+  const handleSort = (key) => {
+    let direction = "asc";
+    
+    if (sortConfig.key === key) {
+      if (sortConfig.direction === "asc") {
+        direction = "desc";
+      } else if (sortConfig.direction === "desc") {
+        direction = null;
+      } else {
+        direction = "asc";
+      }
+    }
 
-    const rect = bulkRef.current.getBoundingClientRect();
-    const dropdownHeight = 140;
-    const spaceBelow = window.innerHeight - rect.bottom;
-
-    setBulkDirection(spaceBelow > dropdownHeight ? "down" : "up");
-    setBulkOpen((prev) => !prev);
+    setSortConfig({ key: direction ? key : null, direction });
+    setCurrentPage(1); // Reset to first page on sort
   };
 
+  const statusRef = useRef(null);
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (!bulkRef.current?.contains(e.target)) {
         setBulkOpen(false);
+      }
+      if (!statusRef.current?.contains(e.target)) {
+        setIsStatusOpen(false);
       }
     };
 
@@ -93,17 +137,13 @@ export default function CompanyDatabase() {
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
-  // Search filter
-  const filteredData = companies.filter((company) =>
-    (company.company_name || "")
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
-  );
+  // Search filter (keep for client-side search if needed, but primary is server-side)
+  const filteredData = companies; // Now server-side filtered
 
-  // Reset page when search changes
+  // Reset page when search or filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, rowsPerPage]);
+  }, [searchQuery, rowsPerPage, statusFilter, selectedDate]);
 
   // Basic client-side filtering and slicing as a fallback/secondary filter
   const visibleData = filteredData;
@@ -141,6 +181,39 @@ export default function CompanyDatabase() {
   const goToPrevPage = () =>
     setCurrentPage((prev) => Math.max(prev - 1, 1));
 
+  const toggleBulk = () => {
+    if (!bulkRef.current) return;
+
+    const rect = bulkRef.current.getBoundingClientRect();
+    const dropdownHeight = 140;
+    const spaceBelow = window.innerHeight - rect.bottom;
+
+    setBulkDirection(spaceBelow > dropdownHeight ? "down" : "up");
+    setBulkOpen((prev) => !prev);
+  };
+
+  const toggleStatus = () => {
+    setIsStatusOpen((prev) => !prev);
+  };
+
+  const handleStatusSelect = (status) => {
+    setStatusFilter(status);
+    setIsStatusOpen(false);
+    setCurrentPage(1);
+  };
+
+  const formatAddress = (addr) => {
+    if (!addr) return "-";
+    const parts = addr.split(',').slice(-4, -1);
+    const city = parts[0]?.trim() || "";
+    const state = parts[1]?.trim() || "";
+    
+    if (!city && !state) return "-";
+    
+    const rawAddr = city + (state ? ", " + state : "");
+    return rawAddr.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -161,13 +234,56 @@ export default function CompanyDatabase() {
             />
           </div>
 
-          <div className={styles.filterDropdown}>
-            <span>Status</span>
-            <img
-              src="/icons/chevron-down-dark.svg"
-              alt=""
-              className={styles.chevron}
-            />
+          <div 
+            ref={statusRef} 
+            className={styles.bulkWrapper}
+          >
+            <div 
+              className={styles.filterDropdown}
+              onClick={toggleStatus}
+            >
+              <span>{statusFilter || "Status"}</span>
+              <img
+                src="/icons/chevron-down-dark.svg"
+                alt=""
+                className={`${styles.chevron} ${isStatusOpen ? styles.rotated : ""}`}
+              />
+            </div>
+
+            {isStatusOpen && (
+              <div className={`${styles.bulkDropdown} ${styles.dropdownDown}`}>
+                <button 
+                  className={styles.dropdownItem} 
+                  onClick={() => handleStatusSelect("")}
+                >
+                  All Status
+                </button>
+                <button 
+                  className={styles.dropdownItem} 
+                  onClick={() => handleStatusSelect("Active")}
+                >
+                  Active
+                </button>
+                <button 
+                  className={styles.dropdownItem} 
+                  onClick={() => handleStatusSelect("Inactive")}
+                >
+                  Inactive
+                </button>
+                {/* <button 
+                  className={styles.dropdownItem} 
+                  onClick={() => handleStatusSelect("Liquidated")}
+                >
+                  Liquidated
+                </button>
+                <button 
+                  className={styles.dropdownItem} 
+                  onClick={() => handleStatusSelect("Strike Off")}
+                >
+                  Strike Off
+                </button> */}
+              </div>
+            )}
           </div>
         </div>
 
@@ -187,13 +303,6 @@ export default function CompanyDatabase() {
                 : "Date of incorporation"}
             </span>
 
-            {isCalendarOpen && (
-              <CustomCalendar
-                selectedDate={selectedDate}
-                onSelect={(date) => setSelectedDate(date)}
-                onClose={() => setIsCalendarOpen(false)}
-              />
-            )}
           </div>
 
           <div ref={bulkRef} className={styles.bulkWrapper}>
@@ -244,11 +353,67 @@ export default function CompanyDatabase() {
                 </div>
               </th>
 
-              <th>Company Name</th>
-              <th>Market Cap. (Cr.)</th>
-              <th>PUC/OOC (Cr.)</th>
+              <th 
+                className={styles.sortableHeader} 
+                onClick={() => handleSort("company_name")}
+              >
+                <div className={styles.headerContent}>
+                  Company Name
+                  <img 
+                    src={sortConfig.key === "company_name" 
+                      ? (sortConfig.direction === "asc" ? "/icons/arrow-up.svg" : "/icons/arrow-down.svg")
+                      : "/icons/chevrons-up-down.svg"} 
+                    alt="" 
+                    className={styles.sortIcon} 
+                  />
+                </div>
+              </th>
+              <th 
+                className={styles.sortableHeader} 
+                onClick={() => handleSort("market_cap")}
+              >
+                <div className={styles.headerContent}>
+                  Market Cap. (Cr.)
+                  <img 
+                    src={sortConfig.key === "market_cap" 
+                      ? (sortConfig.direction === "asc" ? "/icons/arrow-up.svg" : "/icons/arrow-down.svg")
+                      : "/icons/chevrons-up-down.svg"} 
+                    alt="" 
+                    className={styles.sortIcon} 
+                  />
+                </div>
+              </th>
+              <th 
+                className={styles.sortableHeader} 
+                onClick={() => handleSort("paid_up_capital")}
+              >
+                <div className={styles.headerContent}>
+                  PUC/OOC (Cr.)
+                  <img 
+                    src={sortConfig.key === "paid_up_capital" 
+                      ? (sortConfig.direction === "asc" ? "/icons/arrow-up.svg" : "/icons/arrow-down.svg")
+                      : "/icons/chevrons-up-down.svg"} 
+                    alt="" 
+                    className={styles.sortIcon} 
+                  />
+                </div>
+              </th>
               <th>SOC (Cr.)</th>
-              <th>DOI</th>
+              <th 
+                className={styles.sortableHeader} 
+                onClick={() => handleSort("incorporation_date")}
+              >
+                <div className={styles.headerContent}>
+                  DOI
+                  <img 
+                    src={sortConfig.key === "incorporation_date" 
+                      ? (sortConfig.direction === "asc" ? "/icons/arrow-up.svg" : "/icons/arrow-down.svg")
+                      : "/icons/chevrons-up-down.svg"} 
+                    alt="" 
+                    className={styles.sortIcon} 
+                  />
+                </div>
+              </th>
               <th>Location</th>
               <th>Industry</th>
               <th>Company Status</th>
@@ -308,13 +473,13 @@ export default function CompanyDatabase() {
                     <Link href={`/company/${(company.company_name || "").toLowerCase().replace(/\s+/g, "-")}`} className={styles.companyLink}>{company.company_name || "-"}</Link>
                   </td>
                   <td>
-                    {company.authorised_capital 
-                      ? (Number(company.authorised_capital.replace(/,/g, "")) / 1000).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })
+                    {company.market_cap
+                      ? (company.market_cap)
                       : "-"}
                   </td>
                   <td>
                     {company.paid_up_capital 
-                      ? (Number(company.paid_up_capital.replace(/,/g, "")) / 1000).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })
+                      ? (company.paid_up_capital)
                       : "-"}
                   </td>
                   <td>
@@ -322,8 +487,8 @@ export default function CompanyDatabase() {
                       ? (Number(company.soc.replace(/,/g, "")) / 1000).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
                       : "-"}
                   </td>
-                  <td>{company.doi || "-"}</td>
-                  <td>{company.registered_address?.split(',').slice(-4, -1)[0]?.trim() + ", " + company.registered_address?.split(',').slice(-4, -1)[1]?.trim() || company.registered_address?.split(',').slice(-4, -1)[0]?.trim() || "-"}</td>
+                  <td>{company.incorporation_date || "-"}</td>
+                  <td>{formatAddress(company.registered_address)}</td>
                   <td>{company.industry || "-"}</td>
                   <td>
                     <span className={styles.statusBadge}>
