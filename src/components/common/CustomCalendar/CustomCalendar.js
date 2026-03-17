@@ -9,12 +9,21 @@ const months = [
 
 const daysOfWeek = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
+// Generate years from 1950 to 2050
+const yearsList = [];
+for (let i = 1950; i <= 2050; i++) {
+  yearsList.push(i);
+}
+
 export default function CustomCalendar({ selectedDate, onSelect, onClose }) {
   const [currentDate, setCurrentDate] = useState(() => {
     return selectedDate ? new Date(selectedDate) : new Date();
   });
-  const [view, setView] = useState("days"); // days, months, years
+  const [showMonthDropdown, setShowMonthDropdown] = useState(false);
+  const [showYearDropdown, setShowYearDropdown] = useState(false);
+  
   const calendarRef = useRef(null);
+  const yearListRef = useRef(null);
 
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth();
@@ -64,16 +73,6 @@ export default function CustomCalendar({ selectedDate, onSelect, onClose }) {
     return calendarDays;
   }, [currentYear, currentMonth, selectedDate]);
 
-  const years = useMemo(() => {
-    const startYear = currentYear - 10;
-    const endYear = currentYear + 10;
-    const yearList = [];
-    for (let i = startYear; i <= endYear; i++) {
-      yearList.push(i);
-    }
-    return yearList;
-  }, [currentYear]);
-
   const changeMonth = (offset) => {
     setCurrentDate(new Date(currentYear, currentMonth + offset, 1));
   };
@@ -87,12 +86,12 @@ export default function CustomCalendar({ selectedDate, onSelect, onClose }) {
 
   const selectMonth = (idx) => {
     setCurrentDate(new Date(currentYear, idx, 1));
-    setView("days");
+    setShowMonthDropdown(false);
   };
 
   const selectYear = (year) => {
     setCurrentDate(new Date(year, currentMonth, 1));
-    setView("days");
+    setShowYearDropdown(false);
   };
 
   useEffect(() => {
@@ -105,69 +104,85 @@ export default function CustomCalendar({ selectedDate, onSelect, onClose }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
+  // Scroll to current year when dropdown opens
+  useEffect(() => {
+    if (showYearDropdown && yearListRef.current) {
+        const activeItem = yearListRef.current.querySelector(`.${styles.activeYear}`);
+        if (activeItem) {
+            yearListRef.current.scrollTop = activeItem.offsetTop - 100;
+        }
+    }
+  }, [showYearDropdown]);
+
   return (
     <div className={styles.calendarPopup} ref={calendarRef}>
       <div className={styles.header}>
         <button className={styles.navBtn} onClick={() => changeMonth(-1)}>
             <img src="/icons/chevron-left.svg" alt="prev" />
         </button>
-        <div className={styles.currentMonthYear}>
-          <span onClick={() => setView("months")}>{months[currentMonth]}</span>
-          <span onClick={() => setView("years")}>{currentYear}</span>
+        
+        <div className={styles.selectors}>
+            <div className={styles.selectorWrapper}>
+                <span className={styles.selectorLabel} onClick={() => {
+                    setShowMonthDropdown(!showMonthDropdown);
+                    setShowYearDropdown(false);
+                }}>
+                    {months[currentMonth]}
+                    <img src="/icons/chevron-down.svg" alt="" className={`${styles.chevron} ${showMonthDropdown ? styles.rotated : ""}`} />
+                </span>
+                {showMonthDropdown && (
+                    <div className={styles.dropdown}>
+                        {months.map((m, i) => (
+                            <div key={m} className={`${styles.dropdownItem} ${i === currentMonth ? styles.activeItem : ""}`} onClick={() => selectMonth(i)}>
+                                {m}
+                            </div>
+                        ))}
+                    </div>
+                ) }
+            </div>
+
+            <div className={styles.selectorWrapper}>
+                <span className={styles.selectorLabel} onClick={() => {
+                    setShowYearDropdown(!showYearDropdown);
+                    setShowMonthDropdown(false);
+                }}>
+                    {currentYear}
+                    <img src="/icons/chevron-down.svg" alt="" className={`${styles.chevron} ${showYearDropdown ? styles.rotated : ""}`} />
+                </span>
+                {showYearDropdown && (
+                    <div className={`${styles.dropdown} ${styles.yearDropdown}`} ref={yearListRef}>
+                        {yearsList.map((y) => (
+                            <div key={y} className={`${styles.dropdownItem} ${y === currentYear ? styles.activeYear : ""}`} onClick={() => selectYear(y)}>
+                                {y}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
+
         <button className={styles.navBtn} onClick={() => changeMonth(1)}>
             <img src="/icons/chevron-right.svg" alt="next" />
         </button>
       </div>
 
-      {view === "days" && (
-        <>
-          <div className={styles.daysOfWeek}>
-            {daysOfWeek.map((d) => (
-              <span key={d}>{d}</span>
-            ))}
+      <div className={styles.daysOfWeek}>
+        {daysOfWeek.map((d) => (
+          <span key={d}>{d}</span>
+        ))}
+      </div>
+      
+      <div className={styles.daysGrid}>
+        {days.map((d, i) => (
+          <div
+            key={i}
+            className={`${styles.day} ${!d.isCurrentMonth ? styles.otherMonth : ""} ${d.isToday ? styles.today : ""} ${d.isSelected ? styles.selected : ""}`}
+            onClick={() => handleDateClick(d)}
+          >
+            {d.day}
           </div>
-          <div className={styles.daysGrid}>
-            {days.map((d, i) => (
-              <div
-                key={i}
-                className={`${styles.day} ${!d.isCurrentMonth ? styles.otherMonth : ""} ${d.isToday ? styles.today : ""} ${d.isSelected ? styles.selected : ""}`}
-                onClick={() => handleDateClick(d)}
-              >
-                {d.day}
-              </div>
-            ))}
-          </div>
-        </>
-      )}
-
-      {view === "months" && (
-        <div className={styles.monthsGrid}>
-          {months.map((m, i) => (
-            <div
-              key={m}
-              className={`${styles.monthItem} ${i === currentMonth ? styles.activeItem : ""}`}
-              onClick={() => selectMonth(i)}
-            >
-              {m.substring(0, 3)}
-            </div>
-          ))}
-        </div>
-      )}
-
-      {view === "years" && (
-        <div className={styles.yearsGrid}>
-          {years.map((y) => (
-            <div
-              key={y}
-              className={`${styles.yearItem} ${y === currentYear ? styles.activeItem : ""}`}
-              onClick={() => selectYear(y)}
-            >
-              {y}
-            </div>
-          ))}
-        </div>
-      )}
+        ))}
+      </div>
 
       <div className={styles.footer}>
         <button className={styles.clearBtn} onClick={() => { onSelect(""); onClose(); }}>Clear</button>

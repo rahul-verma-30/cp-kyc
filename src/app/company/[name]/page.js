@@ -107,8 +107,14 @@ export default function CompanyPage() {
         setCompanyLoading(true);
         setCompanyError(null);
 
+        const token = localStorage.getItem("token");
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company-details/${encodeURIComponent(companyName)}`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company-details/${encodeURIComponent(companyName)}`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
         );
 
         let data;
@@ -150,8 +156,14 @@ export default function CompanyPage() {
         setFinancialLoading(true);
         setFinancialError(null);
 
+        const token = localStorage.getItem("token");
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/financial-highlights`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/financial-highlights`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
         );
 
         let data;
@@ -190,8 +202,14 @@ export default function CompanyPage() {
         setTrendLoading(true);
         setTrendError(null);
 
+        const token = localStorage.getItem("token");
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/revenue-profit-trend`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/revenue-profit-trend`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
         );
 
         let data;
@@ -231,8 +249,14 @@ export default function CompanyPage() {
         setDirectorshipLoading(true);
         setDirectorshipError(null);
 
+        const token = localStorage.getItem("token");
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/common-directorship`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/common-directorship`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
         );
 
         let data;
@@ -271,10 +295,16 @@ export default function CompanyPage() {
         setHighlightsLoading(true);
         setHighlightsError(null);
 
+        const token = localStorage.getItem("token");
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(
             companyName
-          )}/highlights?page=${highlightsPage}&limit=${highlightsLimit}`
+          )}/highlights?page=${highlightsPage}&limit=${highlightsLimit}`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
         );
 
         let data;
@@ -316,10 +346,16 @@ export default function CompanyPage() {
         setChargesLoading(true);
         setChargesError(null);
 
+        const token = localStorage.getItem("token");
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(
             companyName
-          )}/charges?open_page=${openPage}&closed_page=${closedPage}&limit=${chargesLimit}`
+          )}/charges?open_page=${openPage}&closed_page=${closedPage}&limit=${chargesLimit}`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
         );
 
         let data;
@@ -362,10 +398,16 @@ export default function CompanyPage() {
         setDirectorsLoading(true);
         setDirectorsError(null);
 
+        const token = localStorage.getItem("token");
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(
             companyName
-          )}/directors-detailed`
+          )}/directors-detailed`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
         );
 
         let data;
@@ -407,8 +449,22 @@ export default function CompanyPage() {
         setAlertsLoading(true);
         setAlertsError(null);
 
+<<<<<<< Updated upstream
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/alerts`);
         // const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/Dabur India Limited/alerts`);
+=======
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(
+            companyName
+          )}/alerts`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
+        );
+>>>>>>> Stashed changes
 
         let data;
 

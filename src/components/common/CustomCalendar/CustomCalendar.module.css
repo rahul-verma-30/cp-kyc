@@ -2,10 +2,11 @@
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(228, 228, 231, 1);
   border-radius: 12px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   padding: 16px;
   width: 280px;
   z-index: 100;
@@ -24,39 +25,99 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
-}
-
-.currentMonthYear {
-  font-size: 14px;
-  font-weight: 600;
-  color: #18181b;
-  display: flex;
   gap: 8px;
 }
 
-.currentMonthYear span {
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
+.selectors {
+    display: flex;
+    gap: 4px;
+    flex-grow: 1;
 }
 
-.currentMonthYear span:hover {
-  background: rgba(244, 244, 245, 1);
+.selectorWrapper {
+    position: relative;
+    flex: 1;
+}
+
+.selectorLabel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 8px;
+    background: #f4f4f5;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #18181b;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.selectorLabel:hover {
+    background: #e4e4e7;
+}
+
+.chevron {
+    width: 12px;
+    height: 12px;
+    opacity: 0.5;
+    transition: transform 0.2s;
+}
+
+.rotated {
+    transform: rotate(180deg);
+}
+
+.dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #ffffff;
+    border: 1px solid #e4e4e7;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    z-index: 110;
+    padding: 4px;
+}
+
+.yearDropdown {
+    width: 120%; /* Slightly wider for years */
+}
+
+.dropdownItem {
+    padding: 8px 10px;
+    font-size: 13px;
+    color: #27272a;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.dropdownItem:hover {
+    background: #f4f4f5;
+}
+
+.activeItem, .activeYear {
+    background: #041e42 !important;
+    color: #ffffff !important;
 }
 
 .navBtn {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
+  padding: 6px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background 0.2s;
 }
 
 .navBtn:hover {
-  background: rgba(244, 244, 245, 1);
+  background: #f4f4f5;
 }
 
 .navBtn img {
@@ -96,7 +157,7 @@
 }
 
 .day:hover {
-  background: rgba(244, 244, 245, 1);
+  background: #f4f4f5;
 }
 
 .otherMonth {
@@ -114,31 +175,6 @@
   color: #ffffff !important;
 }
 
-.monthsGrid, .yearsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  padding: 8px 0;
-}
-
-.monthItem, .yearItem {
-  padding: 8px;
-  text-align: center;
-  font-size: 13px;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: all 0.2s;
-}
-
-.monthItem:hover, .yearItem:hover {
-  background: rgba(244, 244, 245, 1);
-}
-
-.activeItem {
-  background: #041e42;
-  color: #ffffff;
-}
-
 .footer {
   display: flex;
   justify-content: space-between;
@@ -153,8 +189,9 @@
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background 0.2s;
 }
 
 .clearBtn {
@@ -166,5 +203,20 @@
 }
 
 .clearBtn:hover, .todayBtn:hover {
-  background: rgba(244, 244, 245, 1);
+  background: #f4f4f5;
+}
+
+/* Custom Scrollbar for Year Dropdown */
+.dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+.dropdown::-webkit-scrollbar-track {
+    background: transparent;
+}
+.dropdown::-webkit-scrollbar-thumb {
+    background: #e4e4e7;
+    border-radius: 10px;
+}
+.dropdown::-webkit-scrollbar-thumb:hover {
+    background: #d4d4d8;
 }

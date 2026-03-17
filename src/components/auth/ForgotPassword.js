@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import toast from "react-hot-toast";
 import styles from "./Auth.module.css";
 
 export default function ForgotPassword() {
@@ -11,7 +12,6 @@ export default function ForgotPassword() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [countdown, setCountdown] = useState(30);
@@ -32,20 +32,30 @@ export default function ForgotPassword() {
   const handleResendOTP = async () => {
     if (canResend) {
       setLoading(true);
-      setError("");
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/signup/resend-otp`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, flow_type: "forgot" }),
         });
-        if (!res.ok) throw new Error("Failed to resend OTP");
         
+        if (!res.ok) {
+          let errorMessage = "Failed to resend OTP";
+          try {
+            const data = await res.json();
+            errorMessage = data.detail || data.message || errorMessage;
+          } catch (e) {
+            if (res.status === 404) errorMessage = "Requested service not found (404)";
+          }
+          throw new Error(errorMessage);
+        }
+        
+        toast.success("OTP sent successfully!");
         setCountdown(30);
         setCanResend(false);
         console.log("Resending OTP...");
       } catch (err) {
-        setError(err.message);
+        toast.error(err.message);
       } finally {
         setLoading(false);
       }
@@ -55,17 +65,28 @@ export default function ForgotPassword() {
   const handleInitiate = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/signup/initiate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, flow_type: "forgot" }),
       });
-      if (!res.ok) throw new Error("Failed to initiate password reset");
+      
+      if (!res.ok) {
+        let errorMessage = "Failed to initiate password reset";
+        try {
+          const data = await res.json();
+          errorMessage = data.detail || data.message || errorMessage;
+        } catch (e) {
+          if (res.status === 404) errorMessage = "User or service not found (404)";
+        }
+        throw new Error(errorMessage);
+      }
+      
+      toast.success("Verification code sent!");
       setStep(2);
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }
@@ -74,17 +95,28 @@ export default function ForgotPassword() {
   const handleVerifyOTP = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/signup/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp }),
       });
-      if (!res.ok) throw new Error("Invalid OTP");
+      
+      if (!res.ok) {
+        let errorMessage = "Invalid OTP";
+        try {
+          const data = await res.json();
+          errorMessage = data.detail || data.message || errorMessage;
+        } catch (e) {
+          if (res.status === 404) errorMessage = "Verification service not found (404)";
+        }
+        throw new Error(errorMessage);
+      }
+      
+      toast.success("OTP verified!");
       setStep(3);
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }
@@ -92,10 +124,9 @@ export default function ForgotPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
@@ -107,18 +138,31 @@ export default function ForgotPassword() {
         body: JSON.stringify({ email, password: newPassword, confirm_password: confirmPassword }),
       });
       
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to reset password");
+      if (!res.ok) {
+        let errorMessage = "Failed to reset password";
+        try {
+          const data = await res.json();
+          errorMessage = data.detail || data.message || errorMessage;
+        } catch (e) {
+          if (res.status === 404) errorMessage = "Reset service not found (404)";
+        }
+        throw new Error(errorMessage);
+      }
 
+      const data = await res.json();
       // Store token
       if (data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
+        // Set cookie for middleware
+        document.cookie = `token=${data.token}; path=/; max-age=86400; SameSite=Lax`;
       }
 
       console.log("Password reset success:", data);
+      toast.success("Password reset successful!");
       window.location.href = "/";
     } catch (err) {
+      toast.error(err.message);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -167,12 +211,8 @@ export default function ForgotPassword() {
                   onChange={(e) => setOtp(e.target.value)}
                   required
                 />
-            {error && step < 3 && <p className={styles.error}>{error}</p>}
-
               </div>
-              
             )}
-
             <button type="submit" className={styles.submitBtn} disabled={loading}>
               {loading ? "Processing..." : "Continue"}
             </button>
@@ -226,7 +266,7 @@ export default function ForgotPassword() {
               </div>
             </div>
 
-            {error && step === 3 && <p className={styles.error}>{error}</p>}
+
 
             <button type="submit" className={styles.submitBtn} disabled={loading}>
               {loading ? "Updating..." : "Continue"}

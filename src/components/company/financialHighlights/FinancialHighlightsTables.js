@@ -672,8 +672,14 @@ const FinancialHighlightsTables = () => {
       try {
         console.log("Fetching auditors for:", companyName);
 
+        const token = localStorage.getItem("token");
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/financials/${companyName}/auditors?type=${audType}`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/financials/${companyName}/auditors?type=${audType}`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
         );
 
         const data = await response.json();

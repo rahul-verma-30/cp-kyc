@@ -232,7 +232,7 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
 
                   {/* IMAGES FOR THE SIDEBAR */}
                   <img
-                    src={(item.image && item.image !== "N/A") ? item.image : "/icons/profile-icon.svg"}
+                    src={(item.image && item.image !== "-") ? item.image : "/icons/profile-icon.svg"}
                     alt="profile"
                     className={styles.sidebarImg}
                   />

@@ -32,9 +32,15 @@ export default function CompanyDatabase() {
     const fetchCompanies = async () => {
       try {
         setLoading(true);
+        const token = localStorage.getItem("token");
         // Using both size and limit to be safe, adding search query if possible
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/companies?page=${currentPage}&size=${rowsPerPage}&limit=${rowsPerPage}&per_page=${rowsPerPage}&search=${searchQuery}&query=${searchQuery}`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/companies?page=${currentPage}&size=${rowsPerPage}&limit=${rowsPerPage}&per_page=${rowsPerPage}&search=${searchQuery}&query=${searchQuery}`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
         );
 
         const result = await res.json();

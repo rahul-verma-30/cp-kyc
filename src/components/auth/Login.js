@@ -1,19 +1,18 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import toast from "react-hot-toast";
 import styles from "./Auth.module.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/login`, {
@@ -32,13 +31,16 @@ export default function Login() {
       if (data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
+        // Set cookie for middleware
+        document.cookie = `token=${data.token}; path=/; max-age=86400; SameSite=Lax`;
       }
 
       console.log("Login success:", data);
+      toast.success("Login successful!");
       // Redirect to home page
       window.location.href = "/";
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }
@@ -87,7 +89,7 @@ export default function Login() {
           </div>
         </div>
 
-        {error && <p className={styles.error}>{error}</p>}
+
 
         <button type="submit" className={styles.submitBtn} disabled={loading}>
           {loading ? "Logging in..." : "Login"}
