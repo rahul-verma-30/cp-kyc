@@ -1,11 +1,14 @@
 "use client";
 import styles from "./Auth.module.css";
+import Link from "next/link";
 
 export default function AuthLayout({ children }) {
   return (
     <div className={styles.authWrapper}>
       <div className={styles.logoContainer}>
-        <img src="/icons/loginpage.svg" alt="Corporate Professionals" className={styles.logo} />
+        <Link href="/">
+          <img src="/icons/loginpage.svg" alt="Corporate Professionals" className={styles.logo} />
+        </Link>
       </div>
       <div className={styles.authCard}>
         {children}
