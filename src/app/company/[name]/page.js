@@ -449,10 +449,6 @@ export default function CompanyPage() {
         setAlertsLoading(true);
         setAlertsError(null);
 
-<<<<<<< Updated upstream
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/alerts`);
-        // const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/Dabur India Limited/alerts`);
-=======
         const token = localStorage.getItem("token");
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(
@@ -464,7 +460,7 @@ export default function CompanyPage() {
             },
           }
         );
->>>>>>> Stashed changes
+
 
         let data;
 
