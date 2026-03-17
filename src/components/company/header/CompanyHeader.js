@@ -11,7 +11,7 @@ const CompanyHeader = () => {
             <img
               src="/icons/Image.svg"
               alt="Dabur Logo"
-              className={styles.logoImage}
+              className={styles.logoCircle}
             />
           </div>
         </div>

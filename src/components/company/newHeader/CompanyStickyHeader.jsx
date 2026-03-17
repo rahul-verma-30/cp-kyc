@@ -56,7 +56,7 @@ export default function CompanyStickyHeader({ visible, companyData }) {
             {/* LEFT */}
             <div className={styles.left}>
               <div className={styles.logo}>
-                <img src="/icons/dabur-logo.svg" alt="Dabur" />
+                <img src="/icons/image.svg" alt={companyData?.company_information?.legal_name + "logo"} />
               </div>
             </div>
             <h1 className={styles.companyName} title={companyName?.full}>{companyName?.display}</h1>

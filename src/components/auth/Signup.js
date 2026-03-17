@@ -39,7 +39,9 @@ export default function Signup() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, flow_type: "signup" }),
         });
-        if (!res.ok) throw new Error("Failed to resend OTP");
+        
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || data.message || "Failed to resend OTP");
         
         setCountdown(30);
         setCanResend(false);
@@ -62,7 +64,9 @@ export default function Signup() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, flow_type: "signup" }),
       });
-      if (!res.ok) throw new Error("Failed to initiate signup");
+      
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || data.message || "Failed to initiate signup");
       setStep(2);
     } catch (err) {
       setError(err.message);
@@ -81,7 +85,9 @@ export default function Signup() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp }),
       });
-      if (!res.ok) throw new Error("Invalid OTP");
+      
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || data.message || "Invalid OTP");
       setStep(3);
     } catch (err) {
       setError(err.message);
@@ -98,6 +104,11 @@ export default function Signup() {
     e.preventDefault();
     setError("");
 
+    if (password.length < 8 || password.length > 30) {
+      setError("Password must be between 8 and 30 characters long");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
@@ -112,7 +123,7 @@ export default function Signup() {
       });
       
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Signup failed");
+      if (!res.ok) throw new Error(data.detail || data.message || "Signup failed");
 
       // Store token
       if (data.token) {
