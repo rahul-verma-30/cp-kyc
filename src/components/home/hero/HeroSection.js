@@ -80,9 +80,20 @@ export default function HeroSection() {
       return;
     }
 
-    const filtered = allCompanies.filter((company) =>
-      company.company_name.toLowerCase().includes(value.toLowerCase())
-    );
+    const searchTerm = value.toLowerCase();
+    const startsWith = [];
+    const contains = [];
+
+    allCompanies.forEach((company) => {
+      const name = company.company_name.toLowerCase();
+      if (name.startsWith(searchTerm)) {
+        startsWith.push(company);
+      } else if (name.includes(searchTerm)) {
+        contains.push(company);
+      }
+    });
+
+    const filtered = [...startsWith, ...contains];
 
     setSuggestions(filtered);
     setShowSuggestions(true);

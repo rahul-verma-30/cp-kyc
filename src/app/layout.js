@@ -165,11 +165,20 @@ export default function RootLayout({ children }) {
       return;
     }
 
-    const filtered = allCompanies
-      .filter((company) =>
-        company.company_name.toLowerCase().includes(value.toLowerCase())
-      )
-      .slice(0, 10);
+    const searchTerm = value.toLowerCase();
+    const startsWith = [];
+    const contains = [];
+
+    allCompanies.forEach((company) => {
+      const name = company.company_name.toLowerCase();
+      if (name.startsWith(searchTerm)) {
+        startsWith.push(company);
+      } else if (name.includes(searchTerm)) {
+        contains.push(company);
+      }
+    });
+
+    const filtered = [...startsWith, ...contains];
 
     setSuggestions(filtered);
     setShowSuggestions(true);

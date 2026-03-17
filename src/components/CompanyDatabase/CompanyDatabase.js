@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import RowsPerPage from "@/components/common/RowsPerPage";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import CustomCalendar from "@/components/common/CustomCalendar/CustomCalendar";
 
 export default function CompanyDatabase() {
   const bulkRef = useRef(null);
@@ -19,6 +20,7 @@ export default function CompanyDatabase() {
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -166,7 +168,7 @@ export default function CompanyDatabase() {
         <div className={styles.rightTools}>
           <div
             className={styles.datePicker}
-            onClick={() => dateInputRef.current?.showPicker()}
+            onClick={() => setIsCalendarOpen(!isCalendarOpen)}
           >
             <img src="/icons/Calender.svg" alt="" className={styles.icon} />
             <span>
@@ -179,12 +181,13 @@ export default function CompanyDatabase() {
                 : "Date of incorporation"}
             </span>
 
-            <input
-              ref={dateInputRef}
-              type="date"
-              className={styles.hiddenDateInput}
-              onChange={(e) => setSelectedDate(e.target.value)}
-            />
+            {isCalendarOpen && (
+              <CustomCalendar
+                selectedDate={selectedDate}
+                onSelect={(date) => setSelectedDate(date)}
+                onClose={() => setIsCalendarOpen(false)}
+              />
+            )}
           </div>
 
           <div ref={bulkRef} className={styles.bulkWrapper}>
