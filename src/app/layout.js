@@ -221,7 +221,6 @@ export default function RootLayout({ children }) {
   }, [pathname]);
 
   const handleNav = (tab, path) => {
-    setActiveTab(tab);
     router.push(path);
   };
 

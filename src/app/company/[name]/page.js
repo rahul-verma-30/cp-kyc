@@ -407,11 +407,8 @@ export default function CompanyPage() {
         setAlertsLoading(true);
         setAlertsError(null);
 
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(
-            companyName
-          )}/alerts`
-        );
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/alerts`);
+        // const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/Dabur India Limited/alerts`);
 
         let data;
 

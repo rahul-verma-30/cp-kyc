@@ -88,7 +88,7 @@ export default function PeopleDatabase({ onRowClick }) {
     // Simulate loading data
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -182,8 +182,8 @@ export default function PeopleDatabase({ onRowClick }) {
                   ))
                 ) : (
                   visiblePeople.map((person, index) => (
-                    <tr 
-                      key={index} 
+                    <tr
+                      key={index}
                       onClick={() => onRowClick && onRowClick(person)}
                       className={styles.clickableRow}
                     >
