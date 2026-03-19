@@ -43,6 +43,16 @@ export default function CompanyStickyHeader({ visible, companyData }) {
   const companyName = getTruncatedText(companyData?.company_information?.legal_name, 5);
   const companyAddress = getTruncatedText(companyData?.contact_details?.registered_address, 30);
 
+  const nseSymbol = companyData?.company_information?.nse_symbol;
+  const bseSymbol = companyData?.company_information?.bse_symbol;
+  const hasNse = nseSymbol && nseSymbol !== "-";
+  const hasBse = bseSymbol && bseSymbol !== "-";
+
+  let listingText = "-";
+  if (hasNse && hasBse) listingText = "NSE & BSE";
+  else if (hasNse) listingText = "NSE";
+  else if (hasBse) listingText = "BSE";
+
 
   return (
     <header
@@ -69,13 +79,18 @@ export default function CompanyStickyHeader({ visible, companyData }) {
 
               <div className={styles.divider}></div>
               <div className={styles.statItem}>
-                <span className={styles.scoreBadgeGreen}>
-                  <img
-                    src="/icons/greencheck.svg"
-                    alt="arrow down"
-                    className={styles.arrowDownGreen}
-                  />
-                  NSE & BSE</span>
+                {listingText !== "-" ? (
+                  <span className={styles.scoreBadgeGreen}>
+                    <img
+                      src="/icons/greencheck.svg"
+                      alt="check"
+                      className={styles.arrowDownGreen}
+                    />
+                    {listingText}
+                  </span>
+                ) : (
+                  <span className={styles.cinBadge}>-</span>
+                )}
               </div>
 
               <div className={styles.divider}></div>

@@ -16,21 +16,34 @@ import FinancialHighlightsTables from "../financialHighlights/FinancialHighlight
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 import { useEffect, useRef } from "react";
 
-const FinancialHighlights = ({ financialHighlights, revenueProfitTrend, financialLoading, financialError, revenueLoading, revenueError }) => {
-
-  if (financialLoading || revenueLoading) {
-    return <div className={styles.container}>Loading highlights...</div>;
-  }
-
-  if (financialError || revenueError) {
-    return (
-      <div className={styles.container}>
-        <div style={{ color: "red", fontWeight: 500 }}>
-          {financialError || revenueError}
-        </div>
-      </div>
-    );
-  }
+const FinancialHighlights = ({ 
+  financialHighlights, 
+  revenueProfitTrend, 
+  financialLoading, 
+  financialError, 
+  revenueLoading, 
+  revenueError, 
+  pnlApiData,
+  pnlLoading,
+  pnlError,
+  pnlViewType,
+  setPnlViewType,
+  auditorsData, 
+  auditorsLoading, 
+  auditorsError, 
+  audType, 
+  setAudType,
+  balanceSheetData,
+  balanceSheetLoading,
+  balanceSheetError,
+  bsType,
+  setBsType,
+  cashFlowData,
+  cashFlowLoading,
+  cashFlowError,
+  cfType,
+  setCfType
+}) => {
 
   const { activeSubSection } = useCompanySection();
 
@@ -40,6 +53,7 @@ const FinancialHighlights = ({ financialHighlights, revenueProfitTrend, financia
   const cashFlowRef = useRef(null);
   const ratioRef = useRef(null);
   const auditorsRef = useRef(null);
+
   useEffect(() => {
     if (!activeSubSection) return;
 
@@ -80,12 +94,68 @@ const FinancialHighlights = ({ financialHighlights, revenueProfitTrend, financia
     }
   }, [activeSubSection]);
 
+  if (!financialHighlights && (financialLoading || revenueLoading)) {
+    return (
+      <div className={styles.container}>
+        <div>Loading highlights...</div>
+        <div style={{ marginTop: "40px" }}>
+          <FinancialHighlightsTables 
+            pnlApiData={pnlApiData}
+        pnlLoading={pnlLoading}
+        pnlError={pnlError}
+        pnlViewType={pnlViewType}
+        setPnlViewType={setPnlViewType}
+        auditorsData={auditorsData}
+            auditorsLoading={auditorsLoading}
+            auditorsError={auditorsError}
+            audType={audType}
+            setAudType={setAudType}
+            balanceSheetData={balanceSheetData}
+            balanceSheetLoading={balanceSheetLoading}
+            balanceSheetError={balanceSheetError}
+            bsType={bsType}
+            setBsType={setBsType} cashFlowData={cashFlowData} cashFlowLoading={cashFlowLoading} cashFlowError={cashFlowError} cfType={cfType} setCfType={setCfType}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (financialError || revenueError) {
+    return (
+      <div className={styles.container}>
+        <div style={{ color: "#EF4444", fontWeight: 500 }}>
+          {financialError || revenueError}
+        </div>
+        <div style={{ marginTop: "40px" }}>
+          <FinancialHighlightsTables 
+            pnlApiData={pnlApiData}
+        pnlLoading={pnlLoading}
+        pnlError={pnlError}
+        pnlViewType={pnlViewType}
+        setPnlViewType={setPnlViewType}
+        auditorsData={auditorsData}
+            auditorsLoading={auditorsLoading}
+            auditorsError={auditorsError}
+            audType={audType}
+            setAudType={setAudType}
+            balanceSheetData={balanceSheetData}
+            balanceSheetLoading={balanceSheetLoading}
+            balanceSheetError={balanceSheetError}
+            bsType={bsType}
+            setBsType={setBsType} cashFlowData={cashFlowData} cashFlowLoading={cashFlowLoading} cashFlowError={cashFlowError} cfType={cfType} setCfType={setCfType}
+          />
+        </div>
+      </div>
+    );
+  }
+
 
   if (!financialHighlights) {
     return <div className={styles.container}>Loading...</div>;
   }
 
-  const financialHighlightsData = financialHighlights.data;
+  const financialHighlightsData = financialHighlights;
 
   if (!revenueProfitTrend) {
     return <div className={styles.container}>Loading...</div>;
@@ -102,40 +172,40 @@ const FinancialHighlights = ({ financialHighlights, revenueProfitTrend, financia
     {
       label: "Revenue",
       value: financialHighlightsData?.revenue?.value,
-      change: financialHighlightsData?.revenue?.change_percentage,
+      change: financialHighlightsData?.revenue?.change_pct,
       isNegative: parseChange(
-        financialHighlightsData?.revenue?.change_percentage
+        financialHighlightsData?.revenue?.change_pct
       ),
     },
     {
       label: "Profit",
       value: financialHighlightsData?.profit?.value,
-      change: financialHighlightsData?.profit?.change_percentage,
-      isNegative: parseChange(financialHighlightsData.profit?.change_percentage),
+      change: financialHighlightsData?.profit?.change_pct,
+      isNegative: parseChange(financialHighlightsData?.profit?.change_pct),
     },
     {
       label: "Cash & Bank Balance",
       value: financialHighlightsData?.cash_and_bank_balance?.value,
-      change: financialHighlightsData?.cash_and_bank_balance?.change_percentage,
-      isNegative: parseChange(financialHighlightsData?.cash_and_bank_balance?.change_percentage),
+      change: financialHighlightsData?.cash_and_bank_balance?.change_pct,
+      isNegative: parseChange(financialHighlightsData?.cash_and_bank_balance?.change_pct),
     },
     {
       label: "Net Worth",
       value: financialHighlightsData?.net_worth?.value,
-      change: financialHighlightsData?.net_worth?.change_percentage,
-      isNegative: parseChange(financialHighlightsData?.net_worth?.change_percentage),
+      change: financialHighlightsData?.net_worth?.change_pct,
+      isNegative: parseChange(financialHighlightsData?.net_worth?.change_pct),
     },
     {
       label: "Assets",
       value: financialHighlightsData?.assets?.value,
-      change: financialHighlightsData?.assets?.change_percentage,
-      isNegative: parseChange(financialHighlightsData?.assets?.change_percentage),
+      change: financialHighlightsData?.assets?.change_pct,
+      isNegative: parseChange(financialHighlightsData?.assets?.change_pct),
     },
     {
       label: "Outsiders' Liabilities",
       value: financialHighlightsData?.outsiders_liabilities?.value,
-      change: financialHighlightsData?.outsiders_liabilities?.change_percentage,
-      isNegative: parseChange(financialHighlightsData?.outsiders_liabilities?.change_percentage),
+      change: financialHighlightsData?.outsiders_liabilities?.change_pct,
+      isNegative: parseChange(financialHighlightsData?.outsiders_liabilities?.change_pct),
     },
   ];
 
@@ -143,56 +213,56 @@ const FinancialHighlights = ({ financialHighlights, revenueProfitTrend, financia
     {
       label: "EBITDA",
       value: financialHighlightsData?.ebitda?.value || "-",
-      change: financialHighlightsData?.ebitda?.change_percentage || "-",
-      isNegative: parseChange(financialHighlightsData?.ebitda?.change_percentage),
+      change: financialHighlightsData?.ebitda?.change_pct || "-",
+      isNegative: parseChange(financialHighlightsData?.ebitda?.change_pct),
     },
     {
       label: "Net Prot Margin",
       value: financialHighlightsData?.net_profit_margin?.value || "-",
-      change: financialHighlightsData?.net_profit_margin?.change_percentage || "-",
-      isNegative: parseChange(financialHighlightsData?.net_profit_margin?.change_percentage),
+      change: financialHighlightsData?.net_profit_margin?.change_pct || "-",
+      isNegative: parseChange(financialHighlightsData?.net_profit_margin?.change_pct),
     },
     {
       label: "Sales to Fixed Asset",
       value: financialHighlightsData?.sales_to_fixed_asset?.value || "-",
-      change: financialHighlightsData?.sales_to_fixed_asset?.change_percentage || "-",
-      isNegative: parseChange(financialHighlightsData?.sales_to_fixed_asset?.change_percentage),
+      change: financialHighlightsData?.sales_to_fixed_asset?.change_pct || "-",
+      isNegative: parseChange(financialHighlightsData?.sales_to_fixed_asset?.change_pct),
     },
     {
       label: "Debt to EBITDA",
       value: financialHighlightsData?.debt_to_ebitda?.value || "-",
-      change: financialHighlightsData?.debt_to_ebitda?.change_percentage || "-",
-      isNegative: parseChange(financialHighlightsData?.debt_to_ebitda?.change_percentage),
+      change: financialHighlightsData?.debt_to_ebitda?.change_pct || "-",
+      isNegative: parseChange(financialHighlightsData?.debt_to_ebitda?.change_pct),
     },
     {
       label: "Interest Coverage Ratio",
       value: financialHighlightsData?.interest_coverage_ratio?.value || "-",
-      change: financialHighlightsData?.interest_coverage_ratio?.change_percentage || "-",
-      isNegative: parseChange(financialHighlightsData?.interest_coverage_ratio?.change_percentage),
+      change: financialHighlightsData?.interest_coverage_ratio?.change_pct || "-",
+      isNegative: parseChange(financialHighlightsData?.interest_coverage_ratio?.change_pct),
     },
     {
       label: "Net Worth Margin",
       value: financialHighlightsData?.net_worth_margin?.value || "-",
-      change: financialHighlightsData?.net_worth_margin?.change_percentage || "-",
-      isNegative: parseChange(financialHighlightsData?.net_worth_margin?.change_percentage),
+      change: financialHighlightsData?.net_worth_margin?.change_pct || "-",
+      isNegative: parseChange(financialHighlightsData?.net_worth_margin?.change_pct),
     },
     {
       label: "Debt to Equity",
       value: financialHighlightsData?.debt_to_equity?.value || "-",
-      change: financialHighlightsData?.debt_to_equity?.change_percentage || "-",
-      isNegative: parseChange(financialHighlightsData?.debt_to_equity?.change_percentage),
+      change: financialHighlightsData?.debt_to_equity?.change_pct || "-",
+      isNegative: parseChange(financialHighlightsData?.debt_to_equity?.change_pct),
     },
     {
       label: "Return on Equity",
       value: financialHighlightsData?.return_on_equity?.value || "-",
-      change: financialHighlightsData?.return_on_equity?.change_percentage || "-",
-      isNegative: parseChange(financialHighlightsData?.return_on_equity?.change_percentage),
+      change: financialHighlightsData?.return_on_equity?.change_pct || "-",
+      isNegative: parseChange(financialHighlightsData?.return_on_equity?.change_pct),
     },
     {
       label: "Equity Multiplier",
       value: financialHighlightsData?.equity_multiplier?.value || "-",
-      change: financialHighlightsData?.equity_multiplier?.change_percentage || "-",
-      isNegative: parseChange(financialHighlightsData?.equity_multiplier?.change_percentage),
+      change: financialHighlightsData?.equity_multiplier?.change_pct || "-",
+      isNegative: parseChange(financialHighlightsData?.equity_multiplier?.change_pct),
     },
   ];
 
@@ -208,13 +278,14 @@ const FinancialHighlights = ({ financialHighlights, revenueProfitTrend, financia
   //   { year: "2023", revenue: 7800, profit: 3200 },
   //   { year: "2024", revenue: 7800, profit: 3200 },
   //   { year: "2025", revenue: 7800, profit: 3200 },
-  // ];
-  2
-  const chartData = revenueProfitTrend.trend.map((item) => ({
-    year: item.year,
-    revenue: item.revenue_cr,
-    profit: item.profit_cr,
-  }));
+  const chartData = (revenueProfitTrend?.trend || [])
+    .filter((item) => item.year !== "TTM" && item.year !== "isExpandable")
+    .map((item) => ({
+      year: item.year,
+      revenue: item.revenue_cr,
+      profit: item.profit_cr,
+    }))
+    .reverse();
 
   return (
     <div ref={containerRef} className={styles.container}>
@@ -367,7 +438,23 @@ const FinancialHighlights = ({ financialHighlights, revenueProfitTrend, financia
           </ResponsiveContainer>
         </div>
       </div>
-      <FinancialHighlightsTables />
+      <FinancialHighlightsTables 
+        pnlApiData={pnlApiData}
+        pnlLoading={pnlLoading}
+        pnlError={pnlError}
+        pnlViewType={pnlViewType}
+        setPnlViewType={setPnlViewType}
+        auditorsData={auditorsData}
+        auditorsLoading={auditorsLoading}
+        auditorsError={auditorsError}
+        audType={audType}
+        setAudType={setAudType}
+        balanceSheetData={balanceSheetData}
+        balanceSheetLoading={balanceSheetLoading}
+        balanceSheetError={balanceSheetError}
+        bsType={bsType}
+        setBsType={setBsType} cashFlowData={cashFlowData} cashFlowLoading={cashFlowLoading} cashFlowError={cashFlowError} cfType={cfType} setCfType={setCfType}
+      />
     </div>
   );
 };

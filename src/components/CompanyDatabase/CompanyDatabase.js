@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import RowsPerPage from "@/components/common/RowsPerPage";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import CustomCalendar from "@/components/common/CustomCalendar";
+import tailwind from "tailwindcss";
 
 export default function CompanyDatabase() {
   const bulkRef = useRef(null);
@@ -17,11 +19,13 @@ export default function CompanyDatabase() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [selectedRows, setSelectedRows] = useState([]);
-  const [selectedDate, setSelectedDate] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isStatusOpen, setIsStatusOpen] = useState(false);
+  const calendarRef = useRef(null);
 
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -49,7 +53,8 @@ export default function CompanyDatabase() {
         setLoading(true);
         const token = localStorage.getItem("token");
         
-        const formattedDate = formatDate(selectedDate);
+        const formattedStartDate = formatDate(startDate);
+        const formattedEndDate = formatDate(endDate);
         
         const params = new URLSearchParams({
           page: currentPage,
@@ -63,9 +68,9 @@ export default function CompanyDatabase() {
           params.append("sort_order", sortConfig.direction);
         }
 
-        if (formattedDate) {
-          params.append("inc_from_date", formattedDate);
-          params.append("inc_to_date", formattedDate); // Assuming single date acts as start/end for now
+        if (formattedStartDate) {
+          params.append("inc_from_date", formattedStartDate);
+          params.append("inc_to_date", formattedEndDate || formattedStartDate); // Assuming single date acts as start/end for now
         }
 
         const res = await fetch(
@@ -103,7 +108,7 @@ export default function CompanyDatabase() {
     };
 
     fetchCompanies();
-  }, [rowsPerPage, currentPage, searchQuery, sortConfig, statusFilter, selectedDate]);
+  }, [rowsPerPage, currentPage, searchQuery, sortConfig, statusFilter, startDate, endDate]);
 
   const handleSort = (key) => {
     let direction = "asc";
@@ -131,6 +136,9 @@ export default function CompanyDatabase() {
       if (!statusRef.current?.contains(e.target)) {
         setIsStatusOpen(false);
       }
+      if (!calendarRef.current?.contains(e.target)) {
+        setIsCalendarOpen(false);
+      }
     };
 
     document.addEventListener("mousedown", handleOutsideClick);
@@ -143,7 +151,7 @@ export default function CompanyDatabase() {
   // Reset page when search or filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, rowsPerPage, statusFilter, selectedDate]);
+  }, [searchQuery, rowsPerPage, statusFilter, startDate, endDate]);
 
   // Basic client-side filtering and slicing as a fallback/secondary filter
   const visibleData = filteredData;
@@ -288,21 +296,56 @@ export default function CompanyDatabase() {
         </div>
 
         <div className={styles.rightTools}>
-          <div
-            className={styles.datePicker}
-            onClick={() => setIsCalendarOpen(!isCalendarOpen)}
-          >
-            <img src="/icons/Calender.svg" alt="" className={styles.icon} />
-            <span>
-              {selectedDate
-                ? new Date(selectedDate).toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric",
-                })
-                : "Date of incorporation"}
-            </span>
+          <div ref={calendarRef} className={styles.datePickerWrapper}>
+            <div
+              className={styles.datePicker}
+              onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+            >
+              <img src="/icons/Calender.svg" alt="" className={styles.icon} />
+              <span>
+                {startDate
+                  ? `${new Date(startDate).toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })}${endDate ? ` - ${new Date(endDate).toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })}` : ""}`
+                  : "Date of incorporation"}
+              </span>
+              {startDate && (
+                <button 
+                  className={styles.clearDateBtn}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setStartDate(null);
+                    setEndDate(null);
+                    setIsCalendarOpen(false);
+                  }}
+                  aria-label="Clear date filter"
+                >
+                  <img src="/icons/close.svg" alt="Clear" className={styles.clearIcon} />
+                </button>
+              )}
+            </div>
 
+            {isCalendarOpen && (
+              <div className={styles.popupDateInput}>
+                <CustomCalendar
+                  initialStartDate={startDate}
+                  initialEndDate={endDate}
+                  onSelect={(start, end) => {
+                    setStartDate(start);
+                    setEndDate(end);
+                    if (start && end) {
+                      setIsCalendarOpen(false);
+                    }
+                  }}
+                />
+              </div>
+            )}
           </div>
 
           <div ref={bulkRef} className={styles.bulkWrapper}>
@@ -376,7 +419,7 @@ export default function CompanyDatabase() {
                   Market Cap. (Cr.)
                   <img 
                     src={sortConfig.key === "market_cap" 
-                      ? (sortConfig.direction === "asc" ? "/icons/arrow-up.svg" : "/icons/arrow-down.svg")
+                      ? (sortConfig.direction === "asc" ? "/icons/arrow-down.svg" : "/icons/arrow-up.svg")
                       : "/icons/chevrons-up-down.svg"} 
                     alt="" 
                     className={styles.sortIcon} 
@@ -391,7 +434,7 @@ export default function CompanyDatabase() {
                   PUC/OOC (Cr.)
                   <img 
                     src={sortConfig.key === "paid_up_capital" 
-                      ? (sortConfig.direction === "asc" ? "/icons/arrow-up.svg" : "/icons/arrow-down.svg")
+                      ? (sortConfig.direction === "asc" ? "/icons/arrow-down.svg" : "/icons/arrow-up.svg")
                       : "/icons/chevrons-up-down.svg"} 
                     alt="" 
                     className={styles.sortIcon} 
@@ -407,7 +450,7 @@ export default function CompanyDatabase() {
                   DOI
                   <img 
                     src={sortConfig.key === "incorporation_date" 
-                      ? (sortConfig.direction === "asc" ? "/icons/arrow-up.svg" : "/icons/arrow-down.svg")
+                      ? (sortConfig.direction === "asc" ? "/icons/arrow-down.svg" : "/icons/arrow-up.svg")
                       : "/icons/chevrons-up-down.svg"} 
                     alt="" 
                     className={styles.sortIcon} 

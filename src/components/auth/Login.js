@@ -30,6 +30,8 @@ export default function Login() {
       // Store token and user data
       if (data.token) {
         localStorage.setItem("token", data.token);
+        // Store as the requested structure { user: ... } if needed, 
+        // but current layout handles both. Ensuring it's stored.
         localStorage.setItem("user", JSON.stringify(data.user));
         // Set cookie for middleware
         document.cookie = `token=${data.token}; path=/; max-age=86400; SameSite=Lax`;

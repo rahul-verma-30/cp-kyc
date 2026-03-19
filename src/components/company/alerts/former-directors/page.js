@@ -2,16 +2,16 @@ import styles from "./FormerDirectors.module.css";
 
 export default function FormerDirectorsPage() {
   const data = [
-    {
-      name: "Munesh Narin...",
-      label: "Current Director",
-      entity: "GPI Textiles Ltd. (CIN: U17117HP2000PLC026391)",
-      type: "Did not file financial statements or annual returns for 3 consecutive years",
-      action: "Disqualified from Directorship",
-      period: "01 Nov 2016 - 31 Oct 2021",
-      status: "Completed",
-      severity: "High",
-    },
+    // {
+    //   name: "Munesh Narin...",
+    //   label: "Current Director",
+    //   entity: "GPI Textiles Ltd. (CIN: U17117HP2000PLC026391)",
+    //   type: "Did not file financial statements or annual returns for 3 consecutive years",
+    //   action: "Disqualified from Directorship",
+    //   period: "01 Nov 2016 - 31 Oct 2021",
+    //   status: "Completed",
+    //   severity: "High",
+    // },
   ];
 
   return (

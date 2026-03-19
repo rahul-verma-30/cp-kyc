@@ -41,6 +41,12 @@ export default function CompanyPage() {
   const [companyLoading, setCompanyLoading] = useState(false);
   const [companyError, setCompanyError] = useState(null);
 
+  // Profit & Loss
+  const [pnlViewType, setPnlViewType] = useState("Standalone");
+  const [pnlApiData, setPnlApiData] = useState(null);
+  const [pnlLoading, setPnlLoading] = useState(false);
+  const [pnlError, setPnlError] = useState(null);
+
   // Financial Highlights
   const [financialHighlights, setFinancialHighlights] = useState(null);
   const [financialLoading, setFinancialLoading] = useState(false);
@@ -82,6 +88,24 @@ export default function CompanyPage() {
   const [alertsData, setAlertsData] = useState(null);
   const [alertsLoading, setAlertsLoading] = useState(false);
   const [alertsError, setAlertsError] = useState(null);
+  
+  // Auditors Details
+  const [auditorsData, setAuditorsData] = useState([]);
+  const [auditorsLoading, setAuditorsLoading] = useState(false);
+  const [auditorsError, setAuditorsError] = useState(null);
+  const [audType, setAudType] = useState("Standalone");
+
+  // Balance Sheet Details
+  const [balanceSheetData, setBalanceSheetData] = useState(null);
+  const [balanceSheetLoading, setBalanceSheetLoading] = useState(false);
+  const [balanceSheetError, setBalanceSheetError] = useState(null);
+  const [bsType, setBsType] = useState("Standalone");
+  
+  // Cash Flow Details
+  const [cashFlowData, setCashFlowData] = useState(null);
+  const [cashFlowLoading, setCashFlowLoading] = useState(false);
+  const [cashFlowError, setCashFlowError] = useState(null);
+  const [cfType, setCfType] = useState("Standalone");
 
 
   const overviewRef = useRef(null);
@@ -145,6 +169,43 @@ export default function CompanyPage() {
     getCompanyDetails();
   }, [companyName]);
 
+  /* ================= PROFIT & LOSS ================= */
+
+  useEffect(() => {
+    if (!companyName) return;
+
+    const fetchPnlData = async () => {
+      const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/screener/profit-loss?result_type=${pnlViewType}`;
+      
+      setPnlLoading(true);
+      setPnlError(null);
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(url, {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || errorData.detail || `Error ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setPnlApiData(data);
+      } catch (error) {
+        console.error("Error fetching P&L data:", error);
+        setPnlError(error.message);
+        setPnlApiData(null);
+      } finally {
+        setPnlLoading(false);
+      }
+    };
+
+    fetchPnlData();
+  }, [companyName, pnlViewType]);
+
   /* ================= FINANCIAL HIGHLIGHTS ================= */
 
   useEffect(() => {
@@ -158,7 +219,7 @@ export default function CompanyPage() {
 
         const token = localStorage.getItem("token");
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/financial-highlights`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/financials/${encodeURIComponent(companyName)}/highlights`,
           {
             headers: {
               Authorization: token ? `Bearer ${token}` : "",
@@ -204,7 +265,7 @@ export default function CompanyPage() {
 
         const token = localStorage.getItem("token");
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/revenue-profit-trend`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/financials/${encodeURIComponent(companyName)}/revenue-profit-trend`,
           {
             headers: {
               Authorization: token ? `Bearer ${token}` : "",
@@ -285,6 +346,43 @@ export default function CompanyPage() {
     getCommonDirectorship();
   }, [companyName]);
 
+  /* ================= GET CASH FLOW DATA ================= */
+
+  useEffect(() => {
+    if (!companyName) return;
+
+    const getCashFlowData = async () => {
+      try {
+        setCashFlowLoading(true);
+        setCashFlowError(null);
+
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/financials/${encodeURIComponent(companyName)}/cash-flow?type=${cfType}`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch cash flow data");
+        }
+
+        const data = await response.json();
+        setCashFlowData(data);
+      } catch (error) {
+        console.error("Error in cash flow fetch:", error);
+        setCashFlowError(error.message);
+      } finally {
+        setCashFlowLoading(false);
+      }
+    };
+
+    getCashFlowData();
+  }, [companyName, cfType]);
+
   /* ================= COMPANY HIGHLIGHTS (PAGINATED) ================= */
 
   useEffect(() => {
@@ -297,7 +395,7 @@ export default function CompanyPage() {
 
         const token = localStorage.getItem("token");
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/financials/${encodeURIComponent(
             companyName
           )}/highlights?page=${highlightsPage}&limit=${highlightsLimit}`,
           {
@@ -491,6 +589,70 @@ export default function CompanyPage() {
     getAlerts();
   }, [companyName]);
 
+  /* ================= AUDITORS DETAILS ================= */
+  useEffect(() => {
+    if (!companyName || !audType) return;
+
+    const getAuditorsData = async () => {
+      try {
+        setAuditorsLoading(true);
+        setAuditorsError(null);
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/financials/${encodeURIComponent(companyName)}/auditors?type=${audType}`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
+        );
+
+        const data = await response.json();
+        setAuditorsData(data?.auditors || []);
+
+      } catch (error) {
+        console.log("Error in auditors fetch:", error);
+        setAuditorsError(error.message);
+      } finally {
+        setAuditorsLoading(false);
+      }
+    };
+
+    getAuditorsData();
+  }, [companyName, audType]);
+
+  /* ================= BALANCE SHEET DETAILS ================= */
+  useEffect(() => {
+    if (!companyName || !bsType) return;
+
+    const getBalanceSheet = async () => {
+      try {
+        setBalanceSheetLoading(true);
+        setBalanceSheetError(null);
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/financials/${encodeURIComponent(companyName)}/balance-sheet?type=${bsType}`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
+        );
+
+        const data = await response.json();
+        setBalanceSheetData(data);
+
+      } catch (error) {
+        console.log("Error in balance sheet fetch:", error);
+        setBalanceSheetError(error.message);
+      } finally {
+        setBalanceSheetLoading(false);
+      }
+    };
+
+    getBalanceSheet();
+  }, [companyName, bsType]);
+
 
   /* 🔥 Scroll when sidebar sub-item changes */
   useEffect(() => {
@@ -533,7 +695,8 @@ export default function CompanyPage() {
       {/* Company Highlights */}
       {activeSection === "companyHighlights" && (
         <>
-          <CompanyHighlights companyHighlights={companyHighlights}
+          <CompanyHighlights 
+            companyHighlights={companyHighlights}
             page={highlightsPage}
             limit={highlightsLimit}
             loading={highlightsLoading}
@@ -541,24 +704,70 @@ export default function CompanyPage() {
             setPage={setHighlightsPage}
             setLimit={setLimit}
           />
-          <FinancialHighlightsDetails financialHighlights={financialHighlights}
+          <FinancialHighlightsDetails 
+            financialHighlights={financialHighlights}
             revenueProfitTrend={revenueProfitTrend}
             financialLoading={financialLoading}
             financialError={financialError}
             revenueLoading={trendLoading}
-            revenueError={trendError} />
+            revenueError={trendError}
+            pnlApiData={pnlApiData}
+            pnlLoading={pnlLoading}
+            pnlError={pnlError}
+            pnlViewType={pnlViewType}
+            setPnlViewType={setPnlViewType}
+            auditorsData={auditorsData}
+            auditorsLoading={auditorsLoading}
+            auditorsError={auditorsError}
+            audType={audType}
+            setAudType={setAudType}
+            balanceSheetData={balanceSheetData}
+            balanceSheetLoading={balanceSheetLoading}
+            balanceSheetError={balanceSheetError}
+            bsType={bsType}
+            setBsType={setBsType}
+            cashFlowData={cashFlowData}
+            cashFlowLoading={cashFlowLoading}
+            cashFlowError={cashFlowError}
+            cfType={cfType}
+            setCfType={setCfType}
+          />
           <CompanyCharts />
           <ProductDetails />
         </>
       )}
 
       {/* Financials */}
-      {activeSection === "financials" && <FinancialHighlights financialHighlights={financialHighlights}
-        revenueProfitTrend={revenueProfitTrend}
-        financialLoading={financialLoading}
-        financialError={financialError}
-        revenueLoading={trendLoading}
-        revenueError={trendError} />}
+      {activeSection === "financials" && (
+        <FinancialHighlights 
+          financialHighlights={financialHighlights}
+          revenueProfitTrend={revenueProfitTrend}
+          financialLoading={financialLoading}
+          financialError={financialError}
+          revenueLoading={trendLoading}
+          revenueError={trendError}
+          pnlApiData={pnlApiData}
+          pnlLoading={pnlLoading}
+          pnlError={pnlError}
+          pnlViewType={pnlViewType}
+          setPnlViewType={setPnlViewType}
+          auditorsData={auditorsData}
+          auditorsLoading={auditorsLoading}
+          auditorsError={auditorsError}
+          audType={audType}
+          setAudType={setAudType}
+          balanceSheetData={balanceSheetData}
+          balanceSheetLoading={balanceSheetLoading}
+          balanceSheetError={balanceSheetError}
+          bsType={bsType}
+          setBsType={setBsType}
+          cashFlowData={cashFlowData}
+          cashFlowLoading={cashFlowLoading}
+          cashFlowError={cashFlowError}
+          cfType={cfType}
+          setCfType={setCfType}
+        />
+      )}
 
       {/* Directors & KMP */}
       {activeSection === "directorsKmp" && <DirectorsSection directorsData={directorsData} directorsLoading={directorsLoading} directorsError={directorsError} />}

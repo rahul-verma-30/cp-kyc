@@ -1,209 +1,160 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./FinancialHighlightsTables.module.css";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 import { useParams } from "next/navigation";
-import { useState } from "react";
 
-const FinancialHighlightsTables = () => {
-  const tableData = [
-    { type: "header", label: "Shareholder's Fund", values: [] },
-    {
-      label: "Share Capital",
-      values: ["17,723.00", "17,720.00", "17,718.00", "17,679.00", "17,674.00"],
-    },
-    {
-      label: "Reserves And Surplus",
-      values: [
-        "724,606.00",
-        "673,817.00",
-        "610,970.00",
-        "568,708.00",
-        "521,448.00",
-      ],
-    },
-    {
-      label: "Money Against Warrant",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    { label: "Other Equity", values: ["0.00", "0.00", "0.00", "0.00", "0.00"] },
-    {
-      type: "grand-total",
-      label: "Total Equity",
-      values: [
-        "742,329.00",
-        "691,537.00",
-        "628,688.00",
-        "586,387.00",
-        "539,122.00",
-      ],
-    },
+const FinancialHighlightsTables = ({ 
+  pnlApiData,
+  pnlLoading,
+  pnlError,
+  pnlViewType,
+  setPnlViewType,
+  auditorsData, 
+  auditorsLoading, 
+  auditorsError, 
+  audType, 
+  setAudType,
+  balanceSheetData,
+  balanceSheetLoading,
+  balanceSheetError,
+  bsType,
+  setBsType,
+  cashFlowData,
+  cashFlowLoading,
+  cashFlowError,
+  cfType,
+  setCfType
+}) => {
+  const params = useParams();
+  const companyName = params?.name ? decodeURIComponent(params.name.replace(/-/g, " ")).toUpperCase() : "";
+  // Build Balance Sheet period columns (filtering out internal keys)
+  const bsPeriods = balanceSheetData?.periods
+    ? balanceSheetData.periods.filter((p) => p !== "setAttributes" && p !== "isExpandable")
+    : [];
 
-    { type: "header", label: "Non Current Liabilities", values: [] },
-    {
-      label: "Long Term Borrowings",
-      values: ["24,942.00", "49,893.00", "24,945.00", "24,910.00", "1,962.00"],
-    },
-    {
-      label: "Deferred Tax Liabilities (NET)",
-      values: ["13,325.00", "10,050.00", "7,676.00", "7,004.00", "0.00"],
-    },
-    {
-      label: "Other Long Term Liabilities",
-      values: ["7,432.00", "6,694.00", "5,015.00", "4,459.00", "137.00"],
-    },
-    {
-      label: "Long Term Provisions",
-      values: ["6,258.00", "6,004.00", "5,768.00", "5,657.00", "5,555.00"],
-    },
-    {
-      type: "Total Non Current Liabilities-sub",
-      label: "Total Non Current Liabilities",
-      values: ["51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"],
-    },
+  const getBsValue = (valuesObj, period) => {
+    if (!valuesObj) return "-";
+    const v = valuesObj[period];
+    return v === undefined || v === null || v === "-" ? "-" : v;
+  };
 
-    { type: "header", label: "Current Liabilities", values: [] },
-    {
-      label: "Short Term Borrowings",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
-      label: "Trade Payables",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
-      label: "Other Current Liabilities",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
-      label: "Short Term Provisions",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
-      type: "grand-total",
-      label: "Total Current Liabilities",
-      values: [
-        "306,261.00",
-        "289,103.00",
-        "263,152.00",
-        "230,783.00",
-        "203,640.00",
-      ],
-    },
+  // Build Cash Flow period columns
+  const cfPeriods = cashFlowData?.periods
+    ? cashFlowData.periods.filter((p) => p !== "setAttributes")
+    : [];
 
-    {
-      type: "grand-total",
-      label: "Total Equities & Liabilities",
-      values: [
-        "1,100,547.00",
-        "1,053,281.00",
-        "935,244.00",
-        "859,200.00",
-        "750,416.00",
-      ],
-    },
+  const getCfValue = (valuesObj, period) => {
+    if (!valuesObj) return "-";
+    const v = valuesObj[period];
+    return v === undefined || v === null || v === "-" ? "-" : v;
+  };
 
-    { type: "header", label: "Non-Current Assests", values: [] },
-    {
-      label: "Tangible Assets",
-      values: [
-        "198,711.00",
-        "185,440.00",
-        "164,096.00",
-        "137,556.00",
-        "117,839.00",
-      ],
-    },
-    {
-      label: "Intangible Assets",
-      values: ["4,851.00", "2,380.00", "2,101.00", "2,344.00", "2,642.00"],
-    },
-    {
-      label: "Capital Work-In-Progress",
-      values: ["13,466.00", "16,154.00", "10,943.00", "12,848.00", "10,726.00"],
-    },
-    {
-      label: "Intangible Assets Under Development",
-      values: ["222.00", "2,269.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Non-Current Investment",
-      values: [
-        "473,046.00",
-        "488,830.00",
-        "520,252.00",
-        "432,770.00",
-        "312,276.00",
-      ],
-    },
-    {
-      label: "Deferred Tax Assets(NET)",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Long Term Loans And Advances",
-      values: ["2,571.00", "3,856.00", "5,141.00", "0.00", "1,637.00"],
-    },
-    {
-      label: "Other Non Current Assets",
-      values: ["14,670.00", "11,115.00", "9,583.00", "10,266.00", "20,552.00"],
-    },
-    {
-      type: "grand-total",
-      label: "Total Non Current Assets",
-      values: [
-        "707,537.00",
-        "710,044.00",
-        "712,116.00",
-        "595,784.00",
-        "467,417.00",
-      ],
-    },
+  const CASH_FLOW_MAPPING = {
+    "Prot Before tax": "operating_activities.profit_before_tax",
+    "Adjustments For Finance Costs": "operating_activities.finance_costs",
+    "Adjustments For Depreciation And Amortisation": "operating_activities.depreciation",
+    "Adjustments For Other Non-Cash Items": "operating_activities.other_adjustments",
+    "Changes in Working Capital": "operating_activities.changes_in_working_capital",
+    "Income Taxes Paid (Net)": "operating_activities.income_tax_paid",
+    "Net Cash Flows From Operating Activities": "operating_activities.net_cash_from_operating_activities",
+    "Purchase Of Property Plant And Equipment (Net)": "investing_activities.purchase_of_fixed_assets",
+    "Proceeds From Disposal Of Property Plant And Equipment": "investing_activities.proceeds_from_sale_of_assets",
+    "Interest Received": "investing_activities.interest_received",
+    "Other Income Received": "investing_activities.other_income_received",
+    "Net Cash Flows From/(Used In) Investing Activities": "investing_activities.net_cash_from_investing_activities",
+    "Proceeds From Long-term Borrowings": "financing_activities.proceeds_from_borrowings",
+    "Repayment Of Long-term Borrowings": "financing_activities.repayment_of_borrowings",
+    "Dividend Paid": "financing_activities.dividend_paid",
+    "Interest Paid": "financing_activities.finance_costs_paid",
+    "Other Financing Activities (Net)": "financing_activities.other_financing_activities",
+    "Net Cash Flows From/(Used In) Financing Activities": "financing_activities.net_cash_from_financing_activities",
+    "Net Increase/(Decrease) In Cash And Cash Equivalents": "net_change_in_cash",
+    "Cash And Cash Equivalents At The Beginning Of The Period": "opening_cash_balance",
+    "Cash And Cash Equivalents At The End Of The Period": "closing_cash_balance"
+  };
 
-    { type: "header", label: "Current Assests", values: [] },
-    {
-      label: "Current Investment",
-      values: ["14,670.00", "11,115.00", "9,583.00", "10,266.00", "20,552.00"],
-    },
-    {
-      label: "Inventories",
-      values: ["14,670.00", "11,115.00", "9,583.00", "10,266.00", "20,552.00"],
-    },
-    {
-      label: "Trade Receivables",
-      values: ["14,670.00", "11,115.00", "9,583.00", "10,266.00", "20,552.00"],
-    },
-    {
-      label: "Cash And Bank Balance",
-      values: ["14,670.00", "11,115.00", "9,583.00", "10,266.00", "20,552.00"],
-    },
-    {
-      label: "Short Term Loans And Advances",
-      values: ["14,670.00", "11,115.00", "9,583.00", "10,266.00", "20,552.00"],
-    },
-    {
-      label: "Other Current Assets",
-      values: ["14,670.00", "11,115.00", "9,583.00", "10,266.00", "20,552.00"],
-    },
-    {
-      type: "Total Current Assets",
-      label: "Total Current Assets",
-      values: ["14,670.00", "11,115.00", "9,583.00", "10,266.00", "20,552.00"],
-    },
+  const getNestedValue = (obj, path) => {
+    return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+  };
 
-    {
-      type: "grand-total",
-      label: "Total Assets",
-      values: [
-        "1,100,547.00",
-        "1,053,281.00",
-        "935,244.00",
-        "859,200.00",
-        "750,416.00",
-      ],
-    },
-  ];
+  const cfRows = [
+    { type: "header", label: "Operating Activities" },
+    { label: "Prot Before tax", path: "operating_activities.profit_before_tax" },
+    { label: "Adjustments For Finance Costs", path: "operating_activities.finance_costs" },
+    { label: "Adjustments For Other Non-Cash Items", path: "operating_activities.other_adjustments" },
+    { label: "Adjustments For Depreciation And Amortisation", path: "operating_activities.depreciation" },
+    { label: "Adjustments For Other Non-Operating Non-Cash Items", path: "operating_activities.other_non_operating" },
+    { label: "Adjustments For (Gain)/Loss On Disposal Of Property Plant And Equipment (Net)", path: "operating_activities.gain_loss_assets" },
+    { label: "Operating Prot Before Working Capital Changes", path: "operating_activities.op_profit_before_wc" },
+    { label: "(Increase)/Decrease In Trade And Other Receivables", path: "operating_activities.receivables" },
+    { label: "(Increase)/Decrease In Inventories", path: "operating_activities.inventories" },
+    { label: "(Increase)/Decrease In Other Assets", path: "operating_activities.other_assets" },
+    { label: "Increase/(Decrease) In Trade And Other Payables", path: "operating_activities.payables" },
+    { label: "Increase/(Decrease) In Other Liabilities", path: "operating_activities.other_liabilities" },
+    { label: "Cash Generated From Operations", path: "operating_activities.cash_from_ops" },
+    { label: "Income Taxes Paid (Net)", path: "operating_activities.income_tax_paid" },
+    { type: "total", label: "Net Cash Flows From Operating Activities", path: "operating_activities.net_cash_from_operating_activities" },
+
+    { type: "header", label: "Investing Activities" },
+    { label: "Purchase Of Property Plant And Equipment (Net)", path: "investing_activities.purchase_of_fixed_assets" },
+    { label: "Proceeds From Disposal Of Property Plant And Equipment", path: "investing_activities.proceeds_from_sale_of_assets" },
+    { label: "(Purchase)/Proceeds From Sale Of Investments (Net)", path: "investing_activities.purchase_of_investments" },
+    { label: "Interest Received", path: "investing_activities.interest_received" },
+    { label: "Dividend Received", path: "investing_activities.dividend_received" },
+    { label: "(Purchase)/Proceeds From Other Investing Activities (Net)", path: "investing_activities.other_income_received" },
+    { type: "total", label: "Net Cash Flows From/(Used In) Investing Activities", path: "investing_activities.net_cash_from_investing_activities" },
+
+    { type: "header", label: "Financing Activities" },
+    { label: "Proceeds From Issue Of Share Capital", path: "financing_activities.proceeds_from_shares" },
+    { label: "Proceeds From Long-term Borrowings", path: "financing_activities.proceeds_from_borrowings" },
+    { label: "Repayment Of Long-term Borrowings", path: "financing_activities.repayment_of_borrowings" },
+    { label: "Short-term Borrowings (Net)", path: "financing_activities.short_term_borrowings" },
+    { label: "Interest Paid", path: "financing_activities.finance_costs_paid" },
+    { label: "Dividend Paid", path: "financing_activities.dividend_paid" },
+    { label: "Other Financing Activities (Net)", path: "financing_activities.other_financing_activities" },
+    { type: "total", label: "Net Cash Flows From/(Used In) Financing Activities", path: "financing_activities.net_cash_from_financing_activities" },
+
+    { type: "grand-total", label: "Net Increase/(Decrease) In Cash And Cash Equivalents", path: "net_change_in_cash" },
+    { label: "Cash And Cash Equivalents At The Beginning Of The Period", path: "opening_cash_balance" },
+    { label: "Cash And Cash Equivalents At The End Of The Period", path: "closing_cash_balance" },
+  ].map(row => {
+    if (row.type === "header") return row;
+    const dataObj = row.path ? getNestedValue(cashFlowData, row.path) : null;
+    return {
+      ...row,
+      valuesObj: dataObj?.values || null
+    };
+  });
+
+  const buildBsRows = () => {
+    if (!balanceSheetData) return [];
+    const sections = [
+      { label: "Shareholder's Fund", data: balanceSheetData.shareholders_fund },
+      { label: "Non Current Liabilities", data: balanceSheetData.non_current_liabilities },
+      { label: "Current Liabilities", data: balanceSheetData.current_liabilities },
+      { label: "Non Current Assets", data: balanceSheetData.non_current_assets },
+      { label: "Current Assets", data: balanceSheetData.current_assets },
+    ];
+    const rows = [];
+    sections.forEach(({ label, data }) => {
+      if (!data) return;
+      rows.push({ type: "header", label });
+      Object.entries(data).forEach(([key, rowData]) => {
+        const displayLabel = key.split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+        const isTotal = key.startsWith("total_");
+        rows.push({
+          type: isTotal ? "grand-total" : "data",
+          label: displayLabel,
+          valuesObj: rowData?.values,
+        });
+      });
+    });
+    return rows;
+  };
+
+  const bsRows = buildBsRows();
 
   const profitLossData = [
     { type: "header", label: "Revenue", values: [] },
@@ -363,199 +314,6 @@ const FinancialHighlightsTables = () => {
     },
   ];
 
-  const cashFlowData = [
-    {
-      type: "header",
-      label: "Cash Flows From/Used In Operating Activities",
-      values: [],
-    },
-    {
-      label: "Prot Before tax",
-      values: ["17,723.00", "17,720.00", "17,718.00", "17,679.00", "17,674.00"],
-    },
-    {
-      label: "Adjustments For Finance Costs",
-      values: [
-        "724,606.00",
-        "673,817.00",
-        "610,970.00",
-        "568,708.00",
-        "521,448.00",
-      ],
-    },
-    {
-      label: "Adjustments For Decrease/Increase In Inventories",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Adjustments For Decrease/Increase In Trade Receivables",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Adjustments For Increase/Decrease In Trade Payables",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Adjustments For Provisions Current",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Adjustments For Other Financial Assets",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Adjustments For Other Financial Liabilities Non Current",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Adjustments For Decrease/Increase In Other Current Assets",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Adjustments For Increase/Decrease In Other Current Liabilities",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Adjustments For Depreciation & Amortisation Expense",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Adjustments For Unrealised Foreign Exchange Losses Gains",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Adjustments For Dividend Income",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Adjustments For Interest Income",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Other Adjustments For Which Cash Effects Are Investing",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Other Adjustments For Non Cash Items",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Adjustments For Reconcile Prot Loss",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Net Cash Flows From Operations",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Income Taxes Paid Refund",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      type: "Net Cash Flows From Operating Activities",
-      label: "Net Cash Flows From Operating Activities",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-
-    {
-      type: "header",
-      label: "Cash Flows From/Used In Investing Activities",
-      values: [],
-    },
-    {
-      label: "Cash Flows From Losing Control Of Subsidiaries",
-      values: ["24,942.00", "49,893.00", "24,945.00", "24,910.00", "1,962.00"],
-    },
-    {
-      label: "Cash Flows Used In Obtaining Control Of Subsidiaries",
-      values: ["13,325.00", "10,050.00", "7,676.00", "7,004.00", "0.00"],
-    },
-    {
-      label: "Other Cash Payments To Acquire Equity/Debt",
-      values: ["7,432.00", "6,694.00", "5,015.00", "4,459.00", "137.00"],
-    },
-    {
-      label: "Other Cash Receipts From Sales Of Interests",
-      values: ["6,258.00", "6,004.00", "5,768.00", "5,657.00", "5,555.00"],
-    },
-    {
-      label: "Proceeds From Sales Of Property Plant & Equipment",
-      values: ["51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"],
-    },
-    {
-      label: "Purchase Of Property Plant & Equipment",
-      values: ["51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"],
-    },
-    {
-      label: "Dividends Received",
-      values: ["51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"],
-    },
-    {
-      label: "Interest Received",
-      values: ["51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"],
-    },
-    {
-      label: "Other Inows Outows Of Cash",
-      values: ["51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"],
-    },
-    {
-      type: "Net Cash Flows From Investing Activities",
-      label: "Net Cash Flows From Investing Activities",
-      values: ["51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"],
-    },
-
-    {
-      type: "header",
-      label: "Cash Flows From/Used In Financing Activities",
-      values: [],
-    },
-    {
-      label: "Proceeds From Issuing Shares",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
-      label: "Proceeds From Borrowings",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
-      label: "Repayments Of Borrowings",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
-      label: "Payments Of Lease Liabilities",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
-      label: "Dividends Paid",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
-      label: "Interest Paid",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
-      label: "Other Inows Of Cash",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
-      label: "Net Cash Flows From Financing Activities",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
-      label:
-        "Net Change In Cash & Cash Equivalent Before Effect Of Exchange Rate Changes",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
-      label: "Net Increase/Decrease In Cash & Cash Equivalents",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
-      type: "Cash And Cash Equivalents At End Of Period",
-      label: "Cash And Cash Equivalents At End Of Period",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-  ];
 
   const ratioData = [
     { type: "header", label: "Liquidity", values: [] },
@@ -637,10 +395,6 @@ const FinancialHighlightsTables = () => {
 
     { type: "header", label: "Solvency", values: [] },
     {
-      label: "Debt To Equity",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
       label: "Interest Coverage Ratio",
       values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
     },
@@ -655,43 +409,48 @@ const FinancialHighlightsTables = () => {
   const ratioRef = useRef(null);
   const auditorsRef = useRef(null);
 
-  /* ================= Auditor's data ================= */
+  /* ================= Profit & Loss Reference ================= */
 
-  const params = useParams();
-  const companyName = (params.name.replaceAll("-", " ")).toUpperCase();
+  // Build period columns (excluding 'isExpandable' and 'TTM'), limited to first 5
+  const pnlPeriods = pnlApiData?.periods
+    ? pnlApiData.periods.filter((p) => p !== "isExpandable" && p !== "TTM")
+    : [];
 
-  const [auditorsData, setAuditorsDatas] = useState([]);
-  const [audType, setAudType] = useState("Standalone")
+  // Helper: get value for a period from a row's values object
+  const getPnlValue = (valuesObj, period) => {
+    if (!valuesObj) return "-";
+    const v = valuesObj[period];
+    return v === undefined || v === null ? "-" : v;
+  };
 
-  useEffect(() => {
-    console.log("Fetching auditors for:", companyName);
+  // Flatten API sections into rows for the P&L table
+  const buildPnlRows = () => {
+    if (!pnlApiData) return [];
+    const sections = [
+      { label: "Revenue", data: pnlApiData.revenue },
+      { label: "Expenses", data: pnlApiData.expenses },
+      { label: "Exceptional & Extra Ordinary Items", data: pnlApiData.exceptional },
+      { label: "Tax Expense", data: pnlApiData.tax_expense },
+    ];
+    const rows = [];
+    sections.forEach(({ label, data }) => {
+      if (!data) return;
+      rows.push({ type: "header", label });
+      Object.entries(data).forEach(([key, rowData]) => {
+        const isTotal = [
+          "Total Revenue", "Total Expense", "Ebitda", "Profit Before Tax", "Profit/Loss"
+        ].includes(key);
+        rows.push({
+          type: isTotal ? "grand-total" : "data",
+          label: key,
+          valuesObj: rowData?.values,
+        });
+      });
+    });
+    return rows;
+  };
 
-    if (!companyName && !audType) return;
-
-    const getAuditorsData = async () => {
-      try {
-        console.log("Fetching auditors for:", companyName);
-
-        const token = localStorage.getItem("token");
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/financials/${companyName}/auditors?type=${audType}`,
-          {
-            headers: {
-              Authorization: token ? `Bearer ${token}` : "",
-            },
-          }
-        );
-
-        const data = await response.json();
-        setAuditorsDatas(data?.auditors || []);
-
-      } catch (error) {
-        console.log("Error in auditors fetch:", error);
-      }
-    };
-
-    getAuditorsData();
-  }, [companyName, audType]);
+  const pnlRows = buildPnlRows();
   // =========================================
 
 
@@ -749,20 +508,22 @@ const FinancialHighlightsTables = () => {
         return (
           <tr key={index} className={rowClass}>
             <td className={styles.labelCell}>{row.label}</td>
-            {row.values.length > 0 ? (
+            {isHeader ? (
+              // Sectors/Headers should have empty cells
+              [1, 2, 3, 4, 5].map((_, i) => (
+                <td key={i} className={styles.valueCell}></td>
+              ))
+            ) : row.values.length > 0 ? (
               row.values.map((val, i) => (
                 <td key={i} className={styles.valueCell}>
-                  {val}
+                  {val || "-"}
                 </td>
               ))
             ) : (
-              <>
-                <td className={styles.valueCell}></td>
-                <td className={styles.valueCell}></td>
-                <td className={styles.valueCell}></td>
-                <td className={styles.valueCell}></td>
-                <td className={styles.valueCell}></td>
-              </>
+              // Fallback for missing row values
+              [1, 2, 3, 4, 5].map((_, i) => (
+                <td key={i} className={styles.valueCell}>-</td>
+              ))
             )}
           </tr>
         );
@@ -781,21 +542,21 @@ const FinancialHighlightsTables = () => {
       >
         <div className={styles.headerTitle}>Balance Sheet</div>
         <div className={styles.headerControls}>
-          <span className={styles.currencyText}>Values in Cr.</span>
+          <span className={styles.currencyText}>{balanceSheetData?.currency || "Values in Cr."}</span>
           <div className={styles.toggleContainer}>
             <div
-              className={`${styles.toggleSlider} ${viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
+              className={`${styles.toggleSlider} ${bsType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
                 }`}
             ></div>
             <button
-              className={`${styles.toggleBtn} ${viewType === "Standalone" ? styles.activeToggle : ""}`}
-              onClick={() => setViewType("Standalone")}
+              className={`${styles.toggleBtn} ${bsType === "Standalone" ? styles.activeToggle : ""}`}
+              onClick={() => setBsType("Standalone")}
             >
               Standalone
             </button>
             <button
-              className={`${styles.toggleBtn} ${viewType === "Consolidated" ? styles.activeToggle : ""}`}
-              onClick={() => setViewType("Consolidated")}
+              className={`${styles.toggleBtn} ${bsType === "Consolidated" ? styles.activeToggle : ""}`}
+              onClick={() => setBsType("Consolidated")}
             >
               Consolidated
             </button>
@@ -803,21 +564,61 @@ const FinancialHighlightsTables = () => {
         </div>
       </div>
 
-
       <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr className={styles.headerRow}>
-              <th className={styles.particularsCell}>Particulars</th>
-              <th className={styles.dateCell}>31 Mar 2025</th>
-              <th className={styles.dateCell}>31 Mar 2024</th>
-              <th className={styles.dateCell}>31 Mar 2023</th>
-              <th className={styles.dateCell}>31 Mar 2022</th>
-              <th className={styles.dateCell}>31 Mar 2021</th>
-            </tr>
-          </thead>
-          {renderTableBody(tableData)}
-        </table>
+        {balanceSheetLoading ? (
+          <div style={{ padding: "24px 16px", color: "#71717A", fontSize: "14px" }}>
+            Loading Balance Sheet data...
+          </div>
+        ) : balanceSheetError ? (
+          <div style={{ padding: "24px 16px", color: "#EF4444", fontSize: "14px" }}>
+            Error: {balanceSheetError}
+          </div>
+        ) : balanceSheetData && bsPeriods.length > 0 ? (
+          <table
+            className={styles.table}
+            style={{ minWidth: `${250 + bsPeriods.length * 130}px` }}
+          >
+            <thead>
+              <tr className={styles.headerRow}>
+                <th className={styles.particularsCell}>Particulars</th>
+                {bsPeriods.map((period) => (
+                  <th key={period} className={styles.dateCell}>
+                    {period}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {bsRows.map((row, index) => {
+                const isHeader = row.type === "header";
+                const isGrandTotal = row.type === "grand-total";
+                let rowClass = styles.row;
+                if (isHeader) rowClass = styles.sectionHeaderRow;
+                if (isGrandTotal)
+                  rowClass = `${styles.totalRow} ${styles.grandTotalRow}`;
+
+                return (
+                  <tr key={index} className={rowClass}>
+                    <td className={styles.labelCell}>{row.label}</td>
+                    {isHeader
+                      ? bsPeriods.map((p) => (
+                          <td key={p} className={styles.valueCell}></td>
+                        ))
+                      : bsPeriods.map((p) => (
+                          <td key={p} className={styles.valueCell}>
+                            {getBsValue(row.valuesObj, p)}
+                          </td>
+                        ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : (
+          <div style={{ padding: "24px 16px", color: "#71717A", fontSize: "14px" }}>
+            No Balance Sheet data available.
+          </div>
+        )}
       </div>
 
       <div
@@ -825,23 +626,32 @@ const FinancialHighlightsTables = () => {
         style={{ marginTop: "32px" }}
         className={styles.headerContainer}
       >
-        <div className={styles.headerTitle}>Profit & Loss </div>
+        <div className={styles.headerTitle}>Profit &amp; Loss</div>
         <div className={styles.headerControls}>
-          <span className={styles.currencyText}>Values in Cr.</span>
+          <span className={styles.currencyText}>
+            {pnlApiData?.currency || "Values in Cr."}
+          </span>
           <div className={styles.toggleContainer}>
             <div
-              className={`${styles.toggleSlider} ${viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
-                }`}
+              className={`${styles.toggleSlider} ${
+                pnlViewType === "Standalone"
+                  ? styles.sliderStandalone
+                  : styles.sliderConsolidated
+              }`}
             ></div>
             <button
-              className={`${styles.toggleBtn} ${viewType === "Standalone" ? styles.activeToggle : ""}`}
-              onClick={() => setViewType("Standalone")}
+              className={`${styles.toggleBtn} ${
+                pnlViewType === "Standalone" ? styles.activeToggle : ""
+              }`}
+              onClick={() => setPnlViewType("Standalone")}
             >
               Standalone
             </button>
             <button
-              className={`${styles.toggleBtn} ${viewType === "Consolidated" ? styles.activeToggle : ""}`}
-              onClick={() => setViewType("Consolidated")}
+              className={`${styles.toggleBtn} ${
+                pnlViewType === "Consolidated" ? styles.activeToggle : ""
+              }`}
+              onClick={() => setPnlViewType("Consolidated")}
             >
               Consolidated
             </button>
@@ -850,19 +660,72 @@ const FinancialHighlightsTables = () => {
       </div>
 
       <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr className={styles.headerRow}>
-              <th className={styles.particularsCell}>Particulars</th>
-              <th className={styles.dateCell}>31 Mar 2025</th>
-              <th className={styles.dateCell}>31 Mar 2024</th>
-              <th className={styles.dateCell}>31 Mar 2023</th>
-              <th className={styles.dateCell}>31 Mar 2022</th>
-              <th className={styles.dateCell}>31 Mar 2021</th>
-            </tr>
-          </thead>
-          {renderTableBody(profitLossData)}
-        </table>
+        {pnlLoading ? (
+          <div style={{ padding: "24px 16px", color: "#71717A", fontSize: "14px" }}>
+            Loading Profit &amp; Loss data...
+          </div>
+        ) : pnlError ? (
+          <div style={{ padding: "24px 16px", color: "#EF4444", fontSize: "14px" }}>
+            Error: {pnlError}
+          </div>
+        ) : pnlApiData && pnlPeriods.length > 0 ? (
+          <table
+            className={styles.table}
+            style={{ minWidth: `${250 + pnlPeriods.length * 130}px` }}
+          >
+            <thead>
+              <tr className={styles.headerRow}>
+                <th className={styles.particularsCell}>Particulars</th>
+                {pnlPeriods.map((period) => (
+                  <th key={period} className={styles.dateCell}>
+                    {period}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {pnlRows.map((row, index) => {
+                const isHeader = row.type === "header";
+                const isGrandTotal = row.type === "grand-total";
+                let rowClass = styles.row;
+                if (isHeader) rowClass = styles.sectionHeaderRow;
+                if (isGrandTotal)
+                  rowClass = `${styles.totalRow} ${styles.grandTotalRow}`;
+
+                return (
+                  <tr key={index} className={rowClass}>
+                    <td className={styles.labelCell}>{row.label}</td>
+                    {isHeader
+                      ? pnlPeriods.map((p) => (
+                          <td key={p} className={styles.valueCell}></td>
+                        ))
+                      : pnlPeriods.map((p) => (
+                          <td key={p} className={styles.valueCell}>
+                            {getPnlValue(row.valuesObj, p)}
+                          </td>
+                        ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : (
+          <table
+            className={styles.table}
+          >
+            <thead>
+              <tr className={styles.headerRow}>
+                <th className={styles.particularsCell}>Particulars</th>
+                <th className={styles.dateCell}>31 Mar 2025</th>
+                <th className={styles.dateCell}>31 Mar 2024</th>
+                <th className={styles.dateCell}>31 Mar 2023</th>
+                <th className={styles.dateCell}>31 Mar 2022</th>
+                <th className={styles.dateCell}>31 Mar 2021</th>
+              </tr>
+            </thead>
+            {renderTableBody(profitLossData)}
+          </table>
+        )}
       </div>
 
       <div
@@ -875,18 +738,18 @@ const FinancialHighlightsTables = () => {
           <span className={styles.currencyText}>Values in Cr.</span>
           <div className={styles.toggleContainer}>
             <div
-              className={`${styles.toggleSlider} ${viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
+              className={`${styles.toggleSlider} ${cfType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
                 }`}
             ></div>
             <button
-              className={`${styles.toggleBtn} ${viewType === "Standalone" ? styles.activeToggle : ""}`}
-              onClick={() => setViewType("Standalone")}
+              className={`${styles.toggleBtn} ${cfType === "Standalone" ? styles.activeToggle : ""}`}
+              onClick={() => setCfType("Standalone")}
             >
               Standalone
             </button>
             <button
-              className={`${styles.toggleBtn} ${viewType === "Consolidated" ? styles.activeToggle : ""}`}
-              onClick={() => setViewType("Consolidated")}
+              className={`${styles.toggleBtn} ${cfType === "Consolidated" ? styles.activeToggle : ""}`}
+              onClick={() => setCfType("Consolidated")}
             >
               Consolidated
             </button>
@@ -895,18 +758,64 @@ const FinancialHighlightsTables = () => {
       </div>
 
       <div className={`${styles.tableWrapper} ${styles.cashFlowTable}`}>
-        <table className={styles.table}>
+        <table
+          className={styles.table}
+          style={{ minWidth: `${250 + cfPeriods.length * 130}px` }}
+        >
           <thead>
             <tr className={styles.headerRow}>
               <th className={styles.particularsCell}>Particulars</th>
-              <th className={styles.dateCell}>31 Mar 2025</th>
-              <th className={styles.dateCell}>31 Mar 2024</th>
-              <th className={styles.dateCell}>31 Mar 2023</th>
-              <th className={styles.dateCell}>31 Mar 2022</th>
-              <th className={styles.dateCell}>31 Mar 2021</th>
+              {cfPeriods.map((p) => (
+                <th key={p} className={styles.dateCell}>{p}</th>
+              ))}
             </tr>
           </thead>
-          {renderTableBody(cashFlowData)}
+          <tbody>
+            {cashFlowLoading ? (
+              <tr>
+                <td colSpan={cfPeriods.length > 0 ? cfPeriods.length + 1 : 6} className={styles.loadingCell}>
+                  <div style={{ padding: "20px" }}>Loading Cash Flow...</div>
+                </td>
+              </tr>
+            ) : cashFlowError ? (
+              <tr>
+                <td colSpan={cfPeriods.length > 0 ? cfPeriods.length + 1 : 6} className={styles.errorCell}>
+                  <div style={{ padding: "20px", color: "#EF4444" }}>{cashFlowError}</div>
+                </td>
+              </tr>
+            ) : cfRows.length > 0 ? (
+              cfRows.map((row, index) => {
+                const isHeader = row.type === "header";
+                const isTotal = row.type === "total" || row.type === "grand-total";
+
+                let rowClass = styles.row;
+                if (isHeader) rowClass = styles.sectionHeaderRow;
+                if (isTotal) rowClass = styles.totalRow;
+                if (row.type === "grand-total") rowClass = `${styles.totalRow} ${styles.grandTotalRow}`;
+
+                return (
+                  <tr key={index} className={rowClass}>
+                    <td className={styles.labelCell}>{row.label}</td>
+                    {isHeader
+                      ? cfPeriods.map((p) => (
+                          <td key={p} className={styles.valueCell}></td>
+                        ))
+                      : cfPeriods.map((p) => (
+                          <td key={p} className={styles.valueCell}>
+                            {getCfValue(row.valuesObj, p)}
+                          </td>
+                        ))}
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan={cfPeriods.length > 0 ? cfPeriods.length + 1 : 6} className={styles.noDataCell}>
+                  <div style={{ padding: "20px" }}>No Data Available to show</div>
+                </td>
+              </tr>
+            )}
+          </tbody>
         </table>
       </div>
 
@@ -965,18 +874,18 @@ const FinancialHighlightsTables = () => {
           <span className={styles.currencyText}>Values in Cr.</span>
           <div className={styles.toggleContainer}>
             <div
-              className={`${styles.toggleSlider} ${audType == "standalone" ? styles.sliderStandalone : styles.sliderConsolidated
+              className={`${styles.toggleSlider} ${audType == "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
                 }`}
             ></div>
             <button
-              className={`${styles.toggleBtn} ${audType == "standalone" ? styles.activeToggle : ""}`}
-              onClick={() => setAudType("standalone")}
+              className={`${styles.toggleBtn} ${audType == "Standalone" ? styles.activeToggle : ""}`}
+              onClick={() => setAudType("Standalone")}
             >
               Standalone
             </button>
             <button
-              className={`${styles.toggleBtn} ${audType == "consolidated" ? styles.activeToggle : ""}`}
-              onClick={() => setAudType("consolidated")}
+              className={`${styles.toggleBtn} ${audType == "Consolidated" ? styles.activeToggle : ""}`}
+              onClick={() => setAudType("Consolidated")}
             >
               Consolidated
             </button>
@@ -984,32 +893,40 @@ const FinancialHighlightsTables = () => {
         </div>
       </div>
 
-      {auditorsData.length > 0 ? <div className={`${styles.tableWrapper} ${styles.auditorTable}`}>
-        <table className={styles.table}>
-          <thead>
-            <tr className={styles.headerRow}>
-              <th className={styles.dateCell}>Particulars</th>
-              <th className={styles.dateCell}>Membership Number</th>
-              <th className={styles.dateCell}>Firm Registration number</th>
-              <th className={styles.dateCell}>Name of auditor firm</th>
-              <th className={styles.dateCell}>PAN</th>
-              <th className={styles.dateCell}>Period</th>
-            </tr>
-          </thead>
-          <tbody>
-            {auditorsData?.map((row, index) => (
-              <tr key={index}>
-                <td className={styles.labelCell}>{row?.auditor_type || "-"}</td>
-                <td className={styles.valueCell}>{row?.membership || "-"}</td>
-                <td className={styles.valueCell}>{row?.registration_no || "-"}</td>
-                <td className={styles.valueCell}>{row?.firm_name || "-"}</td>
-                <td className={styles.valueCell}>{row?.pan || "-"}</td>
-                <td className={styles.valueCell}>{row?.period || "-"}</td>
+      {auditorsLoading ? (
+        <div className={styles.loadingText}>Loading auditors...</div>
+      ) : auditorsError ? (
+        <div className={styles.errorText} style={{ color: "red" }}>{auditorsError}</div>
+      ) : auditorsData && auditorsData.length > 0 ? (
+        <div className={`${styles.tableWrapper} ${styles.auditorTable}`}>
+          <table className={styles.table}>
+            <thead>
+              <tr className={styles.headerRow}>
+                <th className={styles.dateCell}>Particulars</th>
+                <th className={styles.dateCell}>Membership Number</th>
+                <th className={styles.dateCell}>Firm Registration number</th>
+                <th className={styles.dateCell}>Name of auditor firm</th>
+                <th className={styles.dateCell}>PAN</th>
+                <th className={styles.dateCell}>Period</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div> : <div>No Data Available to show</div>}
+            </thead>
+            <tbody>
+              {auditorsData?.map((row, index) => (
+                <tr key={index}>
+                  <td className={styles.labelCell}>{row?.auditor_type || "-"}</td>
+                  <td className={styles.valueCell}>{row?.membership || "-"}</td>
+                  <td className={styles.valueCell}>{row?.registration_no || "-"}</td>
+                  <td className={styles.valueCell}>{row?.firm_name || "-"}</td>
+                  <td className={styles.valueCell}>{row?.pan || "-"}</td>
+                  <td className={styles.valueCell}>{row?.period || "-"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div className={styles.noDataText}>No Data Available to show</div>
+      )}
     </div>
   );
 };

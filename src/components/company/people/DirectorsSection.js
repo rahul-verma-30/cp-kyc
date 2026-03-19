@@ -28,22 +28,22 @@ const DirectorsSection = ({ directorsData, directorsLoading, directorsError }) =
   ? [
       {
         label: "Current Directors",
-        value: directorsData?.summary.current_directors ||  "0",
+        value: directorsData?.summary.current_directors ||  "-",
         colorClass: styles.blueStat,
       },
       {
         label: "Past Directors",
-        value: directorsData?.summary.past_directors || "0",
+        value: directorsData?.summary.past_directors || "-",
         colorClass: styles.redStat,
       },
       {
         label: "Current KMP(s)",
-        value: directorsData?.summary.current_kmp || "0",
+        value: directorsData?.summary.current_kmp || "-",
         colorClass: styles.purpleStat,
       },
       {
         label: "Past KMP(s)",
-        value: directorsData?.summary.past_kmp || "0",
+        value: directorsData?.summary.past_kmp || "-",
         colorClass: styles.greenStat,
       },
     ]

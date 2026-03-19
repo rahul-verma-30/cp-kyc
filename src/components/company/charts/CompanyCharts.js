@@ -24,16 +24,16 @@ const CompanyCharts = () => {
 
   // Data for Business Activity Table
   const activityTable = [
-    {
-      activity: "Chemical and chemical products, pharmaceuticals, medicinal chemical and botanical products",
-      percentage: "81.33",
-      turnover: "₹ 774,477.12"
-    },
-    {
-      activity: "Food, beverages and tobacco products",
-      percentage: "18.67",
-      turnover: "₹ 177,787.88"
-    }
+    // {
+    //   activity: "Chemical and chemical products, pharmaceuticals, medicinal chemical and botanical products",
+    //   percentage: "81.33",
+    //   turnover: "₹ 774,477.12"
+    // },
+    // {
+    //   activity: "Food, beverages and tobacco products",
+    //   percentage: "18.67",
+    //   turnover: "₹ 177,787.88"
+    // }
   ];
 
   // Data for Shareholding Progress Bar
@@ -53,7 +53,7 @@ const CompanyCharts = () => {
         <div className={styles.card}>
           <div className={styles.pieChartContainer}>
             <div className={styles.pieWrapper}>
-              <div className={styles.pieLabelPrimary}>Manufacturing: 81.33% </div>
+              <div className={styles.pieLabelPrimary}>- </div>
               <ResponsiveContainer width={242} height={242}>
                 <PieChart>
                   <Pie
@@ -72,7 +72,7 @@ const CompanyCharts = () => {
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
-              <div className={styles.pieLabelSecondary}>Food & Beverages: 18.67%</div>
+              <div className={styles.pieLabelSecondary}>-</div>
               
             </div>
 
@@ -80,17 +80,17 @@ const CompanyCharts = () => {
               <div className={styles.legendRow}>
                 <div className={styles.legendIndicator}>
                   <div className={styles.dot} style={{ backgroundColor: '#D8B4FE' }}></div>
-                  <span className={styles.legendText}>Manufacturing</span>
+                  <span className={styles.legendText}>-</span>
                 </div>
-                <span className={styles.legendValue}>81.33</span>
+                <span className={styles.legendValue}>-</span>
               </div>
               <div className={styles.legendDivider}></div>
               <div className={styles.legendRow}>
                 <div className={styles.legendIndicator}>
                   <div className={styles.dot} style={{ backgroundColor: '#BBF7D0' }}></div>
-                  <span className={styles.legendText}>Food & Beverages</span>
+                  <span className={styles.legendText}>-</span>
                 </div>
-                <span className={styles.legendValue}>18.67</span>
+                <span className={styles.legendValue}>-</span>
               </div>
             </div>
           </div>
@@ -99,9 +99,9 @@ const CompanyCharts = () => {
         </div>
                   <div className={styles.tableWrapper}>
             <div className={styles.tableHeader}>
-              <div className={styles.headerLeft}>Financial Year: 2025</div>
+              <div className={styles.headerLeft}>Financial Year: -</div>
               <div className={styles.headerRight}>
-                Turnover: <span className={styles.greenText}>952,265.00</span>
+                Turnover: <span className={styles.greenText}>-</span>
               </div>
             </div>
             <table className={styles.activityTable}>

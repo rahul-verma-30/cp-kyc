@@ -37,13 +37,17 @@ export default function RootLayout({ children }) {
 
   useEffect(() => {
     const fetchCompanies = async () => {
+      if (isAuthPage) return;
+      
       try {
         const token = localStorage.getItem("token");
+        if (!token) return;
+
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/companies?per_page=100`,
           {
             headers: {
-              Authorization: token ? `Bearer ${token}` : "",
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -62,7 +66,7 @@ export default function RootLayout({ children }) {
     };
 
     fetchCompanies();
-  }, []);
+  }, [isAuthPage]);
 
   /* ROUTE CHANGE LOGIC */
 
@@ -81,16 +85,21 @@ export default function RootLayout({ children }) {
 
   /* SCROLL ACTIVE SUGGESTION */
 
-  // Check Auth State
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const token = localStorage.getItem("token");
     if (storedUser && token) {
-      setUser(JSON.parse(storedUser));
+      try {
+        const parsed = JSON.parse(storedUser);
+        // Handle both { user: ... } and direct user object formats
+        setUser(parsed.user || parsed);
+      } catch (e) {
+        setUser(null);
+      }
     }
-  }, [pathname]); // Check on route change as well
+  }, [pathname]);
 
-  const handleLogout = () => {
+  const handleLogout = React.useCallback(() => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     // Clear cookie
@@ -98,7 +107,39 @@ export default function RootLayout({ children }) {
     setUser(null);
     setShowUserDropdown(false);
     router.push("/login");
-  };
+  }, [router]);
+
+  // Global 401 interceptor
+  useEffect(() => {
+    const originalFetch = window.fetch;
+    let isRedirecting = false;
+
+    window.fetch = async (...args) => {
+      try {
+        const response = await originalFetch(...args);
+        
+        if (response.status === 401 && !isRedirecting) {
+          const url = args[0] instanceof Request ? args[0].url : args[0];
+          const isInternalApi = typeof url === 'string' && (url.includes(process.env.NEXT_PUBLIC_API_BASE_URL) || url.startsWith("/"));
+          const isAuthPage = ["/login", "/signup", "/forgot-password"].includes(window.location.pathname);
+          
+          if (isInternalApi && !isAuthPage) {
+            isRedirecting = true;
+            handleLogout();
+            toast.error("Session expired. Please login again.");
+          }
+        }
+        return response;
+      } catch (error) {
+        console.error("Fetch Interceptor Error:", error);
+        throw error;
+      }
+    };
+
+    return () => {
+      window.fetch = originalFetch;
+    };
+  }, [handleLogout]);
 
   const getUserInitials = (email) => {
     if (!email) return "??";

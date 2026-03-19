@@ -67,61 +67,61 @@ const RiskCard = ({
 
 /* -------------------- DATA (API READY) -------------------- */
 const RISK_DATA = [
-  {
-    category: "LEGAL",
-    severity: "High",
-    variant: "cardHigh",
-    icon: "/icons/scale.svg",
-    title: "12 Pending Legal Cases Identified",
-    description:
-      "Active litigation across NCLT, High Courts, and civil courts involving product liability and contract disputes",
-    date: "15 Dec 2024",
-    source: "Court Records",
-  },
-  {
-    category: "MEDIA",
-    severity: "Medium",
-    variant: "cardMedium",
-    icon: "/icons/file-text.svg",
-    title: "Negative Media Coverage Related to Product Quality",
-    description:
-      "3 adverse news articles published regarding product quality concerns and customer complaints",
-    date: "08 Jan 2025",
-    source: "News Media",
-  },
-  {
-    category: "REGULATORY",
-    severity: "High",
-    variant: "cardHigh",
-    icon: "/icons/reg-red.svg",
-    title: "Pending Compliance Notices from Regulators",
-    description:
-      "2 outstanding notices from SEBI and MCA requiring response and corrective action",
-    date: "22 Dec 2024",
-    source: "Regulator",
-  },
-  {
-    category: "FINANCIAL",
-    severity: "Medium",
-    variant: "cardMedium",
-    icon: "/icons/fin-yellow.svg",
-    title: "Declining Financial Performance",
-    description:
-      "Profit margins decreased by 7.02% and EBITDA declined by 7.19% in last fiscal year",
-    date: "31 Mar 2024",
-    source: "Financial Statements",
-  },
-  {
-    category: "GOVERNANCE",
-    severity: "Medium",
-    variant: "cardMedium",
-    icon: "/icons/gov-yellow.svg",
-    title: "Material Director Changes",
-    description:
-      "4 director resignations recorded in the past 12 months, indicating potential governance concerns",
-    date: "28 Nov 2024",
-    source: "ROC Filings",
-  },
+  // {
+  //   category: "LEGAL",
+  //   severity: "High",
+  //   variant: "cardHigh",
+  //   icon: "/icons/scale.svg",
+  //   title: "12 Pending Legal Cases Identified",
+  //   description:
+  //     "Active litigation across NCLT, High Courts, and civil courts involving product liability and contract disputes",
+  //   date: "15 Dec 2024",
+  //   source: "Court Records",
+  // },
+  // {
+  //   category: "MEDIA",
+  //   severity: "Medium",
+  //   variant: "cardMedium",
+  //   icon: "/icons/file-text.svg",
+  //   title: "Negative Media Coverage Related to Product Quality",
+  //   description:
+  //     "3 adverse news articles published regarding product quality concerns and customer complaints",
+  //   date: "08 Jan 2025",
+  //   source: "News Media",
+  // },
+  // {
+  //   category: "REGULATORY",
+  //   severity: "High",
+  //   variant: "cardHigh",
+  //   icon: "/icons/reg-red.svg",
+  //   title: "Pending Compliance Notices from Regulators",
+  //   description:
+  //     "2 outstanding notices from SEBI and MCA requiring response and corrective action",
+  //   date: "22 Dec 2024",
+  //   source: "Regulator",
+  // },
+  // {
+  //   category: "FINANCIAL",
+  //   severity: "Medium",
+  //   variant: "cardMedium",
+  //   icon: "/icons/fin-yellow.svg",
+  //   title: "Declining Financial Performance",
+  //   description:
+  //     "Profit margins decreased by 7.02% and EBITDA declined by 7.19% in last fiscal year",
+  //   date: "31 Mar 2024",
+  //   source: "Financial Statements",
+  // },
+  // {
+  //   category: "GOVERNANCE",
+  //   severity: "Medium",
+  //   variant: "cardMedium",
+  //   icon: "/icons/gov-yellow.svg",
+  //   title: "Material Director Changes",
+  //   description:
+  //     "4 director resignations recorded in the past 12 months, indicating potential governance concerns",
+  //   date: "28 Nov 2024",
+  //   source: "ROC Filings",
+  // },
 ];
 
 const CompanyNewHeader = ({ companyData }) => {
@@ -130,7 +130,17 @@ const CompanyNewHeader = ({ companyData }) => {
 
   const slug = companyData?.company_information?.legal_name
     ?.toLowerCase()
-    .replaceAll(" ", "-")
+    .replaceAll(" ", "-");
+
+  const nseSymbol = companyData?.company_information?.nse_symbol;
+  const bseSymbol = companyData?.company_information?.bse_symbol;
+  const hasNse = nseSymbol && nseSymbol !== "-";
+  const hasBse = bseSymbol && bseSymbol !== "-";
+
+  let listingText = "-";
+  if (hasNse && hasBse) listingText = "NSE & BSE";
+  else if (hasNse) listingText = "NSE";
+  else if (hasBse) listingText = "BSE";
 
   const toggleExpand = () => setIsExpanded(!isExpanded);
   const [actionsOpen, setActionsOpen] = useState(false);
@@ -181,15 +191,19 @@ const CompanyNewHeader = ({ companyData }) => {
                 <span className={styles.cinBadge}>{companyData?.company_information?.industry || "-"}</span>
               </div>
               <div className={styles.statItem}>
-                <span className={styles.statLabel}>Limiting Status :</span>
-                <span className={styles.scoreBadgeGreen}>
-                  <img
-                    src="/icons/greencheck.svg"
-                    alt="arrow down"
-                    className={styles.checkGreen}
-                  />
-                  NSE & BSE</span>
-
+                <span className={styles.statLabel}>Listing Status :</span>
+                {listingText !== "-" ? (
+                  <span className={styles.scoreBadgeGreen}>
+                    <img
+                      src="/icons/greencheck.svg"
+                      alt="check"
+                      className={styles.checkGreen}
+                    />
+                    {listingText}
+                  </span>
+                ) : (
+                  <span className={styles.cinBadge}>-</span>
+                )}
               </div>
             </div>
 
@@ -223,43 +237,70 @@ const CompanyNewHeader = ({ companyData }) => {
               </div>
               <div className={styles.metaItem}>
                 <img src="/icons/profile-2user.svg" className={styles.icon} />
-                <span>5001-10000</span>
+                <span>{companyData?.employees?.[0]?.employees || "-"}</span>
               </div>
               <div className={styles.metaItem}>
                 <img src="/icons/global.svg" className={styles.icon} />
-                <a href={companyData?.contact_details?.website} className={styles.link}>
+                <a 
+                  href={companyData?.contact_details?.website ? (companyData.contact_details.website.match(/^https?:\/\//) ? companyData.contact_details.website : `https://${companyData.contact_details.website}`) : undefined} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className={styles.link}
+                >
                   {companyData?.contact_details?.website || "-"}
                 </a>
               </div>
               <div className={styles.socialIcons}>
-                <img
-                  src="/icons/fb.svg"
-                  alt="Facebook"
-                  className={styles.socialIcon}
-                />
-                <img
-                  src="/icons/li.svg"
-                  alt="LinkedIn"
-                  className={styles.socialIcon}
-                />
+                {companyData?.contact_details?.social_media?.map((url, index) => {
+                  let iconSrc = "/icons/link.svg";
+                  let altText = "Link";
+
+                  if (url.includes("facebook.com")) {
+                    iconSrc = "/icons/fb.svg";
+                    altText = "Facebook";
+                  } else if (url.includes("linkedin.com")) {
+                    iconSrc = "/icons/li.svg";
+                    altText = "LinkedIn";
+                  } else if (url.includes("twitter.com") || url.includes("x.com")) {
+                    iconSrc = "/icons/twitter.svg";
+                    altText = "Twitter";
+                  } else if (url.includes("instagram.com")) {
+                    iconSrc = "/icons/instagram.svg";
+                    altText = "Instagram";
+                  } else if (url.includes("youtube.com")) {
+                    iconSrc = "/icons/youtube2.svg";
+                    altText = "YouTube";
+                  }
+
+                  return (
+                    <a href={url} target="_blank" rel="noopener noreferrer" key={index}>
+                      <img
+                        src={iconSrc}
+                        alt={altText}
+                        title={altText}
+                        className={styles.socialIcon}
+                      />
+                    </a>
+                  );
+                })}
               </div>
             </div>
 
             <div className={styles.alertsRow}>
               <div className={`${styles.alertBadge} ${styles.legalAlert}`}>
-                <img src="/icons/scale.svg" alt="" /> <strong>12</strong> Legal
+                <img src="/icons/scale.svg" alt="" /> <strong>-</strong> Legal
                 Cases
               </div>
               <div className={`${styles.alertBadge} ${styles.adverseAlert}`}>
-                <img src="/icons/file-text.svg" alt="" /> <strong>3</strong>{" "}
+                <img src="/icons/file-text.svg" alt="" /> <strong>-</strong>{" "}
                 Adverse media
               </div>
               <div className={`${styles.alertBadge} ${styles.regulatoryAlert}`}>
-                <img src="/icons/shield.svg" alt="" /> <strong>2</strong>{" "}
+                <img src="/icons/shield.svg" alt="" /> <strong>-</strong>{" "}
                 Regulatory Issues
               </div>
               <div className={`${styles.alertBadge} ${styles.riskAlert}`}>
-                <img src="/icons/activity.svg" alt="" /> Medium-High Risk
+                <img src="/icons/activity.svg" alt="" /> - Risk
               </div>
               <button
                 className={styles.viewAllBtn}
@@ -344,11 +385,11 @@ const CompanyNewHeader = ({ companyData }) => {
             <div className={styles.issueItem}>
               <img src="/icons/warning-orange.svg" alt="" />
               <span className={styles.issueTextOrange}>
-                5 Issues Identified
+                - Issues Identified
               </span>
             </div>
             <span className={styles.bullet}>•</span>
-            <span className={styles.issueTextRed}>2 High Severity</span>
+            <span className={styles.issueTextRed}>- High Severity</span>
           </div>
 
           <img
