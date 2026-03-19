@@ -1,5 +1,6 @@
 import styles from "./DirectorProfile.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 
 export default function DirectorProfile({ directors = [], hideSidebar = false }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -9,8 +10,22 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
   const [activeTab, setActiveTab] = useState("current");
   const [directorTab, setDirectorTab] = useState("current");
 
+  const { activeSubSection, setActiveSubSection } = useCompanySection() || {};
 
+  useEffect(() => {
+    if (activeSubSection === "Past Directors") {
+      setDirectorTab("past");
+    } else if (activeSubSection === "Current Directors") {
+      setDirectorTab("current");
+    }
+  }, [activeSubSection]);
 
+  const handleTabChange = (tab) => {
+    setDirectorTab(tab);
+    if (setActiveSubSection) {
+      setActiveSubSection(tab === "past" ? "Past Directors" : "Current Directors");
+    }
+  };
 
   // Filter directors based on tab (current/past) and search
   const filteredDirectors = directors.filter((director) => {
@@ -85,12 +100,12 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
       title: "Negative / Adverse Media",
       headers: ["Source", "Description", "Severity", "Date"],
       rows: [
-        {
-          source: "Economic Times",
-          desc: "Named in regulatory inquiry regarding related party transactions",
-          sev: "High",
-          date: "15 Mar 2024",
-        },
+        // {
+        //   source: "Economic Times",
+        //   desc: "Named in regulatory inquiry regarding related party transactions",
+        //   sev: "High",
+        //   date: "15 Mar 2024",
+        // },
       ],
     },
     {
@@ -98,11 +113,11 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
       title: "Banking / Default Declaration",
       headers: ["Default Type", "Declaration Status", "Remarks"],
       rows: [
-        {
-          type: "Wilful Defaulter",
-          status: "Not a Wilful Defaulter",
-          remarks: "15 Mar 2024",
-        },
+        // {
+        //   type: "Wilful Defaulter",
+        //   status: "Not a Wilful Defaulter",
+        //   remarks: "15 Mar 2024",
+        // },
       ],
     },
     {
@@ -110,12 +125,12 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
       title: "Regulatory / Compliance History",
       headers: ["Regulator", "Nature of Action", "Period", "Status"],
       rows: [
-        {
-          reg: "SEBI",
-          nature: "Show-cause notice",
-          period: "Q2 2023",
-          status: "Resolved",
-        },
+        // {
+        //   reg: "SEBI",
+        //   nature: "Show-cause notice",
+        //   period: "Q2 2023",
+        //   status: "Resolved",
+        // },
       ],
     },
     {
@@ -123,16 +138,16 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
       title: "PEP & Sanctions Check",
       headers: ["Check Type", "Status", "Remarks"],
       rows: [
-        {
-          type: "PEP Check",
-          status: "Not a PEP",
-          remarks: "Verified against government databases",
-        },
-        {
-          type: "Sanctions Check",
-          status: "Clear",
-          remarks: "No matches in OFAC, UN, EU sanctions lists",
-        },
+        // {
+        //   type: "PEP Check",
+        //   status: "Not a PEP",
+        //   remarks: "Verified against government databases",
+        // },
+        // {
+        //   type: "Sanctions Check",
+        //   status: "Clear",
+        //   remarks: "No matches in OFAC, UN, EU sanctions lists",
+        // },
       ],
     },
     {
@@ -145,12 +160,12 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
         "Last Reviewed",
       ],
       rows: [
-        {
-          cat: "Low",
-          edd: "No",
-          drivers: "Clean regulatory record, no adverse findings",
-          date: "05 Jan 2026",
-        },
+        // {
+        //   cat: "Low",
+        //   edd: "No",
+        //   drivers: "Clean regulatory record, no adverse findings",
+        //   date: "05 Jan 2026",
+        // },
       ],
     },
   ];
@@ -173,7 +188,7 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
             <div
               className={`${styles.sidebarTab} ${directorTab === "current" ? styles.sidebarTabActive : ""
                 }`}
-              onClick={() => setDirectorTab("current")}
+              onClick={() => handleTabChange("current")}
             >
               Current Directors & KMP
             </div>
@@ -181,7 +196,7 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
             <div
               className={`${styles.sidebarTab} ${directorTab === "past" ? styles.sidebarTabActive : ""
                 }`}
-              onClick={() => setDirectorTab("past")}
+              onClick={() => handleTabChange("past")}
             >
               Past Directors & KMP
             </div>
@@ -256,7 +271,7 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
               <img
                 src={
                   selectedDirector.details?.profile_image &&
-                    selectedDirector.details.profile_image !== "N/A"
+                    selectedDirector.details.profile_image !== "-"
                     ? selectedDirector.details.profile_image
                     : "/icons/profile-icon.svg"
                 }
@@ -580,7 +595,7 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
           <section className={styles.section}>
             <h2 className={styles.sectionHeading}>Career Timeline</h2>
             <div className={styles.timeline}>
-              <TimelineItem
+              {/* <TimelineItem
                 date="2015 - Present"
                 name="Dabur India Limited"
                 role="Managing Director • 9 years"
@@ -607,7 +622,7 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
                 date="2010 - 2015"
                 name="H&R Johnson (India) Ltd."
                 role="Non-Executive Director • 5 years"
-              />
+              /> */}
             </div>
           </section>
 
@@ -615,7 +630,7 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
           <section className={styles.section}>
             <h2 className={styles.sectionHeading}>Qualifications</h2>
             <div className={styles.qualList}>
-              <QualificationItem
+              {/* <QualificationItem
                 icon="/images/placeholder.svg"
                 title="Chartered Financial Analyst (CFA)"
                 inst="CFA Institute, USA"
@@ -648,7 +663,7 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
                 inst="Delhi Public School, R.K. Puram, New Delhi"
                 spec="CBSE Board"
                 year="1983"
-              />
+              /> */}
             </div>
           </section>
         </main>

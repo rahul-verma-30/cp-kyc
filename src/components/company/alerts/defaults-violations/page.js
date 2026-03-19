@@ -2,27 +2,27 @@ import styles from "./DefaultsViolations.module.css";
 
 export default function DefaultsViolationsPage() {
   const violations = [
-    {
-      regulator: "Delhi Stock Exchange Ltd.",
-      entity: "Dabur India Limited",
-      charges: "Not Available",
-      action: "Company Delisted – 23 Jan 2004",
-      developments: "-"
-    },
-    {
-      regulator: "Employees' Provident Fund Organisation",
-      entity: "Dabur India Limited",
-      charges: "Exempted and unexempted establishments defaulted with EPFO including Provident Fund, Pension & EDL contribution, administration charges & penal damages",
-      action: "Names of defaulters put on EPFO website - 25 Sep 2018",
-      developments: "Not appearing in the list dated 02 Jan 2019"
-    },
-    {
-      regulator: "Securities and Exchange Board of India (SEBI)",
-      entity: "Dabur India Limited",
-      charges: "Delayed disclosure of material information under SEBI (LODR) Regulations, 2015",
-      action: "Names of defaulters put on EPFO website - 25 Sep 2018",
-      developments: "Company response pending review"
-    }
+    // {
+    //   regulator: "",
+    //   entity: "Dabur India Limited",
+    //   charges: "Not Available",
+    //   action: "Company Delisted – 23 Jan 2004",
+    //   developments: "-"
+    // },
+    // {
+    //   regulator: "Employees' Provident Fund Organisation",
+    //   entity: "Dabur India Limited",
+    //   charges: "Exempted and unexempted establishments defaulted with EPFO including Provident Fund, Pension & EDL contribution, administration charges & penal damages",
+    //   action: "Names of defaulters put on EPFO website - 25 Sep 2018",
+    //   developments: "Not appearing in the list dated 02 Jan 2019"
+    // },
+    // {
+    //   regulator: "Securities and Exchange Board of India (SEBI)",
+    //   entity: "Dabur India Limited",
+    //   charges: "Delayed disclosure of material information under SEBI (LODR) Regulations, 2015",
+    //   action: "Names of defaulters put on EPFO website - 25 Sep 2018",
+    //   developments: "Company response pending review"
+    // }
   ];
 
   return (

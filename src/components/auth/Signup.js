@@ -124,7 +124,7 @@ export default function Signup() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || data.message || "Signup failed");
 
-      // Store token
+      // Store token and user data
       if (data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));

@@ -1,0 +1,220 @@
+.calendarContainer {
+  background-color: white;
+  border-radius: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #f3f4f6;
+  max-width: 580px;
+  width: 100%;
+  user-select: none;
+  font-family: inherit;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding: 0 0.5rem;
+}
+
+.navButton {
+  padding: 0.5rem;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navButton:hover {
+  background-color: #f3f4f6;
+}
+
+.navIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #4b5563;
+}
+
+.monthsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .monthsContainer {
+    flex-direction: row;
+  }
+}
+
+.monthWrapper {
+  flex: 1;
+  min-width: 250px;
+}
+
+.monthHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.selectorGroup {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.selectorLabel {
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  padding-right: 1.5rem;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.selectorLabel:hover {
+  color: #4b5563;
+}
+
+.chevronDown {
+  width: 1rem;
+  height: 1rem;
+  position: absolute;
+  right: 0;
+  pointer-events: none;
+  color: #9ca3af;
+  transition: color 0.2s;
+}
+
+.selectorGroup:hover .chevronDown {
+  color: #4b5563;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 50;
+  background-color: white;
+  border: 1px solid #f3f4f6;
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  margin-top: 0.25rem;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.monthDropdown {
+  width: 8rem;
+}
+
+.yearDropdown {
+  width: 6rem;
+}
+
+.dropdownItem {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.dropdownItem:hover {
+  background-color: #f3f4f6;
+}
+
+.dropdownItemActive {
+  font-weight: 700;
+  background-color: #f9fafb;
+}
+
+.daysGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: 0.25rem;
+  text-align: center;
+  font-size: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.dayOfWeek {
+  color: #9ca3af;
+  font-weight: 500;
+  padding: 0.25rem 0;
+}
+
+.dayCell {
+  position: relative;
+  padding: 0.5rem 0;
+  transition: all 0.2s;
+}
+
+.dayCellClickable {
+  cursor: pointer;
+}
+
+.dayCellDisabled {
+  pointer-events: none;
+}
+
+.rangeBg {
+  position: absolute;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  left: 0;
+  right: 0;
+  background-color: rgba(243, 244, 246, 0.8);
+  z-index: 0;
+}
+
+.rangeStartBg {
+  left: 50%;
+}
+
+.rangeEndBg {
+  right: 50%;
+}
+
+.dayInner {
+  position: relative;
+  z-index: 10;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.dayCurrent {
+  color: #1f2937;
+}
+
+.dayNotCurrent {
+  color: #d1d5db;
+}
+
+.dayHover:hover {
+  background-color: #e5e7eb;
+}
+
+.daySelected {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+.futureDay {
+  color: #e5e7eb;
+}

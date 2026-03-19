@@ -107,15 +107,15 @@ const OwnershipSection = ({companyHighlights}) => {
             <div className={styles.statsGrid}>
               <div className={`${styles.statItem} ${styles.statItemFirst}`}>
                 <span className={styles.statLabel}>Total Equity Shares</span>
-                <span className={styles.statValue}>{shareholding?.total_equity_shares}</span>
+                <span className={styles.statValue}>{shareholding?.total_equity_shares ?? "-"}</span>
               </div>
               <div className={`${styles.statItem} ${styles.statItemMiddle}`}>
                 <span className={styles.statLabel}>Promoter Holding</span>
-                <span className={styles.statValue}>{shareholding?.promoter_holding}</span>
+                <span className={styles.statValue}>{shareholding?.promoter_holding ?? "-"}</span>
               </div>
               <div className={`${styles.statItem} ${styles.statItemLast}`}>
                 <span className={styles.statLabel}>Non-Promoter Holding</span>
-                <span className={styles.statValue}>{shareholding?.non_promoter_holding}</span>
+                <span className={styles.statValue}>{shareholding?.non_promoter_holding ?? "-"}</span>
               </div>
             </div>
             <div className={styles.chartHeader}>
@@ -128,11 +128,11 @@ const OwnershipSection = ({companyHighlights}) => {
               <div className={styles.progressBar}>
                 <div
                   className={styles.progressPromoter}
-                  style={{  width: `${shareholding?.promoter_percentage || 0}%`}}
+                  style={{  width: `${shareholding?.promoter_percentage ?? "-"}%`}}
                 ></div>
                 <div
                   className={styles.progressNonPromoter}
-                  style={{ width: `${shareholding?.non_promoter_percentage || 0}%` }}
+                  style={{ width: `${shareholding?.non_promoter_percentage ?? "-"}%` }}
                 ></div>
               </div>
             </div>
