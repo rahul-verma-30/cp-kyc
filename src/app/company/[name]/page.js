@@ -1,6 +1,8 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
+import { scrollToElementWithOffset } from "@/utils/scrollUtils";
+
 
 import CompanyOverview from "@/components/company/overview/CompanyOverview";
 import CompanyDetails from "@/components/company/details/CompanyDetails";
@@ -254,13 +256,14 @@ export default function CompanyPage() {
     getFinancialHighlights();
   }, [companyName]);
 
-  /* ================= REVENUE TREND ================= */
+  /* ================= REVENUE & PROFIT TREND ================= */
+  // Used in FinancialHighlightsDetails and FinancialHighlights
   useEffect(() => {
     if (!companyName) return;
 
     const getRevenueProfitTrend = async () => {
       try {
-        setTrendLoading(true);
+
         setTrendError(null);
 
         const token = localStorage.getItem("token");
@@ -301,7 +304,7 @@ export default function CompanyPage() {
   }, [companyName]);
 
   /* ================= COMMON DIRECTORSHIP ================= */
-
+  // Used in RelatedCorporates
   useEffect(() => {
     if (!companyName) return;
 
@@ -347,7 +350,7 @@ export default function CompanyPage() {
   }, [companyName]);
 
   /* ================= GET CASH FLOW DATA ================= */
-
+  // Used in FinancialHighlightsDetails and FinancialHighlights
   useEffect(() => {
     if (!companyName) return;
 
@@ -384,7 +387,7 @@ export default function CompanyPage() {
   }, [companyName, cfType]);
 
   /* ================= COMPANY HIGHLIGHTS (PAGINATED) ================= */
-
+  // Used in CompanyHighlights and OwnershipSection
   useEffect(() => {
     if (!companyName) return;
 
@@ -395,7 +398,7 @@ export default function CompanyPage() {
 
         const token = localStorage.getItem("token");
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/financials/${encodeURIComponent(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(
             companyName
           )}/highlights?page=${highlightsPage}&limit=${highlightsLimit}`,
           {
@@ -411,6 +414,11 @@ export default function CompanyPage() {
         } catch {
           throw new Error("Invalid server response");
         }
+
+        if (response.status === 500) {
+          throw new Error("Server Error");
+        }
+
 
         if (!response.ok) {
           throw new Error(
@@ -436,6 +444,7 @@ export default function CompanyPage() {
 
 
   /* ================= COMPANY CHARGES (PAGINATED) ================= */
+  // Used in ChargesPage
   useEffect(() => {
     if (!companyName) return;
 
@@ -486,8 +495,7 @@ export default function CompanyPage() {
 
 
   /* ================= DIRECTORS & KMPS ================= */
-
-
+  // Used in DirectorsSection (which renders DirectorProfile)
   useEffect(() => {
     if (!companyName) return;
 
@@ -537,8 +545,8 @@ export default function CompanyPage() {
     getDirectors();
   }, [companyName]);
 
-  //Alerts
-
+  /* ================= ALERTS ================= */
+  // Used in AlertsContainer
   useEffect(() => {
     if (!companyName) return;
 
@@ -590,6 +598,7 @@ export default function CompanyPage() {
   }, [companyName]);
 
   /* ================= AUDITORS DETAILS ================= */
+  // Used in FinancialHighlightsDetails and FinancialHighlights
   useEffect(() => {
     if (!companyName || !audType) return;
 
@@ -622,6 +631,7 @@ export default function CompanyPage() {
   }, [companyName, audType]);
 
   /* ================= BALANCE SHEET DETAILS ================= */
+  // Used in FinancialHighlightsDetails and FinancialHighlights
   useEffect(() => {
     if (!companyName || !bsType) return;
 
@@ -666,11 +676,9 @@ export default function CompanyPage() {
 
     const targetRef = map[activeSubSection];
     if (targetRef?.current) {
-      targetRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+      scrollToElementWithOffset(targetRef.current, 140);
     }
+
   }, [activeSection, activeSubSection]);
 
   return (

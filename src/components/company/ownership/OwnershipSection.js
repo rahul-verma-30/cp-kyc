@@ -9,6 +9,8 @@ import SubsidiaryAccordion from "../subsidiary/SubsidiaryAccordion";
 import InvestmentPage from "../overseasDirectInvestment/OverseasDirectInvestment";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 import { useEffect, useRef } from "react";
+import { scrollToElementWithOffset } from "@/utils/scrollUtils";
+
 
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
@@ -26,11 +28,11 @@ const OwnershipSection = ({companyHighlights}) => {
     if (!activeSubSection) return;
 
     const scroll = (ref) => {
-      ref?.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+      if (ref?.current) {
+        scrollToElementWithOffset(ref.current, 140);
+      }
     };
+
 
     switch (activeSubSection) {
       case "Shareholding":
@@ -55,14 +57,14 @@ const OwnershipSection = ({companyHighlights}) => {
   }, [activeSubSection]);
 
   const promoterHoldingData = [
-    { name: "Indian", value: 4.55, color: "#818CF8" },
-    { name: "Non-Resident Indian (NRI)", value: 0.28, color: "#A78BFA" },
-    { name: "Insurance Companies", value: 5.01, color: "#84CC16" },
-    { name: "Banks", value: 0.11, color: "#C084FC" },
-    { name: "Foreign Institutional Investor", value: 15.83, color: "#0F172A" },
-    { name: "Mutual Fund", value: 5.98, color: "#0EA5E9" },
-    { name: "Body Corporate", value: 0.30, color: "#14B8A6" },
-    { name: "Others", value: 1.71, color: "#D946EF" },
+    // { name: "Indian", value: 4.55, color: "#818CF8" },
+    // { name: "Non-Resident Indian (NRI)", value: 0.28, color: "#A78BFA" },
+    // { name: "Insurance Companies", value: 5.01, color: "#84CC16" },
+    // { name: "Banks", value: 0.11, color: "#C084FC" },
+    // { name: "Foreign Institutional Investor", value: 15.83, color: "#0F172A" },
+    // { name: "Mutual Fund", value: 5.98, color: "#0EA5E9" },
+    // { name: "Body Corporate", value: 0.30, color: "#14B8A6" },
+    // { name: "Others", value: 1.71, color: "#D946EF" },
   ];
 
   /* 
@@ -74,9 +76,9 @@ const OwnershipSection = ({companyHighlights}) => {
 
   const groupStats = [
     { label: "Holding Company", value: "-", type: "blue" },
-    { label: "Subsidiary Company", value: "27", type: "red" },
+    { label: "Subsidiary Company", value: "-", type: "red" },
     { label: "Associate Company", value: "-", type: "purple" },
-    { label: "Joint Ventures", value: "1", type: "green" },
+    { label: "Joint Ventures", value: "-", type: "green" },
   ];
 
   return (
@@ -86,12 +88,12 @@ const OwnershipSection = ({companyHighlights}) => {
         <div className={styles.headerInfo}>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Source:</span>
-            <span className={styles.infoValue}>MCA</span>
+            <span className={styles.infoValue}>-</span>
           </span>
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>30-Dec-2024, 11:45 AM IST</span>
+            <span className={styles.infoValue}>-</span>
           </span>
         </div>
       </div>
@@ -166,7 +168,7 @@ const OwnershipSection = ({companyHighlights}) => {
              <h3 className={styles.controlInsightTitle}>Control Insight</h3>
           </div>
           <p className={styles.controlInsightText}>
-            Promotors hold a controlling majority (66.25%), enabling full control over ordinary and special resoltuions, with sufficient public float for liquidity.
+            Promotors hold a controlling majority (-%), enabling full control over ordinary and special resoltuions, with sufficient public float for liquidity.
           </p>
         </div>
 
@@ -190,12 +192,12 @@ const OwnershipSection = ({companyHighlights}) => {
                 {/* LEFT COLUMN */}
                 <div className={styles.promoterLeft}>
                     <div className={styles.promoterStatBig}>
-                        <span className={styles.promoterStatValue}>1,777,039,162</span>
+                        <span className={styles.promoterStatValue}>-</span>
                         <span className={styles.promoterStatLabel}>Shares</span>
                     </div>
 
                     <div className={styles.promoterBadge}>
-                        <span className={styles.promoterBadgeValue}>66.25%</span>
+                        <span className={styles.promoterBadgeValue}>-%</span>
                         <span className={styles.promoterBadgeLabel}>of total equity</span>
                     </div>
 
@@ -204,8 +206,8 @@ const OwnershipSection = ({companyHighlights}) => {
                     </p>
 
                     <div className={styles.pledgeLockin}>
-                        <div className={styles.pledgeBox}>Pledge: Not disclosed</div>
-                        <div className={styles.pledgeBox}>Lock-in: Not disclosed</div>
+                        <div className={styles.pledgeBox}>Pledge:-</div>
+                        <div className={styles.pledgeBox}>Lock-in:-</div>
                     </div>
                 </div>
 

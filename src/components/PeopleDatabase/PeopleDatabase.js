@@ -231,7 +231,7 @@ export default function PeopleDatabase({ onRowClick }) {
             </span>
             <span className={styles.separator}>|</span>
             <span className={styles.mutedText}>
-              Found: <span className={styles.boldText}>3524709 Companies</span>
+              Found: <span className={styles.boldText}>3524709 People</span>
             </span>
           </div>
           <div className={styles.footerRight}>

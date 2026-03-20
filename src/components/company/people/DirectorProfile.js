@@ -281,7 +281,11 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
               <div className={styles.profileTitle}>
                 <div className={styles.profileTitleWrapper}>
                   <h1>{selectedDirector.name || 'Select a Director'}</h1>
-                  <img src="/images/linkedln.svg" alt="linkedln" />
+                  {selectedDirector.linkedin_url && selectedDirector.linkedin_url !== "-" && (
+                    <a href={selectedDirector.linkedin_url} target="_blank" rel="noopener noreferrer">
+                      <img src="/images/linkedln.svg" alt="linkedln" />
+                    </a>
+                  )}
 
                   {/* PROFILE IMAGE FOR MAIN SECTIION
                   {selectedDirector.details?.profile_image && (
@@ -449,7 +453,7 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
                         key={idx}
                         image={position.company_log}
                         name={position.company_name || "-"}
-                        role={position.designation}
+                        role={position.designation || "-"}
                         date={position?.tenure_years||"-"}
                       />
                     ))}
@@ -474,7 +478,7 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
                       <th>Nature</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  {/* <tbody>
                     <tr>
                       <td>
                         <div className={styles.companyRow}>
@@ -485,15 +489,13 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
                               alt=""
                             />
                           </div>
-                          {/* Dabur India Limited */}
-                          -
+                          Dabur India Limited
                         </div>
                       </td>
                       <td>-</td>
                       <td>
                         <span className={styles.promoterTag}>
-                          {/* Promoter */}
-                          -
+                          Promoter
                         </span>
                       </td>
                     </tr>
@@ -508,19 +510,18 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
                               alt=""
                             />
                           </div>
-                          {/* Dabur Nepal Pvt. Ltd. */}
-                         -
+                          Dabur Nepal Pvt. Ltd.
                         </div>
                       </td>
                       <td>-</td>
                       <td>
                         <span className={styles.nonPromoterTag}>
-                          {/* Non-Promoter */}
+                          Non-Promoter
                           -
                         </span>
                       </td>
                     </tr>
-                  </tbody>
+                  </tbody> */}
                 </table>
               </div>
             )}
@@ -595,34 +596,21 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
           <section className={styles.section}>
             <h2 className={styles.sectionHeading}>Career Timeline</h2>
             <div className={styles.timeline}>
-              {/* <TimelineItem
-                date="2015 - Present"
-                name="Dabur India Limited"
-                role="Managing Director • 9 years"
-                active
-              />
-              <TimelineItem
-                date="2018 - Present"
-                name="Aviva Life Insurance Company India Ltd."
-                role="Independent Director • 6 years"
-                active
-              />
-              <TimelineItem
-                date="2018 - Present"
-                name="Dabur Nepal Pvt. Ltd."
-                role="Director • 6 years"
-                active
-              />
-              <TimelineItem
-                date="2012 - 2019"
-                name="Fresenius Kabi Oncology Limited"
-                role="Independent Director • 7 years"
-              />
-              <TimelineItem
-                date="2010 - 2015"
-                name="H&R Johnson (India) Ltd."
-                role="Non-Executive Director • 5 years"
-              /> */}
+              {selectedDirector.details?.career_timeline?.length > 0 ? (
+                selectedDirector.details.career_timeline.map((item, idx) => (
+                  <TimelineItem
+                    key={idx}
+                    date={`${item.appointment_date || "-"} - ${item.cessation_date || "-"}`}
+                    name={item.company_name || "-"}
+                    role={`${item.designation || "-"} • ${item.tenure_years || "-"}`}
+                    active={item.status === "Active"}
+                  />
+                ))
+              ) : (
+                <p style={{ textAlign: "center", width: "100%", padding: "20px", color: "#666" }}>
+                  No career timeline found
+                </p>
+              )}
             </div>
           </section>
 

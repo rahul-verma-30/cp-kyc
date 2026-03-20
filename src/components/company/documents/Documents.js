@@ -3,106 +3,106 @@ import styles from "./Documents.module.css";
 import { useState } from "react";
 
 const dummyDocs = [
-  {
-    id: 1,
-    title: "Annual Return",
-    formType: "Form MGT-7",
-    date: "30 Sep 2024",
-    files: [
-      "MGT-7_Annual_Return_FY2023-24.pdf",
-      "MGT-7_Annual_Return_FY2022-23.pdf",
-      "MGT-7_Annual_Return_FY2021-22.pdf",
-    ],
-  },
-  {
-    id: 2,
-    title: "Financial Statement",
-    formType: "Form AOC-4 (XBRL)",
-    date: "30 Sep 2024",
-    files: [
-      "MGT-7_Annual_Return_FY2023-24.pdf",
-      "MGT-7_Annual_Return_FY2022-23.pdf",
-      "MGT-7_Annual_Return_FY2021-22.pdf",
-    ],
-  },
-  {
-    id: 3,
-    title: "CSR Report",
-    formType: "Form CSR-2",
-    date: "30 Sep 2024",
-    files: [],
-  },
-  {
-    id: 4,
-    title: "Director Appointment - Rajesh Kumar",
-    formType: "Form DIR-12",
-    date: "30 Sep 2024",
-    files: [],
-  },
-  {
-    id: 5,
-    title: "Charge Modification",
-    formType: "Form CHG-4",
-    date: "30 Sep 2024",
-    files: [
-      "MGT-7_Annual_Return_FY2023-24.pdf",
-      "MGT-7_Annual_Return_FY2022-23.pdf",
-      "MGT-7_Annual_Return_FY2021-22.pdf",
-    ],
-  },
-  {
-    id: 6,
-    title: "Annual Return",
-    formType: "Form MTG-7",
-    date: "30 Sep 2024",
-    files: [
-      "MGT-7_Annual_Return_FY2023-24.pdf",
-      "MGT-7_Annual_Return_FY2022-23.pdf",
-      "MGT-7_Annual_Return_FY2021-22.pdf",
-    ],
-  },
-  {
-    id: 6,
-    title: "Financial Statement",
-    formType: "Form AOC-4 (XBRL)",
-    date: "30 Sep 2024",
-    files: [],
-  },
-  {
-    id: 7,
-    title: "Certificate of Incorporation",
-    formType: "Incorporation Certificate",
-    date: "30 Sep 2024",
-    files: [],
-  },
-  {
-    id: 8,
-    title: "Memorandum of Association",
-    formType: "Incorporation Certificate",
-    date: "30 Sep 2024",
-    files: [],
-  },
-  {
-    id: 9,
-    title: "Director Appointment - Rajesh Kumar",
-    formType: "Form DIR-12",
-    date: "30 Sep 2024",
-    files: [],
-  },
-  {
-    id: 10,
-    title: "Director Appointment - Rajesh Kumar",
-    formType: "Form DIR-12",
-    date: "30 Sep 2024",
-    files: [],
-  },
-  {
-    id: 11,
-    title: "Director Appointment - Rajesh Kumar",
-    formType: "Form DIR-12",
-    date: "30 Sep 2024",
-    files: [],
-  },
+  // {
+  //   id: 1,
+  //   title: "Annual Return",
+  //   formType: "Form MGT-7",
+  //   date: "30 Sep 2024",
+  //   files: [
+  //     "MGT-7_Annual_Return_FY2023-24.pdf",
+  //     "MGT-7_Annual_Return_FY2022-23.pdf",
+  //     "MGT-7_Annual_Return_FY2021-22.pdf",
+  //   ],
+  // },
+  // {
+  //   id: 2,
+  //   title: "Financial Statement",
+  //   formType: "Form AOC-4 (XBRL)",
+  //   date: "30 Sep 2024",
+  //   files: [
+  //     "MGT-7_Annual_Return_FY2023-24.pdf",
+  //     "MGT-7_Annual_Return_FY2022-23.pdf",
+  //     "MGT-7_Annual_Return_FY2021-22.pdf",
+  //   ],
+  // },
+  // {
+  //   id: 3,
+  //   title: "CSR Report",
+  //   formType: "Form CSR-2",
+  //   date: "30 Sep 2024",
+  //   files: [],
+  // },
+  // {
+  //   id: 4,
+  //   title: "Director Appointment - Rajesh Kumar",
+  //   formType: "Form DIR-12",
+  //   date: "30 Sep 2024",
+  //   files: [],
+  // },
+  // {
+  //   id: 5,
+  //   title: "Charge Modification",
+  //   formType: "Form CHG-4",
+  //   date: "30 Sep 2024",
+  //   files: [
+  //     "MGT-7_Annual_Return_FY2023-24.pdf",
+  //     "MGT-7_Annual_Return_FY2022-23.pdf",
+  //     "MGT-7_Annual_Return_FY2021-22.pdf",
+  //   ],
+  // },
+  // {
+  //   id: 6,
+  //   title: "Annual Return",
+  //   formType: "Form MTG-7",
+  //   date: "30 Sep 2024",
+  //   files: [
+  //     "MGT-7_Annual_Return_FY2023-24.pdf",
+  //     "MGT-7_Annual_Return_FY2022-23.pdf",
+  //     "MGT-7_Annual_Return_FY2021-22.pdf",
+  //   ],
+  // },
+  // {
+  //   id: 6,
+  //   title: "Financial Statement",
+  //   formType: "Form AOC-4 (XBRL)",
+  //   date: "30 Sep 2024",
+  //   files: [],
+  // },
+  // {
+  //   id: 7,
+  //   title: "Certificate of Incorporation",
+  //   formType: "Incorporation Certificate",
+  //   date: "30 Sep 2024",
+  //   files: [],
+  // },
+  // {
+  //   id: 8,
+  //   title: "Memorandum of Association",
+  //   formType: "Incorporation Certificate",
+  //   date: "30 Sep 2024",
+  //   files: [],
+  // },
+  // {
+  //   id: 9,
+  //   title: "Director Appointment - Rajesh Kumar",
+  //   formType: "Form DIR-12",
+  //   date: "30 Sep 2024",
+  //   files: [],
+  // },
+  // {
+  //   id: 10,
+  //   title: "Director Appointment - Rajesh Kumar",
+  //   formType: "Form DIR-12",
+  //   date: "30 Sep 2024",
+  //   files: [],
+  // },
+  // {
+  //   id: 11,
+  //   title: "Director Appointment - Rajesh Kumar",
+  //   formType: "Form DIR-12",
+  //   date: "30 Sep 2024",
+  //   files: [],
+  // },
 ];
 const DocumentsTable = () => {
   const [openRow, setOpenRow] = useState(null);
@@ -197,11 +197,11 @@ const Documents = () => {
           <h2 className={styles.title}>Documents</h2>
           <div className={styles.sourceRow}>
             <span className={styles.sourceLabel}>Source:</span>
-            <span className={styles.sourceValue}>MCA</span>
+            <span className={styles.sourceValue}>-</span>
             <span className={styles.divider}></span>
             <span className={styles.updatedText}>
               <span> Last Updated:</span>
-              30-Dec-2024, 11:45 AM IST
+              -
             </span>
           </div>
         </div>
@@ -253,7 +253,7 @@ const Documents = () => {
                       </span>
 
                       <span className={styles.checkboxLabel}>{item}</span>
-                      <span className={styles.countBadge}>16</span>
+                      <span className={styles.countBadge}>-</span>
                     </label>
                   ))}
                 </div>

@@ -4,6 +4,8 @@ import styles from "./ComplianceDetails.module.css";
 import React, { useRef, useEffect, useState } from "react";
 
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
+import { scrollToElementWithOffset } from "@/utils/scrollUtils";
+
 import {
   complianceKpis,
   creditRatingDates,
@@ -25,26 +27,26 @@ import CSRYearlyBarChart from "./CSRYearlyBarChart";
 import CSRSectorDonutChart from "./CSRSectorDonutChart";
 
 const defaultSectorWiseData = [
-  {
-    name: "Poverty, Eradicating Hunger, Malnutrition",
-    value: 108.81,
-    color: "#0EA5E9",
-  },
-  { name: "Health Care", value: 99.62, color: "#041E42" },
-  { name: "Environmental Sustainability", value: 51.86, color: "#F59E0B" },
-  { name: "Education", value: 15.42, color: "#EAB308" },
-  { name: "Livelihood Enhancement Projects", value: 2.2, color: "#22C55E" },
+  // {
+  //   name: "Poverty, Eradicating Hunger, Malnutrition",
+  //   value: 108.81,
+  //   color: "#0EA5E9",
+  // },
+  // { name: "Health Care", value: 99.62, color: "#041E42" },
+  // { name: "Environmental Sustainability", value: 51.86, color: "#F59E0B" },
+  // { name: "Education", value: 15.42, color: "#EAB308" },
+  // { name: "Livelihood Enhancement Projects", value: 2.2, color: "#22C55E" },
 ];
 
 const defaultYearWiseData = [
-  { year: "2015", value: 135 },
-  { year: "2016", value: 160 },
-  { year: "2017", value: 190 },
-  { year: "2018", value: 220 },
-  { year: "2019", value: 250 },
-  { year: "2020", value: 270 },
-  { year: "2021", value: 290 },
-  { year: "2022", value: 300 },
+  // { year: "2015", value: 135 },
+  // { year: "2016", value: 160 },
+  // { year: "2017", value: 190 },
+  // { year: "2018", value: 220 },
+  // { year: "2019", value: 250 },
+  // { year: "2020", value: 270 },
+  // { year: "2021", value: 290 },
+  // { year: "2022", value: 300 },
 ];
 
 function RowsPerPage({ value, onChange }) {
@@ -159,12 +161,12 @@ function RowsPerPage({ value, onChange }) {
 
 // epfoData.ts
 export const epfoSummaryGraphData = [
-  { period: "Jul-Sep 23", employees: 2000, amount: 28 },
-  { period: "Oct-Dec 23", employees: 5600, amount: 65 },
-  { period: "Jan-Mar 24", employees: 5450, amount: 63 },
-  { period: "Apr-Jun 24", employees: 5500, amount: 64 },
-  { period: "Jul-Sep 24", employees: 5520, amount: 64.5 },
-  { period: "Oct-Dec 24", employees: 5480, amount: 63.8 },
+  // { period: "Jul-Sep 23", employees: 2000, amount: 28 },
+  // { period: "Oct-Dec 23", employees: 5600, amount: 65 },
+  // { period: "Jan-Mar 24", employees: 5450, amount: 63 },
+  // { period: "Apr-Jun 24", employees: 5500, amount: 64 },
+  // { period: "Jul-Sep 24", employees: 5520, amount: 64.5 },
+  // { period: "Oct-Dec 24", employees: 5480, amount: 63.8 },
 
   // { period: "Oct-Dec 24", employees: 7000, amount: 63.8 },
 ];
@@ -190,12 +192,10 @@ const ComplianceDetails = () => {
     if (!targetId) return;
 
     const element = document.getElementById(targetId);
-    if (!element) return;
+    if (element) {
+      scrollToElementWithOffset(element, 140);
+    }
 
-    element.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
   }, [activeSubSection]);
 
   // ⬇️ keep your states AFTER this

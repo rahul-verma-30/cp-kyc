@@ -4,6 +4,8 @@ import React, { useRef, useEffect, useState } from "react";
 
 import styles from "./LigilationDetails.module.css";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
+import { scrollToElementWithOffset } from "@/utils/scrollUtils";
+
 import { litigationKpis, pendingCasesTable } from "./dummyData";
 import { ChevronsDownUp } from "lucide-react";
 
@@ -159,11 +161,9 @@ const LigilationDetails = () => {
     const targetEl = sectionRefs.current[targetId];
 
     if (targetEl) {
-      targetEl.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+      scrollToElementWithOffset(targetEl, 140);
     }
+
   }, [activeSubSection]);
 
   return (
@@ -173,11 +173,11 @@ const LigilationDetails = () => {
           <h2 className={styles.title}>Litigation</h2>
           <div className={styles.sourceRow}>
             <span className={styles.sourceLabel}>Source:</span>
-            <span className={styles.sourceValue}>MCA</span>
+            <span className={styles.sourceValue}>-</span>
             <span className={styles.divider}></span>
             <span className={styles.updatedText}>
               <span> Last Updated:</span>
-              30-Dec-2024, 11:45 AM IST
+              -
             </span>
           </div>
         </div>
