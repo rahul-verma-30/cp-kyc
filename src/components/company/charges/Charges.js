@@ -4,6 +4,8 @@ import RowsPerPage from "@/components/common/RowsPerPage";
 import { useState } from "react";
 import { useEffect, useRef } from "react";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
+import { scrollToElementWithOffset } from "@/utils/scrollUtils";
+
 
 export default function ChargesPage({ charges, loading, error, openPage, closedPage, limit, setOpenPage, setClosedPage, setLimit }) {
 
@@ -32,11 +34,11 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
     if (!activeSubSection) return;
 
     const scroll = (ref) => {
-      ref?.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+      if (ref?.current) {
+        scrollToElementWithOffset(ref.current, 140);
+      }
     };
+
 
     switch (activeSubSection) {
       case "Open Charges":
@@ -52,92 +54,92 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
     }
   }, [activeSubSection]);
 
-  // const closedCharges = [
-  //   {
-  //     id: "100592955",
-  //     lender: "Yes Bank Limited",
-  //     amount: "5.00",
-  //     created: "20 Jun 2022",
-  //     modified: "-",
-  //     satisfied: "27 Feb 2024",
-  //   },
-  //   {
-  //     id: "100592956",
-  //     lender: "HDFC Bank Limited",
-  //     amount: "6.25",
-  //     created: "15 Aug 2022",
-  //     modified: "-",
-  //     satisfied: "30 Dec 2024",
-  //   },
-  //   {
-  //     id: "100592957",
-  //     lender: "ICICI Bank Limited",
-  //     amount: "4.50",
-  //     created: "10 Sep 2022",
-  //     modified: "-",
-  //     satisfied: "15 Mar 2025",
-  //   },
-  //   {
-  //     id: "100592958",
-  //     lender: "State Bank of India",
-  //     amount: "5.75",
-  //     created: "25 Oct 2022",
-  //     modified: "-",
-  //     satisfied: "01 Jan 2025",
-  //   },
-  //   {
-  //     id: "100592959",
-  //     lender: "Kotak Mahindra Bank",
-  //     amount: "6.00",
-  //     created: "12 Nov 2022",
-  //     modified: "-",
-  //     satisfied: "10 Jul 2024",
-  //   },
-  //   {
-  //     id: "100592960",
-  //     lender: "Axis Bank Limited",
-  //     amount: "5.50",
-  //     created: "18 Dec 2022",
-  //     modified: "-",
-  //     satisfied: "22 Aug 2024",
-  //   },
-  //   {
-  //     id: "100592961",
-  //     lender: "Punjab National Bank",
-  //     amount: "4.75",
-  //     created: "30 Jan 2023",
-  //     modified: "-",
-  //     satisfied: "05 Sep 2024",
-  //   },
-  //   {
-  //     id: "100592962",
-  //     lender: "Bank of Baroda",
-  //     amount: "5.10",
-  //     created: "14 Feb 2023",
-  //     modified: "-",
-  //     satisfied: "13 Oct 2025",
-  //   },
-  //   {
-  //     id: "100592963",
-  //     lender: "Union Bank of India",
-  //     amount: "5.30",
-  //     created: "20 Mar 2023",
-  //     modified: "-",
-  //     satisfied: "28 Nov 2024",
-  //   },
-  //   {
-  //     id: "100592964",
-  //     lender: "Canara Bank",
-  //     amount: "6.00",
-  //     created: "05 Apr 2023",
-  //     modified: "-",
-  //     satisfied: "19 Jun 2025",
-  //   },
-  // ];
-  // const openChargesData = [
-  //   { name: "Others", value: 158 },
-  //   { name: "Remaining", value: 165 - 158 },
-  // ];
+  const closedCharges = [
+    // {
+    //   id: "100592955",
+    //   lender: "Yes Bank Limited",
+    //   amount: "5.00",
+    //   created: "20 Jun 2022",
+    //   modified: "-",
+    //   satisfied: "27 Feb 2024",
+    // },
+    // {
+    //   id: "100592956",
+    //   lender: "HDFC Bank Limited",
+    //   amount: "6.25",
+    //   created: "15 Aug 2022",
+    //   modified: "-",
+    //   satisfied: "30 Dec 2024",
+    // },
+    // {
+    //   id: "100592957",
+    //   lender: "ICICI Bank Limited",
+    //   amount: "4.50",
+    //   created: "10 Sep 2022",
+    //   modified: "-",
+    //   satisfied: "15 Mar 2025",
+    // },
+    // {
+    //   id: "100592958",
+    //   lender: "State Bank of India",
+    //   amount: "5.75",
+    //   created: "25 Oct 2022",
+    //   modified: "-",
+    //   satisfied: "01 Jan 2025",
+    // },
+    // {
+    //   id: "100592959",
+    //   lender: "Kotak Mahindra Bank",
+    //   amount: "6.00",
+    //   created: "12 Nov 2022",
+    //   modified: "-",
+    //   satisfied: "10 Jul 2024",
+    // },
+    // {
+    //   id: "100592960",
+    //   lender: "Axis Bank Limited",
+    //   amount: "5.50",
+    //   created: "18 Dec 2022",
+    //   modified: "-",
+    //   satisfied: "22 Aug 2024",
+    // },
+    // {
+    //   id: "100592961",
+    //   lender: "Punjab National Bank",
+    //   amount: "4.75",
+    //   created: "30 Jan 2023",
+    //   modified: "-",
+    //   satisfied: "05 Sep 2024",
+    // },
+    // {
+    //   id: "100592962",
+    //   lender: "Bank of Baroda",
+    //   amount: "5.10",
+    //   created: "14 Feb 2023",
+    //   modified: "-",
+    //   satisfied: "13 Oct 2025",
+    // },
+    // {
+    //   id: "100592963",
+    //   lender: "Union Bank of India",
+    //   amount: "5.30",
+    //   created: "20 Mar 2023",
+    //   modified: "-",
+    //   satisfied: "28 Nov 2024",
+    // },
+    // {
+    //   id: "100592964",
+    //   lender: "Canara Bank",
+    //   amount: "6.00",
+    //   created: "05 Apr 2023",
+    //   modified: "-",
+    //   satisfied: "19 Jun 2025",
+    // },
+  ];
+  const openChargesData = [
+    { name: "Others", value: 158 },
+    { name: "Remaining", value: 165 - 158 },
+  ];
 
   const openItems = charges?.open_charges?.items || [];
   const closedItems = charges?.closed_charges?.items || [];
@@ -150,11 +152,11 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
   const openChartData = [
     {
       name: "Open",
-      value: charges?.summary?.open_count || 0,
+      value: charges?.summary?.open_count ?? "-",
     },
     {
       name: "Closed",
-      value: charges?.summary?.closed_count || 0,
+      value: charges?.summary?.closed_count ?? "-",
     },
   ];
 
@@ -179,19 +181,19 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
       <section className={styles.statsGrid}>
         <div className={`${styles.statCard} ${styles.blue}`}>
           <div className={styles.statLabel}>Open Charges</div>
-          <div className={styles.statValue}>{charges?.summary?.open_count || 0}</div>
+          <div className={styles.statValue}>{charges?.summary?.open_count ?? "-"}</div>
         </div>
         <div className={`${styles.statCard} ${styles.red}`}>
           <div className={styles.statLabel}>Open Charges Amount</div>
-          <div className={styles.statValue}>{charges?.summary?.open_amount || "-"}</div>
+          <div className={styles.statValue}>{charges?.summary?.open_amount ?? "-"}</div>
         </div>
         <div className={`${styles.statCard} ${styles.purple}`}>
           <div className={styles.statLabel}>Closed Charges</div>
-          <div className={styles.statValue}>{charges?.summary?.closed_count || 0}</div>
+          <div className={styles.statValue}>{charges?.summary?.closed_count ?? "-"}</div>
         </div>
         <div className={`${styles.statCard} ${styles.green}`}>
           <div className={styles.statLabel}>Closed Charges Amount</div>
-          <div className={styles.statValue}>{charges?.summary?.closed_amount || "-"}</div>
+          <div className={styles.statValue}>{charges?.summary?.closed_amount ?? "-"}</div>
         </div>
       </section>
 
@@ -237,27 +239,27 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
           </div>
           <div className={styles.summaryRow}>
             <span>Total Satised Charges</span>
-            <p className={styles.strong}>{charges?.statistics?.total_satisfied_amount || "-"}</p>
+            <p className={styles.strong}>{charges?.statistics?.total_satisfied_amount ?? "-"}</p>
           </div>
           <div className={styles.summaryRow}>
             <span>Total No. of Lender(s)</span>
-            <p className={styles.strong}>{charges?.statistics?.total_lenders || 0}</p>
+            <p className={styles.strong}>{charges?.statistics?.total_lenders ?? "-"}</p>
           </div>
           <div className={styles.summaryRow}>
             <span>Top Lender</span>
-            <p className={styles.strong}>{charges?.statistics?.top_lender || "Others"}</p>
+            <p className={styles.strong}>{charges?.statistics?.top_lender ?? "-"}</p>
           </div>
           <div className={styles.summaryRow}>
             <span>Last Charge Activity</span>
-            <p className={styles.strong}>{charges?.statistics?.last_charge_activity || "Satisfaction"}</p>
-          </div>
+            <p className={styles.strong}>{charges?.statistics?.last_charge_activity ?? "-"}</p>
+          </div>  
           <div className={styles.summaryRow}>
             <span>Last Charge Date</span>
-            <p className={styles.strong}>{charges?.statistics?.last_charge_date || "20 Mar 2024"}</p>
+            <p className={styles.strong}>{charges?.statistics?.last_charge_date ?? "-"}</p>
           </div>
           <div className={styles.summaryRow}>
             <span>Last Charge Amount</span>
-            <p className={styles.strong}>{charges?.statistics?.last_charge_amount || "-"}</p>
+            <p className={styles.strong}>{charges?.statistics?.last_charge_amount ?? "-"}</p>
           </div>
         </div>
 

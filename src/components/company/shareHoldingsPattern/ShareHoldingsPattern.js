@@ -19,7 +19,7 @@ const ShareHoldingsPattern = () => {
         { name: "Promoters:", value: 66.26, color: "rgba(4, 30, 66, 1)" },
         {
           name: "Other than promoters:",
-          value: 33.77,
+          value: 33.74,
           color: "rgba(59, 130, 246, 1)",
         },
       ],

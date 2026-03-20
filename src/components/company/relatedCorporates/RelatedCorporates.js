@@ -42,68 +42,7 @@ export default function RelatedCorporates({ commonDirectorship, loading, error }
 
 
 
-  // const tableData = [
-  //   {
-  //     name: 'Sds Life Sciences Private Limited',
-  //     directorship: 'Ajit Mohan Sharan',
-  //     incorporation: '12 years 2 months',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'Savencia Fromage & Dairy India Private Limited',
-  //     directorship: 'Mohit Burman',
-  //     incorporation: '29 years 5 months',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'International Tax Research And Analysis Foundation',
-  //     directorship: 'Mukesh Hari Butani',
-  //     incorporation: '10 years 8 months',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'Hitachi Energy India Limited',
-  //     directorship: 'Mukesh Hari Butani',
-  //     incorporation: '6 years 9 months',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'Burman Hospitality Private Limited',
-  //     directorship: 'Mohit Burman',
-  //     incorporation: '11 years 1 month',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'Reliance Retail Ventures Limited',
-  //     directorship: 'Rajiv Mehrishi',
-  //     incorporation: '18 years 11 months',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'Marketopper Securities Private Limited',
-  //     directorship: 'Mohit Burman',
-  //     incorporation: '25 years 4 months',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'Castrol India Limited',
-  //     directorship: 'Satyavati Berera',
-  //     incorporation: '46 years 5 months',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'Olive Bar & Kitchen Private Limited',
-  //     directorship: 'Romesh Sobti',
-  //     incorporation: '25 years 5 months',
-  //     status: 'Active',
-  //   },
-  //   {
-  //     name: 'Bmr Business Solutions Private Limited',
-  //     directorship: 'Mukesh Hari Butani',
-  //     incorporation: '20 years 11 months',
-  //     status: 'Active',
-  //   },
-  // ];
+  
 
   return (
     <div className={styles.container}>
@@ -139,7 +78,7 @@ export default function RelatedCorporates({ commonDirectorship, loading, error }
                   <div className={styles.companyCell}>
                     <div className={styles.companyIconWrapper}>
                       <img
-                        src="/icons/dabur-logo.svg"
+                        src="/icons/Image.svg"
                         className={styles.companyIcon}
                         alt=""
                       />

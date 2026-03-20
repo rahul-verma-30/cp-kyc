@@ -4,6 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./FinancialHighlightsTables.module.css";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 import { useParams } from "next/navigation";
+import { scrollToElementWithOffset } from "@/utils/scrollUtils";
+
 
 const FinancialHighlightsTables = ({ 
   pnlApiData,
@@ -319,84 +321,117 @@ const FinancialHighlightsTables = ({
     { type: "header", label: "Liquidity", values: [] },
     {
       label: "Current Ratio",
-      values: ["17,723.00", "17,720.00", "17,718.00", "17,679.00", "17,674.00"],
+      values: [
+        // "17,723.00", "17,720.00", "17,718.00", "17,679.00", "17,674.00"
+      ],
     },
     {
       label: "Quick Ratio",
       values: [
-        "724,606.00",
-        "673,817.00",
-        "610,970.00",
-        "568,708.00",
-        "521,448.00",
+        // "724,606.00",
+        // "673,817.00",
+        // "610,970.00",
+        // "568,708.00",
+        // "521,448.00",
       ],
     },
-    { label: "Cash Ratio", values: ["0.00", "0.00", "0.00", "0.00", "0.00"] },
+    { label: "Cash Ratio", 
+      values: [
+        // "0.00", "0.00", "0.00", "0.00", "0.00"
+      ] },
 
     { type: "header", label: "Turnover", values: [] },
     {
       label: "Inventory To Sales",
-      values: ["24,942.00", "49,893.00", "24,945.00", "24,910.00", "1,962.00"],
+      values: [
+        // "24,942.00", "49,893.00", "24,945.00", "24,910.00", "1,962.00"
+      ],
     },
     {
       label: "Debtor To Sales",
-      values: ["13,325.00", "10,050.00", "7,676.00", "7,004.00", "0.00"],
+      values: [
+        // "13,325.00", "10,050.00", "7,676.00", "7,004.00", "0.00"
+      ],
     },
     {
       label: "Payable To Sales",
-      values: ["7,432.00", "6,694.00", "5,015.00", "4,459.00", "137.00"],
+      values: [
+        // "7,432.00", "6,694.00", "5,015.00", "4,459.00", "137.00"
+      ],
     },
     {
       label: "Cash Conversion Cycle (days)",
-      values: ["6,258.00", "6,004.00", "5,768.00", "5,657.00", "5,555.00"],
+      values: [
+        // "6,258.00", "6,004.00", "5,768.00", "5,657.00", "5,555.00"
+      ],
     },
     {
       label: "Sales To Fixed Asset",
-      values: ["51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"],
+      values: [
+        // "51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"
+      ],
     },
 
     { type: "header", label: "Protability", values: [] },
     {
       label: "Net Prot Margin",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
+      values: [
+        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
+      ],
     },
     {
       label: "Ebitda Margin",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
+      values: [
+        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
+      ],
     },
     {
       label: "Return On Equity",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
+      values: [
+        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
+      ],
     },
     {
       label: "Return On Capital Employed",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
+      values: [
+        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
+      ],
     },
     {
       label: "Net Worth Margin",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
+      values: [
+        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
+      ],
     },
 
     { type: "header", label: "Earning/Growth", values: [] },
     {
       label: "Equity Multiplier",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
+      values: [
+        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
+      ],
     },
     {
       label: "Revenue Growth",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
+      values: [
+        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
+      ],
     },
 
     { type: "header", label: "Leverage", values: [] },
     {
       label: "Debt To Ebitda",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
+      values: [
+        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
+      ],
     },
 
     { type: "header", label: "Solvency", values: [] },
     {
       label: "Interest Coverage Ratio",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
+      values: [
+        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
+      ],
     },
   ];
 
@@ -458,11 +493,11 @@ const FinancialHighlightsTables = ({
     if (!activeSubSection) return;
 
     const scroll = (ref) => {
-      ref?.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+      if (ref?.current) {
+        scrollToElementWithOffset(ref.current, 140);
+      }
     };
+
 
     switch (activeSubSection) {
       case "Balance Sheet":

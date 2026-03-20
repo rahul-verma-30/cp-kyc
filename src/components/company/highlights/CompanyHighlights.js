@@ -21,23 +21,19 @@ const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, set
     );
   }
 
-  if (!companyHighlights) {
-    return <div className={styles.container}>No data available</div>;
-  }
+  // if (!companyHighlights) {
+  //   return <div className={styles.container}>No data available</div>;
+  // }
 
   /* ================= SAFE DATA EXTRACTION ================= */
 
   const shareholding = companyHighlights?.shareholding || {};
-  const charges = companyHighlights?.charges || {};
-  const items = charges?.items || [];
+  
+  const openChargesObj = companyHighlights?.open_charges || {};
+  const openCharges = openChargesObj?.items || [];
 
-  const openCharges = items?.filter(
-    (item) => item?.status?.toLowerCase() === "open"
-  );
-
-  const closedCharges = items?.filter(
-    (item) => item?.status?.toLowerCase() === "closed"
-  );
+  const closedChargesObj = companyHighlights?.closed_charges || {};
+  const closedCharges = closedChargesObj?.items || [];
 
 
   // const chargesData = [
@@ -234,7 +230,7 @@ const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, set
                 ))) : (
                   <tr>
                     <td colSpan="5" className={styles.noData}>
-                      No open charges found on this page
+                      No open charges found on this page 
                     </td>
                   </tr>
                 )}
@@ -243,8 +239,8 @@ const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, set
             <div className={styles.paginationContainer}>
               <span>
                 Showing {(page - 1) * limit + 1}-
-                {Math.min(page * limit, companyHighlights?.charges?.total)} of
-                {companyHighlights?.charges?.total}
+                {Math.min(page * limit, openChargesObj?.total || 0)} of{" "}
+                {openChargesObj?.total || 0}
               </span>
               <div className={styles.paginationRight}>
                 <div className={styles.rowsPerPage}>
@@ -262,17 +258,30 @@ const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, set
                     <option value={50}>50</option>
                   </select>
                 </div>
-                <div className={styles.pageInfo}> Page {companyHighlights?.charges?.page} of {companyHighlights?.charges?.pages}</div>
+                <div className={styles.pageInfo}>
+                  {" "}
+                  Page {openChargesObj?.page || 1} of{" "}
+                  {openChargesObj?.pages || 1}
+                </div>
                 <div className={styles.paginationControls}>
-                  <button className={styles.paginationButton} disabled={page === 1} onClick={() =>
-                    setPage((prev) => Math.max(prev - 1, 1))
-                  }>
+                  <button
+                    className={styles.paginationButton}
+                    disabled={page === 1}
+                    onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                  >
                     &lt;
                   </button>
-                  <button className={styles.paginationButton} disabled={page === companyHighlights?.charges?.pages}
+                  <button
+                    className={styles.paginationButton}
+                    disabled={page === (openChargesObj?.pages || 1)}
                     onClick={() =>
-                      setPage((prev) => Math.min(prev + 1, companyHighlights?.charges?.pages))
-                    }>&gt;</button>
+                      setPage((prev) =>
+                        Math.min(prev + 1, openChargesObj?.pages || 1)
+                      )
+                    }
+                  >
+                    &gt;
+                  </button>
                 </div>
               </div>
             </div>
@@ -292,40 +301,48 @@ const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, set
                 </tr>
               </thead>
               <tbody>
-                {closedCharges.map((charge) => (
-                  <tr key={charge.charge_id}>
-                    <td>{charge.charge_id}</td>
-                    <td>{charge.lender}</td>
-                    <td>{charge.amount_lakh || "-"}</td>
-                    <td>{charge.creation_date || "-"}</td>
-                    <td>{charge.modification_date || "-"}</td>
-                    <td>{charge.satisfaction_date || "-"}</td>
-                    <td>
-                      <button className={styles.actionButton}>
-                        <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M12 4.5C7 4.5 2.73 7.61 1 12C2.73 16.39 7 19.5 12 19.5C17 19.5 21.27 16.39 23 12C21.27 7.61 17 4.5 12 4.5ZM12 17C9.24 17 7 14.76 7 12C7 9.24 9.24 7 12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17ZM12 9C10.34 9 9 10.34 9 12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12C15 10.34 13.66 9 12 9Z"
-                            fill="#0F172A"
-                          />
-                        </svg>
-                      </button>
+                {closedCharges.length > 0 ? (
+                  closedCharges.map((charge) => (
+                    <tr key={charge.charge_id}>
+                      <td>{charge.charge_id}</td>
+                      <td>{charge.lender}</td>
+                      <td>{charge.amount_lakh || "-"}</td>
+                      <td>{charge.creation_date || "-"}</td>
+                      <td>{charge.modification_date || "-"}</td>
+                      <td>{charge.satisfaction_date || "-"}</td>
+                      <td>
+                        <button className={styles.actionButton}>
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M12 4.5C7 4.5 2.73 7.61 1 12C2.73 16.39 7 19.5 12 19.5C17 19.5 21.27 16.39 23 12C21.27 7.61 17 4.5 12 4.5ZM12 17C9.24 17 7 14.76 7 12C7 9.24 9.24 7 12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17ZM12 9C10.34 9 9 10.34 9 12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12C15 10.34 13.66 9 12 9Z"
+                              fill="#0F172A"
+                            />
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" className={styles.noData}>
+                      No closed charges found on this page
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
             {/* Pagination */}
             <div className={styles.paginationContainer}>
               <span>
                 Showing {(page - 1) * limit + 1}-
-                {Math.min(page * limit, companyHighlights?.charges?.total)} of
-                {companyHighlights?.charges?.total}
+                {Math.min(page * limit, closedChargesObj?.total || 0)} of{" "}
+                {closedChargesObj?.total || 0}
               </span>
               <div className={styles.paginationRight}>
                 <div className={styles.rowsPerPage}>
@@ -343,17 +360,30 @@ const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, set
                     <option value={50}>50</option>
                   </select>
                 </div>
-                <div className={styles.pageInfo}> Page {companyHighlights?.charges?.page} of {companyHighlights?.charges?.pages}</div>
+                <div className={styles.pageInfo}>
+                  {" "}
+                  Page {closedChargesObj?.page || 1} of{" "}
+                  {closedChargesObj?.pages || 1}
+                </div>
                 <div className={styles.paginationControls}>
-                  <button className={styles.paginationButton} disabled={page === 1} onClick={() =>
-                    setPage((prev) => Math.max(prev - 1, 1))
-                  }>
+                  <button
+                    className={styles.paginationButton}
+                    disabled={page === 1}
+                    onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                  >
                     &lt;
                   </button>
-                  <button className={styles.paginationButton} disabled={page === companyHighlights.charges.pages}
+                  <button
+                    className={styles.paginationButton}
+                    disabled={page === (closedChargesObj?.pages || 1)}
                     onClick={() =>
-                      setPage((prev) => Math.min(prev + 1, companyHighlights.charges.pages))
-                    }>&gt;</button>
+                      setPage((prev) =>
+                        Math.min(prev + 1, closedChargesObj?.pages || 1)
+                      )
+                    }
+                  >
+                    &gt;
+                  </button>
                 </div>
               </div>
             </div>

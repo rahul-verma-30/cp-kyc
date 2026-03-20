@@ -1,6 +1,8 @@
 "use client";
 import { useRef, useEffect } from "react";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
+import { scrollToElementWithOffset } from "@/utils/scrollUtils";
+
 
 import CompanyOverview from "@/components/company/overview/CompanyOverview";
 import CompanyDetails from "@/components/company/details/CompanyDetails";
@@ -44,11 +46,9 @@ export default function CompanyPage() {
 
     const targetRef = map[activeSubSection];
     if (targetRef?.current) {
-      targetRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+      scrollToElementWithOffset(targetRef.current, 140);
     }
+
   }, [activeSection, activeSubSection]);
 
   return (

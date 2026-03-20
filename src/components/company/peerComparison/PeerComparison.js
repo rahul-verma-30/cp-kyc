@@ -37,24 +37,24 @@ const CustomXAxisTick = ({ x, y, payload }) => {
 
 export default function PeerComparison() {
   const barData = [
-    { name: "Omniactive Health Technologies Limited", value: 15 },
-    { name: "Viswaat Chemicals Limited", value: 20 },
-    { name: "Calibre Chemicals Private Limited", value: 20 },
-    { name: "Apitoria Pharma Private Limited", value: 75 },
-    { name: "Nirma Limited", value: 80 },
-    { name: "Dabur India Limited", value: 95 },
-    { name: "Mankind Pharma Limited", value: 95 },
-    { name: "Srf Limited", value: 122 },
-    { name: "Pidilite Industries Limited", value: 125 },
+    // { name: "Omniactive Health Technologies Limited", value: 15 },
+    // { name: "Viswaat Chemicals Limited", value: 20 },
+    // { name: "Calibre Chemicals Private Limited", value: 20 },
+    // { name: "Apitoria Pharma Private Limited", value: 75 },
+    // { name: "Nirma Limited", value: 80 },
+    // { name: "Dabur India Limited", value: 95 },
+    // { name: "Mankind Pharma Limited", value: 95 },
+    // { name: "Srf Limited", value: 122 },
+    // { name: "Pidilite Industries Limited", value: 125 },
   ];
 
   const peerData = barData.map((item) => ({
-    name: item.name,
-    cin: "U24230MH2003PLC141898",
-    date: "27 Aug 2003",
-    capital: "₹ 1,005.47 L",
-    turnover: "₹ 83,187.47 L",
-    netWorth: "₹ 83,037.37 L",
+    // name: item.name,
+    // cin: "U24230MH2003PLC141898",
+    // date: "27 Aug 2003",
+    // capital: "₹ 1,005.47 L",
+    // turnover: "₹ 83,187.47 L",
+    // netWorth: "₹ 83,037.37 L",
   }));
 
   // Formatter to match the image's "0.1 T" vs "80 B" style
@@ -71,12 +71,12 @@ export default function PeerComparison() {
         <div className={styles.headerInfo}>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Source:</span>
-            <span className={styles.infoValue}>MCA</span>
+            <span className={styles.infoValue}>-</span>
           </span>
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>30-Dec-2024, 11:45 AM IST</span>
+            <span className={styles.infoValue}>-</span>
           </span>
         </div>
       </div>

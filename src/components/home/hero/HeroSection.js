@@ -133,6 +133,12 @@ export default function HeroSection() {
 
     setShowSuggestions(false);
 
+    // If there are suggestions, select the first one automatically
+    if (suggestions.length > 0) {
+      handleSuggestionClick(suggestions[0].company_name);
+      return;
+    }
+
     router.push(`/company/${query.replaceAll(" ", "-").toLowerCase()}`);
   };
 
