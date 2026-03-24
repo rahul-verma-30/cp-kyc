@@ -383,7 +383,7 @@ export default function AlertsOverview({ alertsData, alertsLoading, alertsError 
       directorRows: Array(10).fill({
         personName: "-",
         personSub: "-",
-        personIcon: "/images/owner.svg",
+        personIcon: "/icons/profile-icon.svg",
 
         companyName: "-",
         companySub: "-",

@@ -108,6 +108,29 @@ export default function CompanyPage() {
   const [cashFlowLoading, setCashFlowLoading] = useState(false);
   const [cashFlowError, setCashFlowError] = useState(null);
   const [cfType, setCfType] = useState("Standalone");
+  
+  // Ratios Details
+  const [ratiosData, setRatiosData] = useState(null);
+  const [ratiosLoading, setRatiosLoading] = useState(false);
+  const [ratiosError, setRatiosError] = useState(null);
+  const [ratiosType, setRatiosType] = useState("Standalone");
+
+  // Shareholding Details
+  const [shareholdingData, setShareholdingData] = useState(null);
+  const [shareholdingLoading, setShareholdingLoading] = useState(false);
+  const [shareholdingError, setShareholdingError] = useState(null);
+
+  const [securityAllotmentData, setSecurityAllotmentData] = useState(null);
+  const [securityAllotmentLoading, setSecurityAllotmentLoading] = useState(false);
+  const [securityAllotmentError, setSecurityAllotmentError] = useState(null);
+
+  const [groupStructureData, setGroupStructureData] = useState(null);
+  const [groupStructureLoading, setGroupStructureLoading] = useState(false);
+  const [groupStructureError, setGroupStructureError] = useState(null);
+
+  const [overseasInvestmentData, setOverseasInvestmentData] = useState(null);
+  const [overseasInvestmentLoading, setOverseasInvestmentLoading] = useState(false);
+  const [overseasInvestmentError, setOverseasInvestmentError] = useState(null);
 
 
   const overviewRef = useRef(null);
@@ -370,7 +393,7 @@ export default function CompanyPage() {
         );
 
         if (!response.ok) {
-          throw new Error("Failed to fetch cash flow data");
+          throw new Error("Cash flow data not available");
         }
 
         const data = await response.json();
@@ -597,6 +620,160 @@ export default function CompanyPage() {
     getAlerts();
   }, [companyName]);
 
+  /* ================= SECURITY ALLOTMENT DETAILS ================= */
+  useEffect(() => {
+    if (!companyName) return;
+
+    const getSecurityAllotment = async () => {
+      try {
+        setSecurityAllotmentLoading(true);
+        setSecurityAllotmentError(null);
+
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(
+            companyName
+          )}/control-ownership/security-allotment`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
+        );
+
+        if (!response.ok) throw new Error("Failed to fetch Security Allotment");
+
+        const data = await response.json();
+        setSecurityAllotmentData(data);
+      } catch (error) {
+        setSecurityAllotmentError(error.message);
+      } finally {
+        setSecurityAllotmentLoading(false);
+      }
+    };
+
+    getSecurityAllotment();
+  }, [companyName]);
+
+  /* ================= GROUP STRUCTURE DETAILS ================= */
+  useEffect(() => {
+    if (!companyName) return;
+
+    const getGroupStructure = async () => {
+      try {
+        setGroupStructureLoading(true);
+        setGroupStructureError(null);
+
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(
+            companyName
+          )}/control-ownership/group-structure`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
+        );
+
+        if (!response.ok) throw new Error("Failed to fetch Group Structure");
+
+        const data = await response.json();
+        setGroupStructureData(data);
+      } catch (error) {
+        setGroupStructureError(error.message);
+      } finally {
+        setGroupStructureLoading(false);
+      }
+    };
+
+    getGroupStructure();
+  }, [companyName]);
+
+  /* ================= OVERSEAS DIRECT INVESTMENT DETAILS ================= */
+  useEffect(() => {
+    if (!companyName) return;
+
+    const getOverseasInvestment = async () => {
+      try {
+        setOverseasInvestmentLoading(true);
+        setOverseasInvestmentError(null);
+
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(
+            companyName
+          )}/control-ownership/overseas-direct-investment`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
+        );
+
+        if (!response.ok) throw new Error("Failed to fetch Overseas Direct Investment");
+
+        const data = await response.json();
+        setOverseasInvestmentData(data);
+      } catch (error) {
+        setOverseasInvestmentError(error.message);
+      } finally {
+        setOverseasInvestmentLoading(false);
+      }
+    };
+
+    getOverseasInvestment();
+  }, [companyName]);
+  // Used in OwnershipSection
+  useEffect(() => {
+    if (!companyName) return;
+
+    const getShareholdingData = async () => {
+      try {
+        setShareholdingLoading(true);
+        setShareholdingError(null);
+
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(
+            companyName
+          )}/control-ownership/shareholding`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
+        );
+
+        let data;
+
+        try {
+          data = await response.json();
+        } catch {
+          throw new Error("Invalid server response");
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            data?.detail ||
+            data?.message ||
+            `Shareholding Error ${response.status}: ${response.statusText}`
+          );
+        }
+
+        setShareholdingData(data);
+        console.log("Shareholding API:", data);
+      } catch (error) {
+        console.log("Error fetching Shareholding:", error);
+        setShareholdingError(error.message);
+      } finally {
+        setShareholdingLoading(false);
+      }
+    };
+
+    getShareholdingData();
+  }, [companyName]);
+
   /* ================= AUDITORS DETAILS ================= */
   // Used in FinancialHighlightsDetails and FinancialHighlights
   useEffect(() => {
@@ -662,6 +839,43 @@ export default function CompanyPage() {
 
     getBalanceSheet();
   }, [companyName, bsType]);
+
+  /* ================= RATIOS DETAILS ================= */
+  // Used in FinancialHighlightsDetails and FinancialHighlights
+  useEffect(() => {
+    if (!companyName || !ratiosType) return;
+
+    const getRatiosData = async () => {
+      try {
+        setRatiosLoading(true);
+        setRatiosError(null);
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/financials/${encodeURIComponent(companyName)}/ratios?type=${ratiosType}`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Ratios data not available");
+        }
+
+        const data = await response.json();
+        setRatiosData(data);
+
+      } catch (error) {
+        console.log("Error in ratios fetch:", error);
+        setRatiosError(error.message);
+      } finally {
+        setRatiosLoading(false);
+      }
+    };
+
+    getRatiosData();
+  }, [companyName, ratiosType]);
 
 
   /* 🔥 Scroll when sidebar sub-item changes */
@@ -739,6 +953,11 @@ export default function CompanyPage() {
             cashFlowError={cashFlowError}
             cfType={cfType}
             setCfType={setCfType}
+            ratiosData={ratiosData}
+            ratiosLoading={ratiosLoading}
+            ratiosError={ratiosError}
+            ratiosType={ratiosType}
+            setRatiosType={setRatiosType}
           />
           <CompanyCharts />
           <ProductDetails />
@@ -774,6 +993,11 @@ export default function CompanyPage() {
           cashFlowError={cashFlowError}
           cfType={cfType}
           setCfType={setCfType}
+          ratiosData={ratiosData}
+          ratiosLoading={ratiosLoading}
+          ratiosError={ratiosError}
+          ratiosType={ratiosType}
+          setRatiosType={setRatiosType}
         />
       )}
 
@@ -783,7 +1007,17 @@ export default function CompanyPage() {
       {/* Control & Ownership */}
 
       {activeSection === "controlOwnership" && (
-        <OwnershipSection companyHighlights={companyHighlights} highlightsLoading={highlightsLoading} highlightsError={highlightsError} />
+        <OwnershipSection 
+          companyHighlights={companyHighlights} 
+          highlightsLoading={highlightsLoading} 
+          highlightsError={highlightsError}
+          shareholdingData={shareholdingData}
+          shareholdingLoading={shareholdingLoading}
+          shareholdingError={shareholdingError}
+          securityAllotmentData={securityAllotmentData}
+          groupStructureData={groupStructureData}
+          overseasInvestmentData={overseasInvestmentData}
+        />
       )}
 
       {/* Charges */}

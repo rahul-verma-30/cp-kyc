@@ -5,77 +5,87 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import styles from "./ShareHoldingsPattern.module.css";
 import Link from "next/link";
 
-const ShareHoldingsPattern = () => {
+const ShareHoldingsPattern = ({ shareholdingData }) => {
   const summaryStats = [
-    { label: "Latest Annual Return", value: "31 Mar 2024", type: "blue" },
-    { label: "Promoter Shares", value: "1174000355.00", type: "red" },
-    { label: "Non Promoter Shares", value: "4598038807.002", type: "green" },
+    { label: "Report Date", value: shareholdingData?.summary?.report_date || "-", type: "blue" },
+    { label: "Promoter Shares", value: shareholdingData?.overview?.promoter_holding_shares || "-", type: "red" },
+    { label: "Non Promoter Shares", value: shareholdingData?.overview?.non_promoter_holding_shares || "-", type: "green" },
   ];
 
-  const shareholdingData = [
+  const colorMap = {
+    "Indian": "#818CF8",
+    "Non-Resident Indian (NRI)": "#A78BFA",
+    "Insurance Companies": "#84CC16",
+    "Banks": "#C084FC",
+    "Foreign Institutional Investor": "#0F172A",
+    "Mutual Fund": "#0EA5E9",
+    "Body Corporate": "#14B8A6",
+    "Others": "#D946EF"
+  };
+
+  const chartData = [
     {
-      title: "Total Shareholders",
+      title: "Shareholding Summary",
       data: [
-        { name: "Promoters:", value: 66.26, color: "rgba(4, 30, 66, 1)" },
-        {
-          name: "Other than promoters:",
-          value: 33.74,
-          color: "rgba(59, 130, 246, 1)",
+        { 
+          name: "Promoters", 
+          value: parseFloat(shareholdingData?.summary?.promoter_percentage || 0), 
+          displayValue: shareholdingData?.summary?.promoter_percentage ? `${shareholdingData?.summary?.promoter_percentage}%` : "-",
+          color: "rgba(4, 30, 66, 1)" 
+        },
+        { 
+          name: "Public", 
+          value: parseFloat(shareholdingData?.summary?.public_percentage || 0), 
+          displayValue: shareholdingData?.summary?.public_percentage ? `${shareholdingData?.summary?.public_percentage}%` : "-",
+          color: "rgba(59, 130, 246, 1)" 
         },
       ],
     },
     {
-      title: "Total Shareholders",
+      title: "Detailed Shareholding Breakdown",
       data: [
-        { name: "Promoters", value: 0.08, color: "rgba(132, 204, 22, 1)" },
-        {
-          name: "Other than promoters:",
-          value: 0.07,
-          color: "rgba(168, 85, 247, 1)",
-        },
-        { name: "Body Corporate:", value: 66.11, color: "rgba(4, 30, 66, 1)" },
-        { name: "Remaining", value: 33.74, color: "rgba(244, 244, 245, 1)" },
-      ],
-    },
-    {
-      title: "Total Shareholders",
-      data: [
-        { name: "Indian:", value: 4.55, color: "rgba(99, 102, 241, 1)" },
-        {
-          name: "Non-Resident Indian (NRI):",
-          value: 0.28,
-          color: "rgba(139, 92, 246, 1)",
-        },
-        {
-          name: "Insurance Companies:",
-          value: 5.01,
-          color: "rgba(132, 204, 22, 1)",
-        },
-        { name: "Banks:", value: 0.11, color: "rgba(168, 85, 247, 1)" },
-        {
-          name: "Foreign Institutional Investor:",
-          value: 15.83,
-          color: "rgba(4, 30, 66, 1)",
-        },
-        { name: "Mutual Fund:", value: 5.98, color: "rgba(14, 165, 233, 1)" },
-        { name: "Body Corporate:", value: 0.3, color: "rgba(20, 184, 166, 1)" },
-        { name: "Others:", value: 1.71, color: "rgba(217, 70, 239, 1)" },
-        { name: "Remaining", value: 70.23, color: "rgba(244, 244, 245, 1)" },
-      ],
-    },
+         // Promoter Holding
+         {
+            name: "Promoters",
+            value: parseFloat(shareholdingData?.summary?.promoter_percentage || 0),
+            displayValue: shareholdingData?.summary?.promoter_percentage ? `${shareholdingData?.summary?.promoter_percentage}%` : "-",
+            color: "rgba(4, 30, 66, 1)"
+         },
+         // Non-Promoter Breakdown
+         ...(Array.isArray(shareholdingData?.promoter_holding_section?.non_promoter_holding_breakdown) 
+            ? shareholdingData.promoter_holding_section.non_promoter_holding_breakdown 
+            : [])
+            .map(item => {
+               const rawValue = item.holding_percentage || "-";
+               const numericValue = rawValue === "-" ? 0 : parseFloat(rawValue.replace('%', ''));
+               return {
+                  name: item.holder_category,
+                  value: numericValue,
+                  displayValue: rawValue,
+                  color: colorMap[item.holder_category] || "#CBD5E1"
+               };
+            }),
+      ]
+    }
   ];
 
-  const groupStats = [
-    { label: "Holding Company", value: "-", type: "blue" },
-    { label: "Subsidiary Company", value: "27", type: "red" },
-    { label: "Associate Company", value: "-", type: "purple" },
-    { label: "Joint Ventures", value: "1", type: "green" },
-  ];
+  // Add "Remaining" if needed
+  chartData.forEach(card => {
+    const total = card.data.reduce((acc, curr) => acc + curr.value, 0);
+    if (total < 100 && card.data.length > 0 && card.title !== "Shareholding Summary") {
+      card.data.push({ 
+        name: "Remaining", 
+        value: parseFloat((100 - total).toFixed(2)), 
+        displayValue: `${(100 - total).toFixed(2)}%`,
+        color: "rgba(244, 244, 245, 1)" 
+      });
+    }
+  });
 
   return (
     <div className={styles.mainWrapper}>
       <nav className={styles.breadcrumb}>
-        <Link href="/company" className={styles.breadcrumbLink}>
+        <Link href={`./`} className={styles.breadcrumbLink}>
           Company Details
         </Link>
         <span className={styles.breadcrumbSeparator}>
@@ -106,7 +116,9 @@ const ShareHoldingsPattern = () => {
           </div>
         </div>
 
-        {shareholdingData.map((item, idx) => (
+        <div className={styles.cardsContainer}>
+        {chartData.map((item, idx) => (
+          item.data.length > 0 && (
           <div key={idx} className={styles.card}>
             <p className={styles.cardLabelInside}>{item.title}</p>
             <div className={styles.pieChartContainer}>
@@ -141,7 +153,7 @@ const ShareHoldingsPattern = () => {
                           ></div>
                           <span className={styles.legendText}>{row.name}</span>
                         </div>
-                        <span className={styles.legendValue}>{row.value}%</span>
+                        <span className={styles.legendValue}>{row.displayValue}</span>
                       </div>
                       {rIdx < filteredArr.length - 1 && (
                         <div className={styles.legendDivider}></div>
@@ -151,7 +163,27 @@ const ShareHoldingsPattern = () => {
               </div>
             </div>
           </div>
+          )
         ))}
+        </div>
+
+        {/* Promoter Details Section */}
+        <div className={styles.promoterDetailsCard}>
+          <h3 className={styles.promoterDetailsTitle}>Promoter Holding Details</h3>
+          <p className={styles.promoterDescription}>
+            {shareholdingData?.promoter_holding_section?.detailed_classification_note || "Detailed classification not available in current filings."}
+          </p>
+          <div className={styles.pledgeLockinGrid}>
+            <div className={styles.pledgeBox}>
+              <span className={styles.pledgeLabel}>Pledge Status</span>
+              <span className={styles.pledgeValue}>{shareholdingData?.promoter_holding_section?.pledge_status || "-"}</span>
+            </div>
+            <div className={styles.pledgeBox}>
+              <span className={styles.pledgeLabel}>Lock-in Status</span>
+              <span className={styles.pledgeValue}>{shareholdingData?.promoter_holding_section?.lock_in_status || "-"}</span>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   );

@@ -27,31 +27,72 @@ const FinancialHighlightsTables = ({
   cashFlowLoading,
   cashFlowError,
   cfType,
-  setCfType
+  setCfType,
+  ratiosData,
+  ratiosLoading,
+  ratiosError,
+  ratiosType,
+  setRatiosType
 }) => {
   const params = useParams();
   const companyName = params?.name ? decodeURIComponent(params.name.replace(/-/g, " ")).toUpperCase() : "";
-  // Build Balance Sheet period columns (filtering out internal keys)
-  const bsPeriods = balanceSheetData?.periods
-    ? balanceSheetData.periods.filter((p) => p !== "setAttributes" && p !== "isExpandable")
-    : [];
 
-  const getBsValue = (valuesObj, period) => {
+  // Helper: get value for a period from a row's values object
+  const getNestedValue = (obj, path) => {
+    return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+  };
+
+  const getValue = (valuesObj, period) => {
     if (!valuesObj) return "-";
     const v = valuesObj[period];
     return v === undefined || v === null || v === "-" ? "-" : v;
   };
+
+  // Build Balance Sheet period columns
+  const bsPeriods = balanceSheetData?.periods
+    ? balanceSheetData.periods.filter((p) => p !== "setAttributes" && p !== "isExpandable")
+    : [];
+
+  const getBsValue = (valuesObj, period) => getValue(valuesObj, period);
 
   // Build Cash Flow period columns
   const cfPeriods = cashFlowData?.periods
     ? cashFlowData.periods.filter((p) => p !== "setAttributes")
     : [];
 
-  const getCfValue = (valuesObj, period) => {
-    if (!valuesObj) return "-";
-    const v = valuesObj[period];
-    return v === undefined || v === null || v === "-" ? "-" : v;
+  const getCfValue = (valuesObj, period) => getValue(valuesObj, period);
+
+  // Build Ratios period columns
+  const ratiosPeriods = ratiosData?.periods || [];
+
+  const getRatioValue = (valuesObj, period) => getValue(valuesObj, period);
+
+  const buildRatioRows = () => {
+    if (!ratiosData) return [];
+    const sections = [
+      { label: "Liquidity", data: ratiosData.liquidity },
+      { label: "Turnover", data: ratiosData.turnover },
+      { label: "Profitability", data: ratiosData.profitability },
+      { label: "Earning/Growth", data: ratiosData.earning_growth },
+      { label: "Leverage", data: ratiosData.leverage },
+      { label: "Solvency", data: ratiosData.solvency },
+    ];
+    const rows = [];
+    sections.forEach(({ label, data }) => {
+      if (!data || !Array.isArray(data)) return;
+      rows.push({ type: "header", label });
+      data.forEach((item) => {
+        rows.push({
+          type: "data",
+          label: item.particular_name,
+          valuesObj: item.values,
+        });
+      });
+    });
+    return rows;
   };
+
+  const ratioRows = buildRatioRows();
 
   const CASH_FLOW_MAPPING = {
     "Prot Before tax": "operating_activities.profit_before_tax",
@@ -75,10 +116,6 @@ const FinancialHighlightsTables = ({
     "Net Increase/(Decrease) In Cash And Cash Equivalents": "net_change_in_cash",
     "Cash And Cash Equivalents At The Beginning Of The Period": "opening_cash_balance",
     "Cash And Cash Equivalents At The End Of The Period": "closing_cash_balance"
-  };
-
-  const getNestedValue = (obj, path) => {
-    return path.split('.').reduce((acc, part) => acc && acc[part], obj);
   };
 
   const cfRows = [
@@ -699,11 +736,13 @@ const FinancialHighlightsTables = ({
           <div style={{ padding: "24px 16px", color: "#71717A", fontSize: "14px" }}>
             Loading Profit &amp; Loss data...
           </div>
-        ) : pnlError ? (
-          <div style={{ padding: "24px 16px", color: "#EF4444", fontSize: "14px" }}>
-            Error: {pnlError}
-          </div>
-        ) : pnlApiData && pnlPeriods.length > 0 ? (
+        )
+        //  : pnlError ? (
+        //   <div style={{ padding: "24px 16px", color: "#EF4444", fontSize: "14px" }}>
+        //     Error: {pnlError}
+        //   </div>
+        //         ) 
+                : pnlApiData && pnlPeriods.length > 0 ? (
           <table
             className={styles.table}
             style={{ minWidth: `${250 + pnlPeriods.length * 130}px` }}
@@ -745,21 +784,9 @@ const FinancialHighlightsTables = ({
             </tbody>
           </table>
         ) : (
-          <table
-            className={styles.table}
-          >
-            <thead>
-              <tr className={styles.headerRow}>
-                <th className={styles.particularsCell}>Particulars</th>
-                <th className={styles.dateCell}>31 Mar 2025</th>
-                <th className={styles.dateCell}>31 Mar 2024</th>
-                <th className={styles.dateCell}>31 Mar 2023</th>
-                <th className={styles.dateCell}>31 Mar 2022</th>
-                <th className={styles.dateCell}>31 Mar 2021</th>
-              </tr>
-            </thead>
-            {renderTableBody(profitLossData)}
-          </table>
+          <div style={{ padding: "24px 16px", color: "#71717A", fontSize: "14px" }}>
+            No Profit & Loss data available.
+          </div>
         )}
       </div>
 
@@ -793,33 +820,26 @@ const FinancialHighlightsTables = ({
       </div>
 
       <div className={`${styles.tableWrapper} ${styles.cashFlowTable}`}>
-        <table
-          className={styles.table}
-          style={{ minWidth: `${250 + cfPeriods.length * 130}px` }}
-        >
-          <thead>
-            <tr className={styles.headerRow}>
-              <th className={styles.particularsCell}>Particulars</th>
-              {cfPeriods.map((p) => (
-                <th key={p} className={styles.dateCell}>{p}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {cashFlowLoading ? (
-              <tr>
-                <td colSpan={cfPeriods.length > 0 ? cfPeriods.length + 1 : 6} className={styles.loadingCell}>
-                  <div style={{ padding: "20px" }}>Loading Cash Flow...</div>
-                </td>
+        {cashFlowLoading ? (
+          <div style={{ padding: "24px 16px", color: "#71717A", fontSize: "14px" }}>
+            Loading Cash Flow data...
+          </div>
+        
+        ) : cashFlowData && cfPeriods.length > 0 ? (
+          <table
+            className={styles.table}
+            style={{ minWidth: `${250 + cfPeriods.length * 130}px` }}
+          >
+            <thead>
+              <tr className={styles.headerRow}>
+                <th className={styles.particularsCell}>Particulars</th>
+                {cfPeriods.map((p) => (
+                  <th key={p} className={styles.dateCell}>{p}</th>
+                ))}
               </tr>
-            ) : cashFlowError ? (
-              <tr>
-                <td colSpan={cfPeriods.length > 0 ? cfPeriods.length + 1 : 6} className={styles.errorCell}>
-                  <div style={{ padding: "20px", color: "#EF4444" }}>{cashFlowError}</div>
-                </td>
-              </tr>
-            ) : cfRows.length > 0 ? (
-              cfRows.map((row, index) => {
+            </thead>
+            <tbody>
+              {cfRows.map((row, index) => {
                 const isHeader = row.type === "header";
                 const isTotal = row.type === "total" || row.type === "grand-total";
 
@@ -842,16 +862,14 @@ const FinancialHighlightsTables = ({
                         ))}
                   </tr>
                 );
-              })
-            ) : (
-              <tr>
-                <td colSpan={cfPeriods.length > 0 ? cfPeriods.length + 1 : 6} className={styles.noDataCell}>
-                  <div style={{ padding: "20px" }}>No Data Available to show</div>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              })}
+            </tbody>
+          </table>
+        ) : (
+          <div style={{ padding: "24px 16px", color: "#71717A", fontSize: "14px" }}>
+            No Cash Flow data available.
+          </div>
+        )}
       </div>
 
       <div
@@ -864,18 +882,18 @@ const FinancialHighlightsTables = ({
           <span className={styles.currencyText}>Values in Cr.</span>
           <div className={styles.toggleContainer}>
             <div
-              className={`${styles.toggleSlider} ${viewType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
+              className={`${styles.toggleSlider} ${ratiosType === "Standalone" ? styles.sliderStandalone : styles.sliderConsolidated
                 }`}
             ></div>
             <button
-              className={`${styles.toggleBtn} ${viewType === "Standalone" ? styles.activeToggle : ""}`}
-              onClick={() => setViewType("Standalone")}
+              className={`${styles.toggleBtn} ${ratiosType === "Standalone" ? styles.activeToggle : ""}`}
+              onClick={() => setRatiosType("Standalone")}
             >
               Standalone
             </button>
             <button
-              className={`${styles.toggleBtn} ${viewType === "Consolidated" ? styles.activeToggle : ""}`}
-              onClick={() => setViewType("Consolidated")}
+              className={`${styles.toggleBtn} ${ratiosType === "Consolidated" ? styles.activeToggle : ""}`}
+              onClick={() => setRatiosType("Consolidated")}
             >
               Consolidated
             </button>
@@ -884,19 +902,55 @@ const FinancialHighlightsTables = ({
       </div>
 
       <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr className={styles.headerRow}>
-              <th className={styles.particularsCell}>Particulars</th>
-              <th className={styles.dateCell}>31 Mar 2025</th>
-              <th className={styles.dateCell}>31 Mar 2024</th>
-              <th className={styles.dateCell}>31 Mar 2023</th>
-              <th className={styles.dateCell}>31 Mar 2022</th>
-              <th className={styles.dateCell}>31 Mar 2021</th>
-            </tr>
-          </thead>
-          {renderTableBody(ratioData)}
-        </table>
+        {ratiosLoading ? (
+          <div style={{ padding: "24px 16px", color: "#71717A", fontSize: "14px" }}>
+            Loading Ratios data...
+          </div>
+        ) : ratiosError ? (
+          <div style={{ padding: "24px 16px", color: "#EF4444", fontSize: "14px" }}>
+            Error: {ratiosError}
+          </div>
+        ) : ratiosData && ratiosPeriods.length > 0 ? (
+          <table
+            className={styles.table}
+            style={{ minWidth: `${250 + ratiosPeriods.length * 130}px` }}
+          >
+            <thead>
+              <tr className={styles.headerRow}>
+                <th className={styles.particularsCell}>Particulars</th>
+                {ratiosPeriods.map((p) => (
+                  <th key={p} className={styles.dateCell}>{p}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {ratioRows.map((row, index) => {
+                const isHeader = row.type === "header";
+                let rowClass = styles.row;
+                if (isHeader) rowClass = styles.sectionHeaderRow;
+
+                return (
+                  <tr key={index} className={rowClass}>
+                    <td className={styles.labelCell}>{row.label}</td>
+                    {isHeader
+                      ? ratiosPeriods.map((p) => (
+                          <td key={p} className={styles.valueCell}></td>
+                        ))
+                      : ratiosPeriods.map((p) => (
+                          <td key={p} className={styles.valueCell}>
+                            {getRatioValue(row.valuesObj, p)}
+                          </td>
+                        ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : (
+          <div style={{ padding: "24px 16px", color: "#71717A", fontSize: "14px" }}>
+            No Ratios data available.
+          </div>
+        )}
       </div>
 
       <div
@@ -929,9 +983,13 @@ const FinancialHighlightsTables = ({
       </div>
 
       {auditorsLoading ? (
-        <div className={styles.loadingText}>Loading auditors...</div>
+        <div style={{ padding: "24px 16px", color: "#71717A", fontSize: "14px" }}>
+          Loading Auditors data...
+        </div>
       ) : auditorsError ? (
-        <div className={styles.errorText} style={{ color: "red" }}>{auditorsError}</div>
+        <div style={{ padding: "24px 16px", color: "#EF4444", fontSize: "14px" }}>
+          Error: {auditorsError}
+        </div>
       ) : auditorsData && auditorsData.length > 0 ? (
         <div className={`${styles.tableWrapper} ${styles.auditorTable}`}>
           <table className={styles.table}>
@@ -960,7 +1018,9 @@ const FinancialHighlightsTables = ({
           </table>
         </div>
       ) : (
-        <div className={styles.noDataText}>No Data Available to show</div>
+        <div style={{ padding: "24px 16px", color: "#71717A", fontSize: "14px" }}>
+          No Auditors data available.
+        </div>
       )}
     </div>
   );

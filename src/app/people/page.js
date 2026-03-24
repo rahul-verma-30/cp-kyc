@@ -1,21 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import PeopleDatabase from "@/components/PeopleDatabase/PeopleDatabase";
-import PeopleProfileWrapper from "@/components/PeopleDatabase/PeopleProfileWrapper";
+import { useRouter } from "next/navigation";
 
 export default function PeopleDatabasePage() {
-  const [selectedPerson, setSelectedPerson] = useState(null);
+  const router = useRouter();
 
   return (
     <main>
-      {selectedPerson ? (
-        <PeopleProfileWrapper 
-          person={selectedPerson} 
-          onBack={() => setSelectedPerson(null)} 
-        />
-      ) : (
-        <PeopleDatabase onRowClick={(person) => setSelectedPerson(person)} />
-      )}
+      <PeopleDatabase onRowClick={(person) => router.push(`/people/${person.din_pan}`)} />
     </main>
   );
 }
