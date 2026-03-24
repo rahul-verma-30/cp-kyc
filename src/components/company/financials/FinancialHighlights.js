@@ -44,7 +44,12 @@ const FinancialHighlights = ({
   cashFlowLoading,
   cashFlowError,
   cfType,
-  setCfType
+  setCfType,
+  ratiosData,
+  ratiosLoading,
+  ratiosError,
+  ratiosType,
+  setRatiosType
 }) => {
 
   const { activeSubSection } = useCompanySection();
@@ -116,7 +121,17 @@ const FinancialHighlights = ({
             balanceSheetLoading={balanceSheetLoading}
             balanceSheetError={balanceSheetError}
             bsType={bsType}
-            setBsType={setBsType} cashFlowData={cashFlowData} cashFlowLoading={cashFlowLoading} cashFlowError={cashFlowError} cfType={cfType} setCfType={setCfType}
+            setBsType={setBsType}
+            cashFlowData={cashFlowData}
+            cashFlowLoading={cashFlowLoading}
+            cashFlowError={cashFlowError}
+            cfType={cfType}
+            setCfType={setCfType}
+            ratiosData={ratiosData}
+            ratiosLoading={ratiosLoading}
+            ratiosError={ratiosError}
+            ratiosType={ratiosType}
+            setRatiosType={setRatiosType}
           />
         </div>
       </div>
@@ -145,7 +160,17 @@ const FinancialHighlights = ({
             balanceSheetLoading={balanceSheetLoading}
             balanceSheetError={balanceSheetError}
             bsType={bsType}
-            setBsType={setBsType} cashFlowData={cashFlowData} cashFlowLoading={cashFlowLoading} cashFlowError={cashFlowError} cfType={cfType} setCfType={setCfType}
+            setBsType={setBsType}
+            cashFlowData={cashFlowData}
+            cashFlowLoading={cashFlowLoading}
+            cashFlowError={cashFlowError}
+            cfType={cfType}
+            setCfType={setCfType}
+            ratiosData={ratiosData}
+            ratiosLoading={ratiosLoading}
+            ratiosError={ratiosError}
+            ratiosType={ratiosType}
+            setRatiosType={setRatiosType}
           />
         </div>
       </div>
@@ -289,6 +314,11 @@ const FinancialHighlights = ({
     }))
     .reverse();
 
+  const maxVal = Math.max(...chartData.map(d => Math.max(d.revenue || 0, d.profit || 0)), 0);
+  const domainMax = Math.ceil((maxVal * 1.1) / 100) * 100 || 5000;
+  const step = Math.ceil(domainMax / 5 / 10) * 10 || 1000; 
+  const dynamicTicks = Array.from({ length: 6 }, (_, i) => i * step);
+
   return (
     <div ref={containerRef} className={styles.container}>
       <div className={styles.header}>
@@ -384,60 +414,61 @@ const FinancialHighlights = ({
           </div>
         </div>
         <div className={styles.chartContainer}>
-          <ResponsiveContainer width="100%" height={400}>
-            <BarChart
-              data={chartData}
-              margin={{ top: 20, right: 10, left: 0, bottom: 0 }}
-            >
-              {/* Added strokeDasharray="5 5" for the dotted horizontal lines shown in design */}
-              <CartesianGrid
-                strokeDasharray="5 5"
-                vertical={false}
-                stroke="#E5E7EB"
-              />
-              <XAxis
-                dataKey="year"
-                axisLine={{ stroke: "rgba(229, 231, 235, 1)" }}
-                tickLine={false}
-                tick={{
-                  fill: "rgba(113, 113, 122, 1)",
-                  fontSize: 14,
-                  fontWeight: 500,
-                }}
-                dy={6}
-              />
-              <YAxis
-                width={70}
-                axisLine={{ stroke: "rgba(229, 231, 235, 1)" }}
-                tickLine={false}
-                tick={{
-                  fill: "rgba(55, 65, 81, 1)",
-                  fontSize: 14,
-                  fontWeight: 500,
-                }}
-                tickFormatter={(value) => `${value} cr`}
-                domain={[0, 10000]}
-                ticks={[
-                  0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000,
-                  10000,
-                ]}
-              />
-              <Tooltip cursor={{ fill: "transparent" }} />
-              {/* radius={[20, 20, 20, 20]} creates the pill shape seen in the image */}
-              <Bar
-                dataKey="revenue"
-                fill="rgba(59, 130, 246, 1)"
-                radius={[20, 20, 0, 0]}
-                barSize={32.73}
-              />
-              <Bar
-                dataKey="profit"
-                fill="rgba(34, 197, 94, 1)"
-                radius={[20, 20, 0, 0]}
-                barSize={32.73}
-              />
-            </BarChart>
-          </ResponsiveContainer>
+          {chartData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={400}>
+              <BarChart
+                data={chartData}
+                margin={{ top: 20, right: 10, left: 0, bottom: 0 }}
+              >
+                {/* Added strokeDasharray="5 5" for the dotted horizontal lines shown in design */}
+                <CartesianGrid
+                  strokeDasharray="5 5"
+                  vertical={false}
+                  stroke="#E5E7EB"
+                />
+                <XAxis
+                  dataKey="year"
+                  axisLine={{ stroke: "rgba(229, 231, 235, 1)" }}
+                  tickLine={false}
+                  tick={{
+                    fill: "rgba(113, 113, 122, 1)",
+                    fontSize: 14,
+                    fontWeight: 500,
+                  }}
+                  dy={6}
+                />
+                <YAxis
+                  width={80}
+                  axisLine={{ stroke: "rgba(229, 231, 235, 1)" }}
+                  tickLine={false}
+                  tick={{
+                    fill: "rgba(55, 65, 81, 1)",
+                    fontSize: 14,
+                    fontWeight: 500,
+                  }}
+                  tickFormatter={(value) => `${value} cr`}
+                  domain={[0, domainMax]}
+                  ticks={dynamicTicks}
+                />
+                <Tooltip cursor={{ fill: "transparent" }} />
+                {/* radius={[20, 20, 20, 20]} creates the pill shape seen in the image */}
+                <Bar
+                  dataKey="revenue"
+                  fill="rgba(59, 130, 246, 1)"
+                  radius={[20, 20, 0, 0]}
+                  barSize={32.73}
+                />
+                <Bar
+                  dataKey="profit"
+                  fill="rgba(34, 197, 94, 1)"
+                  radius={[20, 20, 0, 0]}
+                  barSize={32.73}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className={styles.noDataMessage}>No revenue and profit trend available</div>
+          )}
         </div>
       </div>
       <FinancialHighlightsTables 
@@ -455,7 +486,17 @@ const FinancialHighlights = ({
         balanceSheetLoading={balanceSheetLoading}
         balanceSheetError={balanceSheetError}
         bsType={bsType}
-        setBsType={setBsType} cashFlowData={cashFlowData} cashFlowLoading={cashFlowLoading} cashFlowError={cashFlowError} cfType={cfType} setCfType={setCfType}
+        setBsType={setBsType} 
+        cashFlowData={cashFlowData} 
+        cashFlowLoading={cashFlowLoading} 
+        cashFlowError={cashFlowError} 
+        cfType={cfType} 
+        setCfType={setCfType}
+        ratiosData={ratiosData}
+        ratiosLoading={ratiosLoading}
+        ratiosError={ratiosError}
+        ratiosType={ratiosType}
+        setRatiosType={setRatiosType}
       />
     </div>
   );

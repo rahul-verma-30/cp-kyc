@@ -4,119 +4,107 @@ import styles from "./PeopleDatabase.module.css";
 import { useState, useRef, useEffect } from "react";
 import RowsPerPage from "@/components/common/RowsPerPage";
 
-const peopleData = [
-  {
-    name: "Sachin Bansal",
-    location: "New Delhi, Delhi, India",
-    current: "Navi , Navi Finserv +4 more",
-    previous: "Gpcubs Motorsport , Navi +13 more",
-    sector: "-",
-  },
-  {
-    name: "Priya Gupta",
-    location: "Hyderabad, Telangana, India",
-    current: "CloudNet, DataWise +6 more",
-    previous: "FutureCloud, Hyderabad +12 more",
-    sector: "-",
-  },
-  {
-    name: "Vikram Desai",
-    location: "Ahmedabad, Gujarat, India",
-    current: "EduTech, LearnSmart +5 more",
-    previous: "SkillUp, Ahmedabad +7 more",
-    sector: "-",
-  },
-  {
-    name: "Sachin Bansal",
-    location: "New Delhi, Delhi, India",
-    current: "Navi , Navi Finserv +4 more",
-    previous: "Gpcubs Motorsport , Navi +13 more",
-    sector: "-",
-  },
-  {
-    name: "Anjali Sharma",
-    location: "Bangalore, Karnataka, India",
-    current: "TechWave, Fintech Solutions +3 more",
-    previous: "EagleTech Systems, Bangalore +10 more",
-    sector: "-",
-  },
-  {
-    name: "Karan Singh",
-    location: "Chennai, Tamil Nadu, India",
-    current: "GreenTech, Urban Solutions +4 more",
-    previous: "SmartCity Innovations, Chennai +9 more",
-    sector: "-",
-  },
-  {
-    name: "Riya Verma",
-    location: "Kolkata, West Bengal, India",
-    current: "Artistry, CultureConnect +2 more",
-    previous: "Kolkata Arts, Kolkata +6 more",
-    sector: "-",
-  },
-  {
-    name: "Neeta Joshi",
-    location: "Pune, Maharashtra, India",
-    current: "HealthSync, WellnessCo +3 more",
-    previous: "Pune Healthcare, Pune +11 more",
-    sector: "-",
-  },
-  {
-    name: "Arjun Rao",
-    location: "Jaipur, Rajasthan, India",
-    current: "TravelSphere, Wanderlust +4 more",
-    previous: "ExploreIndia, Jaipur +10 more",
-    sector: "-",
-  },
-  {
-    name: "Ravi Mehta",
-    location: "Mumbai, Maharashtra, India",
-    current: "InnoTech, InvestoHub +5 more",
-    previous: "Visionary Ventures, Mumbai +8 more",
-    sector: "-",
-  },
-];
-
 export default function PeopleDatabase({ onRowClick }) {
   const headerCheckboxRef = useRef(null);
   const [selectedRows, setSelectedRows] = useState([]);
-  const allChecked = selectedRows.length === peopleData.length;
-  const someChecked = selectedRows.length > 0 && !allChecked;
+  const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalPeople, setTotalPeople] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const cleanCompanyName = (name) => {
+    if (typeof name !== "string") return name;
+    // Check if it's a Python-style dict string: {'type': 'string', 'value': '...'}
+    const match = name.match(/\{['"]type['"]:\s*['"]string['"],\s*['"]value['"]:\s*['"](.*?)['"]\}/);
+    if (match && match[1]) {
+      return match[1];
+    }
+    return name;
+  };
+
+  const getCleanDisplay = (companies, originalDisplay) => {
+    if (!companies || companies.length === 0) return originalDisplay || "-";
+    
+    const cleaned = [...new Set(companies.map(cleanCompanyName))];
+    if (cleaned.length === 0) return "-";
+    
+    if (cleaned.length === 1) return cleaned[0];
+    if (cleaned.length === 2) return `${cleaned[0]}, ${cleaned[1]}`;
+    return `${cleaned[0]}, ${cleaned[1]} +${cleaned.length - 2} more`;
+  };
+
+  const fetchPeople = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const token = localStorage.getItem("token");
+      const url = `https://cpkycapi.webninjaz.com/api/people-database?q=${encodeURIComponent(
+        searchQuery
+      )}&page=${currentPage}&per_page=${rowsPerPage}`;
+      const response = await fetch(url, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+      });
+      if (!response.ok) throw new Error("Failed to fetch people data");
+      const data = await response.json();
+      
+      const processedItems = (data.items || []).map(item => ({
+        ...item,
+        current: getCleanDisplay(item.current_companies, item.current_companies_display),
+        previous: getCleanDisplay(item.previous_companies, item.previous_companies_display)
+      }));
+
+      setPeople(processedItems);
+      setTotalPeople(data.total || 0);
+      setTotalPages(data.pages || 0);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    // Simulate loading data
     const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+      fetchPeople();
+    }, 500); // debounce search
     return () => clearTimeout(timer);
-  }, []);
+  }, [searchQuery, currentPage, rowsPerPage]);
+
+  const allChecked = selectedRows.length > 0 && selectedRows.length === people.length;
+  const someChecked = selectedRows.length > 0 && !allChecked;
 
   useEffect(() => {
     if (headerCheckboxRef.current) {
       headerCheckboxRef.current.indeterminate = someChecked;
     }
   }, [someChecked]);
+
   const handleSelectAll = () => {
     if (allChecked) {
       setSelectedRows([]);
     } else {
-      setSelectedRows(peopleData.map((_, i) => i));
+      setSelectedRows(people.map((_, i) => i));
     }
   };
+
   const handleRowSelect = (e, index) => {
     e.stopPropagation();
     setSelectedRows((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index],
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
     );
   };
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [searchQuery, setSearchQuery] = useState("");
-  const filteredPeople = peopleData.filter((person) =>
-    person.name.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
 
-  const visiblePeople = filteredPeople.slice(0, rowsPerPage);
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -131,7 +119,10 @@ export default function PeopleDatabase({ onRowClick }) {
               placeholder="Search Din/Pan E.g. Din no, Pan number"
               className={styles.searchInput}
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1); // reset to first page on search
+              }}
             />
           </div>
         </div>
@@ -150,12 +141,10 @@ export default function PeopleDatabase({ onRowClick }) {
                           checked={allChecked}
                           onChange={handleSelectAll}
                         />
-
                         <span className={styles.customCheckbox}></span>
                       </label>
                     </div>
                   </th>
-
                   <th>Name</th>
                   <th>Location</th>
                   <th>Current Companies</th>
@@ -172,7 +161,7 @@ export default function PeopleDatabase({ onRowClick }) {
                       </td>
                       <td className={styles.nameCell}>
                         <div className={`${styles.skeleton} ${styles.skeletonAvatar}`}></div>
-                        <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: '120px' }}></div>
+                        <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: "120px" }}></div>
                       </td>
                       <td><div className={`${styles.skeleton} ${styles.skeletonText}`}></div></td>
                       <td><div className={`${styles.skeleton} ${styles.skeletonText}`}></div></td>
@@ -180,8 +169,20 @@ export default function PeopleDatabase({ onRowClick }) {
                       <td><div className={`${styles.skeleton} ${styles.skeletonText}`}></div></td>
                     </tr>
                   ))
+                ) : error ? (
+                  <tr>
+                    <td colSpan="6" className={styles.errorCell}>
+                      {error}
+                    </td>
+                  </tr>
+                ) : people.length === 0 ? (
+                  <tr>
+                    <td colSpan="6" className={styles.noDataCell}>
+                      No people found.
+                    </td>
+                  </tr>
                 ) : (
-                  visiblePeople.map((person, index) => (
+                  people.map((person, index) => (
                     <tr
                       key={index}
                       onClick={() => onRowClick && onRowClick(person)}
@@ -195,15 +196,17 @@ export default function PeopleDatabase({ onRowClick }) {
                               checked={selectedRows.includes(index)}
                               onChange={(e) => handleRowSelect(e, index)}
                             />
-
                             <span className={styles.customCheckbox}></span>
                           </label>
                         </div>
                       </td>
-
                       <td className={styles.nameCell}>
                         <img
-                          src="/images/owner.svg"
+                          src={
+                            person.profile_image && person.profile_image !== "-"
+                              ? person.profile_image
+                              : "/icons/profile-icon.svg"
+                          }
                           alt=""
                           className={styles.avatar}
                         />
@@ -226,36 +229,58 @@ export default function PeopleDatabase({ onRowClick }) {
             <span className={styles.mutedText}>
               Loaded:{" "}
               <span className={styles.boldText}>
-                {visiblePeople.length} People
+                {people.length} People
               </span>
             </span>
             <span className={styles.separator}>|</span>
             <span className={styles.mutedText}>
-              Found: <span className={styles.boldText}>3524709 People</span>
+              Found: <span className={styles.boldText}>{totalPeople} People</span>
             </span>
           </div>
           <div className={styles.footerRight}>
             <div className={styles.paginationControls}>
               <div className={styles.rowsPerPage}>
-                <div className={styles.rowsPerPage}>
-                  <span className={styles.rowsPerPageText}>Rows per page</span>
-                  <RowsPerPage value={rowsPerPage} onChange={setRowsPerPage} />
-                </div>
+                <span className={styles.rowsPerPageText}>Rows per page</span>
+                <RowsPerPage
+                  value={rowsPerPage}
+                  onChange={(val) => {
+                    setRowsPerPage(val);
+                    setCurrentPage(1);
+                  }}
+                />
               </div>
 
-              <span className={styles.pageLabel}>Page 1 of 10</span>
+              <span className={styles.pageLabel}>
+                Page {currentPage} of {totalPages || 1}
+              </span>
 
               <div className={styles.navButtons}>
-                <button className={styles.navBtnDisabled} disabled>
+                <button
+                  className={currentPage === 1 ? styles.navBtnDisabled : styles.navBtn}
+                  disabled={currentPage === 1}
+                  onClick={() => handlePageChange(1)}
+                >
                   <img src="/icons/chevrons-left.svg" alt="First page" />
                 </button>
-                <button className={styles.navBtnDisabled} disabled>
+                <button
+                  className={currentPage === 1 ? styles.navBtnDisabled : styles.navBtn}
+                  disabled={currentPage === 1}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                >
                   <img src="/icons/chevron-left.svg" alt="Prev page" />
                 </button>
-                <button className={styles.navBtn}>
+                <button
+                  className={currentPage === totalPages || totalPages === 0 ? styles.navBtnDisabled : styles.navBtn}
+                  disabled={currentPage === totalPages || totalPages === 0}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                >
                   <img src="/icons/chevron-right-black.svg" alt="Next page" />
                 </button>
-                <button className={styles.navBtn}>
+                <button
+                  className={currentPage === totalPages || totalPages === 0 ? styles.navBtnDisabled : styles.navBtn}
+                  disabled={currentPage === totalPages || totalPages === 0}
+                  onClick={() => handlePageChange(totalPages)}
+                >
                   <img src="/icons/chevrons-right.svg" alt="Last page" />
                 </button>
               </div>

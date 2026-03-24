@@ -44,7 +44,8 @@ const CompanyDetails = ({ companyData, loading, error }) => {
     { label: 'Listing Status', value: info.listing_status ?? '-' },
     { label: 'Stock Symbol', value: info.stock_symbol ?? '-' },
     { label: 'Industry', value: info.industry ?? '-' },
-    { label: 'Segment', value: info.segment ?? '-', fullWidth: true },
+    { label: 'Segment', value: info.segment ?? '-'},
+    { label: 'Market Cap.', value: info.market_cap ?? '-'},
   ];
 
   return (

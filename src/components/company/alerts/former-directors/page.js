@@ -37,7 +37,7 @@ export default function FormerDirectorsPage() {
                 <td className={styles.directorCell}>
                   <div className={styles.directorWrapper}>
                     <img
-                      src="/images/owner.svg"
+                      src="/images/"
                       alt={row.name}
                       width="40"
                       height="40"

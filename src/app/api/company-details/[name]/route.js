@@ -45,7 +45,7 @@ export async function GET(request, { params }) {
     });
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to fetch company details.", details: String(error) },
+      { error: "Company details not available", details: String(error) },
       { status: 500 }
     );
   }

@@ -71,7 +71,7 @@ const DirectorsSection = ({ directorsData, directorsLoading, directorsError }) =
   ];
 
   // const directors = [
-  //   { name: 'Amit Burman', role: 'Owner', image: '/images/owner.svg' },
+  //   { name: 'Amit Burman', role: 'Owner', image: '/icons/profile-icon.svg' },
   //   { name: 'Pradip Burman', role: 'Chairman', image: '/images/chairman.svg' },
   //   { name: 'Mohit Malhotra', role: 'CEO', image: '/images/ceo.svg' },
   //   { name: 'Kapil Ohri', role: 'Head of Digital Marketing', image: '/images/head.svg' },

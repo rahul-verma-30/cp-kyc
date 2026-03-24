@@ -29,9 +29,9 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
 
   // Filter directors based on tab (current/past) and search
   const filteredDirectors = directors.filter((director) => {
-    // Based on your API data, all directors have "Inactive" status
-    // So we'll show all directors in both tabs for now
-    const matchesTab = true; // Show all directors regardless of tab
+    // Current directors have director_type === true
+    // Past directors have director_type === false
+    const matchesTab = directorTab === "current" ? director.director_type === true : director.director_type === false;
 
     const matchesSearch = searchTerm === "" ||
       director.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -48,13 +48,37 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
     name: director.name,
     role: director.designation,
     din: director.din_pan,
-    image: director.details.profile_image,
+    image: director.details?.profile_image,
     status: director.status,
     category: director.category,
     appointment_date: director.appointment_date,
     cessation_date: director.cessation_date,
     is_kmp: director.is_kmp,
-    details: director.details
+    linkedin_url: director.linkedin_url,
+    director_type: director.director_type,
+    details: {
+      ...director.details,
+      qualifications: (director.qualifications || director.details?.qualifications || []).map(q => ({
+        icon: q.icon || "/images/placeholder.svg",
+        title: q.certificate_in || q.title || "-",
+        inst: q.institute_name || q.inst || "-",
+        spec: q.specialization_in || q.spec || "-",
+        yearfrom: q.year_from || q.yearfrom || "-",
+        yearto: q.year_to || q.yearto || "-"
+      })),
+      shareholding: (director.shareholding || director.details?.shareholding || []).map(s => ({
+        company_name: s.company_name || "-",
+        share_percentage: s.shareholding_percentage || s.share_percentage || "-",
+        nature_of_holding: s.nature || s.nature_of_holding || "-",
+        company_log: s.company_log
+      })),
+      career_timeline: director.career_timeline || director.details?.career_timeline || [],
+      negative_media: director.negative_media || director.details?.negative_media || [],
+      banking_default: director.banking_default_declarations || director.details?.banking_default || [],
+      regulatory_history: director.regulatory_compliance_history || director.details?.regulatory_history || [],
+      pep_sanctions: director.pep_sanctions_checks || director.details?.pep_sanctions || [],
+      risk_edd: director.risk_edd || director.details?.risk_edd || {}
+    }
   }));
 
   // Get current selected director
@@ -99,56 +123,43 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
       tableKey: "negativeMedia",
       title: "Negative / Adverse Media",
       headers: ["Source", "Description", "Severity", "Date"],
-      rows: [
-        // {
-        //   source: "Economic Times",
-        //   desc: "Named in regulatory inquiry regarding related party transactions",
-        //   sev: "High",
-        //   date: "15 Mar 2024",
-        // },
-      ],
+      rows: (selectedDirector.details?.negative_media || []).map(item => ({
+        source: item.source || "-",
+        desc: item.description || "-",
+        sev: item.severity || "-",
+        date: item.date || "-"
+      })),
     },
     {
       tableKey: "bankingDefault",
       title: "Banking / Default Declaration",
       headers: ["Default Type", "Declaration Status", "Remarks"],
-      rows: [
-        // {
-        //   type: "Wilful Defaulter",
-        //   status: "Not a Wilful Defaulter",
-        //   remarks: "15 Mar 2024",
-        // },
-      ],
+      rows: (selectedDirector.details?.banking_default || []).map(item => ({
+        type: item.default_type || "-",
+        status: item.declaration_status || "-",
+        remarks: item.remarks || "-"
+      })),
     },
     {
       tableKey: "regulatoryHistory",
       title: "Regulatory / Compliance History",
       headers: ["Regulator", "Nature of Action", "Period", "Status"],
-      rows: [
-        // {
-        //   reg: "SEBI",
-        //   nature: "Show-cause notice",
-        //   period: "Q2 2023",
-        //   status: "Resolved",
-        // },
-      ],
+      rows: (selectedDirector.details?.regulatory_history || []).map(item => ({
+        reg: item.regulator || "-",
+        nature: item.nature_of_action || "-",
+        period: item.period || "-",
+        status: item.status || "-"
+      })),
     },
     {
       tableKey: "pepSanctions",
       title: "PEP & Sanctions Check",
       headers: ["Check Type", "Status", "Remarks"],
-      rows: [
-        // {
-        //   type: "PEP Check",
-        //   status: "Not a PEP",
-        //   remarks: "Verified against government databases",
-        // },
-        // {
-        //   type: "Sanctions Check",
-        //   status: "Clear",
-        //   remarks: "No matches in OFAC, UN, EU sanctions lists",
-        // },
-      ],
+      rows: (selectedDirector.details?.pep_sanctions || []).map(item => ({
+        type: item.check_type || "-",
+        status: item.status || "-",
+        remarks: item.remarks || "-"
+      })),
     },
     {
       tableKey: "riskEDD",
@@ -159,14 +170,12 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
         "Key Risk Drivers",
         "Last Reviewed",
       ],
-      rows: [
-        // {
-        //   cat: "Low",
-        //   edd: "No",
-        //   drivers: "Clean regulatory record, no adverse findings",
-        //   date: "05 Jan 2026",
-        // },
-      ],
+      rows: selectedDirector.details?.risk_edd ? [{
+        cat: selectedDirector.details.risk_edd.risk_category || "-",
+        edd: selectedDirector.details.risk_edd.edd_required || "-",
+        drivers: selectedDirector.details.risk_edd.key_risk_drivers || "-",
+        date: selectedDirector.details.risk_edd.last_reviewed || "-",
+      }] : [],
     },
   ];
 
@@ -478,6 +487,24 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
                       <th>Nature</th>
                     </tr>
                   </thead>
+                  <tbody>
+                    {selectedDirector.details?.shareholding?.map((item, idx) => (
+                      <AssociationRow
+                        key={idx}
+                        image={item.company_log}
+                        name={item.company_name || "-"}
+                        role={item.share_percentage || "-"}
+                        date={item?.nature_of_holding||"-"}
+                      />
+                    ))}
+                    {(!selectedDirector.details?.shareholding || selectedDirector.details.shareholding.length === 0) && (
+                      <tr>
+                        <td colSpan="3" style={{ textAlign: 'center', padding: '20px' }}>
+                          No shareholding found
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
                   {/* <tbody>
                     <tr>
                       <td>
@@ -618,40 +645,23 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
           <section className={styles.section}>
             <h2 className={styles.sectionHeading}>Qualifications</h2>
             <div className={styles.qualList}>
-              {/* <QualificationItem
-                icon="/images/placeholder.svg"
-                title="Chartered Financial Analyst (CFA)"
-                inst="CFA Institute, USA"
-                year="1995"
-              />
-              <QualificationItem
-                icon="/images/placeholder.svg"
-                title="Master of Business Administration (MBA)"
-                inst="Indian Institute of Management, Ahmedabad"
-                spec="Finance"
-                year="1990 - 1992"
-              />
-              <QualificationItem
-                icon="/images/placeholder.svg"
-                title="Bachelor of Commerce (B.Com)"
-                inst="Shri Ram College of Commerce, Delhi University"
-                spec="Commerce & Accountancy"
-                year="1987 - 1990"
-              />
-              <QualificationItem
-                icon="/images/placeholder.svg"
-                title="Higher Secondary Certificate (Class XII)"
-                inst="Delhi Public School, R.K. Puram, New Delhi"
-                spec="Science Stream (PCM)"
-                year="1985"
-              />
-              <QualificationItem
-                icon="/images/placeholder.svg"
-                title="Secondary School Certificate (Class X)"
-                inst="Delhi Public School, R.K. Puram, New Delhi"
-                spec="CBSE Board"
-                year="1983"
-              /> */}
+              {selectedDirector.details?.qualifications?.length > 0 ? (
+                selectedDirector.details.qualifications.map((item, idx) => (
+                  <QualificationItem
+                    key={idx}
+                    icon={item.icon || "/images/placeholder.svg"}
+                    title={item.title || "-"}
+                    inst={item.inst || "-"}
+                    spec={item.spec || "-"}
+                    year={`${item.yearfrom || "-"} - ${item.yearto || "-"}`}
+                  />
+                ))
+              ) : (
+                <p style={{ textAlign: "center", width: "100%", padding: "20px", color: "#666" }}>
+                  No qualifications found
+                </p>
+              )}
+              
             </div>
           </section>
         </main>

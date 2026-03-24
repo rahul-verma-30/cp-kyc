@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import styles from "./EmployeeDetails.module.css";
 import Link from "next/link";
+import Image from "next/image";
 
 const EmployeeDetails = () => {
   const [expandedId, setExpandedId] = useState("saket-current");
@@ -18,7 +19,7 @@ const EmployeeDetails = () => {
       gender: "Male",
       address:
         "Villa K27 Frond K Palm JumeirahDubai Post Box117153 Dubai 117153 Ae",
-      image: "/images/owner.svg",
+      image: "/icons/profile-icon.svg",
       appointments: [
         {
           company: "Chowdry Associates",
@@ -96,19 +97,19 @@ const EmployeeDetails = () => {
       id: "mukesh-current",
       name: "Mukesh Hari Butani",
       din: "01452839",
-      image: "/images/owner.svg",
+      image: "/icons/profile-icon.svg",
     },
     {
       id: "amit-current-1",
       name: "Amit Burman",
       din: "05208674",
-      image: "/images/owner.svg",
+      image: "/icons/profile-icon.svg",
     },
     {
       id: "amit-current-2",
       name: "Amit Burman",
       din: "05208674",
-      image: "/images/owner.svg",
+      image: "/icons/profile-icon.svg",
     },
   ];
 
@@ -117,25 +118,25 @@ const EmployeeDetails = () => {
       id: "sunil-former",
       name: "Sunil Duggal",
       din: "00041825",
-      image: "/images/owner.svg",
+      image: "/icons/profile-icon.svg",
     },
     {
       id: "saket-former",
       name: "Saket Burman",
       din: "05208674",
-      image: "/images/owner.svg",
+      image: "/icons/profile-icon.svg",
     },
     {
       id: "ravindra-former",
       name: "Ravindra Chandra Bhargava",
       din: "00007620",
-      image: "/images/owner.svg",
+      image: "/icons/profile-icon.svg",
     },
     {
       id: "mukesh-former",
       name: "Mukesh Hari Butani",
       din: "01452839",
-      image: "/images/owner.svg",
+      image: "/icons/profile-icon.svg",
     },
   ];
 

@@ -3,60 +3,23 @@
 import React from "react";
 import styles from "./ShareHoldingsTables.module.css";
 
-const ShareHoldingsTables = () => {
-  // ---------------- FIRST TABLE DATA (UNCHANGED) ----------------
-  const data = [
-    // { category: "Vishal Chemical (India) Limited", isSectionHeader: true },
-    // { category: "(i) Indian", equityShares: "1366995.00", equityPercent: "0.08%", preferenceShares: "0.00", preferencePercent: "0.00%" },
-    // { category: "(ii) Non-Resident Indian (NRI)", equityShares: "1155000.00", equityPercent: "0.07%", preferenceShares: "0.00", preferencePercent: "0.00%" },
-    // { category: "(iii) Foreign national (other than NRI)", equityShares: "0.00", equityPercent: "0.00%", preferenceShares: "-", preferencePercent: "0.00%" },
-    // { category: "Government", isSectionHeader: true },
-    // { category: "(i) Central Government", equityShares: "0.00", equityPercent: "0.00%", preferenceShares: "-", preferencePercent: "0.00%" },
-    // { category: "(ii) State Government", equityShares: "0.00", equityPercent: "0.00%", preferenceShares: "-", preferencePercent: "0.00%" },
-    // { category: "(iii) Government Companies", equityShares: "0.00", equityPercent: "0.00%", preferenceShares: "0.00%", preferencePercent: "0.00%" },
-    // { category: "Insurance Companies", isSectionHeader: true, equityShares: "0.00", equityPercent: "0.00%", preferenceShares: "-", preferencePercent: "0.00%" },
-    // { category: "Banks", isSectionHeader: true, equityShares: "0.00", equityPercent: "0.00%", preferenceShares: "-", preferencePercent: "0.00%" },
-    // { category: "Financial Institutions", isSectionHeader: true, equityShares: "0.00", equityPercent: "0.00%", preferenceShares: "-", preferencePercent: "0.00%" },
-    // { category: "Foreign Institutional Investor", isSectionHeader: true, equityShares: "0.00", equityPercent: "0.00%", preferenceShares: "-", preferencePercent: "0.00%" },
-    // { category: "Mutual Fund", isSectionHeader: true, equityShares: "0.00", equityPercent: "0.00%", preferenceShares: "0.00%", preferencePercent: "0.00%" },
-    // { category: "Venture Capital", isSectionHeader: true, equityShares: "0.00", equityPercent: "0.00%", preferenceShares: "-", preferencePercent: "0.00%" },
-    // { category: "Body Corporate", isSectionHeader: true, equityShares: "1171478360.00", equityPercent: "66.11%", preferenceShares: "0.00", preferencePercent: "0.00%" },
-    // { category: "Others", isSectionHeader: true, equityShares: "0.00", equityPercent: "0.00%", preferenceShares: "0.00%", preferencePercent: "0.00%" },
-  ];
-
-  // ---------------- SECOND TABLE DATA (NEW) ----------------
-  const publicData = [
-    // { category: "Vishal Chemical (India) Limited", isSectionHeader: true },
-    // { category: "(i) Indian", equityShares: "80541903.00", equityPercent: "4.55%", preferenceShares: "0.00", preferencePercent: "0.00%" },
-    // { category: "(ii) Non-Resident Indian (NRI)", equityShares: "5018803.00", equityPercent: "0.28%", preferenceShares: "0.00", preferencePercent: "0.00%" },
-    // { category: "(iii) Foreign national (other than NRI)", equityShares: "1919.00", equityPercent: "0.00%", preferenceShares: "0.00", preferencePercent: "0.00%" },
-    // { category: "Government", isSectionHeader: true },
-    // { category: "(i) Central Government", equityShares: "0.00", equityPercent: "0.00%", preferenceShares: "-", preferencePercent: "0.00%" },
-    // { category: "(ii) State Government", equityShares: "0.00", equityPercent: "0.00%", preferenceShares: "-", preferencePercent: "0.00%" },
-    // { category: "(iii) Government Companies", equityShares: "1632.00", equityPercent: "0.00%", preferenceShares: "0.00%", preferencePercent: "0.00%" },
-    // { category: "Insurance Companies", isSectionHeader: true, equityShares: "88770641.00", equityPercent: "5.01%", preferenceShares: "0.00", preferencePercent: "0.00%" },
-    // { category: "Banks", isSectionHeader: true, equityShares: "1891383.00", equityPercent: "0.11%", preferenceShares: "0.00", preferencePercent: "0.00%" },
-    // { category: "Financial Institutions", isSectionHeader: true, equityShares: "0.00", equityPercent: "0.00%", preferenceShares: "0.00", preferencePercent: "0.00%" },
-    // { category: "Foreign Institutional Investor", isSectionHeader: true, equityShares: "280438366.00", equityPercent: "15.83%", preferenceShares: "0.00", preferencePercent: "0.00%" },
-    // { category: "Mutual Fund", isSectionHeader: true, equityShares: "105889338.00", equityPercent: "5.98%", preferenceShares: "0.00", preferencePercent: "0.00%" },
-    // { category: "Venture Capital", isSectionHeader: true, equityShares: "0.00", equityPercent: "0.00%", preferenceShares: "0.00", preferencePercent: "0.00%" },
-    // { category: "Body Corporate", isSectionHeader: true, equityShares: "5232010.00", equityPercent: "0.30%", preferenceShares: "0.00", preferencePercent: "0.00%" },
-    // { category: "Others", isSectionHeader: true, equityShares: "30252812.00", equityPercent: "1.71%", preferenceShares: "0.00", preferencePercent: "0.00%" },
-  ];
+const ShareHoldingsTables = ({ shareholdingData, promoters_table_totals = {}, public_table_totals = {} }) => {
+  const promotersData = Array.isArray(shareholdingData?.promoters_table) ? shareholdingData.promoters_table : [];
+  const publicData = Array.isArray(shareholdingData?.public_other_than_promoters_table) ? shareholdingData.public_other_than_promoters_table : [];
 
   const [isPromotersOpen, setIsPromotersOpen] = React.useState(true);
   const [isPublicOpen, setIsPublicOpen] = React.useState(true);
 
   return (
     <div className={styles.container}>
-      {/* ---------------- FIRST TABLE (UNCHANGED) ---------------- */}
+      {/* ---------------- PROMOTERS TABLE ---------------- */}
       <div 
         className={styles.headerRow} 
         onClick={() => setIsPromotersOpen(!isPromotersOpen)}
       >
         <div className={styles.headerContent}>
           <span className={styles.title}>Promoters</span>
-          <span className={styles.date}>31 Mar 2024</span>
+          <span className={styles.date}>{shareholdingData?.last_updated || "-"}</span>
         </div>
         <div className={styles.headerActions}>
            <img 
@@ -85,40 +48,36 @@ const ShareHoldingsTables = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((row, index) => {
-                const hasValues = row.equityShares !== undefined;
-                if (row.isSectionHeader && !hasValues) {
-                  return (
-                    <tr key={index} className={styles.sectionHeaderRow}>
-                      <td colSpan="5" className={styles.sectionTitle}>{row.category}</td>
-                    </tr>
-                  );
-                }
-                return (
-                  <tr key={index} className={row.isSectionHeader ? styles.sectionHeaderRow : ""}>
+              {promotersData.length > 0 ? (
+                promotersData.map((row, index) => (
+                  <tr key={index}>
                     <td className={styles.categoryName}>{row.category}</td>
-                    <td className={styles.valueCell}>{row.equityShares || "0.00"}</td>
-                    <td className={styles.valueCell}>{row.equityPercent || "0.00%"}</td>
-                    <td className={styles.valueCell}>{row.preferenceShares || "0.00"}</td>
-                    <td className={styles.valueCell}>{row.preferencePercent || "0.00%"}</td>
+                    <td className={styles.valueCell}>{row.equity_number_of_shares || "-"}</td>
+                    <td className={styles.valueCell}>{row.equity_percentage && row.equity_percentage !== "-" ? `${row.equity_percentage}%` : "-"}</td>
+                    <td className={styles.valueCell}>{row.preference_number_of_shares || "-"}</td>
+                    <td className={styles.valueCell}>{row.preference_percentage && row.preference_percentage !== "-" ? `${row.preference_percentage}%` : "-"}</td>
                   </tr>
-                );
-              })}
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className={styles.valueCell} style={{ textAlign: "center", padding: "20px" }}>No data available</td>
+                </tr>
+              )}
             </tbody>
             <tfoot>
               <tr className={styles.footerRow}>
                 <td className={styles.categoryName}>Total</td>
-                <td className={styles.valueCell}>-</td>
-                <td className={styles.valueCell}>-%</td>
-                <td className={styles.valueCell}>-%</td>
-                <td className={styles.valueCell}>-%</td>
+                <td className={styles.valueCell}>{promoters_table_totals.equity_number_of_shares || "-"}</td>
+                <td className={styles.valueCell}>{promoters_table_totals.equity_percentage && promoters_table_totals.equity_percentage !== "-" ? `${promoters_table_totals.equity_percentage}%` : "-"}</td>
+                <td className={styles.valueCell}>{promoters_table_totals.preference_number_of_shares || "-"}</td>
+                <td className={styles.valueCell}>{promoters_table_totals.preference_percentage && promoters_table_totals.preference_percentage !== "-" ? `${promoters_table_totals.preference_percentage}%` : "-"}</td>
               </tr>
             </tfoot>
           </table>
         </div>
       )}
 
-      {/* ---------------- SECOND TABLE ---------------- */}
+      {/* ---------------- PUBLIC / OTHER THAN PROMOTERS TABLE ---------------- */}
       <div style={{ margin: "32px 0" }} />
 
       <div 
@@ -127,7 +86,7 @@ const ShareHoldingsTables = () => {
       >
         <div className={styles.headerContent}>
           <span className={styles.title}>Public / Other Than Promoters</span>
-          <span className={styles.date}>-</span>
+          <span className={styles.date}>{shareholdingData?.last_updated || ""}</span>
         </div>
         <div className={styles.headerActions}>
            <img 
@@ -155,33 +114,29 @@ const ShareHoldingsTables = () => {
               </tr>
             </thead>
             <tbody>
-              {publicData.map((row, index) => {
-                const hasValues = row.equityShares !== undefined;
-                if (row.isSectionHeader && !hasValues) {
-                  return (
-                    <tr key={`pub-${index}`} className={styles.sectionHeaderRow}>
-                      <td colSpan="5" className={styles.sectionTitle}>{row.category}</td>
-                    </tr>
-                  );
-                }
-                return (
-                  <tr key={`pub-${index}`} className={row.isSectionHeader ? styles.sectionHeaderRow : ""}>
+              {publicData.length > 0 ? (
+                publicData.map((row, index) => (
+                  <tr key={`pub-${index}`}>
                     <td className={styles.categoryName}>{row.category}</td>
-                    <td className={styles.valueCell}>{row.equityShares || "-"}</td>
-                    <td className={styles.valueCell}>{row.equityPercent || "-%"}</td>
-                    <td className={styles.valueCell}>{row.preferenceShares || "-"}</td>
-                    <td className={styles.valueCell}>{row.preferencePercent || "-%"}</td>
+                    <td className={styles.valueCell}>{row.equity_number_of_shares || "-"}</td>
+                    <td className={styles.valueCell}>{row.equity_percentage && row.equity_percentage !== "-" ? `${row.equity_percentage}%` : "-"}</td>
+                    <td className={styles.valueCell}>{row.preference_number_of_shares || "-"}</td>
+                    <td className={styles.valueCell}>{row.preference_percentage && row.preference_percentage !== "-" ? `${row.preference_percentage}%` : "-"}</td>
                   </tr>
-                );
-              })}
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className={styles.valueCell} style={{ textAlign: "center", padding: "20px" }}>No data available</td>
+                </tr>
+              )}
             </tbody>
             <tfoot>
               <tr className={styles.footerRow}>
                 <td className={styles.categoryName}>Total</td>
-                <td className={styles.valueCell}>-</td>
-                <td className={styles.valueCell}>-%</td>
-                <td className={styles.valueCell}>-</td>
-                <td className={styles.valueCell}>-%</td>
+                <td className={styles.valueCell}>{public_table_totals.equity_number_of_shares || "-"}</td>
+                <td className={styles.valueCell}>{public_table_totals.equity_percentage && public_table_totals.equity_percentage !== "-" ? `${public_table_totals.equity_percentage}%` : "-"}</td>
+                <td className={styles.valueCell}>{public_table_totals.preference_number_of_shares || "-"}</td>
+                <td className={styles.valueCell}>{public_table_totals.preference_percentage && public_table_totals.preference_percentage !== "-" ? `${public_table_totals.preference_percentage}%` : "-"}</td>
               </tr>
             </tfoot>
           </table>

@@ -40,7 +40,12 @@ const FinancialHighlightsDetails = ({
   cashFlowLoading,
   cashFlowError,
   cfType,
-  setCfType
+  setCfType,
+  ratiosData,
+  ratiosLoading,
+  ratiosError,
+  ratiosType,
+  setRatiosType
 }) => {
 
   if (financialLoading || revenueLoading) {
@@ -189,10 +194,15 @@ const FinancialHighlightsDetails = ({
     .filter((item) => item.year !== "TTM" && item.year !== "isExpandable")
     .map((item) => ({
       year: item.year,
-      revenue: item.revenue_cr,
-      profit: item.profit_cr,
+      revenue: item.revenue_cr ?? item.Revenue ?? item.revenue ?? 0,
+      profit: item.profit_cr ?? item.Profit ?? item.profit ?? 0,
     }))
     .reverse();
+
+  const maxVal = Math.max(...chartData.map(d => Math.max(d.revenue || 0, d.profit || 0)), 0);
+  const domainMax = Math.ceil((maxVal * 1.1) / 100) * 100 || 5000;
+  const step = Math.ceil(domainMax / 5 / 10) * 10 || 1000; 
+  const dynamicTicks = Array.from({ length: 6 }, (_, i) => i * step);
 
   const { setActiveSection } = useCompanySection();
 
@@ -279,62 +289,66 @@ const FinancialHighlightsDetails = ({
             </div>
           </div>
           <div className={styles.chartContainer}>
-            <div className={styles.chartWrapper}>
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={chartData}
-                  margin={{ top: 20, right: 10, left: 0, bottom: 0 }}
-                >
-                  {/* Added strokeDasharray="5 5" for the dotted horizontal lines shown in design */}
-                  <CartesianGrid
-                    strokeDasharray="5 5"
-                    vertical={false}
-                    stroke="#E5E7EB"
-                  />
-                  <XAxis
-                    dataKey="year"
-                    axisLine={{ stroke: "rgba(229, 231, 235, 1)" }}
-                    tickLine={false}
-                    tick={{
-                      fill: "rgba(113, 113, 122, 1)",
-                      fontSize: 14,
-                      fontWeight: 500,
-                    }}
-                    dy={6}
-                  />
-                  <YAxis
-                    width={70}
-                    axisLine={{ stroke: "rgba(229, 231, 235, 1)" }}
-                    tickLine={false}
-                    tick={{
-                      fill: "rgba(55, 65, 81, 1)",
-                      fontSize: 14,
-                      fontWeight: 500,
-                    }}
-                    tickFormatter={(value) => `${value} cr`}
-                    domain={[0, 10000]}
-                    ticks={[
-                      0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000,
-                      10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000
-                    ]}
-                  />
-                  <Tooltip cursor={{ fill: "transparent" }} />
-                  {/* radius={[20, 20, 20, 20]} creates the pill shape seen in the image */}
-                  <Bar
-                    dataKey="revenue"
-                    fill="rgba(59, 130, 246, 1)"
-                    radius={[20, 20, 0, 0]}
-                    barSize={32.73}
-                  />
-                  <Bar
-                    dataKey="profit"
-                    fill="rgba(34, 197, 94, 1)"
-                    radius={[20, 20, 0, 0]}
-                    barSize={32.73}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+            {chartData.length > 0 ? (
+              <div className={styles.chartWrapper}>
+                <div className={styles.scrollX}>
+                  <div style={{ minWidth: `${Math.max(chartData.length * 80, 500)}px`, height: "100%" }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart
+                        data={chartData}
+                        margin={{ top: 20, right: 10, left:2, bottom: 0 }}
+                      >
+                        {/* Added strokeDasharray="5 5" for the dotted horizontal lines shown in design */}
+                        <CartesianGrid
+                          strokeDasharray="5 5"
+                          vertical={false}
+                          stroke="#E5E7EB"
+                        />
+                        <XAxis
+                          dataKey="year"
+                          axisLine={{ stroke: "rgba(229, 231, 235, 1)" }}
+                          tickLine={false}
+                          tick={{
+                            fill: "rgba(113, 113, 122, 1)",
+                            fontSize: 14,
+                            fontWeight: 500,
+                          }}
+                          dy={6}
+                        />
+                        <YAxis
+                          width={90}
+                          axisLine={{ stroke: "rgba(229, 231, 235, 1)" }}
+                          tickLine={false}
+                          tick={{
+                            fill: "rgba(55, 65, 81, 1)",
+                            fontSize: 14,
+                            fontWeight: 500,
+                          }}
+                          tickFormatter={(value) => `${value} cr`}
+                          domain={[0, domainMax]}
+                          ticks={dynamicTicks}
+                        />
+                        <Tooltip cursor={{ fill: "transparent" }} />
+                        <Bar
+                          dataKey="revenue"
+                          fill="rgba(59, 130, 246, 1)"
+                          radius={[20, 20, 0, 0]}
+                          barSize={32.73}
+                        />
+                        <Bar
+                          dataKey="profit"
+                          fill="rgba(34, 197, 94, 1)"
+                          radius={[20, 20, 0, 0]}
+                          barSize={32.73}
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className={styles.noDataMessage}>No revenue and profit trend available</div>
+            )}
           </div>
         </div>
       </div>

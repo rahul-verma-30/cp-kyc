@@ -16,8 +16,12 @@ const subsidiaries = [
   // { id: 10, name: "Dabur Lanka Pvt Ltd", location: "Sri Lanka", ownership: "100%" }
 ];
 
-export default function SubsidiaryAccordion() {
+export default function SubsidiaryAccordion({ groupStructureData }) {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const parent = groupStructureData?.parent_company;
+  const rawEntities = groupStructureData?.group_entities;
+  const entities = Array.isArray(rawEntities) ? rawEntities : [];
 
   const toggleAccordion = () => {
     setIsExpanded(!isExpanded);
@@ -31,18 +35,20 @@ export default function SubsidiaryAccordion() {
           <div className={styles.parentInfo}>
             <div className={styles.parentLogo}>
               <img
-                src="/icons/image.svg"
+                src="/icons/Image.svg"
                 alt="logo"
                 className={styles.parentLogoImg}
               />
             </div>
             <div className={styles.parentText}>
-              <h2 className={styles.parentTitle}>-</h2>
-              <span className={styles.parentSubtitle}>Parent Company</span>
+              <h2 className={styles.parentTitle}>{parent?.company_name || "-"}</h2>
+              <span className={styles.parentSubtitle}>{parent?.company_role || "Parent Company"}</span>
             </div>
           </div>
           <div className={styles.parentControls}>
-            <span className={styles.subsidiaryCount}>- Subsidiaries</span>
+            <span className={styles.subsidiaryCount}>
+              {parent?.total_subsidiaries || entities.length} Subsidiaries
+            </span>
             <img
               src="/icons/chevron-down-dark.svg"
               alt="Toggle"
@@ -54,26 +60,31 @@ export default function SubsidiaryAccordion() {
         {/* Expandable Content */}
         <div className={`${styles.contentWrapper} ${isExpanded ? styles.contentWrapperExpanded : ''}`}>
           <div className={styles.subsidiaryList}>
-            {subsidiaries.map((item) => (
-              <div key={item.id} className={styles.subsidiaryItem}>
+            {entities.map((item, index) => (
+              <div key={index} className={styles.subsidiaryItem}>
                 <div className={styles.itemLeft}>
                   <div className={styles.itemIcon}>
                     <img src="/icons/building-icon.svg" alt="Building" className={styles.iconImg} />
                   </div>
                   <div className={styles.itemDetails}>
-                    <p className={styles.itemName}>{item.name}</p>
-                    <p className={styles.itemLocation}>{item.location}</p>
+                    <p className={styles.itemName}>{item.subsidiary_name || "-"}</p>
+                    <p className={styles.itemLocation}>{item.country || "-"}</p>
                   </div>
                 </div>
                 <div className={styles.itemRight}>
                   <div className={styles.ownershipInfo}>
-                    <span className={styles.ownershipValue}>{item.ownership}</span>
-                    <span className={styles.ownershipLabel}>Ownership</span>
+                    <span className={styles.ownershipValue}>
+                      {item.ownership_percentage && item.ownership_percentage !== "-" ? `${item.ownership_percentage}%` : "-"}
+                    </span>
+                    <span className={styles.ownershipLabel}>{item.ownership_type || "Ownership"}</span>
                   </div>
-                  <div className={styles.statusBadge}>Active</div>
+                  <div className={styles.statusBadge}>{item.status || "Active"}</div>
                 </div>
               </div>
             ))}
+            {entities.length === 0 && (
+              <div className={styles.emptyState}>No group entities found.</div>
+            )}
           </div>
         </div>
       </div>

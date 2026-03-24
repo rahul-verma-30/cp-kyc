@@ -7,7 +7,7 @@ import { CompanySectionProvider } from "@/components/company/context/CompanySect
 import "./globals.css";
 import { Inter } from "next/font/google";
 import Link from "next/link";
-import { Toaster } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -422,6 +422,7 @@ export default function RootLayout({ children }) {
                         onClick={() => handleNav("home", "/")}
                       >
                         <img src="/icons/home-icon.svg" alt="Home" />
+                        <span className={styles.tooltip}>Home</span>
                       </button>
 
                       <button
@@ -431,6 +432,7 @@ export default function RootLayout({ children }) {
                         onClick={() => handleNav("company", "/companies")}
                       >
                         <img src="/icons/company-icon.svg" alt="Companies" />
+                        <span className={styles.tooltip}>Companies Database</span>
                       </button>
 
                       <button
@@ -439,7 +441,8 @@ export default function RootLayout({ children }) {
                           }`}
                         onClick={() => handleNav("profile", "/people")}
                       >
-                        <img src="/icons/profile-icon.svg" alt="Profile" />
+                        <img src="/icons/profile-icon.svg" alt="People" />
+                        <span className={styles.tooltip}>People Database</span>
                       </button>
                     </div>
                   </aside>

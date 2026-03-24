@@ -80,6 +80,17 @@
   border-bottom: none;
 }
 
+.errorCell, .noDataCell {
+  padding: 32px !important;
+  text-align: center;
+  color: rgba(113, 113, 122, 1);
+  font-size: 14px;
+}
+
+.errorCell {
+  color: #ef4444;
+}
+
 
 .table tr.clickableRow {
   cursor: pointer;
