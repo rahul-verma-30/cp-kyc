@@ -316,13 +316,13 @@ export default function RootLayout({ children }) {
   }, []);
 
   return (
-    <Suspense fallback={null}>
-      <CompanySectionProvider>
-        <html lang="en">
-          <body className={`${inter.className} ${inter.variable}`}>
-            <Toaster 
-              position="top-center" 
-              reverseOrder={false} 
+    <html lang="en">
+      <body className={`${inter.className} ${inter.variable}`}>
+        <Suspense fallback={null}>
+          <CompanySectionProvider>
+            <Toaster
+              position="top-center"
+              reverseOrder={false}
               toastOptions={{
                 style: {
                   maxWidth: '400px',
@@ -451,9 +451,9 @@ export default function RootLayout({ children }) {
                 </div>
               )}
             </div>
-          </body>
-        </html>
-      </CompanySectionProvider>
-    </Suspense>
+          </CompanySectionProvider>
+        </Suspense>
+      </body>
+    </html>
   );
 }

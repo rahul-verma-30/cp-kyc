@@ -1,6 +1,7 @@
 import { Check, ChevronRight, FileText, Paperclip } from "lucide-react";
 import styles from "./Documents.module.css";
 import { useState } from "react";
+import { formatDateToIST } from "@/utils/dateFormatter";
 
 const dummyDocs = [
   // {
@@ -201,7 +202,7 @@ const Documents = () => {
             <span className={styles.divider}></span>
             <span className={styles.updatedText}>
               <span> Last Updated:</span>
-              {formatDateToIST(documentsData?.last_updated)|| "-"}
+              {formatDateToIST("-")}
             </span>
           </div>
         </div>

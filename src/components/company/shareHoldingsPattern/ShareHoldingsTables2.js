@@ -217,6 +217,7 @@ const ShareHoldingsTables2 = ({ shareholdingData, securityAllotmentData }) => {
       <div 
         className={styles.headerRow}
         onClick={() => setIsAllotmentOpen(!isAllotmentOpen)}
+        id="securities-allotment-table"
       >
         <h2 className={styles.tableTitle}>
           Securities Allotment

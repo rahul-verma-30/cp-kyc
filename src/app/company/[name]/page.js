@@ -132,6 +132,13 @@ export default function CompanyPage() {
   const [overseasInvestmentLoading, setOverseasInvestmentLoading] = useState(false);
   const [overseasInvestmentError, setOverseasInvestmentError] = useState(null);
 
+  // Peer Comparison
+  const [peerComparisonData, setPeerComparisonData] = useState(null);
+  const [peerComparisonLoading, setPeerComparisonLoading] = useState(false);
+  const [peerComparisonError, setPeerComparisonError] = useState(null);
+  const [peerPage, setPeerPage] = useState(1);
+  const [peerLimit, setPeerLimit] = useState(10);
+
 
   const overviewRef = useRef(null);
   const nameHistoryRef = useRef(null);
@@ -807,6 +814,54 @@ export default function CompanyPage() {
     getAuditorsData();
   }, [companyName, audType]);
 
+  /* ================= PEER COMPARISON ================= */
+  useEffect(() => {
+    if (!companyName) return;
+
+    const fetchPeerComparison = async () => {
+      try {
+        setPeerComparisonLoading(true);
+        setPeerComparisonError(null);
+
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/financials/${encodeURIComponent(
+            companyName
+          )}/peer-comparison?page=${peerPage}&per_page=${peerLimit}`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
+        );
+
+        let data;
+        try {
+          data = await response.json();
+        } catch {
+          throw new Error("Invalid server response");
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            data?.detail ||
+            data?.message ||
+            `Peer Comparison Error ${response.status}: ${response.statusText}`
+          );
+        }
+
+        setPeerComparisonData(data);
+      } catch (err) {
+        console.log("Peer Comparison API Error:", err);
+        setPeerComparisonError(err.message);
+      } finally {
+        setPeerComparisonLoading(false);
+      }
+    };
+
+    fetchPeerComparison();
+  }, [companyName, peerPage, peerLimit]);
+
   /* ================= BALANCE SHEET DETAILS ================= */
   // Used in FinancialHighlightsDetails and FinancialHighlights
   useEffect(() => {
@@ -959,7 +1014,10 @@ export default function CompanyPage() {
             ratiosType={ratiosType}
             setRatiosType={setRatiosType}
           />
-          <CompanyCharts />
+          <CompanyCharts 
+            businessActivity={peerComparisonData?.business_activity}
+            layout="column"
+          />
           <ProductDetails />
         </>
       )}
@@ -1015,8 +1073,11 @@ export default function CompanyPage() {
           shareholdingLoading={shareholdingLoading}
           shareholdingError={shareholdingError}
           securityAllotmentData={securityAllotmentData}
+          securityAllotmentLoading={securityAllotmentLoading}
           groupStructureData={groupStructureData}
+          groupStructureLoading={groupStructureLoading}
           overseasInvestmentData={overseasInvestmentData}
+          overseasInvestmentLoading={overseasInvestmentLoading}
         />
       )}
 
@@ -1034,7 +1095,15 @@ export default function CompanyPage() {
 
       {/* Peer Comparison */}
       {activeSection === "peerComparison" && (
-        <PeerComparison />
+        <PeerComparison 
+          data={peerComparisonData}
+          loading={peerComparisonLoading}
+          error={peerComparisonError}
+          page={peerPage}
+          perPage={peerLimit}
+          setPage={setPeerPage}
+          setPerPage={setPeerLimit}
+        />
       )}
 
       {/* Related Corporates */}

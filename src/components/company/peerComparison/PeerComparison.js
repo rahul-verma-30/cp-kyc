@@ -1,69 +1,76 @@
 import styles from "./PeerComparison.module.css";
 import { formatDateToIST } from "@/utils/dateFormatter";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-} from "recharts";
-
 import CompanyCharts from "../charts/CompanyCharts";
 
-// Custom component to handle the multi-line centered text for the X-Axis
-const CustomXAxisTick = ({ x, y, payload }) => {
-  const words = payload.value.split(" ");
-  return (
-    <g transform={`translate(${x},${y})`}>
-      {words.map((word, index) => (
-        <text
-          key={index}
-          x={0}
-          y={15 + index * 14}
-          textAnchor="middle"
-          fill="#6B7280"
-          fontSize={11}
-        >
-          {word}
-        </text>
-      ))}
-    </g>
-  );
-};
+export default function PeerComparison({ 
+  data, 
+  loading, 
+  error, 
+  page, 
+  perPage, 
+  setPage, 
+  setPerPage 
+}) {
+  if (loading || (!data && !error)) {
+    // ... skeleton rendering stays the same (I'll keep it for now)
+    return (
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h2 className={styles.headerTitle}>Peer Comparison</h2>
+        </div>
+        
+        <section className={styles.sectionCard}>
+          <div className={`${styles.skeleton} ${styles.skeletonChart}`}></div>
+        </section>
 
-export default function PeerComparison() {
-  const barData = [
-    // { name: "Omniactive Health Technologies Limited", value: 15 },
-    // { name: "Viswaat Chemicals Limited", value: 20 },
-    // { name: "Calibre Chemicals Private Limited", value: 20 },
-    // { name: "Apitoria Pharma Private Limited", value: 75 },
-    // { name: "Nirma Limited", value: 80 },
-    // { name: "Dabur India Limited", value: 95 },
-    // { name: "Mankind Pharma Limited", value: 95 },
-    // { name: "Srf Limited", value: 122 },
-    // { name: "Pidilite Industries Limited", value: 125 },
-  ];
+        <section className={styles.tableContainer}>
+          <table className={styles.fullTable}>
+            <thead>
+              <tr>
+                <th>Company Name</th>
+                <th>CIN</th>
+                <th>Incorporation Date</th>
+                <th>Paid Up Capital</th>
+                <th>Authorised Capital</th>
+                <th>Sum of Charges</th>
+                <th>Turnover</th>
+                <th>Net Worth</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...Array(5)].map((_, i) => (
+                <tr key={i} className={styles.skeletonRow}>
+                  <td>
+                    <div className={styles.companyCell}>
+                      <div className={`${styles.skeleton} ${styles.skeletonIcon}`}></div>
+                      <div className={`${styles.skeleton} ${styles.skeletonText}`} style={{ width: '120px' }}></div>
+                    </div>
+                  </td>
+                  <td><div className={`${styles.skeleton} ${styles.skeletonText}`}></div></td>
+                  <td><div className={`${styles.skeleton} ${styles.skeletonText}`}></div></td>
+                  <td><div className={`${styles.skeleton} ${styles.skeletonText}`}></div></td>
+                  <td><div className={`${styles.skeleton} ${styles.skeletonText}`}></div></td>
+                  <td><div className={`${styles.skeleton} ${styles.skeletonText}`}></div></td>
+                  <td><div className={`${styles.skeleton} ${styles.skeletonText}`}></div></td>
+                  <td><div className={`${styles.skeleton} ${styles.skeletonText}`}></div></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      </div>
+    );
+  }
 
-  const peerData = barData.map((item) => ({
-    // name: item.name,
-    // cin: "U24230MH2003PLC141898",
-    // date: "27 Aug 2003",
-    // capital: "₹ 1,005.47 L",
-    // turnover: "₹ 83,187.47 L",
-    // netWorth: "₹ 83,037.37 L",
-  }));
+  if (error) {
+    return <div className={styles.errorContainer}>{error}</div>;
+  }
 
-  // Formatter to match the image's "0.1 T" vs "80 B" style
-  const formatYAxis = (value) => {
-    if (value === 0) return "0";
-    if (value >= 100) return `${value / 1000} T`;
-    return `${value} B`;
-  };
+  if (!data) {
+    return null; 
+  }
+
+  const peerData = data?.peer_companies?.items || [];
 
   return (
     <main className={styles.mainContainer}>
@@ -72,56 +79,21 @@ export default function PeerComparison() {
         <div className={styles.headerInfo}>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Source:</span>
-            <span className={styles.infoValue}>-</span>
+            <span className={styles.infoValue}>{data.source || "-"}</span>
           </span>
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>{formatDateToIST(peerData?.last_updated)||"-"}</span>
+            <span className={styles.infoValue}>{data.last_updated || "-"}</span>
           </span>
         </div>
       </div>
 
-      <CompanyCharts />
-
-      <section className={styles.sectionCard}>
-        <div className={styles.barChartContainer}>
-          <ResponsiveContainer width="100%" height={450}>
-            <BarChart
-              data={barData}
-              margin={{ top: 20, right: 10, left: 10, bottom: 50 }}
-            >
-              <CartesianGrid
-                strokeDasharray="4 4"
-                vertical={false}
-                stroke="#E5E7EB"
-              />
-              <XAxis
-                dataKey="name"
-                interval={0}
-                axisLine={{ stroke: "#E5E7EB" }}
-                tickLine={false}
-                tick={<CustomXAxisTick />}
-                tickMargin={0} 
-              />
-              <YAxis
-                axisLine={{ stroke: "#E5E7EB" }}
-                tickLine={false}
-                tick={{ fontSize: 12, fill: "rgba(55, 65, 81, 1)" }}
-                ticks={[0, 20, 40, 60, 80, 100, 120, 140]}
-                tickFormatter={formatYAxis}
-                width={60}
-              />
-              <Bar
-                dataKey="value"
-                fill="rgba(59, 130, 246, 1)"
-                radius={[15, 15, 0, 0]}
-                barSize={32}
-              />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </section>
+      <CompanyCharts 
+        businessActivity={data?.business_activity} 
+        peerComparisonData={data}
+        peerComparisonLoading={loading}
+      />
 
       <section className={styles.tableContainer}>
         <table className={styles.fullTable}>
@@ -141,25 +113,84 @@ export default function PeerComparison() {
             {peerData.map((row, i) => (
               <tr key={i}>
                 <td className={styles.companyCell}>
-                  <img
-                    src="/icons/Image.svg"
-                    alt=""
-                    className={styles.companyIcon}
-                  />
-                  <span className={styles.companyName}>{row.name}</span>
+                  {row.company_logo && row.company_logo !== "-" ? (
+                    <img
+                      src={row.company_logo}
+                      alt={row.company_name}
+                      className={styles.companyIcon}
+                    />
+                  ) : (
+                    <img
+                      src="/icons/Image.svg"
+                      alt={row.company_name}
+                      className={styles.companyIcon}
+                    />
+                  )}
+                  <span className={styles.companyName} title={row.company_name}>
+                    {row.company_name}
+                  </span>
                 </td>
 
-                <td>{row.cin}</td>
-                <td>{row.date}</td>
-                <td>{row.capital}</td>
-                <td>{row.capital}</td>
-                <td>{row.capital}</td>
-                <td>{row.turnover}</td>
-                <td>{row.netWorth}</td>
+                <td>{row.cin || "-"}</td>
+                <td>{row.incorporation_date || "-"}</td>
+                <td>{row.paid_up_capital || "-"}</td>
+                <td>{row.authorised_capital || "-"}</td>
+                <td>{row.sum_of_charges || "-"}</td>
+                <td>{row.turnover || "-"}</td>
+                <td>{row.net_worth || "-"}</td>
               </tr>
             ))}
           </tbody>
         </table>
+        {/* Pagination */}
+        <div className={styles.paginationContainer}>
+          <span>
+            Showing {(page - 1) * perPage + 1}-
+            {Math.min(page * perPage, data.peer_companies?.total || 0)} of{" "}
+            {data.peer_companies?.total || 0}
+          </span>
+          <div className={styles.paginationRight}>
+            <div className={styles.rowsPerPage}>
+              <span>Rows per page</span>
+              <select
+                className={styles.rowsSelect}
+                value={perPage}
+                onChange={(e) => {
+                  setPerPage(Number(e.target.value));
+                  setPage(1);
+                }}
+              >
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+              </select>
+            </div>
+            <div className={styles.pageInfo}>
+              Page {data.peer_companies?.page || 1} of{" "}
+              {data.peer_companies?.pages || 1}
+            </div>
+            <div className={styles.paginationControls}>
+              <button
+                className={styles.paginationButton}
+                disabled={page === 1}
+                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+              >
+                &lt;
+              </button>
+              <button
+                className={styles.paginationButton}
+                disabled={page === (data.peer_companies?.pages || 1)}
+                onClick={() =>
+                  setPage((prev) =>
+                    Math.min(prev + 1, data.peer_companies?.pages || 1)
+                  )
+                }
+              >
+                &gt;
+              </button>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   );
