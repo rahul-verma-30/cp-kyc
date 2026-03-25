@@ -48,24 +48,21 @@ const FinancialHighlightsTables = ({
     return v === undefined || v === null || v === "-" ? "-" : v;
   };
 
-  // Build Balance Sheet period columns
+  const pnlPeriods = pnlApiData?.periods
+    ? pnlApiData.periods.filter((p) => p !== "setAttributes" && p !== "isExpandable")
+    : [];
+
   const bsPeriods = balanceSheetData?.periods
     ? balanceSheetData.periods.filter((p) => p !== "setAttributes" && p !== "isExpandable")
     : [];
-
-  const getBsValue = (valuesObj, period) => getValue(valuesObj, period);
 
   // Build Cash Flow period columns
   const cfPeriods = cashFlowData?.periods
     ? cashFlowData.periods.filter((p) => p !== "setAttributes")
     : [];
 
-  const getCfValue = (valuesObj, period) => getValue(valuesObj, period);
-
   // Build Ratios period columns
   const ratiosPeriods = ratiosData?.periods || [];
-
-  const getRatioValue = (valuesObj, period) => getValue(valuesObj, period);
 
   const buildRatioRows = () => {
     if (!ratiosData) return [];
@@ -195,306 +192,6 @@ const FinancialHighlightsTables = ({
 
   const bsRows = buildBsRows();
 
-  const profitLossData = [
-    { type: "header", label: "Revenue", values: [] },
-    {
-      label: "Other Income",
-      values: ["17,723.00", "17,720.00", "17,718.00", "17,679.00", "17,674.00"],
-    },
-    {
-      label: "Revenue From Operations",
-      values: [
-        "724,606.00",
-        "673,817.00",
-        "610,970.00",
-        "568,708.00",
-        "521,448.00",
-      ],
-    },
-    {
-      type: "grand-total",
-      label: "Total Revenue",
-      values: [
-        "952,265.00",
-        "955,322.00",
-        "907,652.00",
-        "852,105.00",
-        "746,138.00",
-      ],
-    },
-
-    { type: "header", label: "Expenses", values: [] },
-    {
-      label: "Cost Of Material Consumed",
-      values: ["24,942.00", "49,893.00", "24,945.00", "24,910.00", "1,962.00"],
-    },
-    {
-      label: "Finished Goods",
-      values: ["13,325.00", "10,050.00", "7,676.00", "7,004.00", "0.00"],
-    },
-    {
-      label: "Other Long Term Liabilities",
-      values: ["7,432.00", "6,694.00", "5,015.00", "4,459.00", "137.00"],
-    },
-    {
-      label: "Work-In-Progress",
-      values: ["6,258.00", "6,004.00", "5,768.00", "5,657.00", "5,555.00"],
-    },
-    {
-      label: "Stock In Trade",
-      values: ["51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"],
-    },
-    {
-      label: "Employee Benefit Expense",
-      values: ["51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"],
-    },
-    {
-      label: "Managerial Remuneration",
-      values: ["51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"],
-    },
-    {
-      label: "Payment To Auditors",
-      values: ["51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"],
-    },
-    {
-      label: "Insurance Expenses",
-      values: ["51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"],
-    },
-    {
-      label: "Power And Fuel",
-      values: ["51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"],
-    },
-    {
-      label: "Finance Cost",
-      values: ["51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"],
-    },
-    {
-      label: "Depreciation And Amortisation",
-      values: ["51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"],
-    },
-    {
-      label: "Other Expenses",
-      values: ["51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"],
-    },
-    {
-      type: "grand-total",
-      label: "Total Expense",
-      values: [
-        "771,431.00",
-        "758,652.00",
-        "721,820.00",
-        "662,474.00",
-        "577,807.00",
-      ],
-    },
-    {
-      type: "grand-total",
-      label: "Ebitda",
-      values: [
-        "771,431.00",
-        "758,652.00",
-        "721,820.00",
-        "662,474.00",
-        "577,807.00",
-      ],
-    },
-
-    { type: "header", label: "Exceptional & Extra Ordinary Item", values: [] },
-    {
-      label: "Exceptional Items",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
-      label: "Extraordinary Items",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
-      label: "Profit Before Extraordinary & Exceptional",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-    {
-      label: "Profit Before Tax",
-      values: ["3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"],
-    },
-
-    { type: "header", label: "Tax Expense", values: [] },
-    {
-      label: "Current Tax",
-      values: [
-        "198,711.00",
-        "185,440.00",
-        "164,096.00",
-        "137,556.00",
-        "117,839.00",
-      ],
-    },
-    {
-      label: "Deferred Tax",
-      values: ["4,851.00", "2,380.00", "2,101.00", "2,344.00", "2,642.00"],
-    },
-    {
-      label: "Profit From Discontinuing Operations",
-      values: ["222.00", "2,269.00", "0.00", "0.00", "0.00"],
-    },
-    {
-      label: "Tax Expense Of Discontinuing Operations",
-      values: [
-        "473,046.00",
-        "488,830.00",
-        "520,252.00",
-        "432,770.00",
-        "312,276.00",
-      ],
-    },
-    {
-      type: "Profit/Loss",
-      label: "Profit/Loss",
-      values: ["0.00", "0.00", "0.00", "0.00", "0.00"],
-    },
-  ];
-
-
-  const ratioData = [
-    { type: "header", label: "Liquidity", values: [] },
-    {
-      label: "Current Ratio",
-      values: [
-        // "17,723.00", "17,720.00", "17,718.00", "17,679.00", "17,674.00"
-      ],
-    },
-    {
-      label: "Quick Ratio",
-      values: [
-        // "724,606.00",
-        // "673,817.00",
-        // "610,970.00",
-        // "568,708.00",
-        // "521,448.00",
-      ],
-    },
-    { label: "Cash Ratio", 
-      values: [
-        // "0.00", "0.00", "0.00", "0.00", "0.00"
-      ] },
-
-    { type: "header", label: "Turnover", values: [] },
-    {
-      label: "Inventory To Sales",
-      values: [
-        // "24,942.00", "49,893.00", "24,945.00", "24,910.00", "1,962.00"
-      ],
-    },
-    {
-      label: "Debtor To Sales",
-      values: [
-        // "13,325.00", "10,050.00", "7,676.00", "7,004.00", "0.00"
-      ],
-    },
-    {
-      label: "Payable To Sales",
-      values: [
-        // "7,432.00", "6,694.00", "5,015.00", "4,459.00", "137.00"
-      ],
-    },
-    {
-      label: "Cash Conversion Cycle (days)",
-      values: [
-        // "6,258.00", "6,004.00", "5,768.00", "5,657.00", "5,555.00"
-      ],
-    },
-    {
-      label: "Sales To Fixed Asset",
-      values: [
-        // "51,957.00", "72,641.00", "43,404.00", "42,030.00", "7,654.00"
-      ],
-    },
-
-    { type: "header", label: "Protability", values: [] },
-    {
-      label: "Net Prot Margin",
-      values: [
-        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
-      ],
-    },
-    {
-      label: "Ebitda Margin",
-      values: [
-        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
-      ],
-    },
-    {
-      label: "Return On Equity",
-      values: [
-        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
-      ],
-    },
-    {
-      label: "Return On Capital Employed",
-      values: [
-        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
-      ],
-    },
-    {
-      label: "Net Worth Margin",
-      values: [
-        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
-      ],
-    },
-
-    { type: "header", label: "Earning/Growth", values: [] },
-    {
-      label: "Equity Multiplier",
-      values: [
-        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
-      ],
-    },
-    {
-      label: "Revenue Growth",
-      values: [
-        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
-      ],
-    },
-
-    { type: "header", label: "Leverage", values: [] },
-    {
-      label: "Debt To Ebitda",
-      values: [
-        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
-      ],
-    },
-
-    { type: "header", label: "Solvency", values: [] },
-    {
-      label: "Interest Coverage Ratio",
-      values: [
-        // "3,538.00", "19,899.00", "30,776.00", "26,188.00", "15,196.00"
-      ],
-    },
-  ];
-
-
-  const { activeSubSection } = useCompanySection();
-
-  const balanceSheetRef = useRef(null);
-  const profitLossRef = useRef(null);
-  const cashFlowRef = useRef(null);
-  const ratioRef = useRef(null);
-  const auditorsRef = useRef(null);
-
-  /* ================= Profit & Loss Reference ================= */
-
-  // Build period columns (excluding 'isExpandable' and 'TTM'), limited to first 5
-  const pnlPeriods = pnlApiData?.periods
-    ? pnlApiData.periods.filter((p) => p !== "isExpandable" && p !== "TTM")
-    : [];
-
-  // Helper: get value for a period from a row's values object
-  const getPnlValue = (valuesObj, period) => {
-    if (!valuesObj) return "-";
-    const v = valuesObj[period];
-    return v === undefined || v === null ? "-" : v;
-  };
-
   // Flatten API sections into rows for the P&L table
   const buildPnlRows = () => {
     if (!pnlApiData) return [];
@@ -523,6 +220,15 @@ const FinancialHighlightsTables = ({
   };
 
   const pnlRows = buildPnlRows();
+
+  const { activeSubSection } = useCompanySection();
+
+  const balanceSheetRef = useRef(null);
+  const profitLossRef = useRef(null);
+  const cashFlowRef = useRef(null);
+  const ratioRef = useRef(null);
+  const auditorsRef = useRef(null);
+
   // =========================================
 
 
@@ -562,46 +268,6 @@ const FinancialHighlightsTables = ({
     }
   }, [activeSubSection]);
 
-  const renderTableBody = (data) => (
-    <tbody>
-      {data.map((row, index) => {
-        const isHeader = row.type === "header";
-        const isTotal =
-          row.type === "total" ||
-          row.type === "total-sub" ||
-          row.type === "grand-total";
-
-        let rowClass = styles.row;
-        if (isHeader) rowClass = styles.sectionHeaderRow;
-        if (isTotal) rowClass = styles.totalRow;
-        if (row.type === "grand-total")
-          rowClass = `${styles.totalRow} ${styles.grandTotalRow}`;
-
-        return (
-          <tr key={index} className={rowClass}>
-            <td className={styles.labelCell}>{row.label}</td>
-            {isHeader ? (
-              // Sectors/Headers should have empty cells
-              [1, 2, 3, 4, 5].map((_, i) => (
-                <td key={i} className={styles.valueCell}></td>
-              ))
-            ) : row.values.length > 0 ? (
-              row.values.map((val, i) => (
-                <td key={i} className={styles.valueCell}>
-                  {val || "-"}
-                </td>
-              ))
-            ) : (
-              // Fallback for missing row values
-              [1, 2, 3, 4, 5].map((_, i) => (
-                <td key={i} className={styles.valueCell}>-</td>
-              ))
-            )}
-          </tr>
-        );
-      })}
-    </tbody>
-  );
 
   const [viewType, setViewType] = React.useState("Standalone");
 
@@ -678,7 +344,7 @@ const FinancialHighlightsTables = ({
                         ))
                       : bsPeriods.map((p) => (
                           <td key={p} className={styles.valueCell}>
-                            {getBsValue(row.valuesObj, p)}
+                            {getValue(row.valuesObj, p)}
                           </td>
                         ))}
                   </tr>
@@ -775,7 +441,7 @@ const FinancialHighlightsTables = ({
                         ))
                       : pnlPeriods.map((p) => (
                           <td key={p} className={styles.valueCell}>
-                            {getPnlValue(row.valuesObj, p)}
+                            {getValue(row.valuesObj, p)}
                           </td>
                         ))}
                   </tr>
@@ -857,7 +523,7 @@ const FinancialHighlightsTables = ({
                         ))
                       : cfPeriods.map((p) => (
                           <td key={p} className={styles.valueCell}>
-                            {getCfValue(row.valuesObj, p)}
+                            {getValue(row.valuesObj, p)}
                           </td>
                         ))}
                   </tr>
@@ -938,7 +604,7 @@ const FinancialHighlightsTables = ({
                         ))
                       : ratiosPeriods.map((p) => (
                           <td key={p} className={styles.valueCell}>
-                            {getRatioValue(row.valuesObj, p)}
+                            {getValue(row.valuesObj, p)}
                           </td>
                         ))}
                   </tr>

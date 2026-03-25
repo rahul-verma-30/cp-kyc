@@ -10,6 +10,7 @@ import InvestmentPage from "../overseasDirectInvestment/OverseasDirectInvestment
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 import { useEffect, useRef } from "react";
 import { scrollToElementWithOffset } from "@/utils/scrollUtils";
+import { formatDateToIST } from "@/utils/dateFormatter";
 
 
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
@@ -111,7 +112,7 @@ const OwnershipSection = ({ companyHighlights, shareholdingData, shareholdingLoa
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>{shareholdingData?.last_updated || "-"}</span>
+            <span className={styles.infoValue}>{formatDateToIST(shareholdingData?.last_updated)||"-"}</span>
           </span>
         </div>
       </div>

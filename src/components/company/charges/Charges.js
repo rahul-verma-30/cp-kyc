@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useEffect, useRef } from "react";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 import { scrollToElementWithOffset } from "@/utils/scrollUtils";
+import { formatDateToIST } from "@/utils/dateFormatter";
 
 
 export default function ChargesPage({ charges, loading, error, openPage, closedPage, limit, setOpenPage, setClosedPage, setLimit }) {
@@ -173,7 +174,7 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>{charges?.last_updated || "-"}</span>
+            <span className={styles.infoValue}>{formatDateToIST(charges?.last_updated)|| "-"}</span>
           </span>
         </div>
       </div>

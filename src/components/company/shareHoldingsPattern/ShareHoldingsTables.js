@@ -1,14 +1,14 @@
 "use client";
-
-import React from "react";
+import React, { useState } from "react";
 import styles from "./ShareHoldingsTables.module.css";
+import { formatDateToIST } from "@/utils/dateFormatter";
 
 const ShareHoldingsTables = ({ shareholdingData, promoters_table_totals = {}, public_table_totals = {} }) => {
   const promotersData = Array.isArray(shareholdingData?.promoters_table) ? shareholdingData.promoters_table : [];
   const publicData = Array.isArray(shareholdingData?.public_other_than_promoters_table) ? shareholdingData.public_other_than_promoters_table : [];
 
-  const [isPromotersOpen, setIsPromotersOpen] = React.useState(true);
-  const [isPublicOpen, setIsPublicOpen] = React.useState(true);
+  const [isPromotersOpen, setIsPromotersOpen] = useState(true);
+  const [isPublicOpen, setIsPublicOpen] = useState(true);
 
   return (
     <div className={styles.container}>
@@ -19,7 +19,7 @@ const ShareHoldingsTables = ({ shareholdingData, promoters_table_totals = {}, pu
       >
         <div className={styles.headerContent}>
           <span className={styles.title}>Promoters</span>
-          <span className={styles.date}>{shareholdingData?.last_updated || "-"}</span>
+          <span className={styles.date}>{formatDateToIST(shareholdingData?.last_updated)||"-"}</span>
         </div>
         <div className={styles.headerActions}>
            <img 
@@ -86,7 +86,7 @@ const ShareHoldingsTables = ({ shareholdingData, promoters_table_totals = {}, pu
       >
         <div className={styles.headerContent}>
           <span className={styles.title}>Public / Other Than Promoters</span>
-          <span className={styles.date}>{shareholdingData?.last_updated || ""}</span>
+          <span className={styles.date}>{formatDateToIST(shareholdingData?.last_updated)}</span>
         </div>
         <div className={styles.headerActions}>
            <img 

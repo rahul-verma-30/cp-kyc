@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './CompanyOverview.module.css';
+import { formatDateToIST } from '@/utils/dateFormatter';
 
 
 const CompanyOverview = ({companyData,loading,error}) => {
@@ -38,7 +39,7 @@ if (error) {
           <div className={styles.divider}></div>
           <div className={styles.metaItem}>
             <span className={styles.metaLabel}>Last Updated:</span>
-            <span className={styles.metaValueText}>{companyData?.header?.last_updated || "-"}</span>
+            <span className={styles.metaValueText}>{formatDateToIST(companyData?.header?.last_updated)|| "-"}</span>
           </div>
         </div>
       </div>

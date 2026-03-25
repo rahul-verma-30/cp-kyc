@@ -1,10 +1,12 @@
 "use client";
 
 import styles from "./ComplianceDetails.module.css";
+
 import React, { useRef, useEffect, useState } from "react";
 
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 import { scrollToElementWithOffset } from "@/utils/scrollUtils";
+import { formatDateToIST } from "@/utils/dateFormatter";
 
 import {
   complianceKpis,
@@ -240,7 +242,7 @@ const ComplianceDetails = () => {
             <span className={styles.divider}></span>
             <span className={styles.updatedText}>
               <span> Last Updated:</span>
-              30-Dec-2024, 11:45 AM IST
+              {formatDateToIST("-")}
             </span>
           </div>
         </div>

@@ -16,6 +16,7 @@ import FinancialHighlightsTables from "../financialHighlights/FinancialHighlight
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 import { useEffect, useRef } from "react";
 import { scrollToElementWithOffset } from "@/utils/scrollUtils";
+import { formatDateToIST } from "@/utils/dateFormatter";
 
 
 const FinancialHighlights = ({ 
@@ -331,7 +332,7 @@ const FinancialHighlights = ({
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>{financialHighlights.last_updated || "-"}</span>
+            <span className={styles.infoValue}>{formatDateToIST(financialHighlights.last_updated)|| "-"}</span>
           </span>
         </div>
       </div>

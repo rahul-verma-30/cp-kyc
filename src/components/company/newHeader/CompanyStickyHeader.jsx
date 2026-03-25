@@ -35,12 +35,12 @@ export default function CompanyStickyHeader({ visible, companyData }) {
     if (!text) return { display: "-", full: "-" };
 
     return {
-      display: text.length > limit ? text.slice(0, limit) + "..." : text,
+      display: text.length > limit ? text.slice(0, limit) + ".." : text,
       full: text
     };
   };
 
-  const companyName = getTruncatedText(companyData?.company_information?.legal_name, 5);
+  const companyName = getTruncatedText(companyData?.company_information?.legal_name, 15);
   const companyAddress = getTruncatedText(companyData?.contact_details?.registered_address, 30);
 
   const nseSymbol = companyData?.company_information?.nse_symbol;
