@@ -133,6 +133,102 @@
   border-radius: 6px;
 }
 
+.companyIconPlaceholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  background-color: #E5E7EB;
+  color: #6B7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.loadingContainer,
+.errorContainer,
+.noDataContainer {
+  padding: 40px;
+  text-align: center;
+  border: 1px solid rgba(228, 228, 231, 1);
+  border-radius: 20px;
+  background: #FFFFFF;
+  margin-top: 20px;
+}
+
+.noDataMessage {
+  margin-top: 16px;
+  color: #6B7280;
+  font-size: 16px;
+}
+
+/* Pagination Styles */
+.paginationContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  color: #71717A;
+  font-size: 14px;
+}
+
+.paginationRight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.rowsPerPage {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rowsSelect {
+  border: 1px solid rgba(228, 228, 231, 1);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+  color: #09090B;
+  background-color: #FFFFFF;
+  cursor: pointer;
+}
+
+.pageInfo {
+  color: #09090B;
+  font-weight: 500;
+}
+
+.paginationControls {
+  display: flex;
+  gap: 8px;
+}
+
+.paginationButton {
+  border: 1px solid rgba(228, 228, 231, 1);
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFFFFF;
+  cursor: pointer;
+  color: #71717A;
+  transition: all 0.2s ease;
+}
+
+.paginationButton:hover:not(:disabled) {
+  background-color: #F4F4F5;
+  color: #09090B;
+}
+
+.paginationButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Responsiveness */
 
 @media(max-width:1500px) {
@@ -195,4 +291,43 @@
   .labelFood {
     font-size: 10px;
   }
+}
+
+/* Skeleton Loader Styles */
+.skeleton {
+  background: #f6f7f8;
+  background: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+  background-size: 800px 104px;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+.skeletonChart {
+  height: 300px;
+  width: 100%;
+  border-radius: 12px;
+}
+
+.skeletonText {
+  height: 16px;
+  width: 100%;
+}
+
+.skeletonRow td {
+  padding: 12px 16px !important;
+}
+
+.skeletonIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
 }

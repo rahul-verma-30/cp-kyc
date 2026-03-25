@@ -15,93 +15,145 @@ import {
 } from 'recharts';
 import styles from './CompanyCharts.module.css';
 
-const CompanyCharts = () => {
+const COLORS = [
+  '#D8B4FE', // Purple
+  '#BBF7D8', // Light Green
+  '#93C5FD', // Light Blue
+  '#FDBA74', // Light Orange
+  '#F9A8D4', // Pink
+];
+
+// Custom label for Pie Chart to match screenshot
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value, name, color }) => {
+  const RADIAN = Math.PI / 180;
+  const radius = outerRadius + 30; // Position outside
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text 
+      x={x} 
+      y={y} 
+      fill={color} 
+      textAnchor={x > cx ? 'start' : 'end'} 
+      dominantBaseline="central"
+      fontSize="14px"
+      fontWeight="500"
+    >
+      {`${name}: ${value.toFixed(2)}%`}
+    </text>
+  );
+};
+
+// Custom tick for Peer Comparison Bar Chart (copied from PeerComparison.js)
+const CustomXAxisTick = ({ x, y, payload }) => {
+  const words = payload.value.split(" ");
+  return (
+    <g transform={`translate(${x},${y})`}>
+      {words.map((word, index) => (
+        <text
+          key={index}
+          x={0}
+          y={15 + index * 14}
+          textAnchor="middle"
+          fill="#6B7280"
+          fontSize={11}
+        >
+          {word}
+        </text>
+      ))}
+    </g>
+  );
+};
+
+const CompanyCharts = ({ businessActivity, peerComparisonData, peerComparisonLoading, layout = "row" }) => {
+  // ... rest of data processing
   // Data for Business Activity Pie Chart
-  const pieData = [
-    { name: 'Manufacturing', value: 81.33, color: 'rgba(216, 180, 254, 1)' },
-    { name: 'Food & Beverages', value: 18.67, color: 'rgba(187, 247, 208, 1)' }
-  ];
+  const pieData = (businessActivity?.chart_segments || [
+    { segment_name: 'Manufacturing', turnover_percentage: 81.33 },
+    { segment_name: 'Food & Beverages', turnover_percentage: 18.67 }
+  ]).map((item, index) => ({
+    name: item.segment_name,
+    value: parseFloat(item.turnover_percentage) || 0,
+    color: COLORS[index % COLORS.length]
+  }));
+
+  // Data for Peer Comparison Bar Chart
+  const barData = (peerComparisonData?.peer_turnover_chart?.items || []).map((item) => ({
+    name: item.company_name,
+    value: item.turnover_numeric,
+    is_selected: item.is_selected_company
+  }));
 
   // Data for Business Activity Table
-  const activityTable = [
-    // {
-    //   activity: "Chemical and chemical products, pharmaceuticals, medicinal chemical and botanical products",
-    //   percentage: "81.33",
-    //   turnover: "₹ 774,477.12"
-    // },
-    // {
-    //   activity: "Food, beverages and tobacco products",
-    //   percentage: "18.67",
-    //   turnover: "₹ 177,787.88"
-    // }
-  ];
-
-  // Data for Shareholding Progress Bar
-  const shareholding = {
-    promoter: 66.2,
-    nonPromoter: 33.8,
-    promoterValue: "1174000355.00",
-    nonPromoterValue: "598038807.00"
-  };
+  const activityTable = (businessActivity?.table_rows || [
+    {
+      business_activity: "Chemical and chemical products, pharmaceuticals, medicinal chemical and botanical products",
+      turnover_percentage: "81.33",
+      turnover: "₹ 774,477.12"
+    },
+    {
+      business_activity: "Food, beverages and tobacco products",
+      turnover_percentage: "18.67",
+      turnover: "₹ 177,787.88"
+    }
+  ]);
 
   return (
     <div className={styles.mainWrapper}>
       {/* BUSINESS ACTIVITY SECTION */}
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>Business Activity</h2>
-        <div className={styles.businessActivityWrapper}>
-        <div className={styles.card}>
-          <div className={styles.pieChartContainer}>
-            <div className={styles.pieWrapper}>
-              <div className={styles.pieLabelPrimary}>- </div>
-              <ResponsiveContainer width={242} height={242}>
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={0}
-                    outerRadius={121}
-                    paddingAngle={0}
-                    dataKey="value"
-                    stroke="none"
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-              <div className={styles.pieLabelSecondary}>-</div>
-              
-            </div>
+        <h2 className={styles.sectionTitle}>Business Activity </h2>
 
-            <div className={styles.pieLegend}>
-              <div className={styles.legendRow}>
-                <div className={styles.legendIndicator}>
-                  <div className={styles.dot} style={{ backgroundColor: '#D8B4FE' }}></div>
-                  <span className={styles.legendText}>-</span>
-                </div>
-                <span className={styles.legendValue}>-</span>
+        <div className={`${styles.businessActivityWrapper} ${layout === "column" ? styles.columnLayout : ""}`}>
+          <div className={styles.card}>
+            <div className={styles.pieChartContainer}>
+              <div className={styles.pieWrapper}>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={0}
+                      outerRadius={80}
+                      paddingAngle={0}
+                      dataKey="value"
+                      stroke="none"
+                      label={renderCustomizedLabel}
+                    >
+                      {pieData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
-              <div className={styles.legendDivider}></div>
-              <div className={styles.legendRow}>
-                <div className={styles.legendIndicator}>
-                  <div className={styles.dot} style={{ backgroundColor: '#BBF7D0' }}></div>
-                  <span className={styles.legendText}>-</span>
-                </div>
-                <span className={styles.legendValue}>-</span>
+
+              <div className={styles.pieLegend}>
+                {pieData.map((item, idx) => (
+                  <React.Fragment key={idx}>
+                    <div className={styles.legendRow}>
+                      <div className={styles.legendIndicator}>
+                        <div className={styles.dot} style={{ backgroundColor: item.color }}></div>
+                        <span className={styles.legendText}>{item.name}</span>
+                      </div>
+                      <span className={styles.legendValue}>{item.value.toFixed(2)}</span>
+                    </div>
+                    {idx < pieData.length - 1 && <div className={styles.legendDivider}></div>}
+                  </React.Fragment>
+                ))}
               </div>
             </div>
           </div>
 
-
-        </div>
-                  <div className={styles.tableWrapper}>
+          <div className={styles.tableWrapper}>
             <div className={styles.tableHeader}>
-              <div className={styles.headerLeft}>Financial Year: -</div>
+              <div className={styles.headerLeft}>
+                Financial Year: <span className={styles.headerValue}>{businessActivity?.financial_year || "-"}</span>
+              </div>
               <div className={styles.headerRight}>
-                Turnover: <span className={styles.greenText}>-</span>
+                Turnover: <span className={styles.greenText}>{businessActivity?.total_turnover || "-"}</span>
               </div>
             </div>
             <table className={styles.activityTable}>
@@ -115,8 +167,8 @@ const CompanyCharts = () => {
               <tbody>
                 {activityTable.map((row, idx) => (
                   <tr key={idx}>
-                    <td>{row.activity}</td>
-                    <td className={styles.textCenter}>{row.percentage}</td>
+                    <td>{row.business_activity}</td>
+                    <td className={styles.textCenter}>{row.turnover_percentage}</td>
                     <td className={styles.textRight}>{row.turnover}</td>
                   </tr>
                 ))}
@@ -125,6 +177,71 @@ const CompanyCharts = () => {
           </div>
         </div>
       </section>
+
+      {/* PEER COMPARISON SECTION */}
+      {peerComparisonData && (
+        <section className={styles.section} style={{ marginTop: '24px' }}>
+          <h2 className={styles.sectionTitle}>Peer Comparison</h2>
+          <div className={styles.card} style={{ padding: '24px' }}>
+            <div className={styles.barChartContainer}>
+              <ResponsiveContainer width="100%" height={380}>
+                <BarChart
+                  data={barData}
+                  margin={{ top: 20, right: 10, left: 10, bottom: 50 }}
+                >
+                  <CartesianGrid
+                    strokeDasharray="4 4"
+                    vertical={false}
+                    stroke="#E5E7EB"
+                  />
+                  <XAxis
+                    dataKey="name"
+                    interval={0}
+                    axisLine={{ stroke: "#E5E7EB" }}
+                    tickLine={false}
+                    tick={<CustomXAxisTick />}
+                    tickMargin={0} 
+                  />
+                  <YAxis
+                    axisLine={{ stroke: "#E5E7EB" }}
+                    tickLine={false}
+                    tick={{ fontSize: 12, fill: "rgba(55, 65, 81, 1)" }}
+                    tickFormatter={(val) => `${val} ${peerComparisonData.peer_turnover_chart?.metric_unit || ""}`}
+                    width={80}
+                  />
+                  <Tooltip 
+                    cursor={{ fill: "transparent" }}
+                    content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                        return (
+                          <div style={{ backgroundColor: "#fff", padding: "10px", border: "1px solid #ccc", borderRadius: "8px", boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}>
+                            <p style={{ margin: 0, fontWeight: "600", color: '#111827' }}>{payload[0].payload.name}</p>
+                            <p style={{ margin: '4px 0 0', color: '#4B5563' }}>Turnover: {payload[0].value} {peerComparisonData.peer_turnover_chart?.metric_unit}</p>
+                          </div>
+                        );
+                      }
+                      return null;
+                    }}
+                  />
+                  <Bar
+                    dataKey="value"
+                    fill="rgba(59, 130, 246, 1)"
+                    radius={[15, 15, 0, 0]}
+                    barSize={32}
+                  >
+                    {barData.map((entry, index) => (
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={entry.is_selected ? 'rgba(59, 130, 246, 1)' : 'rgba(191, 219, 254, 1)'} 
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 };
