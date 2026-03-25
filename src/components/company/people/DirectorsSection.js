@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './DirectorsSection.module.css';
+import { formatDateToIST } from '@/utils/dateFormatter';
 import DirectorProfile from './DirectorProfile';
 
 const DirectorsSection = ({ directorsData, directorsLoading, directorsError }) => {
@@ -89,7 +90,7 @@ const DirectorsSection = ({ directorsData, directorsLoading, directorsError }) =
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>{directorsData?.summary?.last_updated || "-"}</span>
+            <span className={styles.infoValue}>{formatDateToIST(directorsData?.summary?.last_updated)|| "-"}</span>
           </span>
         </div>
       </div>

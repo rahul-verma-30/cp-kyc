@@ -8,6 +8,7 @@ import { scrollToElementWithOffset } from "@/utils/scrollUtils";
 
 import { litigationKpis, pendingCasesTable } from "./dummyData";
 import { ChevronsDownUp } from "lucide-react";
+import { formatDateToIST } from "@/utils/dateFormatter";
 
 import { createPortal } from "react-dom";
 
@@ -177,7 +178,7 @@ const LigilationDetails = () => {
             <span className={styles.divider}></span>
             <span className={styles.updatedText}>
               <span> Last Updated:</span>
-              -
+              {formatDateToIST("-")}
             </span>
           </div>
         </div>

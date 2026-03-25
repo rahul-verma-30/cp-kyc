@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./newHeader.module.css";
 import { useRouter } from "next/navigation";
+import { formatDateToIST } from "@/utils/dateFormatter";
 
 /* -------------------- REUSABLE RISK CARD -------------------- */
 const RiskCard = ({
@@ -365,7 +366,7 @@ const CompanyNewHeader = ({ companyData }) => {
             </div>
             <div className={styles.lastUpdated}>
               <span>Last Updated:</span>{" "}
-              <strong>{companyData?.header?.last_updated || "-"}</strong>
+              <strong>{formatDateToIST(companyData?.header?.last_updated)}</strong>
             </div>
           </div>
         </div>

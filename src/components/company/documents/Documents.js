@@ -201,7 +201,7 @@ const Documents = () => {
             <span className={styles.divider}></span>
             <span className={styles.updatedText}>
               <span> Last Updated:</span>
-              -
+              {formatDateToIST(documentsData?.last_updated)|| "-"}
             </span>
           </div>
         </div>

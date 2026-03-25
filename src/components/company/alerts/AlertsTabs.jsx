@@ -1,6 +1,7 @@
 "use client";
 
 import styles from "./AlertsTabs.module.css";
+import { formatDateToIST } from "@/utils/dateFormatter";
 
 export default function AlertsTabs({ activeTab, setActiveTab, alertsData  }) {
   const tabs = [
@@ -23,7 +24,7 @@ export default function AlertsTabs({ activeTab, setActiveTab, alertsData  }) {
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>{alertsData?.last_updated || "-"}</span>
+            <span className={styles.infoValue}>{formatDateToIST(alertsData?.last_updated)|| "-"}</span>
           </span>
         </div>
       </div>

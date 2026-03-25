@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./CompanyHighlights.module.css";
+import { formatDateToIST } from "@/utils/dateFormatter";
 
 const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, setPage, setLimit }) => {
 
@@ -103,7 +104,7 @@ const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, set
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>{companyHighlights?.last_updated}</span>
+            <span className={styles.infoValue}>{formatDateToIST(companyHighlights?.last_updated)|| "-"}</span>
           </span>
         </div>
       </div>

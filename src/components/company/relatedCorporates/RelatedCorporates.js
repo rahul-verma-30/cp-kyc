@@ -1,4 +1,5 @@
 import styles from './RelatedCorporates.module.css';
+import { formatDateToIST } from '@/utils/dateFormatter';
 
 export default function RelatedCorporates({ commonDirectorship, loading, error }) {
 
@@ -56,7 +57,7 @@ export default function RelatedCorporates({ commonDirectorship, loading, error }
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>{commonDirectorship?.last_updated || '-'}</span>
+            <span className={styles.infoValue}>{formatDateToIST(commonDirectorship?.last_updated)|| "-"}</span>
           </span>
         </div>
       </div>

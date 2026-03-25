@@ -10,7 +10,7 @@ const CompanyHeader = () => {
           <div className={styles.logoCircle}>
             <img
               src="/icons/Image.svg"
-              alt="Dabur Logo"
+              alt="LOGO"
               className={styles.logoCircle}
             />
           </div>
@@ -145,7 +145,7 @@ const CompanyHeader = () => {
           </div>
           <div className={styles.lastUpdated}>
             <span>Last Updated:</span>{" "}
-            <strong>30-Dec-2024, 11:45 AM IST</strong>
+            <strong>{formatDateToIST(companyData?.header?.last_updated)|| "-"}</strong>
           </div>
         </div>
       </div>

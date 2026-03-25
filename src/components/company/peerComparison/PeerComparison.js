@@ -1,4 +1,5 @@
 import styles from "./PeerComparison.module.css";
+import { formatDateToIST } from "@/utils/dateFormatter";
 import {
   PieChart,
   Pie,
@@ -76,7 +77,7 @@ export default function PeerComparison() {
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>-</span>
+            <span className={styles.infoValue}>{formatDateToIST(peerData?.last_updated)||"-"}</span>
           </span>
         </div>
       </div>
