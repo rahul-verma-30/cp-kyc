@@ -194,7 +194,6 @@
   font-weight: 500;
   font-style: Medium;
   font-size: 18px;
-  leading-trim: NONE;
   line-height: 28px;
   margin: 0;
   letter-spacing: 0%;
@@ -662,4 +661,116 @@ opacity: 0.5;
     width: 75px;
     font-size: 11px;
   }
+}
+/* ===== LOADING & SKELETONS ===== */
+.skeleton {
+  background: #f4f4f5;
+  border-radius: 8px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.skeletonHeader {
+  height: 54px;
+  border-radius: 100px;
+}
+
+.skeletonKpiCard {
+  height: 120px;
+  border-radius: 10px;
+}
+
+.skeletonTableTitle {
+  height: 28px;
+  width: 300px;
+  margin-bottom: 12px;
+}
+
+.skeletonTable {
+  height: 300px;
+  width: 100%;
+}
+
+.loadingSection {
+  position: relative;
+  pointer-events: none;
+}
+
+.tableContainer {
+  position: relative;
+}
+
+.tableLoader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: 12px;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #041e42;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ===== ERROR CONTAINER ===== */
+.errorContainer {
+  padding: 24px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  color: #dc2626;
+  text-align: center;
+}
+
+/* ===== KPI VARIANTS ===== */
+.variant1 {
+  background: rgba(239, 246, 255, 1);
+  border-color: rgba(191, 219, 254, 1);
+  color: rgba(37, 99, 235, 1);
+}
+
+.variant2 {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
+.variant3 {
+  background: #f5f3ff;
+  border-color: #ddd6fe;
+  color: #7c3aed;
+}
+
+.variant4 {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #16a34a;
+}
+
+.noData {
+  text-align: center;
+  padding: 32px !important;
+  color: #71717a;
+  font-style: italic;
 }

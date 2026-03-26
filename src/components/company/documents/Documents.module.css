@@ -243,9 +243,9 @@
   transition: border-color 0.2s ease;
 }
 
-.checkboxRow:hover .customCheckbox::before {
+/* .checkboxRow:hover .customCheckbox::before {
   border-color: #041e42;
-}
+} */
 
 
 /* checked */

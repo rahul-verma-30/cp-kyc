@@ -124,27 +124,53 @@ function RowsPerPage({ value, onChange }) {
 
 // export default RowsPerPage;
 
-const LigilationDetails = () => {
+const LigilationDetails = ({ 
+  data, 
+  loading, 
+  error,
+  paPage, paSize, setPaPage, setPaSize,
+  pbPage, pbSize, setPbPage, setPbSize,
+  daPage, daSize, setDaPage, setDaSize,
+  dbPage, dbSize, setDbPage, setDbSize
+}) => {
   const { activeSubSection } = useCompanySection();
 
-  const [rowsOpen, setRowsOpen] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const litigationSections = [
     {
       id: "pending-against",
       label: "Pending Cases Filed against Company",
+      apiKey: "pendingCasesFiledAgainstCompanyTable",
+      page: paPage,
+      size: paSize,
+      setPage: setPaPage,
+      setSize: setPaSize,
     },
     {
       id: "pending-by",
-      label: "Pending Cases Led by Company",
+      label: "Pending Cases Filed by Company",
+      apiKey: "pendingCasesFiledByCompanyTable",
+      page: pbPage,
+      size: pbSize,
+      setPage: setPbPage,
+      setSize: setPbSize,
     },
     {
       id: "disposed-against",
-      label: "Disposed Cases Led Against Company",
+      label: "Disposed Cases Filed Against Company",
+      apiKey: "disposedCasesFiledAgainstCompanyTable",
+      page: daPage,
+      size: daSize,
+      setPage: setDaPage,
+      setSize: setDaSize,
     },
     {
       id: "disposed-by",
-      label: "Disposed Cases Led by Company",
+      label: "Disposed Cases Filed by Company",
+      apiKey: "disposedCasesFiledByCompanyTable",
+      page: dbPage,
+      size: dbSize,
+      setPage: setDbPage,
+      setSize: setDbSize,
     },
   ];
   const sectionRefs = React.useRef({});
@@ -153,9 +179,9 @@ const LigilationDetails = () => {
 
     const refMap = {
       "Pending Cases Filed against Company": "pending-against",
-      "Pending Cases Led by Company": "pending-by",
-      "Disposed Cases Led Against Company": "disposed-against",
-      "Disposed Cases Led by Company": "disposed-by",
+      "Pending Cases Filed by Company": "pending-by",
+      "Disposed Cases Filed Against Company": "disposed-against",
+      "Disposed Cases Filed by Company": "disposed-by",
     };
 
     const targetId = refMap[activeSubSection];
@@ -167,159 +193,193 @@ const LigilationDetails = () => {
 
   }, [activeSubSection]);
 
+  if (loading && !data) {
+    return (
+      <div className={styles.mainWrapper}>
+        <div className={styles.container}>
+          {/* Skeleton Header */}
+          <div className={`${styles.skeleton} ${styles.skeletonHeader}`}></div>
+          
+          {/* Skeleton KPIs */}
+          <div className={styles.kpiSection}>
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className={`${styles.skeleton} ${styles.skeletonKpiCard}`}></div>
+            ))}
+          </div>
+
+          {/* Skeleton Tables */}
+          {[...Array(2)].map((_, i) => (
+            <div key={i} className={styles.tableSection}>
+              <div className={`${styles.skeleton} ${styles.skeletonTableTitle}`}></div>
+              <div className={`${styles.skeleton} ${styles.skeletonTable}`}></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.mainWrapper}>
+        <div className={styles.errorContainer}>
+          <p>{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const kpis = data?.summaryCardsSection?.cards || [];
+
   return (
     <div className={styles.mainWrapper}>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h2 className={styles.title}>Litigation</h2>
+          <h2 className={styles.title}>{data?.summaryCardsSection?.sectionTitle || "Litigation"}</h2>
           <div className={styles.sourceRow}>
             <span className={styles.sourceLabel}>Source:</span>
-            <span className={styles.sourceValue}>-</span>
+            <span className={styles.sourceValue}>{data?.source || "-"}</span>
             <span className={styles.divider}></span>
             <span className={styles.updatedText}>
               <span> Last Updated:</span>
-              {formatDateToIST("-")}
+              {formatDateToIST(data?.lastUpdated || "-")}
             </span>
           </div>
         </div>
 
         {/* KPI SECTION */}
         <div className={styles.kpiSection}>
-          {litigationKpis.map((kpi, idx) => (
+          {kpis.map((kpi, idx) => (
             <div
               key={idx}
-              className={`${styles.kpiCard} ${styles[kpi.variant]}`}
+              className={`${styles.kpiCard} ${styles[`variant${idx + 1}`] || styles.variant1}`}
             >
               <span className={styles.kpiLabel}>{kpi.label}</span>
-              <span className={styles.kpiValue}>{kpi.value}</span>
+              <span className={styles.kpiValue}>{kpi.count}</span>
             </div>
           ))}
         </div>
 
-        {litigationSections.map((section, index) => (
-          <div
-            key={section.id}
-            id={section.id}
-            ref={(el) => (sectionRefs.current[section.id] = el)}
-            className={styles.tableSection}
-          >
-            <h6 className={styles.tableTitle}>{section.label}</h6>
+        {litigationSections.map((section, index) => {
+          const tableData = data?.[section.apiKey];
+          const columns = tableData?.columns || [];
+          const rows = tableData?.tableData?.rows || [];
+          const pagination = tableData?.tableData?.pagination || {};
 
-            {/* table + footer here */}
+          return (
+            <div
+              key={section.id}
+              id={section.id}
+              ref={(el) => (sectionRefs.current[section.id] = el)}
+              className={`${styles.tableSection} ${loading ? styles.loadingSection : ""}`}
+            >
+              <h6 className={styles.tableTitle}>{tableData?.tableTitle || section.label}</h6>
 
-            <div className={styles.tableContainer}>
-              <table className={styles.litigationTable}>
-                <thead>
-                  <tr>
-                    <th>Case Number</th>
-                    <th>Petitioner Name</th>
-                    <th>Respondent Name</th>
-                    <th>Year</th>
-                    <th>Court</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {pendingCasesTable.map((row, idx) => (
-                    <tr key={idx}>
-                      <td className={styles.caseNumber}>{row.caseNumber}</td>
-                      <td className={styles.ellipsis}>{row.petitioner}</td>
-                      <td className={styles.ellipsis}>{row.respondent}</td>
-                      <td className={styles.yearCell}>{row.year}</td>
-                      <td className={styles.courtCell}>{row.court}</td>
+              <div className={styles.tableContainer}>
+                {loading && (
+                  <div className={styles.tableLoader}>
+                    <div className={styles.spinner}></div>
+                  </div>
+                )}
+                <table className={styles.litigationTable}>
+                  <thead>
+                    <tr>
+                      {columns.map((col) => (
+                        <th key={col.key}>{col.label}</th>
+                      ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            {/* Footer */}
-            <div className={styles.tableFooter}>
-              <span className={styles.entriesInfo}>Showing 1–10 of 20</span>
+                  </thead>
 
-              <div className={styles.pagination}>
-                <div className={styles.rowsPerpage}>
-                  <span>Rows per page</span>
+                  <tbody>
+                    {rows.length > 0 ? (
+                      rows.map((row, idx) => (
+                        <tr key={idx}>
+                          {columns.map((col) => (
+                            <td 
+                              key={col.key} 
+                              className={
+                                col.key === "caseNumber" ? styles.caseNumber : 
+                                col.key === "year" ? styles.yearCell : 
+                                col.key === "court" ? styles.courtCell : 
+                                styles.ellipsis
+                              }
+                            >
+                              {row[col.key]}
+                            </td>
+                          ))}
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={columns.length} className={styles.noData}>
+                          No data available for this section.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
 
-                  <RowsPerPage
-                    forceUp={index === litigationSections.length - 1}
-                    value={rowsPerPage}
-                    onChange={setRowsPerPage}
-                  />
-                </div>
-                <div className={styles.controls}>
-                  <span className={styles.pageInfo}>Page 1 of 10</span>
+              {/* Footer */}
+              <div className={styles.tableFooter}>
+                <span className={styles.entriesInfo}>
+                  Showing {((section.page - 1) * section.size) + 1}–{Math.min(section.page * section.size, pagination.total || 0)} of {pagination.total || 0}
+                </span>
 
-                  <div className={styles.pageControls}>
-                    <button disabled>
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+                <div className={styles.pagination}>
+                  <div className={styles.rowsPerpage}>
+                    <span>Rows per page</span>
+                    <RowsPerPage
+                      forceUp={index === litigationSections.length - 1}
+                      value={section.size}
+                      onChange={(val) => section.setSize(val)}
+                    />
+                  </div>
+                  <div className={styles.controls}>
+                    <span className={styles.pageInfo}>
+                      Page {pagination.currentPage || 1} of {pagination.totalPages || 1}
+                    </span>
+
+                    <div className={styles.pageControls}>
+                      <button 
+                        disabled={pagination.currentPage <= 1 || loading}
+                        onClick={() => section.setPage(1)}
                       >
-                        <path
-                          d="M7.33333 11.3346L4 8.0013L7.33333 4.66797M12 11.3346L8.66667 8.0013L12 4.66797"
-                          stroke="#041E42"
-                          strokeLinecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </button>
-                    <button>
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <path d="M7.33333 11.3346L4 8.0013L7.33333 4.66797M12 11.3346L8.66667 8.0013L12 4.66797" stroke="#041E42" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </button>
+                      <button 
+                        disabled={pagination.currentPage <= 1 || loading}
+                        onClick={() => section.setPage(section.page - 1)}
                       >
-                        <path
-                          d="M10 12L6 8L10 4"
-                          stroke="#041E42"
-                          strokeLinecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </button>
-                    <button>
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <path d="M10 12L6 8L10 4" stroke="#041E42" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </button>
+                      <button 
+                        disabled={pagination.currentPage >= pagination.totalPages || loading}
+                        onClick={() => section.setPage(section.page + 1)}
                       >
-                        <path
-                          d="M6 12L10 8L6 4"
-                          stroke="#041E42"
-                          strokeLinecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </button>
-                    <button>
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <path d="M6 12L10 8L6 4" stroke="#041E42" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </button>
+                      <button 
+                        disabled={pagination.currentPage >= pagination.totalPages || loading}
+                        onClick={() => section.setPage(pagination.totalPages)}
                       >
-                        <path
-                          d="M4 11.3346L7.33333 8.0013L4 4.66797M8.66667 11.3346L12 8.0013L8.66667 4.66797"
-                          stroke="#041E42"
-                          strokeLinecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </button>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <path d="M4 11.3346L7.33333 8.0013L4 4.66797M8.66667 11.3346L12 8.0013L8.66667 4.66797" stroke="#041E42" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
