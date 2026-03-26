@@ -139,6 +139,20 @@ export default function CompanyPage() {
   const [peerPage, setPeerPage] = useState(1);
   const [peerLimit, setPeerLimit] = useState(10);
 
+  // Litigation
+  const [litigationData, setLitigationData] = useState(null);
+  const [litigationLoading, setLitigationLoading] = useState(false);
+  const [litigationError, setLitigationError] = useState(null);
+  
+  const [paPage, setPaPage] = useState(1);
+  const [paSize, setPaSize] = useState(10);
+  const [pbPage, setPbPage] = useState(1);
+  const [pbSize, setPbSize] = useState(10);
+  const [daPage, setDaPage] = useState(1);
+  const [daSize, setDaSize] = useState(10);
+  const [dbPage, setDbPage] = useState(1);
+  const [dbSize, setDbSize] = useState(10);
+
 
   const overviewRef = useRef(null);
   const nameHistoryRef = useRef(null);
@@ -862,6 +876,54 @@ export default function CompanyPage() {
     fetchPeerComparison();
   }, [companyName, peerPage, peerLimit]);
 
+  /* ================= LITIGATION DETAILS ================= */
+
+  useEffect(() => {
+    if (!companyName) return;
+
+    const fetchLitigationData = async () => {
+      try {
+        setLitigationLoading(true);
+        setLitigationError(null);
+
+        const token = localStorage.getItem("token");
+        const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(
+          companyName
+        )}/litigation?pending_against_page=${paPage}&pending_against_size=${paSize}&pending_by_page=${pbPage}&pending_by_size=${pbSize}&disposed_against_page=${daPage}&disposed_against_size=${daSize}&disposed_by_page=${dbPage}&disposed_by_size=${dbSize}`;
+
+        const response = await fetch(url, {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+          },
+        });
+
+        let data;
+        try {
+          data = await response.json();
+        } catch {
+          throw new Error("Invalid server response");
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            data?.detail ||
+            data?.message ||
+            `Litigation Error ${response.status}: ${response.statusText}`
+          );
+        }
+
+        setLitigationData(data);
+      } catch (err) {
+        console.log("Litigation API Error:", err);
+        setLitigationError(err.message);
+      } finally {
+        setLitigationLoading(false);
+      }
+    };
+
+    fetchLitigationData();
+  }, [companyName, paPage, paSize, pbPage, pbSize, daPage, daSize, dbPage, dbSize]);
+
   /* ================= BALANCE SHEET DETAILS ================= */
   // Used in FinancialHighlightsDetails and FinancialHighlights
   useEffect(() => {
@@ -1115,7 +1177,29 @@ export default function CompanyPage() {
 
       {activeSection === "alerts" && <AlertsContainer alertsData={alertsData} alertsLoading={alertsLoading} alertsError={alertsError} />}
 
-      {activeSection === "litigation" && <LigilationDetails />}
+      {activeSection === "litigation" && (
+        <LigilationDetails 
+          data={litigationData}
+          loading={litigationLoading}
+          error={litigationError}
+          paPage={paPage}
+          paSize={paSize}
+          setPaPage={setPaPage}
+          setPaSize={setPaSize}
+          pbPage={pbPage}
+          pbSize={pbSize}
+          setPbPage={setPbPage}
+          setPbSize={setPbSize}
+          daPage={daPage}
+          daSize={daSize}
+          setDaPage={setDaPage}
+          setDaSize={setDaSize}
+          dbPage={dbPage}
+          dbSize={dbSize}
+          setDbPage={setDbPage}
+          setDbSize={setDbSize}
+        />
+      )}
       {activeSection === "documents" && <Documents />}
 
       {activeSection === "compliance" && <ComplianceDetails />}
