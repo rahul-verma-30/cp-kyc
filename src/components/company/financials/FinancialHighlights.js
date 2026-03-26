@@ -19,22 +19,22 @@ import { scrollToElementWithOffset } from "@/utils/scrollUtils";
 import { formatDateToIST } from "@/utils/dateFormatter";
 
 
-const FinancialHighlights = ({ 
-  financialHighlights, 
-  revenueProfitTrend, 
-  financialLoading, 
-  financialError, 
-  revenueLoading, 
-  revenueError, 
+const FinancialHighlights = ({
+  financialHighlights,
+  revenueProfitTrend,
+  financialLoading,
+  financialError,
+  revenueLoading,
+  revenueError,
   pnlApiData,
   pnlLoading,
   pnlError,
   pnlViewType,
   setPnlViewType,
-  auditorsData, 
-  auditorsLoading, 
-  auditorsError, 
-  audType, 
+  auditorsData,
+  auditorsLoading,
+  auditorsError,
+  audType,
   setAudType,
   balanceSheetData,
   balanceSheetLoading,
@@ -107,13 +107,13 @@ const FinancialHighlights = ({
       <div className={styles.container}>
         <div>Loading highlights...</div>
         <div style={{ marginTop: "40px" }}>
-          <FinancialHighlightsTables 
+          <FinancialHighlightsTables
             pnlApiData={pnlApiData}
-        pnlLoading={pnlLoading}
-        pnlError={pnlError}
-        pnlViewType={pnlViewType}
-        setPnlViewType={setPnlViewType}
-        auditorsData={auditorsData}
+            pnlLoading={pnlLoading}
+            pnlError={pnlError}
+            pnlViewType={pnlViewType}
+            setPnlViewType={setPnlViewType}
+            auditorsData={auditorsData}
             auditorsLoading={auditorsLoading}
             auditorsError={auditorsError}
             audType={audType}
@@ -146,13 +146,13 @@ const FinancialHighlights = ({
           {financialError || revenueError}
         </div>
         <div style={{ marginTop: "40px" }}>
-          <FinancialHighlightsTables 
+          <FinancialHighlightsTables
             pnlApiData={pnlApiData}
-        pnlLoading={pnlLoading}
-        pnlError={pnlError}
-        pnlViewType={pnlViewType}
-        setPnlViewType={setPnlViewType}
-        auditorsData={auditorsData}
+            pnlLoading={pnlLoading}
+            pnlError={pnlError}
+            pnlViewType={pnlViewType}
+            setPnlViewType={setPnlViewType}
+            auditorsData={auditorsData}
             auditorsLoading={auditorsLoading}
             auditorsError={auditorsError}
             audType={audType}
@@ -240,7 +240,7 @@ const FinancialHighlights = ({
   const ratioData = [
     {
       label: "EBITDA",
-      value: financialHighlightsData?.ebitda?.value  + financialHighlightsData?.ebitda?.unit || "-",
+      value: financialHighlightsData?.ebitda?.value + financialHighlightsData?.ebitda?.unit || "-",
       change: financialHighlightsData?.ebitda?.change_pct || "-",
       isNegative: parseChange(financialHighlightsData?.ebitda?.change_pct),
     },
@@ -281,7 +281,7 @@ const FinancialHighlights = ({
       isNegative: parseChange(financialHighlightsData?.debt_to_equity?.change_pct),
     },
     {
-      label: "Return on Equity" ,
+      label: "Return on Equity",
       value: financialHighlightsData?.return_on_equity?.value + financialHighlightsData?.return_on_equity?.unit || "-",
       change: financialHighlightsData?.return_on_equity?.change_pct || "-",
       isNegative: parseChange(financialHighlightsData?.return_on_equity?.change_pct),
@@ -317,7 +317,7 @@ const FinancialHighlights = ({
 
   const maxVal = Math.max(...chartData.map(d => Math.max(d.revenue || 0, d.profit || 0)), 0);
   const domainMax = Math.ceil((maxVal * 1.1) / 100) * 100 || 5000;
-  const step = Math.ceil(domainMax / 5 / 10) * 10 || 1000; 
+  const step = Math.ceil(domainMax / 5 / 10) * 10 || 1000;
   const dynamicTicks = Array.from({ length: 6 }, (_, i) => i * step);
 
   return (
@@ -332,7 +332,7 @@ const FinancialHighlights = ({
           <span className={styles.infoDivider}></span>
           <span className={styles.infoGroup}>
             <span className={styles.infoLabel}>Last Updated:</span>
-            <span className={styles.infoValue}>{formatDateToIST(financialHighlights.last_updated)|| "-"}</span>
+            <span className={styles.infoValue}>{formatDateToIST(financialHighlights.last_updated) || "-"}</span>
           </span>
         </div>
       </div>
@@ -372,13 +372,12 @@ const FinancialHighlights = ({
             <span className={styles.rowLabel}>{item.label}</span>
             <span className={styles.rowValue}>{item.value}</span>
             <span
-              className={`${styles.rowBadge} ${
-                item.change === '-' || item.change === null || item.change === undefined
-                  ? styles.rowNegative 
-                  : item.isNegative 
-                    ? styles.rowNegative 
-                    : styles.rowPositive
-              }`}
+              className={`${styles.rowBadge} ${item.change === '-' || item.change === null || item.change === undefined
+                ? styles.rowNegative
+                : item.isNegative
+                  ? styles.rowNegative
+                  : styles.rowPositive
+                }`}
             >
               {item.change === '-' || item.change === null || item.change === undefined ? (
                 '-'
@@ -451,7 +450,10 @@ const FinancialHighlights = ({
                   domain={[0, domainMax]}
                   ticks={dynamicTicks}
                 />
-                <Tooltip cursor={{ fill: "transparent" }} />
+                <Tooltip
+                  cursor={{ fill: "transparent" }}
+                  formatter={(value) => `${value} cr`}
+                />
                 {/* radius={[20, 20, 20, 20]} creates the pill shape seen in the image */}
                 <Bar
                   dataKey="revenue"
@@ -472,7 +474,7 @@ const FinancialHighlights = ({
           )}
         </div>
       </div>
-      <FinancialHighlightsTables 
+      <FinancialHighlightsTables
         pnlApiData={pnlApiData}
         pnlLoading={pnlLoading}
         pnlError={pnlError}
@@ -487,11 +489,11 @@ const FinancialHighlights = ({
         balanceSheetLoading={balanceSheetLoading}
         balanceSheetError={balanceSheetError}
         bsType={bsType}
-        setBsType={setBsType} 
-        cashFlowData={cashFlowData} 
-        cashFlowLoading={cashFlowLoading} 
-        cashFlowError={cashFlowError} 
-        cfType={cfType} 
+        setBsType={setBsType}
+        cashFlowData={cashFlowData}
+        cashFlowLoading={cashFlowLoading}
+        cashFlowError={cashFlowError}
+        cfType={cfType}
         setCfType={setCfType}
         ratiosData={ratiosData}
         ratiosLoading={ratiosLoading}

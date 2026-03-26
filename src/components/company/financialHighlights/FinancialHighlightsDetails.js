@@ -14,22 +14,22 @@ import {
 import styles from "./FinancialHighlightsDetails.module.css";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 
-const FinancialHighlightsDetails = ({ 
-  financialHighlights, 
-  revenueProfitTrend, 
-  financialLoading, 
-  financialError, 
-  revenueLoading, 
-  revenueError, 
+const FinancialHighlightsDetails = ({
+  financialHighlights,
+  revenueProfitTrend,
+  financialLoading,
+  financialError,
+  revenueLoading,
+  revenueError,
   pnlApiData,
   pnlLoading,
   pnlError,
   pnlViewType,
   setPnlViewType,
-  auditorsData, 
-  auditorsLoading, 
-  auditorsError, 
-  audType, 
+  auditorsData,
+  auditorsLoading,
+  auditorsError,
+  audType,
   setAudType,
   balanceSheetData,
   balanceSheetLoading,
@@ -89,7 +89,7 @@ const FinancialHighlightsDetails = ({
     },
     {
       label: "Profit",
-      value: financialHighlightsData?.profit?.value + financialHighlightsData?.profit?.unit || "-" ,
+      value: financialHighlightsData?.profit?.value + financialHighlightsData?.profit?.unit || "-",
       change: financialHighlightsData?.profit?.change_pct,
       isNegative: parseChange(financialHighlightsData?.profit?.change_pct),
     },
@@ -201,7 +201,7 @@ const FinancialHighlightsDetails = ({
 
   const maxVal = Math.max(...chartData.map(d => Math.max(d.revenue || 0, d.profit || 0)), 0);
   const domainMax = Math.ceil((maxVal * 1.1) / 100) * 100 || 5000;
-  const step = Math.ceil(domainMax / 5 / 10) * 10 || 1000; 
+  const step = Math.ceil(domainMax / 5 / 10) * 10 || 1000;
   const dynamicTicks = Array.from({ length: 6 }, (_, i) => i * step);
 
   const { setActiveSection } = useCompanySection();
@@ -246,13 +246,12 @@ const FinancialHighlightsDetails = ({
               <span className={styles.rowLabel}>{item.label}</span>
               <span className={styles.rowValue}>{item.value}</span>
               <span
-                className={`${styles.rowBadge} ${
-                  item.change === '-' || item.change === null || item.change === undefined
-                    ? styles.rowNegative 
-                    : item.isNegative 
-                      ? styles.rowNegative 
-                      : styles.rowPositive
-                }`}
+                className={`${styles.rowBadge} ${item.change === '-' || item.change === null || item.change === undefined
+                  ? styles.rowNegative
+                  : item.isNegative
+                    ? styles.rowNegative
+                    : styles.rowPositive
+                  }`}
               >
                 {item.change === '-' || item.change === null || item.change === undefined ? (
                   '-'
@@ -296,7 +295,7 @@ const FinancialHighlightsDetails = ({
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart
                         data={chartData}
-                        margin={{ top: 20, right: 10, left:2, bottom: 0 }}
+                        margin={{ top: 20, right: 10, left: 2, bottom: 0 }}
                       >
                         {/* Added strokeDasharray="5 5" for the dotted horizontal lines shown in design */}
                         <CartesianGrid
@@ -328,7 +327,10 @@ const FinancialHighlightsDetails = ({
                           domain={[0, domainMax]}
                           ticks={dynamicTicks}
                         />
-                        <Tooltip cursor={{ fill: "transparent" }} />
+                        <Tooltip
+                          cursor={{ fill: "transparent" }}
+                          formatter={(value) => `${value} cr`}
+                        />
                         <Bar
                           dataKey="revenue"
                           fill="rgba(59, 130, 246, 1)"
