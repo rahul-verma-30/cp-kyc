@@ -23,8 +23,8 @@
 
 .businessActivityWrapper {
   display: flex;
-  flex-direction: row;
-  gap: 20px;
+  flex-direction: column;
+  gap: 25px;
 }
 
 .businessActivityWrapper.columnLayout {
@@ -55,10 +55,10 @@ border: 1px solid rgba(228, 228, 231, 1);
 /* Pie Chart Layout */
 .pieChartContainer {
   display: grid;
-  grid-template-columns: 1fr 0.8fr; /* Adjusted for larger labels */
+  grid-template-columns: 1fr 1fr; /* Equal columns after removing external labels */
   padding: 24px;
   gap: 20px;
-  align-items: center;
+  align-items: flex-start; /* Align legend to top */
 }
 
 .pieWrapper {
@@ -121,6 +121,12 @@ border: 1px solid rgba(228, 228, 231, 1);
   border-radius: 20px;
   padding: 24px;
   flex: 1.3;
+  display: flex;
+  flex-direction: column;
+}
+
+.tableScroll {
+  width: 100%;
 }
 
 .tableHeader {

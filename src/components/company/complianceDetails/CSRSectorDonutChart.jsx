@@ -41,7 +41,7 @@ export default function CSRSectorDonutChart({
                 />
                 <span className={styles.csrLegendLabel}>{item.name}:</span>
                 <span className={styles.csrLegendValue}>
-                  {item.value.toFixed(2)} M
+                  {item.value.toFixed(2)} Cr
                 </span>
               </div>
             ))}

@@ -36,9 +36,9 @@ export default function CSRYearlyBarChart({ data = [], title, styles }) {
               }}
               width={95}
               tickMargin={24}
-              tickFormatter={(v) => `${v}.00 M`}
+              tickFormatter={(v) => `${v}.00 Cr`}
             />
-            <Tooltip formatter={(v) => `${v} M`} />
+            <Tooltip formatter={(v) => `${v} Cr`} />
             <Bar
               dataKey="value"
               fill="#3B82F6"
