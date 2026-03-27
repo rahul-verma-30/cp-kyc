@@ -21,29 +21,16 @@ const COLORS = [
   '#93C5FD', // Light Blue
   '#FDBA74', // Light Orange
   '#F9A8D4', // Pink
+  '#A5F3FC', // Light Cyan
+  '#C7D2FE', // Light Indigo
+  '#FEF08A', // Light Yellow
+  '#99F6E4', // Light Teal
+  '#FECDD3', // Light Rose
+  '#D9F99D', // Light Lime
+  '#E9D5FF', // Light Purple
 ];
 
-// Custom label for Pie Chart to match screenshot
-const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value, name, color }) => {
-  const RADIAN = Math.PI / 180;
-  const radius = outerRadius + 30; // Position outside
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-  return (
-    <text 
-      x={x} 
-      y={y} 
-      fill={color} 
-      textAnchor={x > cx ? 'start' : 'end'} 
-      dominantBaseline="central"
-      fontSize="14px"
-      fontWeight="500"
-    >
-      {`${name}: ${value.toFixed(2)}%`}
-    </text>
-  );
-};
 
 // Custom tick for Peer Comparison Bar Chart (copied from PeerComparison.js)
 const CustomXAxisTick = ({ x, y, payload }) => {
@@ -110,23 +97,35 @@ const CompanyCharts = ({ businessActivity, peerComparisonData, peerComparisonLoa
             <div className={styles.pieChartContainer}>
               <div className={styles.pieWrapper}>
                 <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={pieData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={0}
-                      outerRadius={80}
-                      paddingAngle={0}
-                      dataKey="value"
-                      stroke="none"
-                      label={renderCustomizedLabel}
-                    >
-                      {pieData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                  </PieChart>
+                    <PieChart>
+                      <Tooltip 
+                        content={({ active, payload }) => {
+                          if (active && payload && payload.length) {
+                            return (
+                              <div style={{ backgroundColor: "#fff", padding: "10px", border: "1px solid #ccc", borderRadius: "8px", boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}>
+                                <p style={{ margin: 0, fontWeight: "600", color: '#111827' }}>{payload[0].name}</p>
+                                <p style={{ margin: '4px 0 0', color: '#4B5563' }}>{payload[0].value.toFixed(2)}%</p>
+                              </div>
+                            );
+                          }
+                          return null;
+                        }}
+                      />
+                      <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={0}
+                        outerRadius={110}
+                        paddingAngle={0}
+                        dataKey="value"
+                        stroke="none"
+                      >
+                        {pieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                    </PieChart>
                 </ResponsiveContainer>
               </div>
 
@@ -156,24 +155,26 @@ const CompanyCharts = ({ businessActivity, peerComparisonData, peerComparisonLoa
                 Turnover: <span className={styles.greenText}>{businessActivity?.total_turnover || "-"}</span>
               </div>
             </div>
-            <table className={styles.activityTable}>
-              <thead>
-                <tr>
-                  <th>Business Activity</th>
-                  <th className={styles.textCenter}>Turnover %</th>
-                  <th className={styles.textRight}>Turnover</th>
-                </tr>
-              </thead>
-              <tbody>
-                {activityTable.map((row, idx) => (
-                  <tr key={idx}>
-                    <td>{row.business_activity}</td>
-                    <td className={styles.textCenter}>{row.turnover_percentage}</td>
-                    <td className={styles.textRight}>{row.turnover}</td>
+            <div className={styles.tableScroll}>
+              <table className={styles.activityTable}>
+                <thead>
+                  <tr>
+                    <th>Business Activity</th>
+                    <th className={styles.textCenter}>Turnover %</th>
+                    <th className={styles.textRight}>Turnover</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {activityTable.map((row, idx) => (
+                    <tr key={idx}>
+                      <td>{row.business_activity}</td>
+                      <td className={styles.textCenter}>{row.turnover_percentage}</td>
+                      <td className={styles.textRight}>{row.turnover}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
