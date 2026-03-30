@@ -285,11 +285,13 @@ body {
 
 
 .contentArea {
-  flex: 1;
+  flex: 1 1 auto;
   background-color: #ffffff;
   margin-top: 64px;
   margin-left: 48px;
   /* overflow-y: auto; */
+  transition: flex-basis 0.4s cubic-bezier(0.4, 0.2, 0, 1), flex-grow 0.4s cubic-bezier(0.4, 0.2, 0, 1);
+  min-width: 0; /* Important for flex-basis transitions */
 }
 
 /* Below CompanyNewHeader */

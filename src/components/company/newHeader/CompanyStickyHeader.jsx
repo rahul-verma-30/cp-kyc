@@ -2,12 +2,20 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./CompanyStickyHeader.module.css";
+import { useRouter } from "next/navigation";
+import { useCompanySection } from "../context/CompanySectionContext";
 
 export default function CompanyStickyHeader({ visible, companyData }) {
+    const { isVersionHistoryOpen, setVersionHistoryOpen, alertsData } = useCompanySection() || {};
   const actionsRef = useRef(null);
+  const router = useRouter();
 
   const [actionsOpen, setActionsOpen] = useState(false);
   const [actionsDirection, setActionsDirection] = useState("down");
+
+  const slug = companyData?.company_information?.legal_name
+    ?.toLowerCase()
+    .replaceAll(" ", "-");
 
   const toggleActions = () => {
     if (!actionsRef.current) return;
@@ -40,8 +48,7 @@ export default function CompanyStickyHeader({ visible, companyData }) {
     };
   };
 
-  const companyName = getTruncatedText(companyData?.company_information?.legal_name, 15);
-  const companyAddress = getTruncatedText(companyData?.contact_details?.registered_address, 30);
+  const companyName = getTruncatedText(companyData?.company_information?.legal_name, 12);
 
   const nseSymbol = companyData?.company_information?.nse_symbol;
   const bseSymbol = companyData?.company_information?.bse_symbol;
@@ -56,8 +63,7 @@ export default function CompanyStickyHeader({ visible, companyData }) {
 
   return (
     <header
-      className={`${styles.stickyHeader} ${visible ? styles.visible : styles.hidden
-        }`}
+      className={`${styles.stickyHeader} ${visible ? styles.visible : styles.hidden} ${isVersionHistoryOpen ? styles.withSidebar : ""}`}
     >
       <div className={styles.inner}>
         {/* CENTER */}
@@ -103,19 +109,29 @@ export default function CompanyStickyHeader({ visible, companyData }) {
                 <span>{companyData?.company_information?.classification || "-"}</span>
               </div>
 
-              <div className={styles.divider}></div>
-              <div className={styles.infoMetaItem}>
-                <span title={companyAddress?.full}>{companyAddress?.display || "-"}</span>
-              </div>
 
             </div>
+            
           </div>
         </div>
 
         {/* RIGHT */}
         <div className={styles.actionSection}>
           <div className={styles.buttonGroup}>
-            <button className={styles.saveButton} onClick={() => { window.location.reload(); }}>
+            <button 
+              className={styles.saveButton} 
+              onClick={() => setVersionHistoryOpen(true)}
+            >
+              <img
+                src="/version.svg"
+                alt=""
+                className={styles.buttonIcon}
+                style={{ width: '18px', height: '18px' }}
+              />
+              Version History
+            </button>
+            
+            <button className={`${styles.saveButton} ${isVersionHistoryOpen ? styles.hideOn1200 : ""}`} onClick={() => { window.location.reload(); }}>
               <img
                 src="/icons/refresh.svg"
                 alt=""
@@ -124,7 +140,7 @@ export default function CompanyStickyHeader({ visible, companyData }) {
               Refresh Company
             </button>
 
-            <button className={styles.saveButton}>
+            <button className={`${styles.saveButton} ${isVersionHistoryOpen ? styles.hideOn1750 : ""}`}>
               <img
                 src="/icons/bookmark.svg"
                 alt=""
@@ -139,18 +155,24 @@ export default function CompanyStickyHeader({ visible, companyData }) {
                 <img
                   src="/icons/chevron-down.svg"
                   alt=""
-                  className={`${styles.chevronDown} ${actionsOpen ? styles.rotated : ""
-                    }`}
+                  className={`${styles.chevronDown} ${actionsOpen ? styles.rotated : ""}`}
                 />
               </button>
 
               {actionsOpen && (
                 <div
-                  className={`${styles.actionsDropdown} ${actionsDirection === "up"
-                    ? styles.dropdownUp
-                    : styles.dropdownDown
-                    }`}
+                  className={`${styles.actionsDropdown} ${actionsDirection === "up" ? styles.dropdownUp : styles.dropdownDown}`}
                 >
+                  {isVersionHistoryOpen && (
+                    <>
+                      <button className={`${styles.dropdownItem} ${styles.showOn1750}`}>
+                        Save
+                      </button>
+                      <button className={`${styles.dropdownItem} ${styles.showOn1200}`} onClick={() => window.location.reload()}>
+                        Refresh Company
+                      </button>
+                    </>
+                  )}
                   <button className={styles.dropdownItem}>View Company</button>
                   <button className={styles.dropdownItem}>
                     Download Report

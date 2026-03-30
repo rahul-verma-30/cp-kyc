@@ -14,8 +14,13 @@
   pointer-events: none;
 
   transition:
+    right 0.3s ease,
     transform 0.28s ease,
     opacity 0.2s ease;
+}
+
+.withSidebar {
+  right: 380px;
 }
 
 .visible {
@@ -39,7 +44,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 24px;
+    padding: 0 14px;
 }
 
 .left {
@@ -84,7 +89,7 @@
 
 .statsContainer {
     display: flex;
-    gap: 24px;
+    gap: 18px;
     align-items: center;
     padding-left: 8px;
 }
@@ -264,12 +269,30 @@
     background-color: rgba(244, 244, 245, 1);
 }
 
+@media(max-width:1600px){
+    .inner{
+        gap: 16px;
+    }
+    .statsContainer{
+        gap: 8px;
+    }
+}
+
+@media(max-width:1500px){
+    .inner{
+        gap: 16px;
+    }
+    .statsContainer{
+        gap: 5px;
+    }
+}
+
 @media(max-width:1440px){
     .inner{
         gap: 16px;
     }
     .statsContainer{
-        gap: 16px;
+        gap: 8px;
     }
 }
 
@@ -311,3 +334,94 @@
         font-size: 12px;
     }
 }
+
+/* Sidebar Width Media Query */
+@media (max-width: 1750px) {
+  .withSidebar {
+    right: 340px;
+  }
+}
+
+/* Responsive visibility classes for header buttons */
+.showOn1750,
+.showOn1200 {
+    display: none;
+}
+
+@media (max-width: 1750px) {
+    .hideOn1750 {
+        display: none !important;
+    }
+    .showOn1750 {
+        display: block;
+    }
+}
+
+@media (max-width: 1550px) {
+    .hideOn1200 {
+        display: none !important;
+    }
+    .showOn1200 {
+        display: block;
+    }
+}
+
+.alertsRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 24px;
+}
+
+.alertBadge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 11px;
+    border: 1px solid transparent;
+}
+
+.alertBadge img {
+    width: 12px;
+    height: 12px;
+}
+
+.alertBadge strong {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.legalAlert {
+    background: rgba(254, 242, 242, 1);
+    color: rgba(220, 38, 38, 1);
+    border-color: rgba(254, 202, 202, 1);
+}
+
+.adverseAlert {
+    background: rgba(254, 252, 232, 1);
+    color: rgba(202, 138, 4, 1);
+    border-color: rgba(254, 240, 138, 1);
+}
+
+.regulatoryAlert {
+    background: rgba(255, 247, 237, 1);
+    color: rgba(234, 88, 12, 1);
+    border-color: rgba(254, 215, 170, 1);
+}
+
+.viewAllBtn {
+    background: none;
+    border: none;
+    color: rgba(4, 30, 66, 1);
+    font-weight: 500;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 4px 8px;
+}
+

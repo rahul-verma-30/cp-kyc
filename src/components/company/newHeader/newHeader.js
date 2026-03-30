@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./newHeader.module.css";
 import { useRouter } from "next/navigation";
 import { formatDateToIST } from "@/utils/dateFormatter";
@@ -125,7 +125,10 @@ const RISK_DATA = [
   // },
 ];
 
+import { useCompanySection } from "../context/CompanySectionContext";
+
 const CompanyNewHeader = ({ companyData }) => {
+  const { isVersionHistoryOpen, setVersionHistoryOpen, alertsData } = useCompanySection();
   const [isExpanded, setIsExpanded] = useState(false); // State to track expansion
   const router = useRouter();
 
@@ -142,6 +145,17 @@ const CompanyNewHeader = ({ companyData }) => {
   if (hasNse && hasBse) listingText = "NSE & BSE";
   else if (hasNse) listingText = "NSE";
   else if (hasBse) listingText = "BSE";
+
+  // State extraction
+  const getAddressState = (address) => {
+    if (!address) return "-";
+    const parts = address.split(",");
+    const lastPart = parts[parts.length - 1].trim();
+    // Remove pincode (digits at the end) to get the state
+    return lastPart.replace(/\d+$/, "").trim() || lastPart;
+  };
+  const companyState = getAddressState(companyData?.contact_details?.registered_address);
+  const fullAddress = companyData?.contact_details?.registered_address || "-";
 
   const toggleExpand = () => setIsExpanded(!isExpanded);
   const [actionsOpen, setActionsOpen] = useState(false);
@@ -181,11 +195,90 @@ const CompanyNewHeader = ({ companyData }) => {
             </div>
           </div>
 
+          <div className={styles.contentSectionTop}>
+
           <div className={styles.contentSection}>
             <div className={styles.titleRow}>
               <h1 className={styles.companyName}>{companyData?.company_information?.legal_name || "-"}</h1>
             </div>
+            <div className={styles.buttonGroup}>
+              <button 
+                className={styles.saveButton}
+                onClick={() => setVersionHistoryOpen(true)}
+              >
+                <img
+                  src="/version.svg"
+                  alt=""
+                  className={styles.buttonIcon}
+                  style={{ width: '18px', height: '18px' }}
+                />
+                Version History
+              </button>
+              <button 
+                className={`${styles.saveButton} ${isVersionHistoryOpen ? styles.hideOn1200 : ""}`} 
+                onClick={() => { window.location.reload(); }}
+              >
+                <img
+                  src="/icons/refresh.svg"
+                  alt=""
+                  className={styles.buttonIcon}
+                />
+                Refresh Company
+              </button>
+              <button className={`${styles.saveButton} ${isVersionHistoryOpen ? styles.hideOn1750 : ""}`}>
+                <img
+                  src="/icons/bookmark.svg"
+                  alt=""
+                  className={styles.buttonIcon}
+                />
+                Save
+              </button>
+              <div ref={actionsRef} className={styles.actionsWrapper}>
+                <button
+                  className={styles.actionsButton}
+                  onClick={toggleActions}
+                >
+                  Actions
+                  <img
+                    src="/icons/chevron-down.svg"
+                    alt=""
+                    className={`${styles.chevronDown} ${actionsOpen ? styles.rotated : ""
+                      }`}
+                  />
+                </button>
 
+                {actionsOpen && (
+                  <div
+                    className={`${styles.actionsDropdown} ${actionsDirection === "up"
+                      ? styles.dropdownUp
+                      : styles.dropdownDown
+                      }`}
+                  >
+                    {isVersionHistoryOpen && (
+                      <>
+                        <button className={`${styles.dropdownItem} ${styles.showOn1750}`}>
+                          Save
+                        </button>
+                        <button className={`${styles.dropdownItem} ${styles.showOn1200}`} onClick={() => window.location.reload()}>
+                          Refresh Company
+                        </button>
+                      </>
+                    )}
+                    <button className={styles.dropdownItem}>
+                      View Company
+                    </button>
+                    <button className={styles.dropdownItem}>
+                      Download Report
+                    </button>
+                    <button className={styles.dropdownItem}>Share</button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className={styles.contentSectionBottom}>
+            
+          <div className={styles.contentSectionBottomLeft}>
             <div className={styles.statsContainer}>
               <div className={styles.statItem}>
                 <span className={styles.statLabel}>Industry :</span>
@@ -227,13 +320,9 @@ const CompanyNewHeader = ({ companyData }) => {
 
                 <span
                   className={styles.addressLine}
-                  title={companyData?.contact_details?.registered_address || "-"}
+                  title={fullAddress}
                 >
-                  {companyData?.contact_details?.registered_address
-                    ? companyData.contact_details.registered_address.length > 30
-                      ? companyData.contact_details.registered_address.slice(0, 30) + "..."
-                      : companyData.contact_details.registered_address
-                    : "-"}
+                  {companyState}
                 </span>
               </div>
               <div className={styles.metaItem}>
@@ -288,92 +377,55 @@ const CompanyNewHeader = ({ companyData }) => {
             </div>
 
             <div className={styles.alertsRow}>
-              <div className={`${styles.alertBadge} ${styles.legalAlert}`}>
-                <img src="/icons/scale.svg" alt="" /> <strong>-</strong> Legal
-                Cases
-              </div>
-              <div className={`${styles.alertBadge} ${styles.adverseAlert}`}>
-                <img src="/icons/file-text.svg" alt="" /> <strong>-</strong>{" "}
-                Adverse media
-              </div>
-              <div className={`${styles.alertBadge} ${styles.regulatoryAlert}`}>
-                <img src="/icons/shield.svg" alt="" /> <strong>-</strong>{" "}
-                Regulatory Issues
-              </div>
-              <div className={`${styles.alertBadge} ${styles.riskAlert}`}>
-                <img src="/icons/activity.svg" alt="" /> - Risk
-              </div>
-              <button
-                className={styles.viewAllBtn}
-                onClick={() =>
-                  router.push(`/company/${slug}?section=alerts`)
-                }
-              >
-                View All Alert <img src="/icons/arrow-down-dark.svg" alt="" />
-              </button>
-            </div>
-          </div>
-
-          <div className={styles.actionSection}>
-            <div className={styles.buttonGroup}>
-              <button className={styles.saveButton} onClick={() => { window.location.reload(); }}>
-                <img
-                  src="/icons/refresh.svg"
-                  alt=""
-                  className={styles.buttonIcon}
-                />
-                Refresh Company
-              </button>
-              <button className={styles.saveButton}>
-                <img
-                  src="/icons/bookmark.svg"
-                  alt=""
-                  className={styles.buttonIcon}
-                />
-                Save
-              </button>
-              <div ref={actionsRef} className={styles.actionsWrapper}>
+              {alertsData?.summary?.litigation?.total > 0 && (
+                <div className={`${styles.alertBadge} ${styles.legalAlert}`}>
+                  <img src="/icons/scale.svg" alt="" /> <strong>{alertsData.summary.litigation.total}</strong> Legal Cases
+                </div>
+              )}
+              {alertsData?.summary?.adverse?.total > 0 && (
+                <div className={`${styles.alertBadge} ${styles.adverseAlert}`}>
+                  <img src="/icons/file-text.svg" alt="" /> <strong>{alertsData.summary.adverse.total}</strong> Adverse Cases
+                </div>
+              )}
+              {alertsData?.summary?.regulatory?.total > 0 && (
+                <div className={`${styles.alertBadge} ${styles.regulatoryAlert}`}>
+                  <img src="/icons/shield.svg" alt="" /> <strong>{alertsData.summary.regulatory.total}</strong> Regulatory Issues
+                </div>
+              )}
+              {/* Risk Alert - To be mapped later from API */}
+              {false && (
+                <div className={`${styles.alertBadge} ${styles.riskAlert}`}>
+                  <img src="/icons/activity.svg" alt="" /> <strong>-</strong> Risk
+                </div>
+              )}
+              {alertsData?.summary && (alertsData.summary.litigation?.total > 0 || alertsData.summary.adverse?.total > 0 || alertsData.summary.regulatory?.total > 0) && (
                 <button
-                  className={styles.actionsButton}
-                  onClick={toggleActions}
+                  className={styles.viewAllBtn}
+                  onClick={() =>
+                    router.push(`/company/${slug}?section=alerts`)
+                  }
                 >
-                  Actions
-                  <img
-                    src="/icons/chevron-down.svg"
-                    alt=""
-                    className={`${styles.chevronDown} ${actionsOpen ? styles.rotated : ""
-                      }`}
-                  />
+                  View All Alert <img src="/icons/arrow-down-dark.svg" alt="" />
                 </button>
-
-                {actionsOpen && (
-                  <div
-                    className={`${styles.actionsDropdown} ${actionsDirection === "up"
-                      ? styles.dropdownUp
-                      : styles.dropdownDown
-                      }`}
-                  >
-                    <button className={styles.dropdownItem}>
-                      View Company
-                    </button>
-                    <button className={styles.dropdownItem}>
-                      Download Report
-                    </button>
-                    <button className={styles.dropdownItem}>Share</button>
-                  </div>
-                )}
-              </div>
+              )}
             </div>
-            <div className={styles.lastUpdated}>
+            </div>
+            <div className={styles.contentSectionBottomRight}>
+             <div className={styles.lastUpdated}>
               <span>Last Updated:</span>{" "}
               <strong>{formatDateToIST(companyData?.header?.last_updated)}</strong>
             </div>
+            </div>
+       
+            
+           
+          </div>
           </div>
         </div>
       </header>
 
       {/* ================= OBSERVATIONS BAR ================= */}
-      <div className={styles.observationsBar}>
+      {/* <div className={styles.observationsBar}>
         <div className={styles.observationsContent}>
           <div className={styles.obsLeft}>
             <span className={styles.dot}></span>
@@ -401,7 +453,7 @@ const CompanyNewHeader = ({ companyData }) => {
             onClick={() => setIsExpanded(!isExpanded)}
           />
         </div>
-      </div>
+      </div> */}
 
       {/* ================= EXPANDED SECTION (BELOW BAR) ================= */}
       {isExpanded && (

@@ -41,13 +41,13 @@ const ContactAddressSection = ({ companyData, loading, error }) => {
       value: contact.email_address ? (
         <a
           href={`mailto:${contact.email_address
-            .replace("[at]", "@")
-            .replace("[dot]", ".")}`}
+            .replaceAll("[at]", "@")
+            .replaceAll("[dot]", ".")}`}
           className={styles.link}
         >
           {contact.email_address
-            .replace("[at]", "@")
-            .replace("[dot]", ".")}
+            .replaceAll("[at]", "@")
+            .replaceAll("[dot]", ".")}
         </a>
       ) : (
         "-"

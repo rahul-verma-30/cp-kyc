@@ -88,7 +88,7 @@ export default function RelatedCorporates({ commonDirectorship, loading, error }
                   </div>
                 </td>
                 <td className={styles.td}>{row.common_director || "-"}</td>
-                <td className={styles.td}>{row.incorporation_date || "-"}</td>
+                <td className={styles.td}>{row.tenure === "N/A" || row.tenure ? row.tenure : "-"}</td>
                 <td className={styles.td}>
                   <span className={styles.statusBadge}>{row.status || "-"}</span>
                 </td>

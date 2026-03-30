@@ -1,0 +1,391 @@
+.sidebar {
+  flex: 0 0 0;
+  width: 0;
+  min-width: 0;
+  background-color: #ffffff;
+  border-left: 0px solid rgba(228, 228, 231, 1);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 64px);
+  z-index: 800;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: 
+    flex-basis 0.4s cubic-bezier(0.4, 0.2, 0, 1),
+    width 0.4s cubic-bezier(0.4, 0.2, 0, 1),
+    opacity 0.4s cubic-bezier(0.4, 0.2, 0, 1),
+    visibility 0.4s,
+    border-left 0.4s;
+  will-change: flex-basis, width, opacity;
+}
+
+.sidebarOpen {
+  flex-basis: 380px;
+  width: 380px;
+  border-left: 1px solid rgba(228, 228, 231, 1);
+  opacity: 1;
+  visibility: visible;
+}
+
+.internalWrapper {
+  width: 380px;
+  min-width: 380px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  padding: 24px;
+  border-bottom: 1px solid #f4f4f5;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.headerTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.clockIcon {
+  width: 24px;
+  height: 24px;
+  color: #71717a;
+}
+
+.titleText h2 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 500;
+  color: #27272A;
+}
+
+.titleText p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 18px;
+  color: #71717A;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: #a1a1aa;
+  transition: color 0.2s;
+}
+
+.closeButton:hover {
+  color: #71717a;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  position: relative;
+}
+
+/* Remove content::before to fix responsive padding offsets */
+.content::before {
+  display: none;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  bottom: 16px;
+  left: 24px; /* Perfectly aligned to the center of dots */
+  width: 1px;
+  background-color: #e4e4e7;
+  z-index: 1;
+}
+
+.versionItem {
+  position: relative;
+  /* Removed padding-left so header box can fill width */
+}
+
+.versionHeaderBox {
+  position: relative;
+  padding: 16px 16px 16px 48px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.versionHeaderBox:hover {
+  background-color: #f8fafc;
+}
+
+.versionItemActive .versionHeaderBox {
+  background-color: #EFF6FF;
+  z-index: 999;
+}
+
+.versionCardContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.timelineDot {
+  position: absolute;
+  left: 18.5px; /* Center = 20 + 4 = 24px */
+  top: 22px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #d4d4d8;
+  border: 2px solid #ffffff;
+  z-index: 2;
+}
+
+.versionItemActive .timelineDot {
+  background-color: #3b82f6;
+  width: 10px;
+  height: 10px;
+  left: 19px;  /* Center = 19 + 5 = 24px */
+  top: 21px;
+  outline: 4px solid rgba(59, 130, 246, 0.1);
+  background-color: #2563EB;
+}
+
+.versionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.dateRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dateText {
+  font-size: 14px;
+  font-weight: 600;
+  color: #27272a;
+}
+
+.currentBadge {
+  background-color: #EFF6FF;
+  color: #2563EB;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid #93C5FD;
+}
+
+.timeText {
+  display: block;
+  font-size: 12px;
+  color: #71717a;
+  margin-top: 4px;
+}
+
+.metaRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.metaText {
+  font-size: 12px;
+  color:#27272A;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chevronIcon {
+  width: 16px;
+  height: 16px;
+  color: #a1a1aa;
+  transition: transform 0.2s;
+}
+
+.versionItemActive .chevronIcon {
+  transform: rotate(180deg);
+}
+
+.expandedDetails {
+  margin-top: 12px;
+  margin-left: 48px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detailCard {
+  background-color: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.detailBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 7px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 400;
+  margin-bottom: 12px;
+}
+
+.badgeGreen {
+  background-color: #DCFCE7;
+  color: #16a34a;
+}
+
+.badgePurple {
+  background-color: #faf5ff;
+  color: #9333ea;
+}
+
+.badgeOrange {
+  background-color: #fffaf0;
+  color: #ea580c;
+}
+
+.badgeBlue {
+  background-color: #DBEAFE;
+  color: #1e40af;
+}
+
+.detailLabel {
+  font-size: 14px;
+  font-weight: 400;
+  color: #3f3f46;
+  margin-bottom: 8px;
+}
+
+.valueRow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.valueFrom {
+  font-size: 12px;
+  color: #6A7282;
+}
+
+.valueFrom strike {
+  color: #4A5565;
+}
+
+.valueTo {
+  font-size: 12px;
+  font-weight: 400;
+  color: #6A7282;
+  
+}
+
+.Val {
+  color: #16a34a;
+  font-weight: 400;
+}
+
+.valueNew {
+  font-size: 13px;
+  font-weight: 400;
+  color: #6A7282;
+}
+
+.footer {
+  padding: 16px 24px;
+  background-color: #f8fafc;
+  border-top: 1px solid #f4f4f5;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footerIconBox {
+  width: 36px;
+  height: 36px;
+  background-color: #eff6ff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footerInfo h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #27272a;
+}
+
+.footerInfo p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #71717a;
+}
+
+@media (max-width: 1750px) {
+  .sidebarOpen {
+    flex-basis: 340px;
+    width: 340px;
+  }
+  .internalWrapper {
+    width: 340px;
+    min-width: 340px;
+  }
+   .header{
+    padding: 16px;
+   }
+   .content{
+    padding: 16px;
+   }
+}
+
+@media (max-width: 1600px) {
+  .internalWrapper{
+    width: 320px;
+    min-width: 320px;
+  }
+}
+  
+
+@media (max-width: 1440px) {
+  .sidebarOpen {
+    flex-basis: 300px;
+    width: 300px;
+  }
+  .internalWrapper {
+    width: 300px;
+    min-width: 300px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .internalWrapper{
+    width: 280px;
+    min-width: 280px;
+  }
+}
+

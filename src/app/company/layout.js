@@ -5,7 +5,6 @@ import styles from "@/components/company/layout/CompanyLayout.module.css";
 import CompanyNewHeader from "@/components/company/newHeader/newHeader";
 import CompanyStickyHeader from "@/components/company/newHeader/CompanyStickyHeader";
 import CompanyNewSidebar from "@/components/company/newSidebar/newSidebar";
-import { CompanySectionProvider } from "@/components/company/context/CompanySectionContext";
 
 export default function CompanyLayout({ children }) {
   const [showStickyHeader, setShowStickyHeader] = useState(false);
@@ -22,7 +21,7 @@ export default function CompanyLayout({ children }) {
   }, []);
 
   return (
-    <CompanySectionProvider>
+    <>
       {/* 🔹 Compact sticky header */}
       <CompanyStickyHeader visible={showStickyHeader} />
 
@@ -31,7 +30,7 @@ export default function CompanyLayout({ children }) {
         {/* <CompanyNewHeader /> */}
 
         {/* Sidebar + Content */}
-        <div className={styles.contentWrapper}>
+        {/* <div className={styles.contentWrapper}> */}
           <div className={styles.contentRow}>
             {/* <aside className={styles.sidebar}>
               <CompanyNewSidebar />
@@ -39,8 +38,8 @@ export default function CompanyLayout({ children }) {
 
             <main className={styles.main}>{children}</main>
           </div>
-        </div>
+        {/* </div> */}
       </div>
-    </CompanySectionProvider>
+    </>
   );
 }
