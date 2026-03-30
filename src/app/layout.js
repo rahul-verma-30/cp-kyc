@@ -8,6 +8,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import { Toaster, toast } from "react-hot-toast";
+import VersionHistory from "@/components/company/versionHistory/VersionHistory";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -448,6 +449,7 @@ export default function RootLayout({ children }) {
                   </aside>
 
                   <main className={styles.contentArea}>{children}</main>
+                  <VersionHistory />
                 </div>
               )}
             </div>

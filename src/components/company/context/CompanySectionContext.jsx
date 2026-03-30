@@ -14,6 +14,10 @@ export function CompanySectionProvider({ children }) {
 
   const [activeSection, setActiveSection] = useState(sectionFromUrl);
   const [activeSubSection, setActiveSubSection] = useState(subFromUrl);
+  const [isVersionHistoryOpen, setVersionHistoryOpen] = useState(false);
+  const [alertsData, setAlertsData] = useState(null);
+  const [alertsLoading, setAlertsLoading] = useState(false);
+  const [alertsError, setAlertsError] = useState(null);
 
   useEffect(() => {
     setActiveSection(sectionFromUrl);
@@ -38,6 +42,14 @@ export function CompanySectionProvider({ children }) {
         activeSubSection,
         setActiveSection: updateSection,
         setActiveSubSection,
+        isVersionHistoryOpen,
+        setVersionHistoryOpen,
+        alertsData,
+        setAlertsData,
+        alertsLoading,
+        setAlertsLoading,
+        alertsError,
+        setAlertsError,
       }}
     >
       {children}

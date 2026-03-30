@@ -5,12 +5,13 @@ import styles from "@/components/company/layout/CompanyLayout.module.css";
 import CompanyNewHeader from "@/components/company/newHeader/newHeader";
 import CompanyStickyHeader from "@/components/company/newHeader/CompanyStickyHeader";
 import CompanyNewSidebar from "@/components/company/newSidebar/newSidebar";
-import { CompanySectionProvider } from "@/components/company/context/CompanySectionContext";
 import { useParams } from "next/navigation";
+import VersionHistory from "@/components/company/versionHistory/VersionHistory";
+import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 
 export default function CompanyLayout({ children }) {
+  const { setAlertsData, setAlertsLoading, setAlertsError } = useCompanySection() || {};
   const [showStickyHeader, setShowStickyHeader] = useState(false);
-
   const params = useParams();
   const rawCompanyName = (params.name.replaceAll("-", " ")).toUpperCase(); // from /company/dabur because route is [name]
   const [companyName, setCompanyName] = useState("");
@@ -87,8 +88,44 @@ export default function CompanyLayout({ children }) {
     getCompanyDetails();
   }, [companyName]);
 
+  /* ================= GET ALERTS DATA ================= */
+  useEffect(() => {
+    if (!companyName) return;
+
+    const getAlerts = async () => {
+      try {
+        setAlertsLoading(true);
+        setAlertsError(null);
+
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/alerts`,
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`Alerts Error ${response.status}`);
+        }
+
+        const data = await response.json();
+        setAlertsData(data);
+      } catch (error) {
+        console.error("Error fetching Alerts in layout:", error);
+        setAlertsError(error.message);
+      } finally {
+        setAlertsLoading(false);
+      }
+    };
+
+    getAlerts();
+  }, [companyName, setAlertsData, setAlertsLoading, setAlertsError]);
+
   return (
-    <CompanySectionProvider>
+    <>
       {/* 🔹 Compact sticky header */}
       <CompanyStickyHeader visible={showStickyHeader} companyData={companyData} />
 
@@ -107,6 +144,6 @@ export default function CompanyLayout({ children }) {
           </div>
         </div>
       </div>
-    </CompanySectionProvider>
+    </>
   );
 }

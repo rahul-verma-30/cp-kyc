@@ -186,14 +186,14 @@ const OwnershipSection = ({
                 <div className={`${styles.dot} ${styles.dotPromoter}`}></div>
                 <div>
                   <p className={styles.legendLabel}>Promoter </p>
-                  <p className={styles.legendValue}>{shareholdingData?.summary?.promoter_percentage ? `${shareholdingData?.summary?.promoter_percentage}%` : "-"}</p>
+                  <p className={styles.legendValue}>{shareholdingData?.summary?.promoter_percentage ? `${shareholdingData?.summary?.promoter_percentage}` : "-"}</p>
                 </div>
               </div>
               <div className={styles.legendItem}>
                 <div className={`${styles.dot} ${styles.dotNonPromoter}`}></div>
                 <div>
                   <p className={styles.legendLabel}>Non Promoter</p>
-                  <p className={styles.legendValue}>{shareholdingData?.summary?.public_percentage ? `${shareholdingData?.summary?.public_percentage}%` : "-"}</p>
+                  <p className={styles.legendValue}>{shareholdingData?.summary?.public_percentage ? `${shareholdingData?.summary?.public_percentage}` : "-"}</p>
                 </div>
               </div>
             </div>

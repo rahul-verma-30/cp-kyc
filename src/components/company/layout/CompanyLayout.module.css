@@ -1,13 +1,16 @@
 .container {
-  display: flex;
-  flex-direction: column;
+  /* display: flex; */
+  /* flex-direction: column;   */
   width: 100%;
+}
+
+.maincontentWrapper{
+  padding: 0;
 }
 
 /* Full width header */
 .headerWrapper {
   width: 100%;
-
   border-bottom: 1px solid rgba(228, 228, 231, 1);
 }
 
@@ -17,14 +20,20 @@
   padding: 40px 0;   /* vertical only */
 }
 
+
+/* Remove padding when directly below headerWrapper */
+.headerWrapper + .contentWrapper {
+  padding: 0;
+}
+
 /* CENTERED CONTAINER — HAS PADDING */
 .contentRow {
   display: flex;
-  max-width: 1680px;
+  max-width: 1632px;
   margin: 0 auto;
   gap: 32px;
 
-  padding: 0 24px;     /* ✅ LEFT–RIGHT PADDING HERE */
+  padding: 0 16px;     /* ✅ LEFT–RIGHT PADDING HERE */
   box-sizing: border-box;
 }
 
