@@ -214,7 +214,7 @@ const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, set
                 <tr>
                   <th>Charge ID</th>
                   <th>Lender</th>
-                  <th>Amount Lakh</th>
+                  <th>Amount (Cr.)</th>
                   <th>Creation Date</th>
                   <th>Modification Date</th>
                 </tr>
@@ -224,7 +224,7 @@ const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, set
                   <tr key={charge.charge_id}>
                     <td>{charge.charge_id}</td>
                     <td>{charge.lender}</td>
-                    <td>{charge.amount_lakh || "-"}</td>
+                    <td>{charge.amount_cr || "-"}</td>
                     <td>{charge.creation_date || "-"}</td>
                     <td>{charge.modification_date || "-"}</td>
                   </tr>
@@ -294,7 +294,7 @@ const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, set
                 <tr>
                   <th>Charge ID</th>
                   <th>Lender</th>
-                  <th>Amount Lakh</th>
+                  <th>Amount (Cr.)</th>
                   <th>Creation Date</th>
                   <th>Modification Date</th>
                   <th>Satisfaction Date</th>
@@ -307,7 +307,7 @@ const CompanyHighlights = ({ companyHighlights, page, limit, loading, error, set
                     <tr key={charge.charge_id}>
                       <td>{charge.charge_id}</td>
                       <td>{charge.lender}</td>
-                      <td>{charge.amount_lakh || "-"}</td>
+                      <td>{charge.amount_cr || "-"}</td>
                       <td>{charge.creation_date || "-"}</td>
                       <td>{charge.modification_date || "-"}</td>
                       <td>{charge.satisfaction_date || "-"}</td>

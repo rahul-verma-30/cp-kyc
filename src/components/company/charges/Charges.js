@@ -276,7 +276,7 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
               <tr>
                 <th>Charge ID</th>
                 <th>Lender</th>
-                <th>Amount Lakh</th>
+                <th>Amount (Cr.)</th>
                 <th>Creation Date</th>
                 <th>Modication Date</th>
               </tr>
@@ -287,7 +287,7 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
                   <tr key={item.charge_id}>
                     <td>{item.charge_id}</td>
                     <td>{item.lender}</td>
-                    <td>{item.amount_lakh}</td>
+                    <td>{item.amount_cr}</td>
                     <td>{item.creation_date}</td>
                     <td>{item.modification_date}</td>
                   </tr>
@@ -370,7 +370,7 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
               <tr>
                 <th>Charge ID</th>
                 <th>Lender</th>
-                <th>Amount Lakh</th>
+                <th>Amount (Cr.)</th>
                 <th>Creation Date</th>
                 <th>Modication Date</th>
                 <th>Satisfaction Date</th>
@@ -382,7 +382,7 @@ export default function ChargesPage({ charges, loading, error, openPage, closedP
                 <tr key={item.charge_id}>
                   <td>{item.charge_id}</td>
                   <td>{item.lender}</td>
-                  <td>{item.amount_lakh}</td>
+                  <td>{item.amount_cr}</td>
                   <td>{item.creation_date}</td>
                   <td>{item.modification_date}</td>
                   <td>{item.satisfaction_date}</td>
