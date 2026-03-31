@@ -124,33 +124,35 @@ const VersionHistory = () => {
                     </div>
                   </div>
 
-                  {expandedId === item.id && item.details && (
-                    <div className={styles.expandedDetails}>
-                      {item.details.map((detail, idx) => (
-                        <div key={idx} className={styles.detailCard}>
-                          <div className={`${styles.detailBadge} ${styles['badge' + detail.variant.charAt(0).toUpperCase() + detail.variant.slice(1)]}`}>
-                            {detail.type === "Financials" && (
-                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
-                              </svg>
-                            )}
-                            {detail.type === "Directors" && <img src="/director.svg" alt="" width="12" />}
-                            {detail.type === "Compliance" && <img src="/erroricon.svg" alt="" width="12" />}
-                            {detail.type}
+                  {item.details && (
+                    <div className={`${styles.detailsWrapper} ${expandedId === item.id ? styles.detailsWrapperOpen : ""}`}>
+                      <div className={styles.expandedDetails}>
+                        {item.details.map((detail, idx) => (
+                          <div key={idx} className={styles.detailCard}>
+                            <div className={`${styles.detailBadge} ${styles['badge' + detail.variant.charAt(0).toUpperCase() + detail.variant.slice(1)]}`}>
+                              {detail.type === "Financials" && (
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+                                </svg>
+                              )}
+                              {detail.type === "Directors" && <img src="/director.svg" alt="" width="12" />}
+                              {detail.type === "Compliance" && <img src="/erroricon.svg" alt="" width="12" />}
+                              {detail.type}
+                            </div>
+                            <div className={styles.detailLabel}>{detail.label}</div>
+                            <div className={styles.valueRow}>
+                              {detail.newStatus ? (
+                                <div className={styles.valueNew}>New: <span className={styles.Val}>{detail.newStatus}</span></div>
+                              ) : (
+                                <>
+                                  <div className={styles.valueFrom}>From: <strike>{detail.from}</strike></div>
+                                  <div className={styles.valueTo}>To: <span className={styles.Val}>{detail.to}</span></div>
+                                </>
+                              )}
+                            </div>
                           </div>
-                          <div className={styles.detailLabel}>{detail.label}</div>
-                          <div className={styles.valueRow}>
-                            {detail.newStatus ? (
-                              <div className={styles.valueNew}>New: <span className={styles.Val}>{detail.newStatus}</span></div>
-                            ) : (
-                              <>
-                                <div className={styles.valueFrom}>From: <strike>{detail.from}</strike></div>
-                                <div className={styles.valueTo}>To: <span className={styles.Val}>{detail.to}</span></div>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
