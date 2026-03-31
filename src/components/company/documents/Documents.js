@@ -180,6 +180,7 @@ const Documents = () => {
   const [isClosing, setIsClosing] = useState(false);
   const [modalStep, setModalStep] = useState(1);
   const [timeLeft, setTimeLeft] = useState(900);
+  const [isUnlocked, setIsUnlocked] = useState(false);
 
   useEffect(() => {
     let timer;
@@ -220,12 +221,14 @@ const Documents = () => {
       // This will be removed when actual API polling is added
       const transitionTimer = setTimeout(() => {
         setModalStep(3);
+        setIsUnlocked(true);
       }, 10000);
       return () => clearTimeout(transitionTimer);
     }
   }, [modalStep]);
 
   const categories = [
+    "MCA Documents",
     "Annual Returns and Balance Sheet Forms",
     "Annual Returns and Balance Sheet Forms (Attachments)",
     "Certificates",
@@ -338,8 +341,21 @@ const Documents = () => {
                         <Check className={styles.checkIcon} />
                       </span>
 
-                      <span className={styles.checkboxLabel}>{item}</span>
-                      <span className={styles.countBadge}>-</span>
+                      <div className={styles.labelWrapper}>
+                        <span className={styles.checkboxLabel}>{item}</span>
+                        {item === "MCA Documents" && !isUnlocked && (
+                          <Image 
+                            src="/icons/goldenlock.svg" 
+                            alt="Lock" 
+                            width={20} 
+                            height={20} 
+                            className={styles.categoryLock} 
+                          />
+                        )}
+                      </div>
+                      <span className={styles.countBadge}>
+                        {item === "MCA Documents" ? "24" : "-"}
+                      </span>
                     </label>
                   ))}
                 </div>
@@ -556,7 +572,13 @@ const Documents = () => {
                 <button className={styles.cancelBtn} onClick={handleCloseModal}>
                   Cancel
                 </button>
-                <button className={styles.proceedBtn} onClick={() => setModalStep(2)}>
+                <button 
+                  className={styles.proceedBtn} 
+                  onClick={() => {
+                    setModalStep(2);
+                    window.open("https://www.mca.gov.in/content/mca/global/en/foportal/fologin.html", "_blank");
+                  }}
+                >
                   Proceed to Payment
                   <Image src="/icons/paymentgo.svg" alt="Go" width={16} height={16} />
                 </button>

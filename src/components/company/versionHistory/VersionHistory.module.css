@@ -106,20 +106,20 @@
   position: relative;
 }
 
-.timeline::before {
-  content: "";
-  position: absolute;
-  top: 16px;
-  bottom: 16px;
-  left: 24px; /* Perfectly aligned to the center of dots */
-  width: 1px;
-  background-color: #e4e4e7;
-  z-index: 1;
-}
-
 .versionItem {
   position: relative;
   /* Removed padding-left so header box can fill width */
+}
+
+.versionItem:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 22.5px; /* Center of dot is at 18.5 + 4 = 22.5 */
+  top: 23px;    /* Just below the dot */
+  bottom: -30px; /* Down to the next item's dot area */
+  width: 1px;
+  background-color: #e4e4e7;
+  z-index: 1;
 }
 
 .versionHeaderBox {
@@ -152,7 +152,6 @@
   height: 8px;
   border-radius: 50%;
   background-color: #d4d4d8;
-  border: 2px solid #ffffff;
   z-index: 2;
 }
 
@@ -227,10 +226,26 @@
   transform: rotate(180deg);
 }
 
+.detailsWrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.5s ease-in-out, opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.detailsWrapperOpen {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+}
+
 .expandedDetails {
-  margin-top: 12px;
+  min-height: 0;
+  padding-top: 12px;
+  padding-bottom: 24px;
   margin-left: 48px;
-  margin-bottom: 24px;
   display: flex;
   flex-direction: column;
   gap: 12px;
