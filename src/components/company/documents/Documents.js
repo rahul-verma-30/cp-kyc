@@ -1,7 +1,8 @@
-import { Check, ChevronRight, FileText, Paperclip } from "lucide-react";
+import { Check, ChevronRight, FileText, Paperclip, X, AlertCircle } from "lucide-react";
 import styles from "./Documents.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { formatDateToIST } from "@/utils/dateFormatter";
+import Image from "next/image";
 
 const dummyDocs = [
   // {
@@ -175,6 +176,54 @@ const DocumentsTable = () => {
 const Documents = () => {
   const [openCategory, setOpenCategory] = useState(true);
   const [openYear, setOpenYear] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const [modalStep, setModalStep] = useState(1);
+  const [timeLeft, setTimeLeft] = useState(900);
+
+  useEffect(() => {
+    let timer;
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden";
+      setTimeLeft(900); // Reset to 15 mins
+      timer = setInterval(() => {
+        setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+      }, 1000);
+    } else {
+      document.body.style.overflow = "unset";
+      clearInterval(timer);
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+      clearInterval(timer);
+    };
+  }, [isModalOpen]);
+
+  const handleCloseModal = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsModalOpen(false);
+      setIsClosing(false);
+      setModalStep(1);
+    }, 300);
+  };
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  useEffect(() => {
+    if (modalStep === 2) {
+      // Temporary logic: transition to Step 3 after 10 seconds
+      // This will be removed when actual API polling is added
+      const transitionTimer = setTimeout(() => {
+        setModalStep(3);
+      }, 10000);
+      return () => clearTimeout(transitionTimer);
+    }
+  }, [modalStep]);
 
   const categories = [
     "Annual Returns and Balance Sheet Forms",
@@ -206,8 +255,44 @@ const Documents = () => {
             </span>
           </div>
         </div>
-
+ 
+        <div className={styles.premiumBanner}>
+          <div className={styles.premiumLeft}>
+            <div className={styles.premiumIcon}>
+              <Image src="/icons/docLock.svg" alt="Lock" width={24} height={24} />
+            </div>
+            <div className={styles.premiumInfo}>
+              <div className={styles.premiumTitleWrapper}>
+                <h3 className={styles.premiumTitle}>MCA Premium Documents</h3>
+                <span className={styles.premiumTag}>Premium</span>
+              </div>
+              <p className={styles.premiumDesc}>
+                Access exclusive documents directly from the Ministry of Corporate Affairs including detailed financial statements, complete board minutes, auditor reports with annexures, and more.
+              </p>
+              <div className={styles.premiumStats}>
+                <div className={styles.statItem}>
+                  <Image src="/icons/docTick.svg" alt="Tick" width={16} height={16} />
+                  <span>24 Premium Documents</span>
+                </div>
+                <div className={styles.statItem}>
+                  <Image src="/icons/docTick.svg" alt="Tick" width={16} height={16} />
+                  <span>1 Year Access</span>
+                </div>
+                <div className={styles.statItem}>
+                  <Image src="/icons/docTick.svg" alt="Tick" width={16} height={16} />
+                  <span>Verified MCA Source</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button className={styles.unlockBtn} onClick={() => setIsModalOpen(true)}>
+            <Image src="/icons/lock.svg" alt="Unlock" width={16} height={16} />
+            Unlock Documents
+          </button>
+        </div>
+ 
         <div className={styles.contentContainer}>
+
           {/* FILTER SIDEBAR */}
           <aside className={styles.sideBar}>
             <div className={styles.filterHeader}>
@@ -359,6 +444,127 @@ const Documents = () => {
           </div>
         </div>
       </div>
+
+      {isModalOpen && (
+        <div 
+          className={`${styles.modalOverlay} ${isClosing ? styles.closing : ""}`} 
+          onClick={handleCloseModal}
+        >
+          <div 
+            className={`${styles.modalContainer} ${isClosing ? styles.closing : ""}`} 
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.modalHeader}>
+              <div className={styles.modalIcon}>
+                <Image src="/icons/lockAccess.svg" alt="Access" width={24} height={24} />
+              </div>
+              <div className={styles.modalTitleArea}>
+                <h2 className={styles.modalTitle}>MCA Document Access</h2>
+                <p className={styles.modalSubTitle}>Complete payment to view documents</p>
+              </div>
+              <button className={styles.closeBtn} onClick={handleCloseModal}>
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className={styles.modalBody}>
+              {modalStep === 1 ? (
+                <>
+                  <div className={styles.timerSection}>
+                    <div className={styles.timerLeft}>
+                      <Image src="/icons/orangeClock.svg" alt="Clock" width={24} height={24} />
+                      <div className={styles.timerLabel}>
+                        <span>Complete payment within</span>
+                        <span>Session will expire after this time</span>
+                      </div>
+                    </div>
+                    <div className={styles.timerValue}>
+                      <span>{formatTime(timeLeft)}</span>
+                      <span>minutes</span>
+                    </div>
+                  </div>
+
+                  <div className={styles.detailsGrid}>
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>Document Category</span>
+                      <span className={styles.detailValue}>MCA Official Documents</span>
+                    </div>
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>Total Documents</span>
+                      <span className={styles.detailValue}>24 Documents</span>
+                    </div>
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>Access Period</span>
+                      <span className={styles.detailValue}>1 Year</span>
+                    </div>
+                  </div>
+
+                  <div className={styles.instructionsBox}>
+                    <div className={styles.instructionIcon}>
+                      <Image src="/icons/bluealert.svg" alt="Info" width={20} height={20} />
+                    </div>
+                    <div className={styles.instructionContent}>
+                      <h4 className={styles.instructionTitle}>Payment Instructions</h4>
+                      <ul className={styles.instructionList}>
+                        <li>You will be redirected to the MCA official payment portal</li>
+                        <li>Complete the payment using your preferred payment method</li>
+                        <li>Return to this page after successful payment</li>
+                        <li>Your documents will be unlocked automatically</li>
+                      </ul>
+                    </div>
+                  </div>
+                </>
+              ) : modalStep === 2 ? (
+                <div className={styles.processingView}>
+                  <div className={styles.processingIcon}>
+                    <Image src="/icons/blueClock.svg" alt="Processing" width={40} height={40} />
+                  </div>
+                  <h3 className={styles.processingTitle}>Processing Payment...</h3>
+                  <p className={styles.processingSubtitle}>
+                    Please complete your payment on the MCA Portal and return to this page
+                  </p>
+                  <div className={styles.loadingDots}>
+                    <span className={styles.dot}></span>
+                    <span className={styles.dot}></span>
+                    <span className={styles.dot}></span>
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.successView}>
+                  <div className={styles.successIcon}>
+                    <Image src="/icons/greenTick.svg" alt="Success" width={32} height={32} />
+                  </div>
+                  <h3 className={styles.successTitle}>Payment Successful!</h3>
+                  <p className={styles.successSubtitle}>
+                    Your MCA documents have been unlocked successfully
+                  </p>
+                  <div className={styles.accessAlert}>
+                    <div className={styles.accessAlertHeader}>
+                      <Image src="/icons/greenAlert.svg" alt="Alert" width={24} height={24} />
+                      <h4 className={styles.accessAlertTitle}>Access Granted</h4>
+                    </div>
+                    <p className={styles.accessAlertDesc}>
+                      You can now view and download all MCA documents
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {modalStep === 1 && (
+              <div className={styles.modalFooter}>
+                <button className={styles.cancelBtn} onClick={handleCloseModal}>
+                  Cancel
+                </button>
+                <button className={styles.proceedBtn} onClick={() => setModalStep(2)}>
+                  Proceed to Payment
+                  <Image src="/icons/paymentgo.svg" alt="Go" width={16} height={16} />
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

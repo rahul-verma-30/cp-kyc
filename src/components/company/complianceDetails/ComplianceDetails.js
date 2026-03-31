@@ -241,7 +241,9 @@ const ComplianceDetails = () => {
 
   const params = useParams();
   const companySlug = params?.name;
+  const companyName = companySlug ? decodeURIComponent(companySlug.replaceAll("-", " ")).toUpperCase() : "";
 
+  const [auditorRemarksData, setAuditorRemarksData] = useState(null);
   const [auditorsRemarksStandaloneAPI, setAuditorsRemarksStandaloneAPI] = useState(null);
   const [auditorsRemarksConsolidatedAPI, setAuditorsRemarksConsolidatedAPI] = useState(null);
 
@@ -257,7 +259,7 @@ const ComplianceDetails = () => {
       try {
         const token = localStorage.getItem("token");
         const res = await fetch(
-          `https://cpkycapi.webninjaz.com/api/company/${companySlug}/compliance-details/gst?active_page=${activeGstParams.page}&active_size=${activeGstParams.size}&inactive_page=${inactiveGstParams.page}&inactive_size=${inactiveGstParams.size}`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/compliance-details/gst?active_page=${activeGstParams.page}&active_size=${activeGstParams.size}&inactive_page=${inactiveGstParams.page}&inactive_size=${inactiveGstParams.size}`,
           {
             headers: {
               Authorization: token ? `Bearer ${token}` : "",
@@ -274,19 +276,20 @@ const ComplianceDetails = () => {
       }
     };
     fetchGstData();
-  }, [companySlug, activeGstParams.page, activeGstParams.size, inactiveGstParams.page, inactiveGstParams.size]);
+  }, [companyName, activeGstParams.page, activeGstParams.size, inactiveGstParams.page, inactiveGstParams.size]);
 
   useEffect(() => {
-    if (!companySlug) return;
+    if (!companyName) return;
     const fetchAuditorRemarks = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`https://cpkycapi.webninjaz.com/api/company/${companySlug}/compliance-details/auditors-remark`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/compliance-details/auditors-remark`, {
           headers: {
             Authorization: token ? `Bearer ${token}` : "",
           },
         });
         const data = await res.json();
+        setAuditorRemarksData(data);
 
         if (data.auditors_remarks_standalone_table) {
            setAuditorsRemarksStandaloneAPI(data.auditors_remarks_standalone_table);
@@ -299,7 +302,7 @@ const ComplianceDetails = () => {
       }
     };
     fetchAuditorRemarks();
-  }, [companySlug]);
+  }, [companyName]);
 
 
   // ── EPFO API State ──
@@ -315,7 +318,7 @@ const ComplianceDetails = () => {
       try {
         const token = localStorage.getItem("token");
         const res = await fetch(
-          `https://cpkycapi.webninjaz.com/api/company/${companySlug}/compliance-details/epfo?active_page=${activeEpfoParams.page}&active_size=${activeEpfoParams.size}&inactive_page=${inactiveEpfoParams.page}&inactive_size=${inactiveEpfoParams.size}`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/compliance-details/epfo?active_page=${activeEpfoParams.page}&active_size=${activeEpfoParams.size}&inactive_page=${inactiveEpfoParams.page}&inactive_size=${inactiveEpfoParams.size}`,
           {
             headers: {
               Authorization: token ? `Bearer ${token}` : "",
@@ -332,7 +335,7 @@ const ComplianceDetails = () => {
       }
     };
     fetchEpfoData();
-  }, [companySlug, activeEpfoParams.page, activeEpfoParams.size, inactiveEpfoParams.page, inactiveEpfoParams.size]);
+  }, [companyName, activeEpfoParams.page, activeEpfoParams.size, inactiveEpfoParams.page, inactiveEpfoParams.size]);
 
   // ── CSR + Credit Rating API State ──
   const [csrCreditData, setCsrCreditData] = useState(null);
@@ -348,7 +351,7 @@ const ComplianceDetails = () => {
       try {
         const token = localStorage.getItem("token");
         const res = await fetch(
-          `https://cpkycapi.webninjaz.com/api/company/${companySlug}/compliance-details/csr-credit-rating?financial_year_page=${csrTableParams.page}&financial_year_size=${csrTableParams.size}&credit_rating_page=${creditRatingParams.page}&credit_rating_size=${creditRatingParams.size}&rating_agency=${ratingAgency}`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/compliance-details/csr-credit-rating?financial_year_page=${csrTableParams.page}&financial_year_size=${csrTableParams.size}&credit_rating_page=${creditRatingParams.page}&credit_rating_size=${creditRatingParams.size}&rating_agency=${ratingAgency}`,
           {
             headers: {
               Authorization: token ? `Bearer ${token}` : "",
@@ -365,7 +368,7 @@ const ComplianceDetails = () => {
       }
     };
     fetchCsrCreditData();
-  }, [companySlug, csrTableParams.page, csrTableParams.size, creditRatingParams.page, creditRatingParams.size, ratingAgency]);
+  }, [companyName, csrTableParams.page, csrTableParams.size, creditRatingParams.page, creditRatingParams.size, ratingAgency]);
 
   const [agency, setAgency] = useState("CRISIL");
   const [selectedDate, setSelectedDate] = useState("2023-11-24");
@@ -404,12 +407,14 @@ const ComplianceDetails = () => {
           <h2 className={styles.title}>Compliance Details</h2>
           <div className={styles.sourceRow}>
             <span className={styles.sourceLabel}>Source:</span>
-            <span className={styles.sourceValue}>MCA</span>
+            <span className={styles.sourceValue}>{auditorRemarksData?.source || "MCA"}</span>
             <span className={styles.divider}></span>
             <span className={styles.updatedText}>
               <span> Last Updated:</span>
-              {formatDateToIST("-")}
+              {formatDateToIST(auditorRemarksData?.last_updated || "-")}
             </span>
+
+
           </div>
         </div>
         {/* Auditors' Remarks Standalone table */}
