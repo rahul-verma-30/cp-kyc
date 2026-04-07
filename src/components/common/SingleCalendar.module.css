@@ -1,0 +1,166 @@
+.calendarPopout {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: 280px;
+  user-select: none;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.navButton {
+  padding: 6px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.navButton:hover {
+  background: #f5f5f5;
+}
+
+.navIcon {
+  width: 18px;
+  height: 18px;
+  color: #666;
+}
+
+.monthHeader {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.selectorGroup {
+  position: relative;
+}
+
+.selectorLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  color: #333;
+}
+
+.chevronDown {
+  width: 14px;
+  height: 14px;
+  color: #999;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-top: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1001;
+}
+
+.monthDropdown { width: 100px; }
+.yearDropdown { width: 80px; }
+
+.dropdownItem {
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.dropdownItem:hover {
+  background: #f5f5f5;
+}
+
+.dropdownItemActive {
+  background: #f0f0f0;
+  font-weight: 600;
+}
+
+.daysGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.dayOfWeek {
+  font-size: 11px;
+  color: #999;
+  text-align: center;
+  padding: 4px 0;
+  font-weight: 600;
+}
+
+.dayCell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.dayCellCurrent {
+  color: #333;
+}
+
+.dayCellNotCurrent {
+  color: #ccc;
+}
+
+.dayCellCurrent:hover {
+  background: #f5f5f5;
+}
+
+.daySelected {
+  background: #000 !important;
+  color: #fff !important;
+}
+
+.dayDisabled {
+  color: #eee !important;
+  pointer-events: none;
+}
+
+.dayInner {
+  font-size: 12px;
+  font-weight: 500;
+  position: relative;
+}
+
+.todayDot {
+  width: 4px;
+  height: 4px;
+  background: #2563eb;
+  border-radius: 50%;
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+}

@@ -106,8 +106,25 @@ const dummyDocs = [
   //   files: [],
   // },
 ];
-const DocumentsTable = () => {
+const DocumentsTable = ({ documents, isLoading, onDownload }) => {
   const [openRow, setOpenRow] = useState(null);
+  const [downloadingId, setDownloadingId] = useState(null);
+
+  if (isLoading && (!documents || documents.length === 0)) {
+    return (
+      <div className={styles.docsTable}>
+        <div className={styles.loadingPlaceholder}>Loading documents...</div>
+      </div>
+    );
+  }
+
+  if (!documents || documents.length === 0) {
+    return (
+      <div className={styles.docsTable}>
+        <div className={styles.noDataPlaceholder}>No documents found for the selected filters.</div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.docsTable}>
@@ -119,8 +136,9 @@ const DocumentsTable = () => {
       </div>
 
       {/* Rows */}
-      {dummyDocs.map((doc) => {
+      {documents.map((doc) => {
         const isOpen = openRow === doc.id;
+        const downloadUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/mca-document-agent/download/${doc.id}?source=CompanyDocument`;
 
         return (
           <div key={doc.id} className={styles.docsGroup}>
@@ -130,22 +148,18 @@ const DocumentsTable = () => {
               onClick={() => setOpenRow(isOpen ? null : doc.id)}
             >
               <div className={styles.docName}>
-                {doc.files.length > 0 ? (
-                  <ChevronRight
-                    size={16}
-                    className={`${styles.chevronRow} ${
-                      isOpen ? styles.rotate : ""
-                    }`}
-                  />
-                ) : (
-                  <div className={styles.invisible}></div>
-                )}
+                <ChevronRight
+                  size={16}
+                  className={`${styles.chevronRow} ${
+                    isOpen ? styles.rotate : ""
+                  }`}
+                />
                 <FileText size={20} color="#3B82F6" />
-                <span>{doc.title}</span>
+                <span>{doc.document_name}</span>
               </div>
 
-              <span className={styles.muted}>{doc.formType}</span>
-              <span className={styles.muted}>{doc.date}</span>
+              <span className={styles.muted}>{doc.document_type}</span>
+              <span className={styles.muted}>{doc.filing_date}</span>
             </div>
 
             {/* Expandable Section */}
@@ -154,17 +168,20 @@ const DocumentsTable = () => {
                 isOpen ? styles.expandOpen : ""
               }`}
             >
-              {doc.files.map((file, idx) => (
-                <div
-                  key={file}
-                  className={`${styles.subRow} ${idx === 0 ? styles.subRowFirst : ""} ${idx === doc.files.length - 1 ? styles.subRowLast : ""}`}
+              <div className={styles.subRow}>
+                <Paperclip size={20} color="#2563EB" />
+                <span 
+                  className={`${styles.fileLink} ${downloadingId === doc.id ? styles.downloading : ""}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (downloadingId === doc.id) return;
+                    setDownloadingId(doc.id);
+                    onDownload(doc.id, doc.document_name).finally(() => setDownloadingId(null));
+                  }}
                 >
-                  <Paperclip size={20} color="#2563EB" />
-                  <a href="#" className={styles.fileLink}>
-                    {file}
-                  </a>
-                </div>
-              ))}
+                  {downloadingId === doc.id ? "Downloading..." : `Download ${doc.document_name}`}
+                </span>
+              </div>
             </div>
           </div>
         );
@@ -173,7 +190,7 @@ const DocumentsTable = () => {
   );
 };
 
-const Documents = () => {
+const Documents = ({ companyName }) => {
   const [openCategory, setOpenCategory] = useState(true);
   const [openYear, setOpenYear] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -181,14 +198,194 @@ const Documents = () => {
   const [modalStep, setModalStep] = useState(1);
   const [timeLeft, setTimeLeft] = useState(900);
   const [isUnlocked, setIsUnlocked] = useState(false);
+  const [apiLoading, setApiLoading] = useState(false);
+  const [jobData, setJobData] = useState(null);
+  const [statusData, setStatusData] = useState(null);
+  const [isCheckingStatus, setIsCheckingStatus] = useState(false);
+  const [docCategories, setDocCategories] = useState([]);
+  const [docYears, setDocYears] = useState([]);
+  const [isCategoriesLoading, setIsCategoriesLoading] = useState(false);
+  const [documentsList, setDocumentsList] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState(["MCA Documents"]); 
+  const [selectedYear, setSelectedYear] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalDocs, setTotalDocs] = useState(0);
+  const [isDocsLoading, setIsDocsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [mcaHeaderInfo, setMcaHeaderInfo] = useState({ 
+    source: "-", 
+    lastUpdated: "-",
+    totalDocuments: 0 
+  });
+
+  // --- TIMER CONFIGURATION ---
+  const INITIAL_COUNTDOWN = 15; // Minutes for initial modal view
+  const PAYMENT_CHECK_DELAY = 25; // Minutes to wait before checking payment status
+  const RETRY_DELAY = 3; // Minutes to wait and check again if status is RUNNING
+  // ---------------------------
+
+  const fetchCategories = async () => {
+    try {
+      setIsCategoriesLoading(true);
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/mca-document-agent/categories?identifier=${encodeURIComponent(companyName)}`,
+        {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch categories");
+      }
+
+      const data = await response.json();
+      // The API returns categories as [{name, count}, ...] and years as [2026, 2025, ...]
+      setDocCategories(data.categories || []);
+      setDocYears(data.years || []);
+      setMcaHeaderInfo({
+        source: data.source || "-",
+        lastUpdated: data.last_updated || "-",
+        totalDocuments: data.total_documents || 0
+      });
+    } catch (error) {
+      console.error("Categories API Error:", error);
+    } finally {
+      setIsCategoriesLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (companyName) {
+      fetchCategories();
+    }
+  }, [companyName]);
+
+  const fetchDocuments = async (pageNum = 1, shouldAppend = false) => {
+    try {
+      setIsDocsLoading(true);
+      const token = localStorage.getItem("token");
+      const year = selectedYear || "";
+      const filteredCategories = selectedCategories.filter(cat => cat !== "MCA Documents");
+      const categoryParams = filteredCategories.length > 0 
+        ? filteredCategories.map(cat => `category=${encodeURIComponent(cat)}`).join("&")
+        : "";
+      
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/mca-document-agent/documents?identifier=${encodeURIComponent(companyName)}&${categoryParams}&year=${encodeURIComponent(year)}&q=${encodeURIComponent(searchQuery)}&page=${pageNum}&per_page=20`,
+        {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch documents");
+      }
+
+      const data = await response.json();
+      
+      if (shouldAppend) {
+        setDocumentsList(prev => [...(data.documents || []), ...prev]);
+      } else {
+        setDocumentsList(data.documents || []);
+      }
+      setTotalDocs(data.total || 0);
+    } catch (error) {
+      console.error("Documents API Error:", error);
+    } finally {
+      setIsDocsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (companyName) {
+      const timeoutId = setTimeout(() => {
+        setPage(1);
+        fetchDocuments(1, false);
+      }, searchQuery ? 500 : 0); // Debounce search if q is present
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [companyName, selectedCategories, selectedYear, searchQuery]);
+
+  useEffect(() => {
+    if (page > 1) {
+      fetchDocuments(page, true);
+    }
+  }, [page]);
+
+  const handleClearFilters = () => {
+    setSelectedCategories(["MCA Documents"]);
+    setSelectedYear("");
+    setSearchQuery("");
+    setPage(1);
+  };
+
+  const handleDownload = async (docId, fileName) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/mca-document-agent/download/${docId}?source=CompanyDocument`,
+        {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Download failed");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.style.display = "none";
+      a.href = url;
+      
+      // Clean filename: remove "Optional attachments if any"
+      let cleanName = fileName.replace(/Optional attachments if any/gi, "").trim();
+      
+      // Extract filename from header if possible, or use the provided one
+      a.download = cleanName.endsWith(".pdf") ? cleanName : `${cleanName}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error("Download Error:", error);
+      alert("Failed to download document. Please try again.");
+    }
+  };
 
   useEffect(() => {
     let timer;
     if (isModalOpen) {
       document.body.style.overflow = "hidden";
-      setTimeLeft(900); // Reset to 15 mins
+
+      // Restore timer from localStorage if it exists
+      const savedExpiry = localStorage.getItem("mca_payment_expiry");
+      if (savedExpiry && modalStep === 2) {
+        const remaining = Math.max(0, Math.floor((parseInt(savedExpiry) - Date.now()) / 1000));
+        setTimeLeft(remaining);
+      } else if (modalStep === 1) {
+        // Initial countdown from API or default
+        setTimeLeft(jobData?.countdown_minutes * 60 || INITIAL_COUNTDOWN * 60);
+      }
+
       timer = setInterval(() => {
-        setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+        setTimeLeft((prev) => {
+          if (prev <= 1 && modalStep === 2) {
+            clearInterval(timer);
+            fetchPaymentStatus();
+            return 0;
+          }
+          return prev > 0 ? prev - 1 : 0;
+        });
       }, 1000);
     } else {
       document.body.style.overflow = "unset";
@@ -198,7 +395,7 @@ const Documents = () => {
       document.body.style.overflow = "unset";
       clearInterval(timer);
     };
-  }, [isModalOpen]);
+  }, [isModalOpen, modalStep, isCheckingStatus]);
 
   const handleCloseModal = () => {
     setIsClosing(true);
@@ -215,10 +412,102 @@ const Documents = () => {
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
+  const handleUnlockSubmit = async () => {
+    try {
+      setApiLoading(true);
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/mca-document-agent/start?company_name=${encodeURIComponent(companyName)}&countdown_minutes=${INITIAL_COUNTDOWN}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to trigger MCA Document Agent");
+      }
+
+      const data = await response.json();
+      setJobData(data);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error("API Error:", error);
+      alert("Failed to initiate document unlock. Please try again.");
+    } finally {
+      setApiLoading(false);
+    }
+  };
+
+  const fetchPaymentStatus = async () => {
+    try {
+      setIsCheckingStatus(true);
+      const token = localStorage.getItem("token");
+      // Using jobData?.job_id or a fallback if testing
+      const jobId = jobData?.job_id || "794dfac6-2a00-4d49-bd4f-417d21d969e4";
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/mca-document-agent/status/${jobId}`,
+        {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch payment status");
+      }
+
+      const data = await response.json();
+      setStatusData(data);
+      
+      if (data.status === "SUCCESS") {
+        setIsUnlocked(true);
+        setModalStep(3);
+        localStorage.removeItem("mca_payment_expiry");
+        // Trigger data refresh after successful unlock
+        fetchCategories();
+        fetchDocuments(1, false);
+      } else if (data.status === "RUNNING") {
+        // If still running, add 3 more minutes to the timer and check again
+        const retryDuration = RETRY_DELAY * 60;
+        const newExpiry = Date.now() + retryDuration * 1000;
+        localStorage.setItem("mca_payment_expiry", newExpiry.toString());
+        setTimeLeft(retryDuration);
+      } else {
+        // FAILED or other status
+        setModalStep(3);
+        localStorage.removeItem("mca_payment_expiry");
+      }
+    } catch (error) {
+      console.error("Status API Error:", error);
+      // Fallback to failed view if API fails
+      setStatusData({ status: "FAILED", error_message: "Network error. Please try again later." });
+      setModalStep(3);
+    } finally {
+      setIsCheckingStatus(false);
+      // Removed generic localStorage.removeItem to let individual status handlers decid
+    }
+  };
+
+  const handleProceedToPayment = () => {
+    // Start 25 minute timer and save to storage
+    const durationInSeconds = PAYMENT_CHECK_DELAY * 60;
+    const expiry = Date.now() + durationInSeconds * 1000;
+    
+    localStorage.setItem("mca_payment_expiry", expiry.toString());
+    setTimeLeft(durationInSeconds);
+    setModalStep(2);
+    
+    window.open("https://www.mca.gov.in/content/mca/global/en/foportal/fologin.html", "_blank");
+  };
+
+  // Removed temporary auto-transition logic in favor of persistent timer check
+  /*
   useEffect(() => {
     if (modalStep === 2) {
-      // Temporary logic: transition to Step 3 after 10 seconds
-      // This will be removed when actual API polling is added
       const transitionTimer = setTimeout(() => {
         setModalStep(3);
         setIsUnlocked(true);
@@ -226,73 +515,87 @@ const Documents = () => {
       return () => clearTimeout(transitionTimer);
     }
   }, [modalStep]);
+  */
 
-  const categories = [
-    "MCA Documents",
-    "Annual Returns and Balance Sheet Forms",
-    "Annual Returns and Balance Sheet Forms (Attachments)",
-    "Certificates",
-    "Change in Directors",
-    "Charge Documents",
-    "Incorporation Documents",
-    "Other Attachments",
-    "Other eForm Documents",
+  // Default category "MCA Documents" that should always be present
+  const defaultCategory = { 
+    name: "MCA Documents", 
+    count: mcaHeaderInfo.totalDocuments > 0 ? mcaHeaderInfo.totalDocuments : "100+" 
+  };
+
+  // Combine default with API categories, filtered to avoid duplicates
+  const allCategories = [
+    defaultCategory,
+    ...docCategories.filter(cat => cat.name !== "MCA Documents")
   ];
 
-  const years = [
+  // Map API years (strings) to numbers if needed, or just use as is
+  const yearsToDisplay = docYears.length > 0 ? docYears : [
     2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014,
   ];
 
   return (
-    <div className={styles.mainWrapper}>
+    <div className={styles.mainWrapper} id="documents">
       <div className={styles.container}>
         <div className={styles.header}>
           <h2 className={styles.title}>Documents</h2>
           <div className={styles.sourceRow}>
             <span className={styles.sourceLabel}>Source:</span>
-            <span className={styles.sourceValue}>-</span>
+            <span className={styles.sourceValue}>{mcaHeaderInfo.source}</span>
             <span className={styles.divider}></span>
             <span className={styles.updatedText}>
               <span> Last Updated:</span>
-              {formatDateToIST("-")}
+              {mcaHeaderInfo.lastUpdated}
             </span>
           </div>
         </div>
  
-        <div className={styles.premiumBanner}>
-          <div className={styles.premiumLeft}>
-            <div className={styles.premiumIcon}>
-              <Image src="/icons/docLock.svg" alt="Lock" width={24} height={24} />
-            </div>
-            <div className={styles.premiumInfo}>
-              <div className={styles.premiumTitleWrapper}>
-                <h3 className={styles.premiumTitle}>MCA Premium Documents</h3>
-                <span className={styles.premiumTag}>Premium</span>
+        {mcaHeaderInfo.totalDocuments === 0 && (
+          <div className={styles.premiumBanner}>
+            <div className={styles.premiumLeft}>
+              <div className={styles.premiumIcon}>
+                <Image src="/icons/docLock.svg" alt="Lock" width={24} height={24} />
               </div>
-              <p className={styles.premiumDesc}>
-                Access exclusive documents directly from the Ministry of Corporate Affairs including detailed financial statements, complete board minutes, auditor reports with annexures, and more.
-              </p>
-              <div className={styles.premiumStats}>
-                <div className={styles.statItem}>
-                  <Image src="/icons/docTick.svg" alt="Tick" width={16} height={16} />
-                  <span>24 Premium Documents</span>
+              <div className={styles.premiumInfo}>
+                <div className={styles.premiumTitleWrapper}>
+                  <h3 className={styles.premiumTitle}>MCA Premium Documents</h3>
+                  <span className={styles.premiumTag}>Premium</span>
                 </div>
-                <div className={styles.statItem}>
-                  <Image src="/icons/docTick.svg" alt="Tick" width={16} height={16} />
-                  <span>1 Year Access</span>
-                </div>
-                <div className={styles.statItem}>
-                  <Image src="/icons/docTick.svg" alt="Tick" width={16} height={16} />
-                  <span>Verified MCA Source</span>
+                <p className={styles.premiumDesc}>
+                  Access exclusive documents directly from the Ministry of Corporate Affairs including detailed financial statements, complete board minutes, auditor reports with annexures, and more.
+                </p>
+                <div className={styles.premiumStats}>
+                  <div className={styles.statItem}>
+                    <Image src="/icons/docTick.svg" alt="Tick" width={16} height={16} />
+                    <span>8 Premium Categories</span>
+                  </div>
+                  <div className={styles.statItem}>
+                    <Image src="/icons/docTick.svg" alt="Tick" width={16} height={16} />
+                    <span>1 Year Access</span>
+                  </div>
+                  <div className={styles.statItem}>
+                    <Image src="/icons/docTick.svg" alt="Tick" width={16} height={16} />
+                    <span>Verified MCA Source</span>
+                  </div>
                 </div>
               </div>
             </div>
+            <button 
+              className={styles.unlockBtn} 
+              onClick={handleUnlockSubmit}
+              disabled={apiLoading}
+            >
+              {apiLoading ? (
+                <div className={styles.loader}></div>
+              ) : (
+                <>
+                  <Image src="/icons/lock.svg" alt="Unlock" width={16} height={16} />
+                  Unlock Documents
+                </>
+              )}
+            </button>
           </div>
-          <button className={styles.unlockBtn} onClick={() => setIsModalOpen(true)}>
-            <Image src="/icons/lock.svg" alt="Unlock" width={16} height={16} />
-            Unlock Documents
-          </button>
-        </div>
+        )}
  
         <div className={styles.contentContainer}>
 
@@ -300,7 +603,7 @@ const Documents = () => {
           <aside className={styles.sideBar}>
             <div className={styles.filterHeader}>
               <span className={styles.filterTitle}>Filters</span>
-              <button className={styles.clearBtn}>Clear</button>
+              <button className={styles.clearBtn} onClick={handleClearFilters}>Clear</button>
             </div>
             <div className={styles.seperator} />
             {/* CATEGORY */}
@@ -334,16 +637,27 @@ const Documents = () => {
 
               {openCategory && (
                 <div className={styles.filterOptions}>
-                  {categories.map((item) => (
-                    <label key={item} className={styles.checkboxRow}>
-                      <input type="checkbox" className={styles.checkboxInput} />
+                  {allCategories.map((cat) => (
+                    <label key={cat.name} className={styles.checkboxRow}>
+                      <input 
+                        type="checkbox" 
+                        className={styles.checkboxInput} 
+                        checked={selectedCategories.includes(cat.name)}
+                        onChange={() => {
+                          setSelectedCategories(prev => 
+                            prev.includes(cat.name) 
+                              ? prev.filter(c => c !== cat.name) 
+                              : [...prev, cat.name]
+                          );
+                        }}
+                      />
                       <span className={styles.customCheckbox}>
                         <Check className={styles.checkIcon} />
                       </span>
 
                       <div className={styles.labelWrapper}>
-                        <span className={styles.checkboxLabel}>{item}</span>
-                        {item === "MCA Documents" && !isUnlocked && (
+                        <span className={styles.checkboxLabel}>{cat.name}</span>
+                        {cat.name === "MCA Documents" && !isUnlocked && (
                           <Image 
                             src="/icons/goldenlock.svg" 
                             alt="Lock" 
@@ -354,7 +668,7 @@ const Documents = () => {
                         )}
                       </div>
                       <span className={styles.countBadge}>
-                        {item === "MCA Documents" ? "24" : "-"}
+                        {cat.count || "-"}
                       </span>
                     </label>
                   ))}
@@ -393,12 +707,20 @@ const Documents = () => {
 
               {openYear && (
                 <div className={styles.filterOptions}>
-                  {years.map((year) => (
+                  {yearsToDisplay.map((year) => (
                     <label
                       key={year}
                       className={`${styles.checkboxRow} ${styles.checkboxRowCenter}`}
                     >
-                      <input type="checkbox" className={styles.checkboxInput} />
+                      <input 
+                        type="checkbox" 
+                        className={styles.checkboxInput} 
+                        checked={String(selectedYear) === String(year)}
+                        onChange={() => {
+                          const yearStr = String(year);
+                          setSelectedYear(prev => prev === yearStr ? "" : yearStr);
+                        }}
+                      />
                       <span className={styles.customCheckbox}>
                         <Check className={styles.checkIcon} />
                       </span>
@@ -445,17 +767,29 @@ const Documents = () => {
                   type="text"
                   placeholder="Search documents"
                   className={styles.searchInput}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
 
-              <button className={styles.loadMoreBtn}>
-                Load More
-                <ChevronRight size={15} />
-              </button>
+              {documentsList.length < totalDocs && (
+                <button 
+                  className={styles.loadMoreBtn} 
+                  onClick={() => setPage(prev => prev + 1)}
+                  disabled={isDocsLoading}
+                >
+                  {isDocsLoading ? "Loading..." : "Load More"}
+                  <ChevronRight size={15} />
+                </button>
+              )}
             </div>
 
             <div>
-              <DocumentsTable />
+              <DocumentsTable 
+                documents={documentsList} 
+                isLoading={isDocsLoading} 
+                onDownload={handleDownload}
+              />
             </div>
           </div>
         </div>
@@ -506,8 +840,8 @@ const Documents = () => {
                       <span className={styles.detailValue}>MCA Official Documents</span>
                     </div>
                     <div className={styles.detailRow}>
-                      <span className={styles.detailLabel}>Total Documents</span>
-                      <span className={styles.detailValue}>24 Documents</span>
+                      <span className={styles.detailLabel}>Total Sub-Categories</span>
+                      <span className={styles.detailValue}>{jobData?.total_category_count || 8}</span>
                     </div>
                     <div className={styles.detailRow}>
                       <span className={styles.detailLabel}>Access Period</span>
@@ -535,9 +869,14 @@ const Documents = () => {
                   <div className={styles.processingIcon}>
                     <Image src="/icons/blueClock.svg" alt="Processing" width={40} height={40} />
                   </div>
-                  <h3 className={styles.processingTitle}>Processing Payment...</h3>
+                  <h3 className={styles.processingTitle}>
+                    {isCheckingStatus ? "Checking Status..." : "Processing Payment..."}
+                  </h3>
                   <p className={styles.processingSubtitle}>
-                    Please complete your payment on the MCA Portal and return to this page
+                    {isCheckingStatus 
+                      ? "Verifying your payment with MCA records. Please wait."
+                      : `Please complete your payment on the MCA Portal and return to this page. `
+                    }
                   </p>
                   <div className={styles.loadingDots}>
                     <span className={styles.dot}></span>
@@ -547,22 +886,43 @@ const Documents = () => {
                 </div>
               ) : (
                 <div className={styles.successView}>
-                  <div className={styles.successIcon}>
-                    <Image src="/icons/greenTick.svg" alt="Success" width={32} height={32} />
-                  </div>
-                  <h3 className={styles.successTitle}>Payment Successful!</h3>
-                  <p className={styles.successSubtitle}>
-                    Your MCA documents have been unlocked successfully
-                  </p>
-                  <div className={styles.accessAlert}>
-                    <div className={styles.accessAlertHeader}>
-                      <Image src="/icons/greenAlert.svg" alt="Alert" width={24} height={24} />
-                      <h4 className={styles.accessAlertTitle}>Access Granted</h4>
-                    </div>
-                    <p className={styles.accessAlertDesc}>
-                      You can now view and download all MCA documents
-                    </p>
-                  </div>
+                  {statusData?.status === "SUCCESS" || (!statusData && isUnlocked) ? (
+                    <>
+                      <div className={styles.successIcon}>
+                        <Image src="/icons/greenTick.svg" alt="Success" width={32} height={32} />
+                      </div>
+                      <h3 className={styles.successTitle}>Payment Successful!</h3>
+                      <p className={styles.successSubtitle}>
+                        Your MCA documents have been unlocked successfully
+                      </p>
+                      <div className={styles.accessAlert}>
+                        <div className={styles.accessAlertHeader}>
+                          <Image src="/icons/greenAlert.svg" alt="Alert" width={24} height={24} />
+                          <h4 className={styles.accessAlertTitle}>Access Granted</h4>
+                        </div>
+                        <p className={styles.accessAlertDesc}>
+                          You can now view and download all MCA documents
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className={styles.errorIcon} style={{ backgroundColor: '#FEE2E2', borderRadius: '50%', width: 64, height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24 }}>
+                        <X size={32} color="#EF4444" />
+                      </div>
+                      <h3 className={styles.successTitle} style={{ color: '#EF4444' }}>Payment Failed</h3>
+                      <p className={styles.successSubtitle}>
+                        {statusData?.error_message || "Please complete the payment first to view the documents"}
+                      </p>
+                      <button 
+                        className={styles.proceedBtn} 
+                        style={{ marginTop: 20 }}
+                        onClick={() => setModalStep(1)}
+                      >
+                        Try Again
+                      </button>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -574,10 +934,7 @@ const Documents = () => {
                 </button>
                 <button 
                   className={styles.proceedBtn} 
-                  onClick={() => {
-                    setModalStep(2);
-                    window.open("https://www.mca.gov.in/content/mca/global/en/foportal/fologin.html", "_blank");
-                  }}
+                  onClick={handleProceedToPayment}
                 >
                   Proceed to Payment
                   <Image src="/icons/paymentgo.svg" alt="Go" width={16} height={16} />
