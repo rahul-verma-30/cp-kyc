@@ -11,6 +11,14 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
   const [directorTab, setDirectorTab] = useState("current");
 
   const { activeSubSection, setActiveSubSection } = useCompanySection() || {};
+  const [expandedNewsIds, setExpandedNewsIds] = useState({});
+
+  const toggleNewsExpand = (id) => {
+    setExpandedNewsIds(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
 
   useEffect(() => {
     if (activeSubSection === "Past Directors") {
@@ -177,6 +185,45 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
         date: selectedDirector.details.risk_edd.last_reviewed || "-",
       }] : [],
     },
+  ];
+
+  const leadershipNews = [
+    {
+      id: 1,
+      status: 'green',
+      title: 'Rajesh Kumar Appointed as Independent Director at NovaTech Industries',
+      description: 'NovaTech Industries announced the appointment of Rajesh Kumar as an Independent Director, citing his 25+ years of experience in financial governance and corporate restructuring as key drivers of the decision. This appointment is expected to strengthen the board\'s oversight on strategic acquisitions and long-term financial planning.',
+      date: '12 Jan 2026',
+      source: 'Economic Times',
+      tag: 'Regulatory'
+    },
+    {
+      id: 2,
+      status: 'red',
+      title: 'Rajesh Kumar Appointed as Independent Director at NovaTech Industries',
+      description: 'NovaTech Industries announced the appointment of Rajesh Kumar as an Independent Director, citing his 25+ years of experience in financial governance and corporate restructuring as key drivers of the decision. This appointment is expected to strengthen the board\'s oversight on strategic acquisitions and long-term financial planning.',
+      date: '12 Jan 2026',
+      source: 'Economic Times',
+      tag: 'Regulatory'
+    },
+    {
+      id: 3,
+      status: 'red',
+      title: 'Rajesh Kumar Appointed as Independent Director at NovaTech Industries',
+      description: 'NovaTech Industries announced the appointment of Rajesh Kumar as an Independent Director, citing his 25+ years of experience in financial governance and corporate restructuring as key drivers of the decision. This appointment is expected to strengthen the board\'s oversight on strategic acquisitions and long-term financial planning.',
+      date: '12 Jan 2026',
+      source: 'Economic Times',
+      tag: 'Regulatory'
+    },
+    {
+      id: 4,
+      status: 'yellow',
+      title: 'Rajesh Kumar Appointed as Independent Director at NovaTech Industries',
+      description: 'NovaTech Industries announced the appointment of Rajesh Kumar as an Independent Director, citing his 25+ years of experience in financial governance and corporate restructuring as key drivers of the decision. This appointment is expected to strengthen the board\'s oversight on strategic acquisitions and long-term financial planning.',
+      date: '12 Jan 2026',
+      source: 'Economic Times',
+      tag: 'Regulatory'
+    }
   ];
 
   const filters = [
@@ -664,6 +711,21 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
               
             </div>
           </section>
+
+          {/* DIRECTORS & LEADERSHIP NEWS SECTION */}
+          <section className={styles.section}>
+            <h2 className={styles.sectionHeading}>Directors & Leadership News</h2>
+            <div className={styles.newsList}>
+              {leadershipNews.map((news) => (
+                <DirectorNewsItem 
+                  key={news.id} 
+                  news={news} 
+                  isExpanded={expandedNewsIds[news.id]}
+                  onToggle={() => toggleNewsExpand(news.id)}
+                />
+              ))}
+            </div>
+          </section>
         </main>
       </div>
     </div>
@@ -762,6 +824,55 @@ function TimelineItem({ date, name, role, active }) {
 
       )}
 
+    </div>
+  );
+}
+
+function DirectorNewsItem({ news, isExpanded, onToggle }) {
+  return (
+    <div className={styles.newsCard}>
+      <div className={styles.newsContent}>
+        <div className={styles.newsHeader}>
+          <div className={styles.newsTitleRow}>
+            <div className={`${styles.newsStatusDot} ${styles[news.status]}`}></div>
+            <h3 className={styles.newsTitle}>{news.title}</h3>
+          </div>
+        </div>
+        
+        <div className={styles.newsDescriptionContainer}>
+          <p className={`${styles.newsDescription} ${!isExpanded ? styles.newsClamped : ""}`}>
+            {news.description}
+          </p>
+          {!isExpanded && (
+            <span className={styles.newsShowMoreInline} onClick={onToggle}>
+              ... Show More
+            </span>
+          )}
+          {isExpanded && (
+            <span className={styles.newsShowLess} onClick={onToggle}>
+              Show Less
+            </span>
+          )}
+        </div>
+
+        <div className={styles.newsFooter}>
+          <div className={styles.newsFooterItem}>
+            <img src="/icons/footer_calender.svg" alt="date" className={styles.newsFooterIcon} />
+            <span>{news.date}</span>
+          </div>
+          <div className={styles.newsFooterItem}>
+            <img src="/globe.svg" alt="source" className={styles.newsFooterIcon} />
+            <span>{news.source}</span>
+          </div>
+          <div className={styles.newsTag}>
+            {news.tag}
+          </div>
+        </div>
+      </div>
+      <div className={styles.newsCardActions}>
+        <img src="/viewsourceIcon.svg" alt="view-source" className={styles.newsActionIcon} />
+        <img src="/iconShare.svg" alt="share" className={styles.newsActionIcon} />
+      </div>
     </div>
   );
 }

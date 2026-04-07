@@ -8,6 +8,7 @@ import CompanyOverview from "@/components/company/overview/CompanyOverview";
 import CompanyDetails from "@/components/company/details/CompanyDetails";
 import NameHistory from "@/components/company/history/NameHistory";
 import ContactAddressSection from "@/components/company/contact/ContactAddressSection";
+import CompanyNews from "@/components/company/news/CompanyNews";
 
 import CompanyHighlights from "@/components/company/highlights/CompanyHighlights";
 import FinancialHighlights from "@/components/company/financials/FinancialHighlights";
@@ -154,6 +155,7 @@ export default function CompanyPage() {
   const overviewRef = useRef(null);
   const nameHistoryRef = useRef(null);
   const contactRef = useRef(null);
+  const newsRef = useRef(null);
 
   /* ================= SET COMPANY NAME ================= */
 
@@ -949,6 +951,7 @@ export default function CompanyPage() {
       Summary: overviewRef,
       "Name History": nameHistoryRef,
       "Contact Details": contactRef,
+      "Company News": newsRef,
     };
 
     const targetRef = map[activeSubSection];
@@ -973,6 +976,10 @@ export default function CompanyPage() {
 
           <div ref={contactRef}>
             <ContactAddressSection companyData={companyData} loading={companyLoading} error={companyError} />
+          </div>
+
+          <div ref={newsRef}>
+            <CompanyNews />
           </div>
         </>
       )}
@@ -1146,7 +1153,7 @@ export default function CompanyPage() {
           setDbSize={setDbSize}
         />
       )}
-      {activeSection === "documents" && <Documents />}
+      {activeSection === "documents" && <Documents companyName={companyName} />}
 
       {activeSection === "compliance" && <ComplianceDetails />}
     </>

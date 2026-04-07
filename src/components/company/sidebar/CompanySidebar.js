@@ -26,7 +26,7 @@ const CompanySidebar = () => {
     {
       id: "companyDetails",
       title: "Company Details",
-      items: ["Summary", "Name History", "Contact Details", "Items"],
+      items: ["Summary", "Name History", "Contact Details", "Company News"],
     },
     {
       id: "companyHighlights",

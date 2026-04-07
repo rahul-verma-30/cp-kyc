@@ -298,9 +298,7 @@
   border-color: #042044;
 }
 
-.checkboxInput:checked + .customCheckbox .checkIcon {
-  /* transform: scale(1); */
-}
+/* .checkboxInput:checked + .customCheckbox .checkIcon {} */
 .checkboxRowCenter {
   align-items: center;
 }
@@ -316,8 +314,7 @@
   flex-direction: column;
   gap: 12px;
 }
-.docTitle {
-}
+/* .docTitle {} */
 .docTitle h4 {
   color: #27272a;
   font-weight: 500;
@@ -407,6 +404,21 @@
   border-radius: 12px;
   overflow: hidden;
   background: #fff;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.loadingPlaceholder,
+.noDataPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 48px;
+  color: #71717a;
+  font-size: 14px;
+  text-align: center;
 }
 
 /* HEADER */
@@ -461,10 +473,7 @@
   align-items: center;
   gap: 8px;
 }
-.muted {
-  /* color: #374151; */
-  /* font-size: 13px; */
-}
+/* .muted {} */
 
 /* CHEVRON */
 .chevronRow {
@@ -1074,4 +1083,24 @@
   color: #16A34A;
   margin: 0;
   padding-left: 36px;
+}
+
+.loader {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ffffff;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

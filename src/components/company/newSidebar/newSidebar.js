@@ -39,7 +39,7 @@ const CompanyNewSidebar = () => {
     {
       id: "companyDetails",
       title: "Company Details",
-      items: ["Summary", "Name History", "Contact Details"],
+      items: ["Summary", "Name History", "Contact Details", "Company News"],
     },
     { id: "alerts", title: "Alerts", isStandalone: true },
     {
@@ -115,6 +115,11 @@ const CompanyNewSidebar = () => {
       setActiveTab(section.items[0]);
     } else {
       setActiveTab(null);
+    }
+
+    // Scroll to top of section content area
+    if (section.id === "documents") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
   const [indicatorTop, setIndicatorTop] = useState(0);
