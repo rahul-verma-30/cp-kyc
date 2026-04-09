@@ -106,7 +106,7 @@ const dummyDocs = [
   //   files: [],
   // },
 ];
-const DocumentsTable = ({ documents, isLoading, onDownload }) => {
+const DocumentsTable = ({ documents, isLoading, onDownload, sortConfig, onSort }) => {
   const [openRow, setOpenRow] = useState(null);
   const [downloadingId, setDownloadingId] = useState(null);
 
@@ -132,7 +132,21 @@ const DocumentsTable = ({ documents, isLoading, onDownload }) => {
       <div className={styles.docsHeader}>
         <span>Document Name</span>
         <span>Form Type</span>
-        <span>Filing Date</span>
+        <div 
+          className={styles.sortableHeader} 
+          onClick={() => onSort("filing_date")}
+        >
+          <div className={styles.headerContent}>
+            Filing Date
+            <img 
+              src={sortConfig.key === "filing_date" 
+                ? (sortConfig.direction === "asc" ? "/icons/arrow-up.svg" : "/icons/arrow-down.svg")
+                : "/icons/chevrons-up-down.svg"} 
+              alt="" 
+              className={styles.sortIcon} 
+            />
+          </div>
+        </div>
       </div>
 
       {/* Rows */}
@@ -207,7 +221,7 @@ const Documents = ({ companyName }) => {
   const [isCategoriesLoading, setIsCategoriesLoading] = useState(false);
   const [documentsList, setDocumentsList] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState(["MCA Documents"]); 
-  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedYears, setSelectedYears] = useState([]); 
   const [page, setPage] = useState(1);
   const [totalDocs, setTotalDocs] = useState(0);
   const [isDocsLoading, setIsDocsLoading] = useState(false);
@@ -215,8 +229,9 @@ const Documents = ({ companyName }) => {
   const [mcaHeaderInfo, setMcaHeaderInfo] = useState({ 
     source: "-", 
     lastUpdated: "-",
-    totalDocuments: 0 
+    totalDocuments: null 
   });
+  const [sortConfig, setSortConfig] = useState({ key: "filing_date", direction: "desc" });
 
   // --- TIMER CONFIGURATION ---
   const INITIAL_COUNTDOWN = 15; // Minutes for initial modal view
@@ -267,14 +282,21 @@ const Documents = ({ companyName }) => {
     try {
       setIsDocsLoading(true);
       const token = localStorage.getItem("token");
-      const year = selectedYear || "";
       const filteredCategories = selectedCategories.filter(cat => cat !== "MCA Documents");
       const categoryParams = filteredCategories.length > 0 
         ? filteredCategories.map(cat => `category=${encodeURIComponent(cat)}`).join("&")
         : "";
       
+      const yearParams = selectedYears.length > 0 
+        ? selectedYears.map(y => `year=${encodeURIComponent(y)}`).join("&")
+        : "";
+
+      const sortParams = sortConfig.key && sortConfig.direction
+        ? `&sort_by=${sortConfig.key}&sort_order=${sortConfig.direction}`
+        : "";
+
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/mca-document-agent/documents?identifier=${encodeURIComponent(companyName)}&${categoryParams}&year=${encodeURIComponent(year)}&q=${encodeURIComponent(searchQuery)}&page=${pageNum}&per_page=20`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/mca-document-agent/documents?identifier=${encodeURIComponent(companyName)}&${categoryParams}&${yearParams}&q=${encodeURIComponent(searchQuery)}&page=${pageNum}&per_page=20${sortParams}`,
         {
           headers: {
             Authorization: token ? `Bearer ${token}` : "",
@@ -289,7 +311,7 @@ const Documents = ({ companyName }) => {
       const data = await response.json();
       
       if (shouldAppend) {
-        setDocumentsList(prev => [...(data.documents || []), ...prev]);
+        setDocumentsList(prev => [...prev, ...(data.documents || [])]);
       } else {
         setDocumentsList(data.documents || []);
       }
@@ -310,18 +332,33 @@ const Documents = ({ companyName }) => {
       
       return () => clearTimeout(timeoutId);
     }
-  }, [companyName, selectedCategories, selectedYear, searchQuery]);
+  }, [companyName, selectedCategories, selectedYears, searchQuery, sortConfig]);
 
   useEffect(() => {
     if (page > 1) {
       fetchDocuments(page, true);
     }
   }, [page]);
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key) {
+      if (sortConfig.direction === "asc") {
+        direction = "desc";
+      } else if (sortConfig.direction === "desc") {
+        direction = null;
+      } else {
+        direction = "asc";
+      }
+    }
+    setSortConfig({ key: direction ? key : null, direction });
+    setPage(1);
+  };
 
   const handleClearFilters = () => {
     setSelectedCategories(["MCA Documents"]);
-    setSelectedYear("");
+    setSelectedYears([]);
     setSearchQuery("");
+    setSortConfig({ key: "filing_date", direction: "desc" });
     setPage(1);
   };
 
@@ -367,13 +404,8 @@ const Documents = ({ companyName }) => {
     if (isModalOpen) {
       document.body.style.overflow = "hidden";
 
-      // Restore timer from localStorage if it exists
-      const savedExpiry = localStorage.getItem("mca_payment_expiry");
-      if (savedExpiry && modalStep === 2) {
-        const remaining = Math.max(0, Math.floor((parseInt(savedExpiry) - Date.now()) / 1000));
-        setTimeLeft(remaining);
-      } else if (modalStep === 1) {
-        // Initial countdown from API or default
+      // Initial countdown for Step 1
+      if (modalStep === 1) {
         setTimeLeft(jobData?.countdown_minutes * 60 || INITIAL_COUNTDOWN * 60);
       }
 
@@ -381,7 +413,10 @@ const Documents = ({ companyName }) => {
         setTimeLeft((prev) => {
           if (prev <= 1 && modalStep === 2) {
             clearInterval(timer);
-            fetchPaymentStatus();
+            // Guard against multiple calls if already checking
+            if (!isCheckingStatus) {
+              fetchPaymentStatus();
+            }
             return 0;
           }
           return prev > 0 ? prev - 1 : 0;
@@ -395,7 +430,7 @@ const Documents = ({ companyName }) => {
       document.body.style.overflow = "unset";
       clearInterval(timer);
     };
-  }, [isModalOpen, modalStep, isCheckingStatus]);
+  }, [isModalOpen, modalStep]); // Removed isCheckingStatus to fix loop
 
   const handleCloseModal = () => {
     setIsClosing(true);
@@ -466,20 +501,16 @@ const Documents = ({ companyName }) => {
       if (data.status === "SUCCESS") {
         setIsUnlocked(true);
         setModalStep(3);
-        localStorage.removeItem("mca_payment_expiry");
         // Trigger data refresh after successful unlock
         fetchCategories();
         fetchDocuments(1, false);
       } else if (data.status === "RUNNING") {
         // If still running, add 3 more minutes to the timer and check again
         const retryDuration = RETRY_DELAY * 60;
-        const newExpiry = Date.now() + retryDuration * 1000;
-        localStorage.setItem("mca_payment_expiry", newExpiry.toString());
         setTimeLeft(retryDuration);
       } else {
         // FAILED or other status
         setModalStep(3);
-        localStorage.removeItem("mca_payment_expiry");
       }
     } catch (error) {
       console.error("Status API Error:", error);
@@ -488,16 +519,11 @@ const Documents = ({ companyName }) => {
       setModalStep(3);
     } finally {
       setIsCheckingStatus(false);
-      // Removed generic localStorage.removeItem to let individual status handlers decid
     }
   };
 
   const handleProceedToPayment = () => {
-    // Start 25 minute timer and save to storage
     const durationInSeconds = PAYMENT_CHECK_DELAY * 60;
-    const expiry = Date.now() + durationInSeconds * 1000;
-    
-    localStorage.setItem("mca_payment_expiry", expiry.toString());
     setTimeLeft(durationInSeconds);
     setModalStep(2);
     
@@ -550,7 +576,7 @@ const Documents = ({ companyName }) => {
           </div>
         </div>
  
-        {mcaHeaderInfo.totalDocuments === 0 && (
+        {mcaHeaderInfo.totalDocuments !== null && mcaHeaderInfo.totalDocuments === 0 && (
           <div className={styles.premiumBanner}>
             <div className={styles.premiumLeft}>
               <div className={styles.premiumIcon}>
@@ -657,7 +683,7 @@ const Documents = ({ companyName }) => {
 
                       <div className={styles.labelWrapper}>
                         <span className={styles.checkboxLabel}>{cat.name}</span>
-                        {cat.name === "MCA Documents" && !isUnlocked && (
+                        {cat.name === "MCA Documents" && mcaHeaderInfo.totalDocuments !== null && mcaHeaderInfo.totalDocuments === 0 && (
                           <Image 
                             src="/icons/goldenlock.svg" 
                             alt="Lock" 
@@ -707,28 +733,41 @@ const Documents = ({ companyName }) => {
 
               {openYear && (
                 <div className={styles.filterOptions}>
-                  {yearsToDisplay.map((year) => (
-                    <label
-                      key={year}
-                      className={`${styles.checkboxRow} ${styles.checkboxRowCenter}`}
-                    >
-                      <input 
-                        type="checkbox" 
-                        className={styles.checkboxInput} 
-                        checked={String(selectedYear) === String(year)}
-                        onChange={() => {
-                          const yearStr = String(year);
-                          setSelectedYear(prev => prev === yearStr ? "" : yearStr);
-                        }}
-                      />
-                      <span className={styles.customCheckbox}>
-                        <Check className={styles.checkIcon} />
-                      </span>
+                  {yearsToDisplay.map((yearItem) => {
+                    const yearValue = typeof yearItem === 'object' ? yearItem.year : yearItem;
+                    const yearCount = typeof yearItem === 'object' ? yearItem.count : null;
+                    const yearStr = String(yearValue);
 
-                      <span className={styles.checkboxLabel}>{year}</span>
-                      {/* <span className={styles.countBadge}>16</span> */}
-                    </label>
-                  ))}
+                    return (
+                      <label
+                        key={yearStr}
+                        className={`${styles.checkboxRow} ${styles.checkboxRowCenter}`}
+                      >
+                        <input 
+                          type="checkbox" 
+                          className={styles.checkboxInput} 
+                          checked={selectedYears.includes(yearStr)}
+                          onChange={() => {
+                            setSelectedYears(prev => 
+                              prev.includes(yearStr) 
+                                ? prev.filter(y => y !== yearStr) 
+                                : [...prev, yearStr]
+                            );
+                          }}
+                        />
+                        <span className={styles.customCheckbox}>
+                          <Check className={styles.checkIcon} />
+                        </span>
+
+                        <div className={styles.labelWrapper}>
+                          <span className={styles.checkboxLabel}>{yearValue}</span>
+                        </div>
+                        {yearCount !== null && (
+                          <span className={styles.countBadge}>{yearCount}</span>
+                        )}
+                      </label>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -771,8 +810,20 @@ const Documents = ({ companyName }) => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
+            </div>
 
-              {documentsList.length < totalDocs && (
+            <div>
+              <DocumentsTable 
+                documents={documentsList} 
+                isLoading={isDocsLoading} 
+                onDownload={handleDownload}
+                sortConfig={sortConfig}
+                onSort={handleSort}
+              />
+            </div>
+
+            {documentsList.length < totalDocs && (
+              <div className={styles.loadMoreWrapper}>
                 <button 
                   className={styles.loadMoreBtn} 
                   onClick={() => setPage(prev => prev + 1)}
@@ -781,16 +832,8 @@ const Documents = ({ companyName }) => {
                   {isDocsLoading ? "Loading..." : "Load More"}
                   <ChevronRight size={15} />
                 </button>
-              )}
-            </div>
-
-            <div>
-              <DocumentsTable 
-                documents={documentsList} 
-                isLoading={isDocsLoading} 
-                onDownload={handleDownload}
-              />
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

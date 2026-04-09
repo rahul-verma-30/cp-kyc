@@ -1,11 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styles from "./CompanyNews.module.css";
-import SingleCalendar from "../../common/SingleCalendar";
+import CustomCalendar from "../../common/CustomCalendar";
 
-const CompanyNews = () => {
+const CompanyNews = ({ companyName }) => {
+    const [news, setNews] = useState([]);
+    const [totalNews, setTotalNews] = useState(0);
+    const [page, setPage] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [apiInfo, setApiInfo] = useState({ source: "-", lastUpdated: "-" });
+
     const [expandedIds, setExpandedIds] = useState({});
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-    const [selectedDate, setSelectedDate] = useState(null);
+    const calendarRef = useRef(null);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
 
     const toggleExpand = (id) => {
         setExpandedIds(prev => ({
@@ -14,38 +23,105 @@ const CompanyNews = () => {
         }));
     };
 
-    const newsData = [
-        {
-            id: 1,
-            status: 'green',
-            title: 'Dabur Reports 8% Revenue Increase in Q3 for India',
-            description: 'Dabur reported an 8% increase in revenue year-on-year, driven by strong performance across its healthcare and personal care segments. The company witnessed robust demand in its key categories, particularly in Ayurvedic products, immunity boosters, and oral care. Rural markets continued to outperform urban regions, contributing significantly to overall sales growth. Operational efficiency and strategic cost management helped improve margins, while continued investments in brand building and distribution expansion supported volume growth.',
-            date: '12 Jan 2026',
-            source: 'Business Standard',
-            tag: 'Earnings',
-            image: '/icons/Image.svg'
-        },
-        {
-            id: 2,
-            status: 'red',
-            title: 'Dabur Achieves 8% Revenue Growth in Q3 in the United States',
-            description: 'Dabur reported an 8% increase in revenue year-on-year, driven by strong performance across its healthcare and personal care segments. The company witnessed robust demand in its key categories, particularly in Ayurvedic products, immunity boosters, and oral care. Rural markets continued to outperform urban regions, contributing significantly to overall sales growth. Operational efficiency and strategic cost management helped improve margins, while continued investments in brand building and distribution expansion supported volume growth.',
-            date: '12 Jan 2026',
-            source: 'Business Standard',
-            tag: 'Earnings',
-            image: '/icons/Image.svg'
-        },
-        {
-            id: 3,
-            status: 'yellow',
-            title: "Dabur's Q3 Results Reveal 8% Revenue Surge in the UK",
-            description: 'Dabur reported an 8% increase in revenue year-on-year, driven by strong performance across its healthcare and personal care segments. The company witnessed robust demand in its key categories, particularly in Ayurvedic products, immunity boosters, and oral care. Rural markets continued to outperform urban regions, contributing significantly to overall sales growth.',
-            date: '12 Jan 2026',
-            source: 'Business Standard',
-            tag: 'Earnings',
-            image: '/icons/Image.svg'
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+                setIsCalendarOpen(false);
+            }
+        };
+
+        if (isCalendarOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
         }
-    ];
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isCalendarOpen]);
+
+    const fetchNews = async (pageNum = 1, shouldAppend = false) => {
+        if (!companyName || companyName === "undefined") return;
+        try {
+            setIsLoading(true);
+            const formatDate = (date) => {
+                if (!date) return "";
+                const d = new Date(date);
+                return d.toISOString().split('T')[0];
+            };
+
+            const dateFrom = formatDate(startDate);
+            const dateTo = formatDate(endDate);
+            
+            let url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/news?page=${pageNum}&size=5`;
+            
+            if (searchQuery) url += `&search=${encodeURIComponent(searchQuery)}`;
+            if (dateFrom) url += `&date_from=${dateFrom}`;
+            if (dateTo) url += `&date_to=${dateTo}`;
+
+            const token = localStorage.getItem("token");
+            
+            const response = await fetch(url, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (!response.ok) throw new Error("Failed to fetch news");
+            
+            const data = await response.json();
+            
+            if (shouldAppend) {
+                setNews(prev => [...prev, ...(data.news || [])]);
+            } else {
+                setNews(data.news || []);
+                setPage(1);
+            }
+            
+            setTotalNews(data.total || 0);
+            // setApiInfo({
+            //     source: data.source || "-",
+            //     lastUpdated: data.last_updated || "-"
+            // });
+        } catch (error) {
+            console.error("News API Error:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Initial load and filter changes
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            fetchNews(1, false);
+        }, 500); // Debounce search/date changes
+
+        return () => clearTimeout(timer);
+    }, [searchQuery, startDate, endDate, companyName]);
+
+    const handleLoadMore = () => {
+        const nextPage = page + 1;
+        setPage(nextPage);
+        fetchNews(nextPage, true);
+    };
+
+    const handleShare = async (title, url) => {
+        if (!url) return;
+        
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: title || 'News Article',
+                    url: url
+                });
+            } catch (error) {
+                if (error.name !== 'AbortError') {
+                    console.error('Error sharing:', error);
+                    window.open(url, '_blank');
+                }
+            }
+        } else {
+            // Fallback for browsers that don't support Web Share API
+            window.open(url, '_blank');
+        }
+    };
 
 
 
@@ -55,21 +131,62 @@ const CompanyNews = () => {
                 <div className={styles.titleSection}>
                     <h2>Company News</h2>
                     <p className={styles.subtitle}>Latest updates, announcements, and media coverage</p>
+                    {/* <div className={styles.apiInfo}>
+                        <span className={styles.infoLabel}>Source: </span>
+                        <span className={styles.infoValue}>{apiInfo.source}</span>
+                        <span className={styles.infoDivider}>|</span>
+                        <span className={styles.infoLabel}>Last Updated: </span>
+                        <span className={styles.infoValue}>{apiInfo.lastUpdated}</span>
+                    </div> */}
                 </div>
                 <div className={styles.actions}>
-                    <div className={styles.calendarContainer}>
+                    <div className={styles.calendarContainer} ref={calendarRef}>
                         <button 
                             className={styles.calendarBtn}
                             onClick={() => setIsCalendarOpen(!isCalendarOpen)}
                         >
                             <img src="/calendaricon.svg" alt="calendar" className={styles.calendarIcon} />
+                            <span className={`${styles.dateLabel} ${!startDate ? styles.placeholder : ""}`}>
+                                {startDate
+                                    ? `${new Date(startDate).toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                    })}${endDate ? ` - ${new Date(endDate).toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                    })}` : ""}`
+                                    : "Select Date"}
+                            </span>
+                            {startDate && (
+                                <div 
+                                    className={styles.clearDateBtn}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setStartDate(null);
+                                        setEndDate(null);
+                                        setIsCalendarOpen(false);
+                                    }}
+                                >
+                                    <img src="/icons/close.svg" alt="Clear" className={styles.clearIcon} />
+                                </div>
+                            )}
                         </button>
                         {isCalendarOpen && (
-                            <SingleCalendar 
-                                selectedDate={selectedDate}
-                                onSelect={(date) => setSelectedDate(date)}
-                                onClose={() => setIsCalendarOpen(false)}
-                            />
+                            <div className={styles.popupCalendar}>
+                                <CustomCalendar 
+                                    initialStartDate={startDate}
+                                    initialEndDate={endDate}
+                                    onSelect={(start, end) => {
+                                        setStartDate(start);
+                                        setEndDate(end);
+                                        if (start && end) {
+                                            setIsCalendarOpen(false);
+                                        }
+                                    }}
+                                />
+                            </div>
                         )}
                     </div>
                     <div className={styles.searchContainer}>
@@ -78,36 +195,42 @@ const CompanyNews = () => {
                             type="text" 
                             placeholder="Search News..." 
                             className={styles.searchInput}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
                 </div>
             </header>
 
             <div className={styles.newsList}>
-                {newsData.map((news) => (
-                    <div key={news.id} className={styles.newsCard}>
-                        <div className={`${styles.statusDot} ${styles[news.status]}`}></div>
+                {news.map((item, index) => (
+                    <div key={index} className={styles.newsCard}>
+                        {/* <div className={`${styles.statusDot} ${styles[item.status]}`}></div> */}
                         <div className={styles.imageContainer}>
-                            <img src={news.image} alt={news.title} className={styles.newsImage} />
+                            <img 
+                                src={(item.image_url && item.image_url !== "-") ? item.image_url : '/icons/Image.svg'} 
+                                alt={item.title || "-"} 
+                                className={styles.newsImage} 
+                            />
                         </div>
                         <div className={styles.content}>
-                            <h3 className={styles.newsTitle}>{news.title}</h3>
+                            <h3 className={styles.newsTitle}>{item.title || "-"}</h3>
                             <div className={styles.descriptionContainer}>
-                                <p className={`${styles.description} ${expandedIds[news.id] ? styles.expanded : styles.clamped}`}>
-                                    {news.description}
+                                <p className={`${styles.description} ${expandedIds[index] ? styles.expanded : styles.clamped}`}>
+                                    {item.description || "-"}
                                 </p>
-                                {!expandedIds[news.id] && (
+                                {!expandedIds[index] && item.description?.length > 100 && (
                                     <span 
                                         className={styles.showMoreInline} 
-                                        onClick={() => toggleExpand(news.id)}
+                                        onClick={() => toggleExpand(index)}
                                     >
                                         ... Show More
                                     </span>
                                 )}
-                                {expandedIds[news.id] && (
+                                {expandedIds[index] && (
                                     <span 
                                         className={styles.showLess} 
-                                        onClick={() => toggleExpand(news.id)}
+                                        onClick={() => toggleExpand(index)}
                                     >
                                         Show Less
                                     </span>
@@ -116,23 +239,52 @@ const CompanyNews = () => {
                             <div className={styles.footer}>
                                 <div className={styles.footerItem}>
                                     <img src="/icons/footer_calender.svg" alt="date" className={styles.footerIcon} />
-                                    <span>{news.date}</span>
+                                    <span>{item.date || "-"}</span>
                                 </div>
                                 <div className={styles.footerItem}>
                                     <img src="/globe.svg" alt="source" className={styles.footerIcon} />
-                                    <span>{news.source}</span>
+                                    <span>{item.source || "-"}</span>
                                 </div>
-                                <div className={styles.tag}>
-                                    {news.tag}
-                                </div>
+                                {item.category && (
+                                    <div className={styles.tag}>
+                                        {item.category || "-"}
+                                    </div>
+                                )}
                             </div>
                         </div>
                         <div className={styles.cardActions}>
-                            <img src="/viewsourceIcon.svg" alt="view-source" className={styles.actionIcon} />
-                            <img src="/iconShare.svg" alt="share" className={styles.actionIcon} />
+                            {item.external_url && (
+                                <a href={item.external_url} target="_blank" rel="noopener noreferrer">
+                                    <img src="/viewsourceIcon.svg" alt="view-source" className={styles.actionIcon} />
+                                </a>
+                            )}
+                            {item.share_url && (
+                                <div 
+                                    onClick={() => handleShare(item.title, item.share_url)}
+                                    className={styles.actionButton}
+                                >
+                                    <img src="/iconShare.svg" alt="share" className={styles.actionIcon} />
+                                </div>
+                            )}
                         </div>
                     </div>
                 ))}
+
+                {news.length < totalNews && (
+                    <div className={styles.loadMoreWrapper}>
+                        <button 
+                            className={styles.loadMoreBtn}
+                            onClick={handleLoadMore}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? "Loading..." : "Load More"}
+                        </button>
+                    </div>
+                )}
+                
+                {news.length === 0 && !isLoading && (
+                    <div className={styles.noResults}>No news articles found for this selection.</div>
+                )}
             </div>
         </div>
     );
