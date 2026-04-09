@@ -979,7 +979,7 @@ export default function CompanyPage() {
           </div>
 
           <div ref={newsRef}>
-            <CompanyNews />
+            <CompanyNews companyName={companyName} />
           </div>
         </>
       )}

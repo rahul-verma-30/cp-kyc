@@ -424,7 +424,7 @@
 /* HEADER */
 .docsHeader {
   display: grid;
-  grid-template-columns: 2.4fr 1fr 1fr;
+  grid-template-columns: 2.4fr 1fr 0.7fr;
   padding: 14px 16px;
   /* height: 44px; */
   font-size: 14px;
@@ -443,7 +443,7 @@
 /* ROW */
 .docsRow {
   display: grid;
-  grid-template-columns: 2.4fr 1fr 1fr;
+  grid-template-columns: 2.4fr 1fr 0.7fr;
   padding: 18px 16px;
   /* max-height: 56px; */
 
@@ -472,6 +472,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}
+.docName span{
+  padding-right: 5px;
 }
 /* .muted {} */
 
@@ -1103,4 +1106,38 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+.sortableHeader {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* .sortableHeader:hover {
+  background-color: rgba(244, 244, 245, 1) !important;
+} */
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.sortIcon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.6;
+  filter: invert(47%) sepia(6%) saturate(301%) hue-rotate(202deg) brightness(91%) contrast(89%);
+}
+
+.sortableHeader:hover .sortIcon {
+  opacity: 1;
+}
+
+.loadMoreWrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  width: 100%;
 }

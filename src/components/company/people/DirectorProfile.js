@@ -2,7 +2,7 @@ import styles from "./DirectorProfile.module.css";
 import { useState, useEffect } from "react";
 import { useCompanySection } from "@/components/company/context/CompanySectionContext";
 
-export default function DirectorProfile({ directors = [], hideSidebar = false }) {
+export default function DirectorProfile({ directors = [], companyName = "", hideSidebar = false }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeFilter, setActiveFilter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
@@ -19,6 +19,11 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
       [id]: !prev[id]
     }));
   };
+
+  const [directorNewsList, setDirectorNewsList] = useState([]);
+  const [newsPage, setNewsPage] = useState(1);
+  const [newsLoading, setNewsLoading] = useState(false);
+  const [hasMoreNews, setHasMoreNews] = useState(false);
 
   useEffect(() => {
     if (activeSubSection === "Past Directors") {
@@ -85,12 +90,56 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
       banking_default: director.banking_default_declarations || director.details?.banking_default || [],
       regulatory_history: director.regulatory_compliance_history || director.details?.regulatory_history || [],
       pep_sanctions: director.pep_sanctions_checks || director.details?.pep_sanctions || [],
-      risk_edd: director.risk_edd || director.details?.risk_edd || {}
+      risk_edd: director.risk_edd || director.details?.risk_edd || {},
+      news: director.news || { news: [] }
     }
   }));
 
   // Get current selected director
   const selectedDirector = sidebarItems[activeIndex] || sidebarItems[0] || {};
+
+  useEffect(() => {
+    if (selectedDirector?.name) {
+      const initialNews = selectedDirector.details?.news?.news || [];
+      const total = selectedDirector.details?.news?.total || 0;
+      setDirectorNewsList(initialNews);
+      setNewsPage(1);
+      setHasMoreNews(initialNews.length < total);
+    } else {
+      setDirectorNewsList([]);
+      setHasMoreNews(false);
+    }
+  }, [selectedDirector?.name, selectedDirector?.din]);
+
+  const fetchMoreNews = async () => {
+    if (newsLoading || !hasMoreNews || !companyName) return;
+    
+    try {
+      setNewsLoading(true);
+      const nextPage = newsPage + 1;
+      const token = localStorage.getItem("token");
+      const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/company/${encodeURIComponent(companyName)}/news?page=${nextPage}&size=5&search=${encodeURIComponent(selectedDirector.name)}`;
+      
+      const response = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await response.json();
+      
+      if (data.news && Array.isArray(data.news)) {
+        setDirectorNewsList(prev => [...prev, ...data.news]);
+        setNewsPage(nextPage);
+        setHasMoreNews((directorNewsList.length + data.news.length) < data.total);
+      } else {
+        setHasMoreNews(false);
+      }
+    } catch (error) {
+      console.error("Error fetching more director news:", error);
+    } finally {
+      setNewsLoading(false);
+    }
+  };
 
   // Helper to detect and style status/pills
   const renderCellContent = (value) => {
@@ -187,44 +236,24 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
     },
   ];
 
-  const leadershipNews = [
-    {
-      id: 1,
-      status: 'green',
-      title: 'Rajesh Kumar Appointed as Independent Director at NovaTech Industries',
-      description: 'NovaTech Industries announced the appointment of Rajesh Kumar as an Independent Director, citing his 25+ years of experience in financial governance and corporate restructuring as key drivers of the decision. This appointment is expected to strengthen the board\'s oversight on strategic acquisitions and long-term financial planning.',
-      date: '12 Jan 2026',
-      source: 'Economic Times',
-      tag: 'Regulatory'
-    },
-    {
-      id: 2,
-      status: 'red',
-      title: 'Rajesh Kumar Appointed as Independent Director at NovaTech Industries',
-      description: 'NovaTech Industries announced the appointment of Rajesh Kumar as an Independent Director, citing his 25+ years of experience in financial governance and corporate restructuring as key drivers of the decision. This appointment is expected to strengthen the board\'s oversight on strategic acquisitions and long-term financial planning.',
-      date: '12 Jan 2026',
-      source: 'Economic Times',
-      tag: 'Regulatory'
-    },
-    {
-      id: 3,
-      status: 'red',
-      title: 'Rajesh Kumar Appointed as Independent Director at NovaTech Industries',
-      description: 'NovaTech Industries announced the appointment of Rajesh Kumar as an Independent Director, citing his 25+ years of experience in financial governance and corporate restructuring as key drivers of the decision. This appointment is expected to strengthen the board\'s oversight on strategic acquisitions and long-term financial planning.',
-      date: '12 Jan 2026',
-      source: 'Economic Times',
-      tag: 'Regulatory'
-    },
-    {
-      id: 4,
-      status: 'yellow',
-      title: 'Rajesh Kumar Appointed as Independent Director at NovaTech Industries',
-      description: 'NovaTech Industries announced the appointment of Rajesh Kumar as an Independent Director, citing his 25+ years of experience in financial governance and corporate restructuring as key drivers of the decision. This appointment is expected to strengthen the board\'s oversight on strategic acquisitions and long-term financial planning.',
-      date: '12 Jan 2026',
-      source: 'Economic Times',
-      tag: 'Regulatory'
+  const handleShare = async (title, url) => {
+    if (!url) return;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: title || 'Director News',
+          url: url
+        });
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          console.error('Error sharing:', error);
+          window.open(url, '_blank');
+        }
+      }
+    } else {
+      window.open(url, '_blank');
     }
-  ];
+  };
 
   const filters = [
     "All",
@@ -716,14 +745,34 @@ export default function DirectorProfile({ directors = [], hideSidebar = false })
           <section className={styles.section}>
             <h2 className={styles.sectionHeading}>Directors & Leadership News</h2>
             <div className={styles.newsList}>
-              {leadershipNews.map((news) => (
-                <DirectorNewsItem 
-                  key={news.id} 
-                  news={news} 
-                  isExpanded={expandedNewsIds[news.id]}
-                  onToggle={() => toggleNewsExpand(news.id)}
-                />
-              ))}
+              {directorNewsList.length > 0 ? (
+                <>
+                  {directorNewsList.map((item, idx) => (
+                    <DirectorNewsItem 
+                      key={idx} 
+                      news={item} 
+                      isExpanded={expandedNewsIds[idx]}
+                      onToggle={() => toggleNewsExpand(idx)}
+                      onShare={handleShare}
+                    />
+                  ))}
+                  {hasMoreNews && (
+                    <div className={styles.loadMoreWrapper}>
+                      <button 
+                        className={styles.loadMoreBtn} 
+                        onClick={fetchMoreNews}
+                        disabled={newsLoading}
+                      >
+                        {newsLoading ? "Loading..." : "Load More"}
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <p style={{ textAlign: "center", width: "100%", padding: "20px", color: "#666" }}>
+                  No news found for this director
+                </p>
+              )}
             </div>
           </section>
         </main>
@@ -828,22 +877,29 @@ function TimelineItem({ date, name, role, active }) {
   );
 }
 
-function DirectorNewsItem({ news, isExpanded, onToggle }) {
+function DirectorNewsItem({ news, isExpanded, onToggle, onShare }) {
   return (
     <div className={styles.newsCard}>
+      <div className={styles.newsImageContainer}>
+        <img 
+          src={(news.image_url && news.image_url !== "-") ? news.image_url : '/icons/Image.svg'} 
+          alt={news.title || "-"} 
+          className={styles.newsImage} 
+        />
+      </div>
       <div className={styles.newsContent}>
         <div className={styles.newsHeader}>
           <div className={styles.newsTitleRow}>
-            <div className={`${styles.newsStatusDot} ${styles[news.status]}`}></div>
-            <h3 className={styles.newsTitle}>{news.title}</h3>
+            {/* <div className={`${styles.newsStatusDot} ${styles[news.status]}`}></div> */}
+            <h3 className={styles.newsTitle}>{news.title || "-"}</h3>
           </div>
         </div>
         
         <div className={styles.newsDescriptionContainer}>
           <p className={`${styles.newsDescription} ${!isExpanded ? styles.newsClamped : ""}`}>
-            {news.description}
+            {news.description || "-"}
           </p>
-          {!isExpanded && (
+          {!isExpanded && news.description?.length > 100 && (
             <span className={styles.newsShowMoreInline} onClick={onToggle}>
               ... Show More
             </span>
@@ -858,20 +914,30 @@ function DirectorNewsItem({ news, isExpanded, onToggle }) {
         <div className={styles.newsFooter}>
           <div className={styles.newsFooterItem}>
             <img src="/icons/footer_calender.svg" alt="date" className={styles.newsFooterIcon} />
-            <span>{news.date}</span>
+            <span>{news.date || "-"}</span>
           </div>
           <div className={styles.newsFooterItem}>
             <img src="/globe.svg" alt="source" className={styles.newsFooterIcon} />
-            <span>{news.source}</span>
+            <span>{news.source || "-"}</span>
           </div>
-          <div className={styles.newsTag}>
-            {news.tag}
-          </div>
+          {news.category && (
+            <div className={styles.newsTag}>
+              {news.category || "-"}
+            </div>
+          )}
         </div>
       </div>
       <div className={styles.newsCardActions}>
-        <img src="/viewsourceIcon.svg" alt="view-source" className={styles.newsActionIcon} />
-        <img src="/iconShare.svg" alt="share" className={styles.newsActionIcon} />
+        {news.external_url && (
+          <a href={news.external_url} target="_blank" rel="noopener noreferrer">
+            <img src="/viewsourceIcon.svg" alt="view-source" className={styles.newsActionIcon} />
+          </a>
+        )}
+        {news.share_url && (
+          <div onClick={() => onShare(news.title, news.share_url)} style={{ cursor: 'pointer' }}>
+            <img src="/iconShare.svg" alt="share" className={styles.newsActionIcon} />
+          </div>
+        )}
       </div>
     </div>
   );

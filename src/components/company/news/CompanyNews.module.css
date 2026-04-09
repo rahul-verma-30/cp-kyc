@@ -227,3 +227,164 @@
   border-radius: 4px;
   text-transform: capitalize;
 }
+
+.popupCalendar {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 100;
+  background: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  /* overflow: hidden; */
+}
+
+.dateLabel {
+  font-size: 14px;
+  color: #27272a;
+  margin-left: 8px;
+  white-space: nowrap;
+}
+
+.clearDateBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.clearDateBtn:hover {
+  background-color: #f4f4f5;
+}
+
+.clearIcon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.6;
+}
+
+.clearDateBtn:hover .clearIcon {
+  opacity: 1;
+}
+
+.placeholder {
+  color: #94A3B8;
+}
+
+.iconPlaceholder {
+  filter: invert(69%) sepia(34%) saturate(275%) hue-rotate(174deg) brightness(88%) contrast(90%);
+}
+
+.placeholder {
+  color: #94A3B8;
+}
+
+.apiInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 13px;
+  color: #71717A;
+}
+
+.infoDivider {
+  color: #e2e8f0;
+}
+
+.infoLabel {
+  font-weight: 500;
+  color: #3f3f46;
+}
+
+.loadMoreWrapper {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 24px;
+  width: 100%;
+}
+
+.loadMoreBtn {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #27272A;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.loadMoreBtn:hover:not(:disabled) {
+  background-color: #f4f4f5;
+  border-color: #d4d4d8;
+}
+
+.loadMoreBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.noResults {
+  text-align: center;
+  padding: 40px;
+  color: #71717A;
+  font-size: 14px;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 1px dashed #e2e8f0;
+}
+
+.shareWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.actionIconWrapper {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.copiedTooltip {
+  position: absolute;
+  top: -28px;
+  right: 0;
+  background: #27272A;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  animation: fadeInOut 0.3s ease;
+  z-index: 10;
+}
+
+.copiedTooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  right: 6px;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #27272A;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(4px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.actionButton {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

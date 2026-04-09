@@ -103,7 +103,10 @@ const DirectorsSection = ({ directorsData, directorsLoading, directorsError }) =
           </div>
         ))}
       </div>
-      <DirectorProfile directors={directorsData?.directors} />
+      <DirectorProfile 
+        directors={directorsData?.directors} 
+        companyName={directorsData?.company_name || ""} 
+      />
     </div>
   );
 };
