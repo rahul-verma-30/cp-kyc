@@ -279,6 +279,10 @@ body {
   opacity: 1;
 }
 
+.activeTab svg {
+  stroke: #ffffff;
+}
+
 .activeTab:hover {
   background-color: rgba(4, 30, 66, 1);
 }
