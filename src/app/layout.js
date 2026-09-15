@@ -267,6 +267,8 @@ export default function RootLayout({ children }) {
   useEffect(() => {
     if (pathname === "/") {
       setActiveTab("home");
+    } else if (pathname.startsWith("/company-announcement")) {
+      setActiveTab("announcement");
     } else if (pathname.startsWith("/companies")) {
       setActiveTab("company");
     } else if (pathname.startsWith("/people")) {
@@ -526,6 +528,31 @@ export default function RootLayout({ children }) {
                       >
                         <img src="/icons/profile-icon.svg" alt="People" />
                         <span className={styles.tooltip}>People Database</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        className={`${styles.iconTab} ${activeTab === "announcement" ? styles.activeTab : ""
+                          }`}
+                        onClick={() => handleNav("announcement", "/company-announcement")}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke={activeTab === "announcement" ? "#FFFFFF" : "#27272A"}
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="lucide lucide-megaphone"
+                        >
+                          <path d="M11 6a13 13 0 0 0 8.4-2.8A1 1 0 0 1 21 4v12a1 1 0 0 1-1.6.8A13 13 0 0 0 11 14H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+                          <path d="M6 14a12 12 0 0 0 2.4 7.2 2 2 0 0 0 3.2-2.4A8 8 0 0 1 10 14" />
+                          <path d="M8 6v8" />
+                        </svg>
+                        <span className={styles.tooltip}>Company Announcement</span>
                       </button>
                     </div>
                   </aside>
