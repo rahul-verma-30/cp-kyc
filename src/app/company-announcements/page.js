@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import ViewAnnouncements from "@/components/CompanyAnnouncement/ViewAnnouncements";
 
 export const metadata = {
@@ -8,7 +9,9 @@ export const metadata = {
 export default function CompanyAnnouncementsPage() {
   return (
     <main>
-      <ViewAnnouncements />
+      <Suspense fallback={null}>
+        <ViewAnnouncements />
+      </Suspense>
     </main>
   );
 }

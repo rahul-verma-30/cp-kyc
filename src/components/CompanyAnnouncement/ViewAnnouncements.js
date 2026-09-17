@@ -3,11 +3,15 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import styles from "./ViewAnnouncements.module.css";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import RowsPerPage from "@/components/common/RowsPerPage";
 import CustomCalendar from "@/components/common/CustomCalendar";
 
 export default function ViewAnnouncements() {
   const calendarRef = useRef(null);
+  const searchParams = useSearchParams();
+  const searchParamVal = searchParams ? searchParams.get("search") || "" : "";
+  const prevSearchParamRef = useRef(searchParamVal);
 
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,8 +19,8 @@ export default function ViewAnnouncements() {
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [searchQuery, setSearchQuery] = useState(searchParamVal);
+  const [debouncedSearch, setDebouncedSearch] = useState(searchParamVal);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const [announcements, setAnnouncements] = useState([]);
@@ -33,6 +37,16 @@ export default function ViewAnnouncements() {
     }, 350);
     return () => clearTimeout(timer);
   }, [searchQuery]);
+
+  // Sync URL search query if it changes externally (e.g. navigation)
+  useEffect(() => {
+    if (prevSearchParamRef.current !== searchParamVal) {
+      prevSearchParamRef.current = searchParamVal;
+      setSearchQuery(searchParamVal);
+      setDebouncedSearch(searchParamVal);
+      setCurrentPage(1);
+    }
+  }, [searchParamVal]);
 
   // Toggle expanded state for long descriptions
   const toggleRowExpand = (index) => {
@@ -380,8 +394,25 @@ export default function ViewAnnouncements() {
               placeholder="Search by Company Name or CIN..."
               className={styles.searchInput}
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1);
+              }}
             />
+            {searchQuery && (
+              <button
+                type="button"
+                className={styles.clearDateBtn}
+                onClick={() => {
+                  setSearchQuery("");
+                  setDebouncedSearch("");
+                  setCurrentPage(1);
+                }}
+                aria-label="Clear search query"
+              >
+                <img src="/icons/close.svg" alt="Clear" className={styles.clearIcon} />
+              </button>
+            )}
           </div>
 
           {/* Quick Days Selector */}

@@ -464,14 +464,9 @@ export default function CompanyAnnouncement() {
                           height={32}
                           unoptimized={true}
                         />
-                        {slug ? (
+                        {companyName && companyName !== "-" ? (
                           <Link
-                            href={`/company/${slug}`}
-                            onClick={() => {
-                              if (typeof window !== "undefined") {
-                                sessionStorage.setItem("internalSearch", "true");
-                              }
-                            }}
+                            href={`/company-announcement/view?search=${encodeURIComponent(companyName)}`}
                             className={styles.companyLink}
                           >
                             {companyName}
