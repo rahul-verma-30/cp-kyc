@@ -11,7 +11,9 @@ export default function ViewAnnouncements() {
   const calendarRef = useRef(null);
   const searchParams = useSearchParams();
   const searchParamVal = searchParams ? searchParams.get("search") || "" : "";
+  const headlineParamVal = searchParams ? searchParams.get("headline") || "" : "";
   const prevSearchParamRef = useRef(searchParamVal);
+  const prevHeadlineParamRef = useRef(headlineParamVal);
 
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,6 +23,8 @@ export default function ViewAnnouncements() {
   const [endDate, setEndDate] = useState(null);
   const [searchQuery, setSearchQuery] = useState(searchParamVal);
   const [debouncedSearch, setDebouncedSearch] = useState(searchParamVal);
+  const [headlineQuery, setHeadlineQuery] = useState(headlineParamVal);
+  const [debouncedHeadline, setDebouncedHeadline] = useState(headlineParamVal);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const [announcements, setAnnouncements] = useState([]);
@@ -38,6 +42,14 @@ export default function ViewAnnouncements() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
+  // Debounce headline input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedHeadline(headlineQuery);
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [headlineQuery]);
+
   // Sync URL search query if it changes externally (e.g. navigation)
   useEffect(() => {
     if (prevSearchParamRef.current !== searchParamVal) {
@@ -47,6 +59,16 @@ export default function ViewAnnouncements() {
       setCurrentPage(1);
     }
   }, [searchParamVal]);
+
+  // Sync URL headline query if it changes externally
+  useEffect(() => {
+    if (prevHeadlineParamRef.current !== headlineParamVal) {
+      prevHeadlineParamRef.current = headlineParamVal;
+      setHeadlineQuery(headlineParamVal);
+      setDebouncedHeadline(headlineParamVal);
+      setCurrentPage(1);
+    }
+  }, [headlineParamVal]);
 
   // Toggle expanded state for long descriptions
   const toggleRowExpand = (index) => {
@@ -126,6 +148,10 @@ export default function ViewAnnouncements() {
 
       if (debouncedSearch.trim()) {
         params.append("search", debouncedSearch.trim());
+      }
+
+      if (debouncedHeadline.trim()) {
+        params.append("headline", debouncedHeadline.trim());
       }
 
       // Date range or specific single date, or days parameter
@@ -287,6 +313,15 @@ export default function ViewAnnouncements() {
               );
             }
 
+            if (debouncedHeadline.trim()) {
+              const hq = debouncedHeadline.toLowerCase();
+              combined = combined.filter(
+                (it) =>
+                  (it.headline && it.headline.toLowerCase().includes(hq)) ||
+                  (it.description && it.description.toLowerCase().includes(hq))
+              );
+            }
+
             totalCount = globalTotal || combined.length;
             totalPageCount = Math.ceil(totalCount / rowsPerPage) || 1;
             const startIndex = (currentPage - 1) * rowsPerPage;
@@ -313,6 +348,7 @@ export default function ViewAnnouncements() {
     rowsPerPage,
     days,
     debouncedSearch,
+    debouncedHeadline,
     startDate,
     endDate,
   ]);
@@ -361,7 +397,7 @@ export default function ViewAnnouncements() {
   // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [debouncedSearch, rowsPerPage, days, startDate, endDate]);
+  }, [debouncedSearch, debouncedHeadline, rowsPerPage, days, startDate, endDate]);
 
   // Pagination Handlers
   const goToFirstPage = () => setCurrentPage(1);
@@ -387,6 +423,7 @@ export default function ViewAnnouncements() {
       {/* Toolbar */}
       <div className={styles.toolbar}>
         <div className={styles.leftTools}>
+          {/* Search by Company Name / CIN */}
           <div className={styles.searchWrapper}>
             <img src="/icons/search.svg" alt="" className={styles.icon} />
             <input
@@ -408,7 +445,36 @@ export default function ViewAnnouncements() {
                   setDebouncedSearch("");
                   setCurrentPage(1);
                 }}
-                aria-label="Clear search query"
+                aria-label="Clear company search"
+              >
+                <img src="/icons/close.svg" alt="Clear" className={styles.clearIcon} />
+              </button>
+            )}
+          </div>
+
+          {/* Search by Headline / Subject */}
+          <div className={styles.searchWrapper}>
+            <img src="/icons/search.svg" alt="" className={styles.icon} />
+            <input
+              type="text"
+              placeholder="Search by Heading (e.g. Board Meeting, Dividend...)"
+              className={styles.searchInput}
+              value={headlineQuery}
+              onChange={(e) => {
+                setHeadlineQuery(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+            {headlineQuery && (
+              <button
+                type="button"
+                className={styles.clearDateBtn}
+                onClick={() => {
+                  setHeadlineQuery("");
+                  setDebouncedHeadline("");
+                  setCurrentPage(1);
+                }}
+                aria-label="Clear heading search"
               >
                 <img src="/icons/close.svg" alt="Clear" className={styles.clearIcon} />
               </button>
